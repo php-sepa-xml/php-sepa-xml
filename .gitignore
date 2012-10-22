@@ -1,3 +1,26 @@
-assets/
-protected/runtime/
-themes/classic/views/
+# OS generated #
+._*
+.DS_Store*
+.Trash-*
+*~
+.Trashes
+Thumbs.db
+Session.vim
+
+# Compiled #
+*.war
+*.jar
+*.exe
+*.app
+*.dmg
+*.zip
+*.deb
+
+# Editors
+.idea/
+nbproject/
+nbactions.xml
+nb-configuration.xml
+project.properties
+project.xml
+
