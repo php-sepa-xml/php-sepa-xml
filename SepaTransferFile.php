@@ -18,6 +18,13 @@
  */
 class SepaTransferFile
 {
+	/**
+	 * @var boolean If true, the transaction will never be executed.
+	 */
+	public $isTest = false;
+	/**
+	 * @var string Unambiguously identify the message.
+	 */
 	public $messageIdentification;
 	public $debtorName;
 	public $debtorAccountIBAN;
@@ -26,12 +33,11 @@ class SepaTransferFile
 	public $paymentInfoId;
 	public $headerControlSum = 0;
 	public $paymentControlSum = 0;
-	public $paymentMethod = 'TRF';
-	public $paymentTypeInfoCode = 'SEPA';
-	public $chargeBearer = 'SLEV';
 	public $debtorAccountCurrency = 'EUR';
 	protected $creditorList = array();
 	protected $numberOfTransactions = 0;
+	protected $paymentMethod = 'TRF';
+	protected $serviceInstrumentCode = 'CORE';
 	/**
 	 * @var SimpleXMLElement
 	 */
@@ -42,6 +48,35 @@ class SepaTransferFile
 	public function __construct()
 	{
 		$this->xml = simplexml_load_string(self::INITIAL_STRING);
+		$this->xml->addChild('CstmrCdtTrfInitn');
+	}
+	
+	/**
+	 * Set the payment method.
+	 * @param string $method
+	 * @throws Exception
+	 */
+	public function setPaymentMethod($method)
+	{
+		$method = strtoupper($method);
+		if (!in_array($method, array('CHK', 'TRF', 'TRA'))) {
+			throw new Exception("Invalid Payment Method: $method");
+		}
+		$this->paymentMethod = $method;
+	}
+	
+	/**
+	 * Set the local service instrument code.
+	 * @param string $code
+	 * @throws Exception
+	 */
+	public function setServiceInstrumentCode($code)
+	{
+		$code = strtoupper($code);
+		if (!in_array($code, array('CORE', 'B2B'))) {
+			throw new Exception("Invalid Service Instrument Code: $code");
+		}
+		$this->serviceInstrumentCode = $code;
 	}
 
 	/**
@@ -84,9 +119,12 @@ class SepaTransferFile
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
 		$requestedExecutionDate = $datetime->format('Y-m-d');
 
-		$GrpHdr = $this->xml->addChild('CstmrCdtTrfInitn')->addChild('GrpHdr');
+		$GrpHdr = $this->xml->CstmrCdtTrfInitn->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
 		$GrpHdr->addChild('CreDtTm', $creationDateTime);
+		if ($this->isTest) {
+			$GrpHdr->addChild('Authstn')->addChild('Prtry', 'TEST');
+		}
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
 		$GrpHdr->addChild('CtrlSum', $this->headerControlSum);
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
@@ -96,7 +134,8 @@ class SepaTransferFile
 		$PmtInf->addChild('PmtMtd', $this->paymentMethod);
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
 		$PmtInf->addChild('CtrlSum', $this->paymentControlSum);
-		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', $this->paymentTypeInfoCode);
+		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
+		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->serviceInstrumentCode);
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
 		$PmtInf->addChild('Dbtr')->addChild('Nm', $this->debtorName);
 
@@ -105,7 +144,7 @@ class SepaTransferFile
 		$DbtrAcct->addChild('Ccy', $this->debtorAccountCurrency);
 
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
-		$PmtInf->addChild('ChrgBr', $this->chargeBearer);
+		$PmtInf->addChild('ChrgBr', 'SLEV');
 
 		foreach ($this->creditorList as $creditor) {
 			$CdtTrfTxInf = $PmtInf->addChild('CdtTrfTxInf');
