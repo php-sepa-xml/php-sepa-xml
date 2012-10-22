@@ -37,7 +37,7 @@ class SepaTransferFile
 	protected $creditorList = array();
 	protected $numberOfTransactions = 0;
 	protected $paymentMethod = 'TRF';
-	protected $serviceInstrumentCode = 'CORE';
+	protected $localInstrumentCode = 'CORE';
 	/**
 	 * @var SimpleXMLElement
 	 */
@@ -70,13 +70,13 @@ class SepaTransferFile
 	 * @param string $code
 	 * @throws Exception
 	 */
-	public function setServiceInstrumentCode($code)
+	public function setLocalInstrumentCode($code)
 	{
 		$code = strtoupper($code);
 		if (!in_array($code, array('CORE', 'B2B'))) {
-			throw new Exception("Invalid Service Instrument Code: $code");
+			throw new Exception("Invalid Local Instrument Code: $code");
 		}
-		$this->serviceInstrumentCode = $code;
+		$this->localInstrumentCode = $code;
 	}
 
 	/**
@@ -135,7 +135,7 @@ class SepaTransferFile
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
 		$PmtInf->addChild('CtrlSum', $this->paymentControlSum);
 		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
-		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->serviceInstrumentCode);
+		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
 		$PmtInf->addChild('Dbtr')->addChild('Nm', $this->debtorName);
 
