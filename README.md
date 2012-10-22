@@ -12,7 +12,7 @@ Do **not** use in production environments!!!
 ###Usage
 ~~~
 [php]
-$sepaFile = new SepaTransferFile;
+$sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
 $sepaFile->paymentInfoId = 'paymentInfo';
 $sepaFile->initiatingPartyName = 'Me';
@@ -34,4 +34,6 @@ $sepaFile->headerControlSum = '0.02';
 $sepaFile->paymentControlSum = '0.02';
       
 echo $sepaFile->generateXml();
+/*Output XML*/
+echo $sepaFile->outputXML();
 ~~~

@@ -10,6 +10,7 @@
  * @license GNU Lesser General Public License v3.0
  * @author Jérémy Cambon
  * @author Ianaré Sévi
+ * @author Vincent MOMIN
  */
 
 /**
@@ -91,5 +92,11 @@ class SepaTransferFile
 
 		return $xml->asXML();
 	}
+        
+        public function outputXML()
+        {
+            header('Content-type: text/xml');
+            echo $this->generateXml();
+        }
 
 }
