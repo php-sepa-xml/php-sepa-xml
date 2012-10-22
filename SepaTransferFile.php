@@ -15,8 +15,6 @@
 
 /**
  * SEPA file object.
- *
- * TODO: inherit from PHP XML object?
  */
 class SepaTransferFile
 {
@@ -26,43 +24,74 @@ class SepaTransferFile
 	public $debtorAgentBIC;
 	public $initiatingPartyName;
 	public $paymentInfoId;
-
 	public $headerControlSum = 0;
 	public $paymentControlSum = 0;
-
 	public $paymentMethod = 'TRF';
 	public $paymentTypeInfoCode = 'SEPA';
 	public $chargeBearer = 'SLEV';
 	public $debtorAccountCurrency = 'EUR';
-
 	protected $creditorList = array();
 	protected $numberOfTransactions = 0;
+	/**
+	 * @var SimpleXMLElement
+	 */
+	protected $xml;
 
 	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
+	
+	public function __construct()
+	{
+		$this->xml = simplexml_load_string(self::INITIAL_STRING);
+	}
 
+	/**
+	 * Return the XML string.
+	 * @return string
+	 */
+	public function asXML()
+	{
+		$this->generateXml();
+		return $this->xml->asXML();
+	}
+
+	/**
+	 * Output the XML string to the screen.
+	 */
+	public function outputXML()
+	{
+		$this->generateXml();
+		header('Content-type: text/xml');
+		echo $this->xml->asXML();
+	}
+	
+	/**
+	 * Add a creditor.
+	 * @param array $creditor
+	 */
 	public function addCreditor(array $creditor)
 	{
-		$creditor['CreditorPaymentId']	= $this->messageIdentification.'/'.$this->numberOfTransactions;
+		$creditor['CreditorPaymentId'] = $this->messageIdentification . '/' . $this->numberOfTransactions;
 		$this->creditorList[] = $creditor;
 		$this->numberOfTransactions++;
 	}
 
-	public function generateXml()
+	/**
+	 * Generate the XML structure.
+	 */
+	protected function generateXml()
 	{
 		$datetime = new DateTime();
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
 		$requestedExecutionDate = $datetime->format('Y-m-d');
-		
-		$xml = simplexml_load_string(self::INITIAL_STRING);
 
-		$GrpHdr = $xml->addChild('CstmrCdtTrfInitn')->addChild('GrpHdr');
+		$GrpHdr = $this->xml->addChild('CstmrCdtTrfInitn')->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
 		$GrpHdr->addChild('CreDtTm', $creationDateTime);
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
 		$GrpHdr->addChild('CtrlSum', $this->headerControlSum);
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
 
-		$PmtInf = $xml->CstmrCdtTrfInitn->addChild('PmtInf');
+		$PmtInf = $this->xml->CstmrCdtTrfInitn->addChild('PmtInf');
 		$PmtInf->addChild('PmtInfId', $this->paymentInfoId);
 		$PmtInf->addChild('PmtMtd', $this->paymentMethod);
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
@@ -78,7 +107,7 @@ class SepaTransferFile
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
 		$PmtInf->addChild('ChrgBr', $this->chargeBearer);
 
-		foreach($this->creditorList as $creditor) {
+		foreach ($this->creditorList as $creditor) {
 			$CdtTrfTxInf = $PmtInf->addChild('CdtTrfTxInf');
 			$PmtId = $CdtTrfTxInf->addChild('PmtId');
 			$PmtId->addChild('InstrId', $creditor['CreditorPaymentId']);
@@ -89,14 +118,5 @@ class SepaTransferFile
 			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $creditor['CreditorAccountIBAN']);
 			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $creditor['RemittanceInformation']);
 		}
-
-		return $xml->asXML();
 	}
-        
-        public function outputXML()
-        {
-            header('Content-type: text/xml');
-            echo $this->generateXml();
-        }
-
 }
