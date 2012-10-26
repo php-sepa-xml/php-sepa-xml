@@ -105,7 +105,7 @@ class SepaTransferFile
 	 */
 	public function addCreditor(array $creditor)
 	{
-		$creditor['CreditorPaymentId'] = $this->messageIdentification . '/' . $this->numberOfTransactions;
+		$creditor['CreditorPaymentEndToEndId'] = $this->messageIdentification . '/' . $this->numberOfTransactions;
 		$this->creditorList[] = $creditor;
 		$this->numberOfTransactions++;
 	}

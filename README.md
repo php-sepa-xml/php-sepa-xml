@@ -21,14 +21,14 @@ $sepaFile->debtorAgentBIC = 'MY_BANK_BIC';
 $sepaFile->debtorAccountIBAN = 'MY_ACCOUNT_IBAN';
 
 $sepaFile->addCreditor(array(
-  			'CreditorPaymentEndToEndId' => 'someId',
-				'CreditorPaymentCurrency'	=> 'EUR',
-				'CreditorPaymentAmount'		=> '0.02',
-				'CreditorBIC'				=> $THEIR_BANK_BIC,
-				'CreditorName'				=> $THEIR_NAME,
-				'CreditorAccountIBAN'		=> $THEIR_IBAN,
-				'RemittanceInformation'		=> 'some string',
-			));
+	'CreditorPaymentId'			=> 'Id shown in bank statement',
+	'CreditorPaymentCurrency'	=> 'EUR',
+	'CreditorPaymentAmount'		=> '0.02',
+	'CreditorBIC'				=> $THEIR_BANK_BIC,
+	'CreditorName'				=> $THEIR_NAME,
+	'CreditorAccountIBAN'		=> $THEIR_IBAN,
+	'RemittanceInformation'		=> 'Transaction description',
+));
 
 $sepaFile->headerControlSum = '0.02';
 $sepaFile->paymentControlSum = '0.02';
