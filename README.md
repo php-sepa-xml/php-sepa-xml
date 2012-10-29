@@ -9,6 +9,8 @@ License: GNU Lesser General Public License v3.0
 
 Do **not** use in production environments!!!
 
+API subject to change.
+
 ###Usage
 ~~~
 [php]

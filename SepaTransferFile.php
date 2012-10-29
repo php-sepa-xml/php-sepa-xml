@@ -14,7 +14,7 @@
  */
 
 /**
- * SEPA file object.
+ * SEPA payments file object.
  */
 class SepaTransferFile
 {
@@ -34,7 +34,10 @@ class SepaTransferFile
 	public $headerControlSum = 0;
 	public $paymentControlSum = 0;
 	public $debtorAccountCurrency = 'EUR';
-	protected $creditorList = array();
+	/**
+	 * @var SepaCreditTransfer[]
+	 */
+	protected $creditTransfers = array();
 	protected $numberOfTransactions = 0;
 	protected $paymentMethod = 'TRF';
 	protected $localInstrumentCode = 'CORE';
@@ -100,13 +103,21 @@ class SepaTransferFile
 	}
 	
 	/**
-	 * Add a creditor.
-	 * @param array $creditor
+	 * Add a credit transfer transaction.
+	 * @param array $transferInfo
 	 */
-	public function addCreditor(array $creditor)
+	public function addCreditTransfer(array $transferInfo)
 	{
-		$creditor['CreditorPaymentEndToEndId'] = $this->messageIdentification . '/' . $this->numberOfTransactions;
-		$this->creditorList[] = $creditor;
+		$transfer = new SepaCreditTransfer;
+		$transfer->id = $transferInfo['CreditorPaymentId'];
+		$transfer->endToEndId = $this->messageIdentification . '/' . $this->numberOfTransactions;
+		$transfer->currency = $transferInfo['CreditorPaymentCurrency'];
+		$transfer->amount = $transferInfo['CreditorPaymentAmount'];
+		$transfer->creditorBIC = $transferInfo['CreditorBIC'];
+		$transfer->creditorName = $transferInfo['CreditorName'];
+		$transfer->creditorAccountIBAN = $transferInfo['CreditorAccountIBAN'];
+		$transfer->remittanceInformation = $transferInfo['RemittanceInformation'];
+		$this->creditTransfers[] = $transfer;
 		$this->numberOfTransactions++;
 	}
 
@@ -146,16 +157,31 @@ class SepaTransferFile
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
 		$PmtInf->addChild('ChrgBr', 'SLEV');
 
-		foreach ($this->creditorList as $creditor) {
+		foreach ($this->creditTransfers as $transfer) {
 			$CdtTrfTxInf = $PmtInf->addChild('CdtTrfTxInf');
 			$PmtId = $CdtTrfTxInf->addChild('PmtId');
-			$PmtId->addChild('InstrId', $creditor['CreditorPaymentId']);
-			$PmtId->addChild('EndToEndId', $creditor['CreditorPaymentEndToEndId']);
-			$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $creditor['CreditorPaymentAmount'])->addAttribute('Ccy', $creditor['CreditorPaymentCurrency']);
-			$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $creditor['CreditorBIC']);
-			$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $creditor['CreditorName']);
-			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $creditor['CreditorAccountIBAN']);
-			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $creditor['RemittanceInformation']);
+			$PmtId->addChild('InstrId', $transfer->id);
+			$PmtId->addChild('EndToEndId', $transfer->endToEndId);
+			$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $transfer->amount)->addAttribute('Ccy', $transfer->currency);
+			$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $transfer->creditorBIC);
+			$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $transfer->creditorName);
+			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $transfer->creditorAccountIBAN);
+			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $transfer->remittanceInformation);
 		}
 	}
+}
+
+/**
+ * SEPA Credit Transfer Transaction Information.
+ */
+class SepaCreditTransfer
+{
+	public $id;
+	public $endToEndId;
+	public $amount;
+	public $currency;
+	public $creditorBIC;
+	public $creditorName;
+	public $creditorAccountIBAN;
+	public $remittanceInformation;
 }
