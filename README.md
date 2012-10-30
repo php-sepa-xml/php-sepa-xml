@@ -22,7 +22,7 @@ $sepaFile->debtorName = 'My Corp';
 $sepaFile->debtorAgentBIC = 'MY_BANK_BIC';
 $sepaFile->debtorAccountIBAN = 'MY_ACCOUNT_IBAN';
 
-$sepaFile->addCreditor(array(
+$sepaFile->addCreditTransfer(array(
 	'CreditorPaymentId'			=> 'Id shown in bank statement',
 	'CreditorPaymentCurrency'	=> 'EUR',
 	'CreditorPaymentAmount'		=> '0.02',
