@@ -26,20 +26,54 @@ class SepaTransferFile
 	 * @var string Unambiguously identify the message.
 	 */
 	public $messageIdentification;
+	/**
+	 * @var string Debtor's name.
+	 */
 	public $debtorName;
+	/**
+	 * @var string Debtor's account IBAN.
+	 */
 	public $debtorAccountIBAN;
+	/**
+	 * @var string Debtor's account bank BIC code.
+	 */
 	public $debtorAgentBIC;
-	public $initiatingPartyName;
-	public $paymentInfoId;
-	public $headerControlSum = 0;
-	public $paymentControlSum = 0;
+	/**
+	 * @var string Debtor's account ISO currency code.
+	 */
 	public $debtorAccountCurrency = 'EUR';
 	/**
-	 * @var SepaCreditTransfer[]
+	 * @var string Payment sender's name.
+	 */
+	public $initiatingPartyName;
+	/**
+	 * @var string Unambiguously identify the payment.
+	 */
+	public $paymentInfoId;
+
+	/**
+	 * @var integer
+	 */
+	protected $headerControlSumCents = 0;
+	/**
+	 * @var integer
+	 */
+	protected $paymentControlSumCents = 0;
+	/**
+	 * @var SepaCreditTransfer[] 
 	 */
 	protected $creditTransfers = array();
+	/**
+	 * @var integer Number of payment transactions.
+	 */
 	protected $numberOfTransactions = 0;
+	/**
+	 * @var string Payment method.
+	 */
 	protected $paymentMethod = 'TRF';
+	/**
+	 * @var string Local service instrument code.
+	 */
 	protected $localInstrumentCode = 'CORE';
 	/**
 	 * @var SimpleXMLElement
@@ -101,6 +135,24 @@ class SepaTransferFile
 		header('Content-type: text/xml');
 		echo $this->xml->asXML();
 	}
+
+	/**
+	 * Get the header control sum in cents.
+	 * @return integer
+	 */
+	protected function getHeaderControlSumCents()
+	{
+		return $this->headerControlSumCents;
+	}
+
+	/**
+	 * Get the payment control sum in cents.
+	 * @return integer
+	 */
+	protected function getPaymentControlSumCents()
+	{
+		return $this->paymentControlSumCents;
+	}
 	
 	/**
 	 * Add a credit transfer transaction.
@@ -112,13 +164,15 @@ class SepaTransferFile
 		$transfer->id = $transferInfo['CreditorPaymentId'];
 		$transfer->endToEndId = $this->messageIdentification . '/' . $this->numberOfTransactions;
 		$transfer->currency = $transferInfo['CreditorPaymentCurrency'];
-		$transfer->amount = $transferInfo['CreditorPaymentAmount'];
+		$transfer->setAmount($transferInfo['CreditorPaymentAmount']);
 		$transfer->creditorBIC = $transferInfo['CreditorBIC'];
 		$transfer->creditorName = $transferInfo['CreditorName'];
 		$transfer->creditorAccountIBAN = $transferInfo['CreditorAccountIBAN'];
 		$transfer->remittanceInformation = $transferInfo['RemittanceInformation'];
 		$this->creditTransfers[] = $transfer;
 		$this->numberOfTransactions++;
+		$this->headerControlSumCents += $transfer->getAmountCents();
+		$this->paymentControlSumCents += $transfer->getAmountCents();
 	}
 
 	/**
@@ -137,14 +191,14 @@ class SepaTransferFile
 			$GrpHdr->addChild('Authstn')->addChild('Prtry', 'TEST');
 		}
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
-		$GrpHdr->addChild('CtrlSum', $this->headerControlSum);
+		$GrpHdr->addChild('CtrlSum', $this->intToCurrency($this->headerControlSumCents));
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
 
 		$PmtInf = $this->xml->CstmrCdtTrfInitn->addChild('PmtInf');
 		$PmtInf->addChild('PmtInfId', $this->paymentInfoId);
 		$PmtInf->addChild('PmtMtd', $this->paymentMethod);
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
-		$PmtInf->addChild('CtrlSum', $this->paymentControlSum);
+		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->paymentControlSumCents));
 		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
 		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
@@ -158,16 +212,26 @@ class SepaTransferFile
 		$PmtInf->addChild('ChrgBr', 'SLEV');
 
 		foreach ($this->creditTransfers as $transfer) {
+			$amount = $this->intToCurrency($transfer->getAmountCents());
+
 			$CdtTrfTxInf = $PmtInf->addChild('CdtTrfTxInf');
 			$PmtId = $CdtTrfTxInf->addChild('PmtId');
 			$PmtId->addChild('InstrId', $transfer->id);
 			$PmtId->addChild('EndToEndId', $transfer->endToEndId);
-			$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $transfer->amount)->addAttribute('Ccy', $transfer->currency);
+			$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $amount)->addAttribute('Ccy', $transfer->currency);
 			$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $transfer->creditorBIC);
 			$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $transfer->creditorName);
 			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $transfer->creditorAccountIBAN);
 			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $transfer->remittanceInformation);
 		}
+	}
+
+	/**
+	 * Format an integer as a monetary value.
+	 */
+	protected function intToCurrency($amount)
+	{
+		return sprintf("%01.2f", $amount);
 	}
 }
 
@@ -176,12 +240,60 @@ class SepaTransferFile
  */
 class SepaCreditTransfer
 {
+	/**
+	 * @var string Payment ID.
+	 */
 	public $id;
+	/**
+	 * @var string
+	 */
 	public $endToEndId;
-	public $amount;
+	/**
+	 * @var string ISO currency code
+	 */
 	public $currency;
+	/**
+	 * @var string Account bank's BIC
+	 */
 	public $creditorBIC;
+	/**
+	 * @var string Name
+	 */
 	public $creditorName;
+	/**
+	 * @var string account IBAN
+	 */
 	public $creditorAccountIBAN;
+	/**
+	 * @var string Remittance information.
+	 */
 	public $remittanceInformation;
+
+	/**
+	 * @var integer Transfer amount in cents.
+	 */
+	protected $amountCents;
+
+	/**
+	 * Set the transfer amount.
+	 * @param mixed $amount
+	 */
+	public function setAmount($amount)
+	{
+		$amount += 0;
+		if (is_float($amount))
+			$amount = (integer)($amount * 100);
+
+		$this->amountCents = $amount;
+	}
+
+	/**
+	 * Get the transfer amount in cents.
+	 * @return integer
+	 */
+	public function getAmountCents()
+	{
+		return $this->amountCents;
+	}
 }
+

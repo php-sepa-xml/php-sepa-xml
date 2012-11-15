@@ -32,10 +32,10 @@ $sepaFile->addCreditTransfer(array(
 	'RemittanceInformation'		=> 'Transaction description',
 ));
 
-$sepaFile->headerControlSum = '0.02';
-$sepaFile->paymentControlSum = '0.02';
-      
-echo $sepaFile->generateXml();
-/*Output XML*/
-echo $sepaFile->outputXML();
+// generate the file and return the XML string
+echo $sepaFile->asXML();
+
+// After generating the file, these two values can be retrieved:
+echo $sepaFile->getHeaderControlSumCents;
+echo $sepaFile->getPaymentControlSumCents;
 ~~~
