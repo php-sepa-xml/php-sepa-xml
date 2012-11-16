@@ -140,7 +140,7 @@ class SepaTransferFile
 	 * Get the header control sum in cents.
 	 * @return integer
 	 */
-	protected function getHeaderControlSumCents()
+	public function getHeaderControlSumCents()
 	{
 		return $this->headerControlSumCents;
 	}
@@ -149,7 +149,7 @@ class SepaTransferFile
 	 * Get the payment control sum in cents.
 	 * @return integer
 	 */
-	protected function getPaymentControlSumCents()
+	public function getPaymentControlSumCents()
 	{
 		return $this->paymentControlSumCents;
 	}
