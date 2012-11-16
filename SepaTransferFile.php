@@ -245,7 +245,7 @@ class SepaTransferFile
 	 */
 	protected function intToCurrency($amount)
 	{
-		return sprintf("%01.2f", $amount);
+		return sprintf("%01.2f", ($amount/100));
 	}
 }
 
