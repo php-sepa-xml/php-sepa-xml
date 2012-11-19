@@ -8,20 +8,20 @@
  *
  * @copyright © Digitick <www.digitick.net> 2012
  * @license GNU Lesser General Public License v3.0
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Lesser Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * @author Jérémy Cambon
  * @author Ianaré Sévi
  * @author Vincent MOMIN
@@ -45,7 +45,7 @@ class SepaTransferFile
 	 */
 	public $debtorName;
 	/**
-	 * @var string Debtor's account IBAN. 
+	 * @var string Debtor's account IBAN.
 	 */
 	public $debtorAccountIBAN;
 	/**
@@ -82,7 +82,7 @@ class SepaTransferFile
 	 */
 	protected $paymentControlSumCents = 0;
 	/**
-	 * @var SepaCreditTransfer[] 
+	 * @var SepaCreditTransfer[]
 	 */
 	protected $creditTransfers = array();
 	/**
@@ -103,13 +103,13 @@ class SepaTransferFile
 	protected $xml;
 
 	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
-	
+
 	public function __construct()
 	{
 		$this->xml = simplexml_load_string(self::INITIAL_STRING);
 		$this->xml->addChild('CstmrCdtTrfInitn');
 	}
-	
+
 	/**
 	 * Set the payment method.
 	 * @param string $method
@@ -123,7 +123,7 @@ class SepaTransferFile
 		}
 		$this->paymentMethod = $method;
 	}
-	
+
 	/**
 	 * Set the local service instrument code.
 	 * @param string $code
@@ -157,18 +157,19 @@ class SepaTransferFile
 		header('Content-type: text/xml');
 		echo $this->xml->asXML();
 	}
-        
-        /**
+
+	/**
 	 * Download the XML string into XML File
 	 */
-        public function downloadXML()
+	public function downloadXML()
 	{
 		$this->generateXml();
 		header("Content-type: text/xml");
-		header("Content-disposition: attachment; filename=sepa_" .date("dmY-His").".xml");
+		header('Content-disposition: attachment; filename=sepa_' . date('dmY-His') . '.xml');
 		echo $this->xml->asXML();
 		exit();
-        }
+	}
+
 	/**
 	 * Get the header control sum in cents.
 	 * @return integer
@@ -186,7 +187,7 @@ class SepaTransferFile
 	{
 		return $this->paymentControlSumCents;
 	}
-	
+
 	/**
 	 * Add a credit transfer transaction.
 	 * @param array $transferInfo
@@ -218,7 +219,7 @@ class SepaTransferFile
 		$requestedExecutionDate = $datetime->format('Y-m-d');
 
 		// -- 1: Group Header -- \\
-		
+
 		$GrpHdr = $this->xml->CstmrCdtTrfInitn->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
 		$GrpHdr->addChild('CreDtTm', $creationDateTime);
@@ -230,9 +231,9 @@ class SepaTransferFile
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
 		if (isset($this->initiatingPartyId))
 			$GrpHdr->addChild('InitgPty')->addChild('Id', $this->initiatingPartyId);
-		
+
 		// -- 2: Payment Information --\\
-		
+
 		$PmtInf = $this->xml->CstmrCdtTrfInitn->addChild('PmtInf');
 		$PmtInf->addChild('PmtInfId', $this->paymentInfoId);
 		if (isset($this->categoryPurposeCode))
@@ -252,7 +253,7 @@ class SepaTransferFile
 
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
 		$PmtInf->addChild('ChrgBr', 'SLEV');
-		
+
 		// -- 3: Credit Transfer Transaction Information --\\
 
 		foreach ($this->creditTransfers as $transfer) {
