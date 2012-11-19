@@ -157,7 +157,18 @@ class SepaTransferFile
 		header('Content-type: text/xml');
 		echo $this->xml->asXML();
 	}
-
+        
+        /**
+	 * Download the XML string into XML File
+	 */
+        public function downloadXML()
+	{
+		$this->generateXml();
+		header("Content-type: text/xml");
+		header("Content-disposition: attachment; filename=sepa_" .date("dmY-His").".xml");
+		echo $this->xml->asXML();
+		exit();
+        }
 	/**
 	 * Get the header control sum in cents.
 	 * @return integer
