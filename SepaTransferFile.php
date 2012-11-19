@@ -61,9 +61,17 @@ class SepaTransferFile
 	 */
 	public $initiatingPartyName;
 	/**
+	 * @var string Payment sender's ID (for example: the tax ID).
+	 */
+	public $initiatingPartyId;
+	/**
 	 * @var string Unambiguously identify the payment.
 	 */
 	public $paymentInfoId;
+	/**
+	 * @var string Purpose of the transaction(s).
+	 */
+	public $categoryPurposeCode;
 
 	/**
 	 * @var integer
@@ -198,6 +206,8 @@ class SepaTransferFile
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
 		$requestedExecutionDate = $datetime->format('Y-m-d');
 
+		// -- 1: Group Header -- \\
+		
 		$GrpHdr = $this->xml->CstmrCdtTrfInitn->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
 		$GrpHdr->addChild('CreDtTm', $creationDateTime);
@@ -207,9 +217,16 @@ class SepaTransferFile
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
 		$GrpHdr->addChild('CtrlSum', $this->intToCurrency($this->headerControlSumCents));
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
-
+		if (isset($this->initiatingPartyId))
+			$GrpHdr->addChild('InitgPty')->addChild('Id', $this->initiatingPartyId);
+		
+		// -- 2: Payment Information --\\
+		
 		$PmtInf = $this->xml->CstmrCdtTrfInitn->addChild('PmtInf');
 		$PmtInf->addChild('PmtInfId', $this->paymentInfoId);
+		if (isset($this->categoryPurposeCode))
+			$PmtInf->addChild('CtgyPurp')->addChild('Cd', $this->categoryPurposeCode);
+
 		$PmtInf->addChild('PmtMtd', $this->paymentMethod);
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
 		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->paymentControlSumCents));
@@ -224,6 +241,8 @@ class SepaTransferFile
 
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
 		$PmtInf->addChild('ChrgBr', 'SLEV');
+		
+		// -- 3: Credit Transfer Transaction Information --\\
 
 		foreach ($this->creditTransfers as $transfer) {
 			$amount = $this->intToCurrency($transfer->getAmountCents());
