@@ -96,7 +96,7 @@ class SepaTransferFile
 	/**
 	 * @var string Local service instrument code.
 	 */
-	protected $localInstrumentCode = 'CORE';
+	protected $localInstrumentCode;
 	/**
 	 * @var SimpleXMLElement
 	 */
@@ -243,7 +243,9 @@ class SepaTransferFile
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
 		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->paymentControlSumCents));
 		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
-		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
+		if ($this->localInstrumentCode)
+			$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
+		
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
 		$PmtInf->addChild('Dbtr')->addChild('Nm', $this->debtorName);
 
