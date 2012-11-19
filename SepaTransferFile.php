@@ -28,9 +28,23 @@
  */
 
 /**
+ * Base class.
+ */
+abstract class SepaFileSection
+{
+	/**
+	 * Format an integer as a monetary value.
+	 */
+	protected function intToCurrency($amount)
+	{
+		return sprintf("%01.2f", ($amount / 100));
+	}
+}
+
+/**
  * SEPA payments file object.
  */
-class SepaTransferFile
+class SepaTransferFile extends SepaFileSection
 {
 	/**
 	 * @var boolean If true, the transaction will never be executed.
@@ -41,22 +55,6 @@ class SepaTransferFile
 	 */
 	public $messageIdentification;
 	/**
-	 * @var string Debtor's name.
-	 */
-	public $debtorName;
-	/**
-	 * @var string Debtor's account IBAN.
-	 */
-	public $debtorAccountIBAN;
-	/**
-	 * @var string Debtor's account bank BIC code.
-	 */
-	public $debtorAgentBIC;
-	/**
-	 * @var string Debtor's account ISO currency code.
-	 */
-	public $debtorAccountCurrency = 'EUR';
-	/**
 	 * @var string Payment sender's name.
 	 */
 	public $initiatingPartyName;
@@ -65,42 +63,30 @@ class SepaTransferFile
 	 */
 	public $initiatingPartyId;
 	/**
-	 * @var string Unambiguously identify the payment.
-	 */
-	public $paymentInfoId;
-	/**
 	 * @var string Purpose of the transaction(s).
 	 */
 	public $categoryPurposeCode;
+	/**
+	 * @var string NOT USED - reserve for future.
+	 */
+	public $grouping;
 
 	/**
-	 * @var integer
+	 * @var integer Sum of all transactions in all payments regardless of currency.
 	 */
-	protected $headerControlSumCents = 0;
-	/**
-	 * @var integer
-	 */
-	protected $paymentControlSumCents = 0;
-	/**
-	 * @var SepaCreditTransfer[]
-	 */
-	protected $creditTransfers = array();
+	protected $controlSumCents = 0;
 	/**
 	 * @var integer Number of payment transactions.
 	 */
 	protected $numberOfTransactions = 0;
 	/**
-	 * @var string Payment method.
-	 */
-	protected $paymentMethod = 'TRF';
-	/**
-	 * @var string Local service instrument code.
-	 */
-	protected $localInstrumentCode = 'CORE';
-	/**
 	 * @var SimpleXMLElement
 	 */
 	protected $xml;
+	/**
+	 * @var SepaPaymentInfo
+	 */
+	protected $payment;
 
 	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
 
@@ -108,34 +94,7 @@ class SepaTransferFile
 	{
 		$this->xml = simplexml_load_string(self::INITIAL_STRING);
 		$this->xml->addChild('CstmrCdtTrfInitn');
-	}
-
-	/**
-	 * Set the payment method.
-	 * @param string $method
-	 * @throws Exception
-	 */
-	public function setPaymentMethod($method)
-	{
-		$method = strtoupper($method);
-		if (!in_array($method, array('CHK', 'TRF', 'TRA'))) {
-			throw new Exception("Invalid Payment Method: $method");
-		}
-		$this->paymentMethod = $method;
-	}
-
-	/**
-	 * Set the local service instrument code.
-	 * @param string $code
-	 * @throws Exception
-	 */
-	public function setLocalInstrumentCode($code)
-	{
-		$code = strtoupper($code);
-		if (!in_array($code, array('CORE', 'B2B'))) {
-			throw new Exception("Invalid Local Instrument Code: $code");
-		}
-		$this->localInstrumentCode = $code;
+		$this->payment = new SepaPaymentInfo;
 	}
 
 	/**
@@ -176,7 +135,7 @@ class SepaTransferFile
 	 */
 	public function getHeaderControlSumCents()
 	{
-		return $this->headerControlSumCents;
+		return $this->controlSumCents;
 	}
 
 	/**
@@ -185,28 +144,44 @@ class SepaTransferFile
 	 */
 	public function getPaymentControlSumCents()
 	{
-		return $this->paymentControlSumCents;
+		return $this->payment->controlSumCents;
+	}
+	
+	/**
+	 * Set the information for the "Payment Information" block.
+	 * @param array $paymentInfo
+	 */
+	public function setPaymentInfo(array $paymentInfo)
+	{
+		$values = array(
+			'id', 'categoryPurposeCode', 'debtorName', 'debtorAccountIBAN',
+			'debtorAgentBIC', 'debtorAccountCurrency'
+		);
+		foreach($values as $name) {
+			$this->payment->$name = $paymentInfo[$name];
+		}
+		$this->payment->setLocalInstrumentCode($paymentInfo['localInstrumentCode']);
+		$this->payment->setPaymentMethod($paymentInfo['paymentMethod']);
 	}
 
 	/**
-	 * Add a credit transfer transaction.
+	 * Add a "Credit Transfer Transaction Information" block to the payment.
 	 * @param array $transferInfo
 	 */
 	public function addCreditTransfer(array $transferInfo)
 	{
 		$transfer = new SepaCreditTransfer;
-		$transfer->id = $transferInfo['CreditorPaymentId'];
-		$transfer->endToEndId = $this->messageIdentification . '/' . $this->numberOfTransactions;
-		$transfer->currency = $transferInfo['CreditorPaymentCurrency'];
-		$transfer->setAmount($transferInfo['CreditorPaymentAmount']);
-		$transfer->creditorBIC = $transferInfo['CreditorBIC'];
-		$transfer->creditorName = $transferInfo['CreditorName'];
-		$transfer->creditorAccountIBAN = $transferInfo['CreditorAccountIBAN'];
-		$transfer->remittanceInformation = $transferInfo['RemittanceInformation'];
-		$this->creditTransfers[] = $transfer;
-		$this->numberOfTransactions++;
-		$this->headerControlSumCents += $transfer->getAmountCents();
-		$this->paymentControlSumCents += $transfer->getAmountCents();
+		$values = array(
+			'id', 'currency', 'amount', 'creditorBIC', 'creditorName',
+			'creditorAccountIBAN', 'remittanceInformation'
+		);
+		foreach($values as $name) {
+			$transfer->$name = $transferInfo[$name];
+		}
+		$this->payment->addCreditTransfer($transfer);
+		
+		$this->numberOfTransactions += $this->payment->getNumberOfTransactions();
+		$this->controlSumCents += $this->payment->getControlSumCents();
 	}
 
 	/**
@@ -216,9 +191,8 @@ class SepaTransferFile
 	{
 		$datetime = new DateTime();
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
-		$requestedExecutionDate = $datetime->format('Y-m-d');
 
-		// -- 1: Group Header -- \\
+		// -- Group Header -- \\
 
 		$GrpHdr = $this->xml->CstmrCdtTrfInitn->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
@@ -227,21 +201,143 @@ class SepaTransferFile
 			$GrpHdr->addChild('Authstn')->addChild('Prtry', 'TEST');
 		}
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
-		$GrpHdr->addChild('CtrlSum', $this->intToCurrency($this->headerControlSumCents));
+		$GrpHdr->addChild('CtrlSum', $this->intToCurrency($this->controlSumCents));
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
 		if (isset($this->initiatingPartyId))
 			$GrpHdr->addChild('InitgPty')->addChild('Id', $this->initiatingPartyId);
 
-		// -- 2: Payment Information --\\
+		// -- Payment Information --\\
+		$this->xml = $this->payment->generateXml($this->xml);
+	}
+}
 
-		$PmtInf = $this->xml->CstmrCdtTrfInitn->addChild('PmtInf');
-		$PmtInf->addChild('PmtInfId', $this->paymentInfoId);
+/**
+ * SEPA file "Payment Information" block.
+ */
+class SepaPaymentInfo extends SepaFileSection
+{
+	/**
+	 * @var string Unambiguously identify the payment.
+	 */
+	public $id;
+	/**
+	 * @var string Purpose of the transaction(s).
+	 */
+	public $categoryPurposeCode;
+	/**
+	 * @var string Debtor's name.
+	 */
+	public $debtorName;
+	/**
+	 * @var string Debtor's account IBAN.
+	 */
+	public $debtorAccountIBAN;
+	/**
+	 * @var string Debtor's account bank BIC code.
+	 */
+	public $debtorAgentBIC;
+	/**
+	 * @var string Debtor's account ISO currency code.
+	 */
+	public $debtorAccountCurrency = 'EUR';
+
+	/**
+	 * @var string Payment method.
+	 */
+	protected $paymentMethod = 'TRF';
+	/**
+	 * @var string Local service instrument code.
+	 */
+	protected $localInstrumentCode = 'CORE';
+	/**
+	 * @var integer
+	 */
+	protected $controlSumCents = 0;
+	/**
+	 * @var integer Number of payment transactions.
+	 */
+	protected $numberOfTransactions = 0;
+	/**
+	 * @var SepaCreditTransfer[]
+	 */
+	protected $creditTransfers = array();
+
+	/**
+	 * Set the payment method.
+	 * @param string $method
+	 * @throws Exception
+	 */
+	public function setPaymentMethod($method)
+	{
+		$method = strtoupper($method);
+		if (!in_array($method, array('CHK', 'TRF', 'TRA'))) {
+			throw new Exception("Invalid Payment Method: $method");
+		}
+		$this->paymentMethod = $method;
+	}
+
+	/**
+	 * Set the local service instrument code.
+	 * @param string $code
+	 * @throws Exception
+	 */
+	public function setLocalInstrumentCode($code)
+	{
+		$code = strtoupper($code);
+		if (!in_array($code, array('CORE', 'B2B'))) {
+			throw new Exception("Invalid Local Instrument Code: $code");
+		}
+		$this->localInstrumentCode = $code;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getNumberOfTransactions()
+	{
+		return $this->numberOfTransactions;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function getControlSumCents()
+	{
+		return $this->controlSumCents;
+	}
+
+	/**
+	 * Add a credit transfer transaction.
+	 * @param array $transferInfo
+	 */
+	public function addCreditTransfer(SepaCreditTransfer $transfer)
+	{
+		$transfer->endToEndId = $this->messageIdentification . '/' . $this->numberOfTransactions;
+		$this->creditTransfers[] = $transfer;
+		$this->numberOfTransactions++;
+		$this->controlSumCents += $transfer->getAmountCents();
+	}
+
+	/**
+	 * DO NOT CALL THIS FUNCTION DIRECTLY!
+	 * 
+	 * @param SimpleXMLElement $xml
+	 * @return SimpleXMLElement
+	 */
+	public function generateXml(SimpleXMLElement $xml)
+	{
+		$requestedExecutionDate = $datetime->format('Y-m-d');
+		
+		// -- Payment Information --\\
+
+		$PmtInf = $xml->CstmrCdtTrfInitn->addChild('PmtInf');
+		$PmtInf->addChild('PmtInfId', $this->id);
 		if (isset($this->categoryPurposeCode))
 			$PmtInf->addChild('CtgyPurp')->addChild('Cd', $this->categoryPurposeCode);
 
 		$PmtInf->addChild('PmtMtd', $this->paymentMethod);
 		$PmtInf->addChild('NbOfTxs', $this->numberOfTransactions);
-		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->paymentControlSumCents));
+		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->controlSumCents));
 		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
 		$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
@@ -254,7 +350,7 @@ class SepaTransferFile
 		$PmtInf->addChild('DbtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->debtorAgentBIC);
 		$PmtInf->addChild('ChrgBr', 'SLEV');
 
-		// -- 3: Credit Transfer Transaction Information --\\
+		// -- Credit Transfer Transaction Information --\\
 
 		foreach ($this->creditTransfers as $transfer) {
 			$amount = $this->intToCurrency($transfer->getAmountCents());
@@ -269,21 +365,15 @@ class SepaTransferFile
 			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $transfer->creditorAccountIBAN);
 			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $transfer->remittanceInformation);
 		}
+		return $xml;
 	}
 
-	/**
-	 * Format an integer as a monetary value.
-	 */
-	protected function intToCurrency($amount)
-	{
-		return sprintf("%01.2f", ($amount/100));
-	}
 }
 
 /**
- * SEPA Credit Transfer Transaction Information.
+ * SEPA file "Credit Transfer Transaction Information" block.
  */
-class SepaCreditTransfer
+class SepaCreditTransfer extends SepaFileSection
 {
 	/**
 	 * @var string Payment ID.
@@ -327,7 +417,7 @@ class SepaCreditTransfer
 	{
 		$amount += 0;
 		if (is_float($amount))
-			$amount = (integer)($amount * 100);
+			$amount = (integer) ($amount * 100);
 
 		$this->amountCents = $amount;
 	}
@@ -340,5 +430,6 @@ class SepaCreditTransfer
 	{
 		return $this->amountCents;
 	}
+
 }
 

@@ -16,20 +16,25 @@ Do **not** use in production environments!!!
 [php]
 $sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
-$sepaFile->paymentInfoId = 'paymentInfo';
 $sepaFile->initiatingPartyName = 'Me';
-$sepaFile->debtorName = 'My Corp';
-$sepaFile->debtorAgentBIC = 'MY_BANK_BIC';
-$sepaFile->debtorAccountIBAN = 'MY_ACCOUNT_IBAN';
+
+$sepaFile->setPaymentInfo(array(
+	'id'					=> 'Payment Info ID',
+	'debtorName'			=> 'My Corp',
+	'debtorAccountIBAN'		=> 'MY_ACCOUNT_IBAN',
+	'debtorAgentBIC'		=> 'MY_BANK_BIC'
+//	'debtorAccountCurrency'	=> 'GPB', // optional, defaults to 'EUR'
+//	'categoryPurposeCode'	=> 'SUPP', // optional, defaults to NULL
+));
 
 $sepaFile->addCreditTransfer(array(
-	'CreditorPaymentId'			=> 'Id shown in bank statement',
-	'CreditorPaymentCurrency'	=> 'EUR',
-	'CreditorPaymentAmount'		=> 0.02,
-	'CreditorBIC'				=> 'THEIR_BANK_BIC',
-	'CreditorName'				=> 'THEIR_NAME',
-	'CreditorAccountIBAN'		=> 'THEIR_IBAN',
-	'RemittanceInformation'		=> 'Transaction description',
+	'id'					=> 'Id shown in bank statement',
+	'currency'				=> 'EUR',
+	'amount'				=> '0.02', // or as float: 0.02 or as integer: 2
+	'creditorBIC'			=> 'THEIR_BANK_BIC',
+	'creditorName'			=> 'THEIR_NAME',
+	'creditorAccountIBAN'	=> 'THEIR_IBAN',
+	'remittanceInformation'	=> 'Transaction description',
 ));
 
 // generate the file and return the XML string
