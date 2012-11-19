@@ -26,7 +26,7 @@
  * @author Ianaré Sévi
  * @author Vincent MOMIN
  */
-require 'lib/SepaFileSection.php';
+require 'lib/SepaFileBlock.php';
 require 'lib/SepaPaymentInfo.php';
 require 'lib/SepaCreditTransfer.php';
 
@@ -85,7 +85,7 @@ class SepaTransferFile extends SepaFileBlock
 		$this->xml->addChild('CstmrCdtTrfInitn');
 		$this->payment = new SepaPaymentInfo;
 	}
-
+	
 	/**
 	 * Return the XML string.
 	 * @return string
@@ -180,9 +180,9 @@ class SepaTransferFile extends SepaFileBlock
 		$GrpHdr = $this->xml->CstmrCdtTrfInitn->addChild('GrpHdr');
 		$GrpHdr->addChild('MsgId', $this->messageIdentification);
 		$GrpHdr->addChild('CreDtTm', $creationDateTime);
-		if ($this->isTest) {
+		if ($this->isTest)
 			$GrpHdr->addChild('Authstn')->addChild('Prtry', 'TEST');
-		}
+
 		$GrpHdr->addChild('NbOfTxs', $this->numberOfTransactions);
 		$GrpHdr->addChild('CtrlSum', $this->intToCurrency($this->controlSumCents));
 		$GrpHdr->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
