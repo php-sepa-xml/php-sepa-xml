@@ -282,6 +282,7 @@ class SepaTransferFile
 	}
 }
 
+
 /**
  * SEPA Credit Transfer Transaction Information.
  */
