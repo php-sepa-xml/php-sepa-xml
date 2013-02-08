@@ -3,7 +3,7 @@
 /**
  * SEPA file generator.
  *
- * @copyright © Digitick <www.digitick.net> 2012
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @license GNU Lesser General Public License v3.0
  *
  * This program is free software: you can redistribute it and/or modify
@@ -129,8 +129,25 @@ class SepaPaymentInfo extends SepaFileBlock
 	 * Add a credit transfer transaction.
 	 * @param array $transferInfo
 	 */
-	public function addCreditTransfer(SepaCreditTransfer $transfer)
+	public function addCreditTransfer(array $transferInfo)
 	{
+		$transfer = new SepaCreditTransfer;
+		$values = array(
+			'id', 'creditorBIC', 'creditorName',
+			'creditorAccountIBAN', 'remittanceInformation'
+		);
+		foreach ($values as $name) {
+			if (isset($transferInfo[$name]))
+				$transfer->$name = $transferInfo[$name];
+		}
+		if (isset($transferInfo['amount']))
+			$transfer->setAmount($transferInfo['amount']);
+		
+		if (isset($transferInfo['currency']))
+			$transfer->setCurrency($transferInfo['currency']);
+		
+		$transfer->endToEndId = $this->messageIdentification . '/' . $this->payment->getNumberOfTransactions();
+
 		$this->creditTransfers[] = $transfer;
 		$this->numberOfTransactions++;
 		$this->controlSumCents += $transfer->getAmountCents();

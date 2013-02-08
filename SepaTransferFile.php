@@ -6,7 +6,7 @@
  * ALPHA QUALITY SOFTWARE
  * Do NOT use in production environments!!!
  *
- * @copyright © Digitick <www.digitick.net> 2012
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @license GNU Lesser General Public License v3.0
  *
  * This program is free software: you can redistribute it and/or modify
@@ -144,24 +144,7 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	public function addCreditTransfer(array $transferInfo)
 	{
-		$transfer = new SepaCreditTransfer;
-		$values = array(
-			'id', 'creditorBIC', 'creditorName',
-			'creditorAccountIBAN', 'remittanceInformation'
-		);
-		foreach ($values as $name) {
-			if (isset($transferInfo[$name]))
-				$transfer->$name = $transferInfo[$name];
-		}
-		if (isset($transferInfo['amount']))
-			$transfer->setAmount($transferInfo['amount']);
-		
-		if (isset($transferInfo['currency']))
-			$transfer->setCurrency($transferInfo['currency']);
-		
-		$transfer->endToEndId = $this->messageIdentification . '/' . $this->payment->getNumberOfTransactions();
-		
-		$this->payment->addCreditTransfer($transfer);
+		$this->payment->addCreditTransfer($transferInfo);
 
 		$this->numberOfTransactions += $this->payment->getNumberOfTransactions();
 		$this->controlSumCents += $this->payment->getControlSumCents();

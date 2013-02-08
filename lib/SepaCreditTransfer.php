@@ -3,7 +3,7 @@
 /**
  * SEPA file generator.
  *
- * @copyright © Digitick <www.digitick.net> 2012
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @license GNU Lesser General Public License v3.0
  *
  * This program is free software: you can redistribute it and/or modify
