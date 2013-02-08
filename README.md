@@ -12,8 +12,7 @@ Do **not** use in production environments!!!
 **API subject to change.**
 
 ###Usage
-~~~
-[php]
+```php
 $sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
 $sepaFile->initiatingPartyName = 'Me';
@@ -43,4 +42,4 @@ echo $sepaFile->asXML();
 // After generating the file, these two values can be retrieved:
 echo $sepaFile->getHeaderControlSumCents;
 echo $sepaFile->getPaymentControlSumCents;
-~~~
+```
