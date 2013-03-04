@@ -146,7 +146,7 @@ class SepaPaymentInfo extends SepaFileBlock
 		if (isset($transferInfo['currency']))
 			$transfer->setCurrency($transferInfo['currency']);
 		
-		$transfer->endToEndId = $this->messageIdentification . '/' . $this->payment->getNumberOfTransactions();
+		$transfer->endToEndId = $this->messageIdentification . '/' . $this->getNumberOfTransactions();
 
 		$this->creditTransfers[] = $transfer;
 		$this->numberOfTransactions++;
