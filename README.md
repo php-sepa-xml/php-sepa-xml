@@ -11,12 +11,15 @@ Do **not** use in production environments!!!
 
 **API subject to change.**
 
-###Usage
+###Basic Usage
 ```php
 $sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
 $sepaFile->initiatingPartyName = 'Me';
 
+/* 
+ * Set the payment information
+ */
 $sepaFile->setPaymentInfo(array(
 	'id'					=> 'Payment Info ID',
 	'debtorName'			=> 'My Corp',
@@ -26,6 +29,11 @@ $sepaFile->setPaymentInfo(array(
 //	'categoryPurposeCode'	=> 'SUPP', // optional, defaults to NULL
 ));
 
+/* 
+ * Add the credit transfer(s). This method may be called
+ * more than once to add multiple transfers for the same
+ * payment information.
+ */
 $sepaFile->addCreditTransfer(array(
 	'id'					=> 'Id shown in bank statement',
 	'currency'				=> 'EUR',
@@ -40,6 +48,6 @@ $sepaFile->addCreditTransfer(array(
 echo $sepaFile->asXML();
 
 // After generating the file, these two values can be retrieved:
-echo $sepaFile->getHeaderControlSumCents;
-echo $sepaFile->getPaymentControlSumCents;
+echo $sepaFile->getHeaderControlSumCents();
+echo $sepaFile->getPaymentControlSumCents();
 ```
