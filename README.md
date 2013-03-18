@@ -20,7 +20,7 @@ $sepaFile->initiatingPartyName = 'Me';
 /* 
  * Set the payment information
  */
-$sepaFile->setPaymentInfo(array(
+$sepaFile->addPaymentInfo(array(
 	'id'					=> 'Payment Info ID',
 	'debtorName'			=> 'My Corp',
 	'debtorAccountIBAN'		=> 'MY_ACCOUNT_IBAN',
