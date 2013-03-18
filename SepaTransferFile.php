@@ -267,7 +267,7 @@ class SepaTransferFile
 			$PmtId->addChild('EndToEndId', $transfer->endToEndId);
 			$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $amount)->addAttribute('Ccy', $transfer->currency);
 			$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $transfer->creditorBIC);
-			$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', $transfer->creditorName);
+			$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', htmlspecialchars($transfer->creditorName));
 			$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $transfer->creditorAccountIBAN);
 			$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $transfer->remittanceInformation);
 		}
