@@ -70,6 +70,10 @@ class SepaPaymentInfo extends SepaFileBlock
 	 * @var SepaCreditTransfer[]
 	 */
 	protected $creditTransfers = array();
+	/**
+	 * @var SepaTransferFile
+	 */
+	protected $transferFile;
 
 	/**
 	 * Set the payment method.
@@ -124,6 +128,15 @@ class SepaPaymentInfo extends SepaFileBlock
 	{
 		return $this->controlSumCents;
 	}
+	
+	/**
+	 * Set the transfer file.
+	 * @param SepaTransferFile $transferFile
+	 */
+	public function setTransferFile(SepaTransferFile $transferFile)
+	{
+		$this->transferFile = $transferFile;
+	}
 
 	/**
 	 * Add a credit transfer transaction.
@@ -131,7 +144,7 @@ class SepaPaymentInfo extends SepaFileBlock
 	 */
 	public function addCreditTransfer(array $transferInfo)
 	{
-		$transfer = new SepaCreditTransfer;
+		$transfer = new SepaCreditTransfer();
 		$values = array(
 			'id', 'creditorBIC', 'creditorName',
 			'creditorAccountIBAN', 'remittanceInformation'
@@ -146,7 +159,7 @@ class SepaPaymentInfo extends SepaFileBlock
 		if (isset($transferInfo['currency']))
 			$transfer->setCurrency($transferInfo['currency']);
 		
-		$transfer->endToEndId = $this->messageIdentification . '/' . $this->getNumberOfTransactions();
+		$transfer->endToEndId = $this->transferFile->messageIdentification . '/' . $this->getNumberOfTransactions();
 
 		$this->creditTransfers[] = $transfer;
 		$this->numberOfTransactions++;
@@ -179,7 +192,7 @@ class SepaPaymentInfo extends SepaFileBlock
 			$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
 		
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
-		$PmtInf->addChild('Dbtr')->addChild('Nm', $this->debtorName);
+		$PmtInf->addChild('Dbtr')->addChild('Nm', htmlentities($this->debtorName));
 
 		$DbtrAcct = $PmtInf->addChild('DbtrAcct');
 		$DbtrAcct->addChild('Id')->addChild('IBAN', $this->debtorAccountIBAN);

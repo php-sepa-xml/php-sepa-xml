@@ -83,7 +83,6 @@ class SepaTransferFile extends SepaFileBlock
 	{
 		$this->xml = simplexml_load_string(self::INITIAL_STRING);
 		$this->xml->addChild('CstmrCdtTrfInitn');
-		$this->payment = new SepaPaymentInfo;
 	}
 	
 	/**
@@ -117,9 +116,13 @@ class SepaTransferFile extends SepaFileBlock
 	/**
 	 * Set the information for the "Payment Information" block.
 	 * @param array $paymentInfo
+	 * @return SepaPaymentInfo
 	 */
-	public function setPaymentInfo(array $paymentInfo)
+	public function addPaymentInfo(array $paymentInfo)
 	{
+		$this->payment = new SepaPaymentInfo();
+		$this->payment->setTransferFile($this);
+		
 		$values = array(
 			'id', 'categoryPurposeCode', 'debtorName', 'debtorAccountIBAN',
 			'debtorAgentBIC', 'debtorAccountCurrency'
@@ -136,6 +139,8 @@ class SepaTransferFile extends SepaFileBlock
 		
 		if (isset($paymentInfo['debtorAccountCurrency']))
 			$this->payment->setDebtorAccountCurrency($paymentInfo['debtorAccountCurrency']);
+		
+		return $this->payment;
 	}
 
 	/**
