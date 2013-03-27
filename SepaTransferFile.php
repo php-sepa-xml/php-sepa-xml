@@ -73,9 +73,9 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	protected $xml;
 	/**
-	 * @var SepaPaymentInfo
+	 * @var SepaPaymentInfo[]
 	 */
-	protected $payment;
+	protected $payments;
 
 	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
 
@@ -120,39 +120,26 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	public function addPaymentInfo(array $paymentInfo)
 	{
-		$this->payment = new SepaPaymentInfo();
-		$this->payment->setTransferFile($this);
+		$payment = new SepaPaymentInfo($this);
+		$payment->setInfo($paymentInfo);
 		
-		$values = array(
-			'id', 'categoryPurposeCode', 'debtorName', 'debtorAccountIBAN',
-			'debtorAgentBIC', 'debtorAccountCurrency'
-		);
-		foreach ($values as $name) {
-			if (isset($paymentInfo[$name]))
-				$this->payment->$name = $paymentInfo[$name];
-		}
-		if (isset($paymentInfo['localInstrumentCode']))
-			$this->payment->setLocalInstrumentCode($paymentInfo['localInstrumentCode']);
+		$this->payments[] = $payment;
 		
-		if (isset($paymentInfo['paymentMethod']))
-			$this->payment->setPaymentMethod($paymentInfo['paymentMethod']);
-		
-		if (isset($paymentInfo['debtorAccountCurrency']))
-			$this->payment->setDebtorAccountCurrency($paymentInfo['debtorAccountCurrency']);
-		
-		return $this->payment;
+		return $payment;
 	}
 
 	/**
-	 * Add a "Credit Transfer Transaction Information" block to the payment.
-	 * @param array $transferInfo
+	 * Update counters related to "Payment Information" blocks.
 	 */
-	public function addCreditTransfer(array $transferInfo)
+	protected function updatePaymentCounters()
 	{
-		$this->payment->addCreditTransfer($transferInfo);
-
-		$this->numberOfTransactions += $this->payment->getNumberOfTransactions();
-		$this->controlSumCents += $this->payment->getControlSumCents();
+		$this->numberOfTransactions = 0;
+		$this->controlSumCents = 0;
+		
+		foreach ($this->payments as $payment) {
+			$this->numberOfTransactions += $payment->getNumberOfTransactions();
+			$this->controlSumCents += $payment->getControlSumCents();
+		}
 	}
 
 	/**
@@ -160,6 +147,8 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	protected function generateXml()
 	{
+		$this->updatePaymentCounters();
+		
 		$datetime = new DateTime();
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
 
@@ -178,7 +167,9 @@ class SepaTransferFile extends SepaFileBlock
 			$GrpHdr->addChild('InitgPty')->addChild('Id', $this->initiatingPartyId);
 
 		// -- Payment Information --\\
-		$this->xml = $this->payment->generateXml($this->xml);
+		foreach ($this->payments as $payment) {
+			$this->xml = $payment->generateXml($this->xml);
+		}
 	}
 
 }

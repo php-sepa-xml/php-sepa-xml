@@ -45,11 +45,11 @@ class SepaPaymentInfo extends SepaFileBlock
 	 * @var string Debtor's account bank BIC code.
 	 */
 	public $debtorAgentBIC;
+	
 	/**
 	 * @var string Debtor's account ISO currency code.
 	 */
-	public $debtorAccountCurrency = 'EUR';
-
+	protected $debtorAccountCurrency = 'EUR';
 	/**
 	 * @var string Payment method.
 	 */
@@ -74,6 +74,39 @@ class SepaPaymentInfo extends SepaFileBlock
 	 * @var SepaTransferFile
 	 */
 	protected $transferFile;
+	
+	/**
+	 * Constructor.
+	 * @param SepaTransferFile $transferFile
+	 */
+	public function __construct(SepaTransferFile $transferFile)
+	{
+		$this->setTransferFile($transferFile);
+	}
+
+	/**
+	 * Set the information for this "Payment Information" block.
+	 * @param array $paymentInfo
+	 */
+	public function setInfo(array $paymentInfo)
+	{
+		$values = array(
+			'id', 'categoryPurposeCode', 'debtorName', 'debtorAccountIBAN',
+			'debtorAgentBIC', 'debtorAccountCurrency'
+		);
+		foreach ($values as $name) {
+			if (isset($paymentInfo[$name]))
+				$this->$name = $paymentInfo[$name];
+		}
+		if (isset($paymentInfo['localInstrumentCode']))
+			$this->setLocalInstrumentCode($paymentInfo['localInstrumentCode']);
+		
+		if (isset($paymentInfo['paymentMethod']))
+			$this->setPaymentMethod($paymentInfo['paymentMethod']);
+		
+		if (isset($paymentInfo['debtorAccountCurrency']))
+			$this->setDebtorAccountCurrency($paymentInfo['debtorAccountCurrency']);
+	}
 
 	/**
 	 * Set the payment method.
@@ -168,6 +201,8 @@ class SepaPaymentInfo extends SepaFileBlock
 
 	/**
 	 * DO NOT CALL THIS FUNCTION DIRECTLY!
+	 *
+	 * Generate the XML structure for this "Payment Info" block.
 	 * 
 	 * @param SimpleXMLElement $xml
 	 * @return SimpleXMLElement

@@ -3,24 +3,30 @@ php-sepa-xml
 
 SEPA file generator for PHP.
 
+Creates an XML file for a Single Euro Payments Area (SEPA) Credit Transfer.
+
+The version of the standard followed is: __pain.001.001.03__
+
 License: GNU Lesser General Public License v3.0
 
-ALPHA QUALITY SOFTWARE
+BETA QUALITY SOFTWARE
 
-Do **not** use in production environments!!!
+Verify generated files with your bank before using!!!
 
 **API subject to change.**
 
-###Basic Usage
+###Usage
 ```php
 $sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
 $sepaFile->initiatingPartyName = 'Me';
 
 /* 
- * Set the payment information
+ * Add a payment to the SEPA file. This method
+ * may be called more than once to add multiple
+ * payments to the same file.
  */
-$sepaFile->addPaymentInfo(array(
+$payment1 = $sepaFile->addPaymentInfo(array(
 	'id'					=> 'Payment Info ID',
 	'debtorName'			=> 'My Corp',
 	'debtorAccountIBAN'		=> 'MY_ACCOUNT_IBAN',
@@ -30,11 +36,11 @@ $sepaFile->addPaymentInfo(array(
 ));
 
 /* 
- * Add the credit transfer(s). This method may be called
- * more than once to add multiple transfers for the same
- * payment information.
+ * Add a credit transfer to the payment. This method
+ * may be called more than once to add multiple
+ * transfers for the same payment.
  */
-$sepaFile->addCreditTransfer(array(
+$payment1->addCreditTransfer(array(
 	'id'					=> 'Id shown in bank statement',
 	'currency'				=> 'EUR',
 	'amount'				=> '0.02', // or as float: 0.02 or as integer: 2
@@ -44,10 +50,10 @@ $sepaFile->addCreditTransfer(array(
 	'remittanceInformation'	=> 'Transaction description',
 ));
 
-// generate the file and return the XML string
+/* Generate the file and return the XML string. */
 echo $sepaFile->asXML();
 
-// After generating the file, these two values can be retrieved:
+/* After generating the file, these two values can be retrieved: */
 echo $sepaFile->getHeaderControlSumCents();
-echo $sepaFile->getPaymentControlSumCents();
+echo $payment1->getPaymentControlSumCents();
 ```
