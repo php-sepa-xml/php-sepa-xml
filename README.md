@@ -15,7 +15,7 @@ Verify generated files with your bank before using!!!
 
 **API subject to change.**
 
-###Usage
+##Usage
 ```php
 $sepaFile = new SepaTransferFile();
 $sepaFile->messageIdentification = 'transferID';
