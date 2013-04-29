@@ -110,7 +110,7 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	public function getPaymentControlSumCents()
 	{
-		return $this->payment->getControlSumCents();
+		return $this->controlSumCents;
 	}
 
 	/**
