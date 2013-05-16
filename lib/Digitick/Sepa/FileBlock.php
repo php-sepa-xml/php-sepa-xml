@@ -1,5 +1,7 @@
 <?php
 
+namespace Digitick\Sepa;
+
 /**
  * SEPA file generator.
  *
@@ -23,7 +25,7 @@
 /**
  * Base class for SEPA file blocks.
  */
-abstract class SepaFileBlock
+abstract class FileBlock
 {
 
 	//abstract public function generateXml(SimpleXMLElement $xml);
@@ -37,7 +39,7 @@ abstract class SepaFileBlock
 	}
 
 	/**
-	 * @param type $code
+	 * @param string $code
 	 * @return string currency ISO code
 	 * @throws Exception
 	 */
@@ -45,6 +47,7 @@ abstract class SepaFileBlock
 	{
 		if (strlen($code) !== 3)
 			throw new Exception("Invalid ISO currency code: $code");
+
 		return $code;
 	}
 

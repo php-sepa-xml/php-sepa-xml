@@ -1,5 +1,7 @@
 <?php
 
+namespace Digitick\Sepa;
+
 /**
  * SEPA file generator.
  *
@@ -23,7 +25,7 @@
 /**
  * SEPA file "Credit Transfer Transaction Information" block.
  */
-class SepaCreditTransfer extends SepaFileBlock
+class CreditTransfer extends FileBlock
 {
 	/**
 	 * @var string Payment ID.
@@ -94,10 +96,10 @@ class SepaCreditTransfer extends SepaFileBlock
 	/**
 	 * DO NOT CALL THIS FUNCTION DIRECTLY!
 	 * 
-	 * @param SimpleXMLElement $xml
-	 * @return SimpleXMLElement
+	 * @param \SimpleXMLElement $xml
+	 * @return \SimpleXMLElement
 	 */
-	public function generateXml(SimpleXMLElement $xml)
+	public function generateXml(\SimpleXMLElement $xml)
 	{
 		// -- Credit Transfer Transaction Information --\\
 		
@@ -115,5 +117,4 @@ class SepaCreditTransfer extends SepaFileBlock
 		
 		return $xml;
 	}
-
 }

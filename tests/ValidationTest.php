@@ -1,20 +1,25 @@
 <?php
 
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once '../SepaTransferFile.php';
+namespace Tests;
+
+use \Digitick\Sepa\TransferFile;
 
 /**
  * Various schema validation tests.
  */
-class ValidationTest extends PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit_Framework_TestCase
 {
 	protected $schema;
-	protected $dom;
+
+    /**
+     * @var \DOMDocument
+     */
+    protected $dom;
 	
 	protected function setUp()
 	{
-		$this->schema = "pain.001.001.03.xsd";
-		$this->dom = new DOMDocument('1.0', 'UTF-8');
+		$this->schema = __DIR__ . "/pain.001.001.03.xsd";
+		$this->dom = new \DOMDocument('1.0', 'UTF-8');
 	} 
 
 	/**
@@ -22,7 +27,7 @@ class ValidationTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSanity()
 	{
-		$this->dom->load('pain.001.001.03.xml');
+		$this->dom->load(__DIR__ . '/pain.001.001.03.xml');
 		$validated = $this->dom->schemaValidate($this->schema);
 		$this->assertTrue($validated);
 	}
@@ -32,7 +37,7 @@ class ValidationTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSinglePaymentSingleTrans()
 	{
-		$sepaFile = new SepaTransferFile();
+		$sepaFile = new TransferFile();
 		$sepaFile->messageIdentification = 'transferID';
 		$sepaFile->initiatingPartyName = 'Me';
 		
@@ -63,7 +68,7 @@ class ValidationTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSinglePaymentMultiTrans()
 	{
-		$sepaFile = new SepaTransferFile();
+		$sepaFile = new TransferFile();
 		$sepaFile->messageIdentification = 'transferID';
 		$sepaFile->initiatingPartyName = 'Me';
 		
@@ -103,7 +108,7 @@ class ValidationTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMultiPaymentSingleTrans()
 	{
-		$sepaFile = new SepaTransferFile();
+		$sepaFile = new TransferFile();
 		$sepaFile->messageIdentification = 'transferID';
 		$sepaFile->initiatingPartyName = 'Me';
 		
@@ -149,7 +154,7 @@ class ValidationTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMultiPaymentMultiTrans()
 	{
-		$sepaFile = new SepaTransferFile();
+		$sepaFile = new TransferFile();
 		$sepaFile->messageIdentification = 'transferID';
 		$sepaFile->initiatingPartyName = 'Me';
 		

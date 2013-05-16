@@ -1,5 +1,7 @@
 <?php
 
+namespace Digitick\Sepa;
+
 /**
  * SEPA file generator.
  *
@@ -26,14 +28,11 @@
  * @author Ianaré Sévi
  * @author Vincent MOMIN
  */
-require 'lib/SepaFileBlock.php';
-require 'lib/SepaPaymentInfo.php';
-require 'lib/SepaCreditTransfer.php';
 
 /**
  * SEPA payments file object.
  */
-class SepaTransferFile extends SepaFileBlock
+class TransferFile extends FileBlock
 {
 	/**
 	 * @var boolean If true, the transaction will never be executed.
@@ -69,11 +68,11 @@ class SepaTransferFile extends SepaFileBlock
 	 */
 	protected $numberOfTransactions = 0;
 	/**
-	 * @var SimpleXMLElement
+	 * @var \SimpleXMLElement
 	 */
 	protected $xml;
 	/**
-	 * @var SepaPaymentInfo[]
+	 * @var \Digitick\Sepa\PaymentInfo[]
 	 */
 	protected $payments;
 
@@ -116,11 +115,11 @@ class SepaTransferFile extends SepaFileBlock
 	/**
 	 * Set the information for the "Payment Information" block.
 	 * @param array $paymentInfo
-	 * @return SepaPaymentInfo
+	 * @return \Digitick\Sepa\PaymentInfo
 	 */
 	public function addPaymentInfo(array $paymentInfo)
 	{
-		$payment = new SepaPaymentInfo($this);
+		$payment = new PaymentInfo($this);
 		$payment->setInfo($paymentInfo);
 		
 		$this->payments[] = $payment;
@@ -149,7 +148,7 @@ class SepaTransferFile extends SepaFileBlock
 	{
 		$this->updatePaymentCounters();
 		
-		$datetime = new DateTime();
+		$datetime = new \DateTime();
 		$creationDateTime = $datetime->format('Y-m-d\TH:i:s');
 
 		// -- Group Header -- \\
