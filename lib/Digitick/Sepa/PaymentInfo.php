@@ -76,7 +76,7 @@ class PaymentInfo extends FileBlock
      */
     protected $numberOfTransactions = 0;
     /**
-     * @var \Digitick\Sepa\CreditTransfer[]
+     * @var array<\Digitick\Sepa\CreditTransfer>
      */
     protected $creditTransfers = array();
     /**
@@ -90,7 +90,7 @@ class PaymentInfo extends FileBlock
      */
     public function __construct(TransferFile $transferFile)
     {
-        $this->setTransferFile($transferFile);
+        $this->transferFile = $transferFile;
     }
 
     /**
@@ -201,7 +201,7 @@ class PaymentInfo extends FileBlock
         if (isset($transferInfo['currency']))
             $transfer->setCurrency($transferInfo['currency']);
 
-        $transfer->endToEndId = $this->transferFile->messageIdentification . '/' . $this->getNumberOfTransactions();
+        $transfer->endToEndId = $this->transferFile->getGroupHeader()->getMessageIdentification() . '/' . $this->getNumberOfTransactions();
 
         $this->creditTransfers[] = $transfer;
         $this->numberOfTransactions++;

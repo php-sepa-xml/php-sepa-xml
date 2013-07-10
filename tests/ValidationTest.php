@@ -2,7 +2,8 @@
 
 namespace Tests;
 
-use \Digitick\Sepa\TransferFile;
+use Digitick\Sepa\CustomerCredit;
+use Digitick\Sepa\GroupHeader;
 
 /**
  * Various schema validation tests.
@@ -37,9 +38,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSinglePaymentSingleTrans()
 	{
-		$sepaFile = new TransferFile();
-		$sepaFile->messageIdentification = 'transferID';
-		$sepaFile->initiatingPartyName = 'Me';
+        $groupHeader = new GroupHeader('transferID', 'Me');
+		$sepaFile = new CustomerCredit($groupHeader);
 		
 		$payment = $sepaFile->addPaymentInfo(array(
 			'id'                    => 'Payment Info ID',
@@ -68,9 +68,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSinglePaymentMultiTrans()
 	{
-		$sepaFile = new TransferFile();
-		$sepaFile->messageIdentification = 'transferID';
-		$sepaFile->initiatingPartyName = 'Me';
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCredit($groupHeader);
 		
 		$payment = $sepaFile->addPaymentInfo(array(
 			'id'                    => 'Payment Info ID',
@@ -108,9 +107,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMultiPaymentSingleTrans()
 	{
-		$sepaFile = new TransferFile();
-		$sepaFile->messageIdentification = 'transferID';
-		$sepaFile->initiatingPartyName = 'Me';
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCredit($groupHeader);
 		
 		$payment1 = $sepaFile->addPaymentInfo(array(
 			'id'                    => 'Payment Info ID',
@@ -154,9 +152,8 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMultiPaymentMultiTrans()
 	{
-		$sepaFile = new TransferFile();
-		$sepaFile->messageIdentification = 'transferID';
-		$sepaFile->initiatingPartyName = 'Me';
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCredit($groupHeader);
 		
 		$payment1 = $sepaFile->addPaymentInfo(array(
 			'id'                    => 'Payment Info ID',
