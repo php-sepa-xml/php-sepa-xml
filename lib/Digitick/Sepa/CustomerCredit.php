@@ -33,13 +33,8 @@ namespace Digitick\Sepa;
 /**
  * SEPA payments file object.
  */
-class CustomerCredit extends FileBlock implements TransferFile
+class CustomerCredit extends Document implements TransferFileInterface
 {
-    /**
-     * @var GroupHeader
-     */
-    protected $groupHeader;
-
 	/**
 	 * @var string Purpose of the transaction(s).
 	 */
@@ -54,29 +49,24 @@ class CustomerCredit extends FileBlock implements TransferFile
 	 * @var integer Sum of all transactions in all payments regardless of currency.
 	 */
 	protected $controlSumCents = 0;
+
 	/**
 	 * @var integer Number of payment transactions.
 	 */
-	protected $numberOfTransactions = 0;
-	/**
-	 * @var \SimpleXMLElement
-	 */
-	protected $xml;
+    protected $numberOfTransactions = 0;
 
 	/**
 	 * @var array<\Digitick\Sepa\PaymentInfo>
 	 */
 	protected $payments;
 
-	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
+    function __construct(GroupHeader $groupHeader) {
+        parent::__construct($groupHeader, 'pain.001.001.03');
+        $this->xml->addChild('CstmrCdtTrfInitn');
+    }
 
-	public function __construct(GroupHeader $groupHeader) {
-        $this->groupHeader = $groupHeader;
-		$this->xml = simplexml_load_string(self::INITIAL_STRING);
-		$this->xml->addChild('CstmrCdtTrfInitn');
-	}
-	
-	/**
+
+    /**
 	 * Return the XML string.
 	 * @return string
 	 */
@@ -147,18 +137,11 @@ class CustomerCredit extends FileBlock implements TransferFile
         $this->groupHeader->generateXml($this->xml->CstmrCdtTrfInitn);
 
 		// -- Payment Information --\\
+        /** @var $payment PaymentInfo */
 		foreach ($this->payments as $payment) {
-			$this->xml = $payment->generateXml($this->xml);
+			$payment->generateXml($this->xml->CstmrCdtTrfInitn);
 		}
 	}
-
-    /**
-     * @return \Digitick\Sepa\GroupHeader
-     */
-    public function getGroupHeader() {
-        return $this->groupHeader;
-    }
-
 
 }
 

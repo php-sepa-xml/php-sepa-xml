@@ -8,7 +8,7 @@ use Digitick\Sepa\GroupHeader;
 /**
  * Various schema validation tests.
  */
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 {
 	protected $schema;
 

@@ -10,7 +10,7 @@ namespace Digitick\Sepa;
  */
 
 
-interface TransferFile {
+interface TransferFileInterface {
 
     public function asXML();
 
