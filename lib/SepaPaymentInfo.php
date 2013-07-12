@@ -224,7 +224,7 @@ class SepaPaymentInfo extends SepaFileBlock
 		$PmtInf->addChild('CtrlSum', $this->intToCurrency($this->controlSumCents));
 		$PmtInf->addChild('PmtTpInf')->addChild('SvcLvl')->addChild('Cd', 'SEPA');
 		if ($this->localInstrumentCode)
-			$PmtInf->PmtTpInf->addChild('LclInstr')->addChild('Cd', $this->localInstrumentCode);
+			$PmtInf->PmtTpInf->addChild('LclInstrm')->addChild('Cd', $this->localInstrumentCode);
 		
 		$PmtInf->addChild('ReqdExctnDt', $requestedExecutionDate);
 		$PmtInf->addChild('Dbtr')->addChild('Nm', htmlentities($this->debtorName));
