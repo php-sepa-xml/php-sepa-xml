@@ -1,6 +1,7 @@
 <?php
 
 namespace Digitick\Sepa;
+use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 
 /**
  * User: s.rohweder@blage.net
@@ -9,7 +10,7 @@ namespace Digitick\Sepa;
  * License: MIT
  */
 
-class GroupHeader extends FileBlock {
+class GroupHeader {
 
     /**
      * Weather this is a test Transaction
@@ -46,6 +47,11 @@ class GroupHeader extends FileBlock {
     protected $initiatingPartyName;
 
     /**
+     * @var \DateTime
+     */
+    protected $creationDateTime;
+
+    /**
      * @param $messageIdentification
      * @param $isTest
      * @param $initiatingPartyName
@@ -54,49 +60,11 @@ class GroupHeader extends FileBlock {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
         $this->initiatingPartyName = $initiatingPartyName;
+        $this->creationDateTime = new \DateTime();
     }
 
-    /**
-     * @return \SimpleXMLElement
-     */
-    public function generateXml(\SimpleXMLElement $parentNode) {
-
-        $datetime = new \DateTime();
-        $creationDateTime = $datetime->format('Y-m-d\TH:i:s');
-
-        // -- Group Header -- \\
-
-        $groupHeader = $parentNode->addChild('GrpHdr');
-
-        if ($this->messageIdentification === '' || $this->messageIdentification === null) {
-            throw new Exception('Missing messageIdentification in Group Header', 1373406415);
-        }
-        $groupHeader->addChild('MsgId', $this->messageIdentification);
-
-        $groupHeader->addChild('CreDtTm', $creationDateTime);
-        if ($this->isTest) {
-            $groupHeader->addChild('Authstn')->addChild('Prtry', 'TEST');
-        }
-
-        if ($this->numberOfTransactions === 0) {
-            throw new Exception('The transaction count is 0', 1373406515);
-        }
-        $groupHeader->addChild('NbOfTxs', $this->numberOfTransactions);
-
-        if ($this->controlSumCents === 0) {
-            throw new Exception('The control sum is 0', 1373406553);
-        }
-        $groupHeader->addChild('CtrlSum', $this->intToCurrency($this->controlSumCents));
-
-        if ($this->initiatingPartyName === '' || $this->initiatingPartyName === null) {
-            throw new Exception('The initiating party name must be set', 1373406617);
-        }
-        $groupHeader->addChild('InitgPty')->addChild('Nm', $this->initiatingPartyName);
-        if (isset($this->initiatingPartyId)) {
-            $groupHeader->addChild('InitgPty')->addChild('Id', $this->initiatingPartyId);
-        }
-
-        return $groupHeader;
+    public function accept(DomBuilderInterface $domBuilder) {
+        $domBuilder->visitGroupHeader($this);
     }
 
     /**
@@ -182,5 +150,13 @@ class GroupHeader extends FileBlock {
     public function getNumberOfTransactions() {
         return $this->numberOfTransactions;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreationDateTime() {
+        return $this->creationDateTime;
+    }
+
 
 }
