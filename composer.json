@@ -1,12 +1,12 @@
 {
-    "name": "digitick/php-sepa-xml",
+    "name": "digitick/sepa-xml",
     "type": "library",
     "description": "Creates an XML file for a Single Euro Payments Area (SEPA) Credit Transfer.",
     "keywords": ["banking", "sepa", "xml"],
     "license": "GNU Lesser General Public License v3.0",
     "authors": [
         {
-            "name": "Ianaré Sévi",
+            "name": "Ianaré Sévi"
         },
         {
             "name": "Digitick, SA",
