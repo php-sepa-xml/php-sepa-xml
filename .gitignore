@@ -5,7 +5,7 @@
 *~
 .Trashes
 Thumbs.db
-Session.vim
+.directory
 
 # Compiled #
 *.war
@@ -23,6 +23,7 @@ nbactions.xml
 nb-configuration.xml
 project.properties
 project.xml
+Session.vim
 
 
 /vendor/
