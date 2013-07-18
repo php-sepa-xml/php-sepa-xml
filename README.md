@@ -13,7 +13,21 @@ BETA QUALITY SOFTWARE
 
 Verify generated files with your bank before using!!!
 
-**API subject to change.**
+##Installation
+###Composer
+This library is available in packagist.org, you can add it to your project
+via Composer.
+
+In the "require" section of your composer.json file:
+
+Always up to date (bleeding edge, API *not* guaranteed stable)
+```javascript
+"digitick/sepa-xml" : "dev-master"
+```
+Specific minor version, API stability
+```javascript
+"digitick/sepa-xml" : "0.9.*"
+```
 
 ##Usage
 ```php
