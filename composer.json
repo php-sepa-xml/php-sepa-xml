@@ -1,11 +1,15 @@
 {
-    "name": "digitick/php-sepa-xml",
+    "name": "monofone/de-sepa-xml",
     "description": "SEPA file generator in PHP",
     "license": "GNU",
     "authors": [
         {
             "name": "Digitick",
             "email": "info@digitick.net"
+        },
+        {
+            "name": "monofone",
+            "email": "s.rohweder@blage.net"
         }
     ],
     "require": {
@@ -13,6 +17,5 @@
     },
     "autoload": {
         "psr-0": { "Digitick\\Sepa": "lib/" }
-    },
-    "target-dir": "Digitick/Sepa"
+    }
 }
