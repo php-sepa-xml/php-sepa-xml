@@ -55,7 +55,11 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade {
         $payment->setSequenceType($paymentInformation['seqType']);
         $payment->setCreditorId($paymentInformation['creditorId']);
         if(isset($paymentInformation['dueDate'])) {
-            $payment->setDueDate(new \DateTime($paymentInformation['dueDate']));
+            if($paymentInformation['dueDate'] instanceof \DateTime) {
+                $payment->setDueDate($paymentInformation['dueDate']);
+            } else {
+                $payment->setDueDate(new \DateTime($paymentInformation['dueDate']));
+            }
         } else {
             $payment->setDueDate(new \DateTime(date('Y-m-d',strtotime('now + 5 days'))));
         }
