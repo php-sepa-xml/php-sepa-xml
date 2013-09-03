@@ -75,7 +75,7 @@ class SepaTransferFile extends SepaFileBlock
 	/**
 	 * @var SepaPaymentInfo[]
 	 */
-	protected $payments;
+	protected $payments = array();
 
 	const INITIAL_STRING = '<?xml version="1.0" encoding="UTF-8"?><Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"></Document>';
 
