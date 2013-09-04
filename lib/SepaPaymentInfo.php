@@ -215,7 +215,7 @@ class SepaPaymentInfo extends SepaFileBlock
 		// -- Payment Information --\\
 
 		$PmtInf = $xml->CstmrCdtTrfInitn->addChild('PmtInf');
-		$PmtInf->addChild('PmtInfId', $this->id);
+		$PmtInf->addChild('PmtInfId', htmlentities($this->id));
 		if (isset($this->categoryPurposeCode))
 			$PmtInf->addChild('CtgyPurp')->addChild('Cd', $this->categoryPurposeCode);
 
