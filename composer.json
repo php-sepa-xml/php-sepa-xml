@@ -14,7 +14,7 @@
         }
     ],
     "autoload": {
-        "classmap": ["lib/"]
+        "classmap": ["lib/", "SepaTransferFile.php"]
     },
     "require": {
         "php": ">=5.3.2"
