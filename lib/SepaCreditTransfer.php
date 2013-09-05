@@ -108,7 +108,9 @@ class SepaCreditTransfer extends SepaFileBlock
 		$PmtId->addChild('InstrId', $this->id);
 		$PmtId->addChild('EndToEndId', $this->endToEndId);
 		$CdtTrfTxInf->addChild('Amt')->addChild('InstdAmt', $amount)->addAttribute('Ccy', $this->currency);
-		$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->creditorBIC);
+		if ($this->creditorBIC) {
+			$CdtTrfTxInf->addChild('CdtrAgt')->addChild('FinInstnId')->addChild('BIC', $this->creditorBIC);
+		}
 		$CdtTrfTxInf->addChild('Cdtr')->addChild('Nm', htmlentities($this->creditorName));
 		$CdtTrfTxInf->addChild('CdtrAcct')->addChild('Id')->addChild('IBAN', $this->creditorAccountIBAN);
 		$CdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd', $this->remittanceInformation);
