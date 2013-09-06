@@ -45,7 +45,11 @@ class SepaPaymentInfo extends SepaFileBlock
 	 * @var string Debtor's account bank BIC code.
 	 */
 	public $debtorAgentBIC;
-	
+	/**
+	 * @var string When to process the payment (in Y-m-d format)
+	 */
+	public $requestedExecutionDate;
+
 	/**
 	 * @var string Debtor's account ISO currency code.
 	 */
@@ -92,7 +96,7 @@ class SepaPaymentInfo extends SepaFileBlock
 	{
 		$values = array(
 			'id', 'categoryPurposeCode', 'debtorName', 'debtorAccountIBAN',
-			'debtorAgentBIC', 'debtorAccountCurrency'
+			'debtorAgentBIC', 'debtorAccountCurrency', 'requestedExecutionDate'
 		);
 		foreach ($values as $name) {
 			if (isset($paymentInfo[$name]))
@@ -210,8 +214,9 @@ class SepaPaymentInfo extends SepaFileBlock
 	public function generateXml(SimpleXMLElement $xml)
 	{
 		$datetime = new DateTime();
-		$requestedExecutionDate = $datetime->format('Y-m-d');
-		
+
+		$requestedExecutionDate = $this->requestedExecutionDate ? : $datetime->format('Y-m-d');
+
 		// -- Payment Information --\\
 
 		$PmtInf = $xml->CstmrCdtTrfInitn->addChild('PmtInf');
