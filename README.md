@@ -47,6 +47,7 @@ $payment1 = $sepaFile->addPaymentInfo(array(
 	'debtorAgentBIC'		=> 'MY_BANK_BIC'
 //	'debtorAccountCurrency'	=> 'GPB', // optional, defaults to 'EUR'
 //	'categoryPurposeCode'	=> 'SUPP', // optional, defaults to NULL
+//	'requestedExecutionDate => '2014-1-28', // optional, defaults to current date
 ));
 
 /* 
