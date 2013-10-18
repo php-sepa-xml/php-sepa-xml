@@ -2,6 +2,7 @@
 /**
  * SEPA file generator.
  *
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @copyright © Blage <www.blage.net> 2013
  * @license GNU Lesser General Public License v3.0
  *

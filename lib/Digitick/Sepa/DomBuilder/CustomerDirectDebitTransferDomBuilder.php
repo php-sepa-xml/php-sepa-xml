@@ -1,17 +1,8 @@
 <?php
-
-namespace Digitick\Sepa\DomBuilder;
-use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
-use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use Digitick\Sepa\TransferInformation\TransferInformationInterface;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\TransferFileInterface;
-
-
 /**
  * SEPA file generator.
  *
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @copyright © Blage <www.blage.net> 2013
  * @license GNU Lesser General Public License v3.0
  *
@@ -29,12 +20,23 @@ use Digitick\Sepa\TransferFile\TransferFileInterface;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder {
+namespace Digitick\Sepa\DomBuilder;
 
+use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
+use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
+use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\TransferFile\TransferFileInterface;
+
+
+class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
+{
 
     public function __construct() {
         parent::__construct(CustomerDirectDebitTransferFile::PAIN_FORMAT);
     }
+
     /**
      * Build the root of the document
      *

@@ -1,10 +1,8 @@
 <?php
-
-namespace Digitick\Sepa\TransferInformation;
-
 /**
  * SEPA file generator.
  *
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @copyright © Blage <www.blage.net> 2013
  * @license GNU Lesser General Public License v3.0
  *
@@ -22,8 +20,10 @@ namespace Digitick\Sepa\TransferInformation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-class CustomerCreditTransferInformation extends BaseTransferInformation {
+namespace Digitick\Sepa\TransferInformation;
 
+class CustomerCreditTransferInformation extends BaseTransferInformation
+{
     /**
      * @param string $amount
      * @param string $iban

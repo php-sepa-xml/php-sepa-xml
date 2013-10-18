@@ -1,14 +1,8 @@
 <?php
-
-namespace Digitick\Sepa\TransferFile;
-use Digitick\Sepa\DomBuilder\DomBuilderInterface;
-use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-
 /**
  * SEPA file generator.
  *
+ * @copyright © Digitick <www.digitick.net> 2012-2013
  * @copyright © Blage <www.blage.net> 2013
  * @license GNU Lesser General Public License v3.0
  *
@@ -26,8 +20,15 @@ use Digitick\Sepa\PaymentInformation;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-abstract class BaseTransferFile implements TransferFileInterface {
+namespace Digitick\Sepa\TransferFile;
 
+use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
+use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\PaymentInformation;
+
+abstract class BaseTransferFile implements TransferFileInterface
+{
     /**
      * @var GroupHeader
      */
