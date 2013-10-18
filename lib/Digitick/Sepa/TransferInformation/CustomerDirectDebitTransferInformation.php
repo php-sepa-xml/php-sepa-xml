@@ -1,6 +1,7 @@
 <?php
 
 namespace Digitick\Sepa\TransferInformation;
+use Digitick\Sepa\Util\StringHelper;
 
 /**
  * SEPA file generator.
@@ -47,7 +48,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation {
     function __construct($amount, $iban, $name) {
         parent::__construct($amount, $iban, $name);
         // FIXME broken implementation find suitable IDs
-        $this->EndToEndIdentification = $name;
+        $this->EndToEndIdentification = StringHelper::sanitizeString($name);
     }
 
     /**
@@ -68,7 +69,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation {
      * @param string $mandateId
      */
     public function setMandateId($mandateId) {
-        $this->mandateId = $mandateId;
+        $this->mandateId = StringHelper::sanitizeString($mandateId);
     }
 
     /**

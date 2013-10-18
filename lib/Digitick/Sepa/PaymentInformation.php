@@ -4,6 +4,7 @@ namespace Digitick\Sepa;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidPaymentMethodException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Digitick\Sepa\Util\StringHelper;
 
 /**
  * SEPA file generator.
@@ -121,7 +122,7 @@ class PaymentInformation {
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
         $this->originAgentBIC = $originAgentBIC;
-        $this->originName = $originName;
+        $this->originName = StringHelper::sanitizeString($originName);
         $this->originAccountCurrency = $originAccountCurrency;
         $this->dueDate = new \DateTime();
     }
@@ -233,7 +234,7 @@ class PaymentInformation {
      * @param string $originName
      */
     public function setOriginName($originName) {
-        $this->originName = $originName;
+        $this->originName = StringHelper::sanitizeString($originName);
     }
 
     /**
@@ -331,7 +332,7 @@ class PaymentInformation {
      * @param string $creditorSchemeId
      */
     public function setCreditorId($creditorSchemeId) {
-        $this->creditorId = $creditorSchemeId;
+        $this->creditorId = StringHelper::sanitizeString($creditorSchemeId);
     }
 
     /**

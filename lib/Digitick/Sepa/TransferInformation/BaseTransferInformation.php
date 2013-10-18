@@ -2,6 +2,7 @@
 
 namespace Digitick\Sepa\TransferInformation;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Util\StringHelper;
 
 /**
  * SEPA file generator.
@@ -85,7 +86,7 @@ class BaseTransferInformation implements TransferInformationInterface{
         }
         $this->transferAmount = $amount;
         $this->iban = $iban;
-        $this->name = $name;
+        $this->name = StringHelper::sanitizeString($name);
     }
 
     /**
@@ -177,7 +178,7 @@ class BaseTransferInformation implements TransferInformationInterface{
      * @param string $remittanceInformation
      */
     public function setRemittanceInformation($remittanceInformation) {
-        $this->remittanceInformation = $remittanceInformation;
+        $this->remittanceInformation = StringHelper::sanitizeString($remittanceInformation);
     }
 
     /**

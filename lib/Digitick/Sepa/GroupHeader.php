@@ -1,7 +1,9 @@
 <?php
 
 namespace Digitick\Sepa;
+
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Util\StringHelper;
 
 /**
  * User: s.rohweder@blage.net
@@ -59,7 +61,7 @@ class GroupHeader {
     function __construct($messageIdentification, $initiatingPartyName, $isTest = false) {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
-        $this->initiatingPartyName = $initiatingPartyName;
+        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
         $this->creationDateTime = new \DateTime();
     }
 
@@ -99,7 +101,7 @@ class GroupHeader {
      * @param string $initiatingPartyName
      */
     public function setInitiatingPartyName($initiatingPartyName) {
-        $this->initiatingPartyName = $initiatingPartyName;
+        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
     }
 
     /**

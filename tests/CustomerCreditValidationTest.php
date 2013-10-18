@@ -170,13 +170,13 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         //Payment method is set
         $paymentMethod = $xpathDoc->query('//sepa:PmtMtd');
         $this->assertEquals('TRF', $paymentMethod->item(0)->textContent);
-        //Originiating IBAN
+        //Originating IBAN
         $originIban = $xpathDoc->query('//sepa:DbtrAcct/sepa:Id/sepa:IBAN');
         $this->assertEquals('FR1420041010050500013M02606', $originIban->item(0)->textContent);
-        //Originiating BIC
+        //Originating BIC
         $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
         $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
-        //Originiating Name
+        //Originating Name
         $originName = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
         $this->assertEquals('My Corp', $originName->item(0)->textContent);
     }
@@ -237,19 +237,3 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
 	}
 }
-
-/*$payment2 = $sepaFile->addPaymentInfo(array(
-                                           'id'                    => 'Payment Info ID',
-                                           'debtorName'            => 'My Corp',
-                                           'debtorAccountIBAN'     => 'FR1420041010050500013M02606',
-                                           'debtorAgentBIC'        => 'PSSTFRPPMON'
-                                      ));
-$payment2->addCreditTransfer(array(
-                                  'id'                    => 'Id shown in bank statement',
-                                  'currency'              => 'EUR',
-                                  'amount'                => '0.02',
-                                  'creditorName'          => 'Their Corp',
-                                  'creditorAccountIBAN'   => 'FI1350001540000056',
-                                  'creditorBIC'           => 'OKOYFIHH',
-                                  'remittanceInformation' => 'Transaction description',
-                             ));*/
