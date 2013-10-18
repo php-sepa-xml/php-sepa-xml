@@ -11,10 +11,14 @@
         {
             "name": "Digitick, SA",
             "email": "info@digitick.net"
+        },
+        {
+            "name": "Sören Rohweder (monofone)",
+            "email": "s.rohweder@blage.net"
         }
     ],
     "autoload": {
-        "classmap": ["lib/", "SepaTransferFile.php"]
+        "psr-0": { "Digitick\\Sepa": "lib/" }
     },
     "require": {
         "php": ">=5.3.2"

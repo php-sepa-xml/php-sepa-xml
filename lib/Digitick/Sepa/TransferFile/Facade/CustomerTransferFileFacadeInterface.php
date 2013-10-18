@@ -1,9 +1,11 @@
 <?php
 
+namespace Digitick\Sepa\TransferFile\Facade;
+
 /**
  * SEPA file generator.
  *
- * @copyright © Digitick <www.digitick.net> 2012-2013
+ * @copyright © Blage <www.blage.net> 2013
  * @license GNU Lesser General Public License v3.0
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,32 +22,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Base class for SEPA file blocks.
- */
-abstract class SepaFileBlock
-{
 
-	//abstract public function generateXml(SimpleXMLElement $xml);
+interface CustomerTransferFileFacadeInterface {
 
-	/**
-	 * Format an integer as a monetary value.
-	 */
-	protected function intToCurrency($amount)
-	{
-		return sprintf("%01.2f", ($amount / 100));
-	}
+    /**
+     * @param $payment
+     * @param array $paymentInformation
+     *
+     * @return mixed
+     */
+    public function addPaymentInfo($payment, array $paymentInformation);
 
-	/**
-	 * @param type $code
-	 * @return string currency ISO code
-	 * @throws Exception
-	 */
-	protected function validateCurrency($code)
-	{
-		if (strlen($code) !== 3)
-			throw new Exception("Invalid ISO currency code: $code");
-		return $code;
-	}
+    /**
+     * @param $payment
+     * @param array $transferInformation
+     *
+     * @return mixed
+     */
+    public function addTransfer($payment, array $transferInformation);
 
+    /**
+     * @return string
+     */
+    public function asXML();
 }
