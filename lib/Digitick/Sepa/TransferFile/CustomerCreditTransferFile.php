@@ -22,6 +22,7 @@
 
 namespace Digitick\Sepa\TransferFile;
 
+use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\Exception\InvalidTransferTypeException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -48,6 +49,9 @@ class CustomerCreditTransferFile extends BaseTransferFile
         parent::validate();
         /** @var $payment PaymentInformation */
         foreach($this->paymentInformations as $payment) {
+            if(count($payment->getTransfers()) === 0) {
+                throw new InvalidTransferFileConfiguration('PaymentInformation must at least contain one payment');
+            }
             foreach($payment->getTransfers() as $transfer) {
                 if(!$transfer instanceof CustomerCreditTransferInformation) {
                     throw new InvalidTransferTypeException('Transfers must be of type CustomerCreditTransferInformation instead of: ' . get_class($transfer));

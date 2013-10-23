@@ -95,9 +95,8 @@ $payment->addTransfer($transfer);
 // It's possible to add multiple payments to one SEPA File
 $sepaFile->addPaymentInformation($payment);
 
-// The DOMBuilder will be moved to a factory later
-$domBuilder = new CustomerCreditTransferDomBuilder();
-$sepaFile->accept($domBuilder);
+// Attach a dombuilder to the sepaFile to create the XML output
+$domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 
 $domBuilder->asXml();
 ```
