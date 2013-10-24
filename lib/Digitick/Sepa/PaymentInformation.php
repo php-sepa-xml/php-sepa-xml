@@ -118,6 +118,7 @@ class PaymentInformation
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
      * @param string $originName This is your Name
+     * @param string $originAccountCurrency
      */
     function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR') {
         $this->id = $id;
@@ -161,7 +162,7 @@ class PaymentInformation
     /**
      * Set the payment method.
      * @param string $method
-     * @throws \Digitick\Sepa\Exception\InvalidPaymentMethodException
+     * @throws InvalidArgumentException
      */
     public function setPaymentMethod($method) {
         $method = strtoupper($method);
@@ -173,6 +174,7 @@ class PaymentInformation
 
     /**
      * @param string $localInstrumentCode
+     * @throws InvalidArgumentException
      */
     public function setLocalInstrumentCode($localInstrumentCode) {
         $localInstrumentCode = strtoupper($localInstrumentCode);

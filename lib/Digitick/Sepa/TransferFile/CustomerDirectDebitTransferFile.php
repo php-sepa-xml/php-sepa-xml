@@ -57,7 +57,7 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
             }
             foreach($payment->getTransfers() as $transfer) {
                 if(!$transfer instanceof CustomerDirectDebitTransferInformation) {
-                    throw new InvalidTransferTypeException('Transfers must be of type CustomerDirectDebitTransferInformation instead of: ' . get_class($transfer));
+                    throw new InvalidTransferTypeException('Transfers must be of type \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class($transfer));
                 }
             }
         }
