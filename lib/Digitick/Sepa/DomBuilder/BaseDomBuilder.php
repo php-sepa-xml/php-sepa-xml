@@ -77,7 +77,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     protected function intToCurrency($amount)
     {
-        return sprintf("%01.2f", ($amount / 100));
+        return sprintf("%01.2F", ($amount / 100));
     }
 
     /**
