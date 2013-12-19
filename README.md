@@ -38,7 +38,7 @@ No namespaces, only bugfixes
 
 Specific minor version, API stability
 ```javascript
-"digitick/sepa-xml" : "0.9.*"
+"digitick/sepa-xml" : "0.10.*"
 ```
 
 ##Sample Usage DirectDebit with Factory
