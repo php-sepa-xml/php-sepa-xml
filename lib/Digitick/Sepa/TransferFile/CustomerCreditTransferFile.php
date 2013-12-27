@@ -29,7 +29,6 @@ use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferFile extends BaseTransferFile
 {
-    const PAIN_FORMAT = 'pain.001.002.03';
 
     /**
      * @param PaymentInformation $paymentInformation

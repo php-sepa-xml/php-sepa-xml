@@ -31,8 +31,8 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
-    function __construct() {
-        parent::__construct(CustomerCreditTransferFile::PAIN_FORMAT);
+    function __construct($painFormat = 'pain.001.002.03') {
+        parent::__construct($painFormat);
     }
 
 
