@@ -29,7 +29,8 @@ class CustomerCreditTransferInformation extends BaseTransferInformation
      * @param string $iban
      * @param string $name
      */
-    function __construct($amount, $iban, $name) {
+    function __construct($amount, $iban, $name)
+    {
         parent::__construct($amount, $iban, $name);
         // FIXME broken implementation find suitable IDs
         $this->EndToEndIdentification = $name;
@@ -38,7 +39,8 @@ class CustomerCreditTransferInformation extends BaseTransferInformation
     /**
      * @return string
      */
-    public function getCreditorName() {
+    public function getCreditorName()
+    {
         return $this->name;
     }
 

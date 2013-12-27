@@ -46,7 +46,8 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
      * @param string $iban
      * @param string $name
      */
-    function __construct($amount, $iban, $name) {
+    function __construct($amount, $iban, $name)
+    {
         parent::__construct($amount, $iban, $name);
         // FIXME broken implementation find suitable IDs
         $this->EndToEndIdentification = StringHelper::sanitizeString($name);
@@ -55,49 +56,56 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     /**
      * @param \DateTime $finalCollectionDate
      */
-    public function setFinalCollectionDate($finalCollectionDate) {
+    public function setFinalCollectionDate($finalCollectionDate)
+    {
         $this->finalCollectionDate = $finalCollectionDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getFinalCollectionDate() {
+    public function getFinalCollectionDate()
+    {
         return $this->finalCollectionDate;
     }
 
     /**
      * @param string $mandateId
      */
-    public function setMandateId($mandateId) {
+    public function setMandateId($mandateId)
+    {
         $this->mandateId = StringHelper::sanitizeString($mandateId);
     }
 
     /**
      * @return string
      */
-    public function getMandateId() {
+    public function getMandateId()
+    {
         return $this->mandateId;
     }
 
     /**
      * @param \DateTime $mandateSignDate
      */
-    public function setMandateSignDate($mandateSignDate) {
+    public function setMandateSignDate($mandateSignDate)
+    {
         $this->mandateSignDate = $mandateSignDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getMandateSignDate() {
+    public function getMandateSignDate()
+    {
         return $this->mandateSignDate;
     }
 
     /**
      * @return string
      */
-    public function getDebitorName() {
+    public function getDebitorName()
+    {
         return $this->name;
     }
 

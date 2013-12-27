@@ -26,7 +26,8 @@ namespace Tests;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
-class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase {
+class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
+{
     protected $schema;
 
     /**
@@ -34,7 +35,8 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase {
      */
     protected $dom;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->schema = __DIR__ . "/pain.008.002.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
@@ -42,25 +44,32 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase {
     /**
      * Test creation of file via Factory and Facade
      */
-    public function testValidFileCreationWithFacade() {
+    public function testValidFileCreationWithFacade()
+    {
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
-        $directDebit->addPaymentInfo('firstPayment', array(
-                                                            'id' => 'firstPayment',
-                                                            'creditorName' => 'My Company',
-                                                            'creditorAccountIBAN' => 'FI1350001540000056',
-                                                            'creditorAgentBIC' => 'PSSTFRPPMON',
-                                                            'seqType' => PaymentInformation::S_ONEOFF,
-                                                            'creditorId' => 'DE21WVM1234567890'
-                                                     ));
-        $directDebit->addTransfer('firstPayment', array(
-                                                       'amount' => '500',
-                                                       'debtorIban' => 'FI1350001540000056',
-                                                       'debtorBic' => 'OKOYFIHH',
-                                                       'debtorName' => 'Their Company',
-                                                       'debtorMandate' =>  'AB12345',
-                                                       'debtorMandateSignDate' => '13.10.2012',
-                                                       'remittanceInformation' => 'Purpose of this direct debit'
-                                                  ));
+        $directDebit->addPaymentInfo(
+            'firstPayment',
+            array(
+                'id' => 'firstPayment',
+                'creditorName' => 'My Company',
+                'creditorAccountIBAN' => 'FI1350001540000056',
+                'creditorAgentBIC' => 'PSSTFRPPMON',
+                'seqType' => PaymentInformation::S_ONEOFF,
+                'creditorId' => 'DE21WVM1234567890'
+            )
+        );
+        $directDebit->addTransfer(
+            'firstPayment',
+            array(
+                'amount' => '500',
+                'debtorIban' => 'FI1350001540000056',
+                'debtorBic' => 'OKOYFIHH',
+                'debtorName' => 'Their Company',
+                'debtorMandate' => 'AB12345',
+                'debtorMandateSignDate' => '13.10.2012',
+                'remittanceInformation' => 'Purpose of this direct debit'
+            )
+        );
 
         $this->dom->loadXML($directDebit->asXML());
         $this->assertTrue($this->dom->schemaValidate($this->schema));

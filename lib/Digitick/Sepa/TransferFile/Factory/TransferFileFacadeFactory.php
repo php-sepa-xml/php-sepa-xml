@@ -37,10 +37,12 @@ class TransferFileFacadeFactory
      *
      * @return CustomerDirectDebitFacade
      */
-    public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName) {
+    public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName)
+    {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
         $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
         $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+
         return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
     }
 
@@ -50,10 +52,12 @@ class TransferFileFacadeFactory
      *
      * @return CustomerCreditFacade
      */
-    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName) {
+    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName)
+    {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
         $directDebitTransferFile = new CustomerCreditTransferFile($groupHeader);
         $domBuilder = new CustomerCreditTransferDomBuilder();
+
         return new CustomerCreditFacade($directDebitTransferFile, $domBuilder);
     }
 }

@@ -120,7 +120,8 @@ class PaymentInformation
      * @param string $originName This is your Name
      * @param string $originAccountCurrency
      */
-    function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR') {
+    function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR')
+    {
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
         $this->originAgentBIC = $originAgentBIC;
@@ -133,7 +134,8 @@ class PaymentInformation
     /**
      * @param TransferInformationInterface $transfer
      */
-    public function addTransfer(TransferInformationInterface $transfer) {
+    public function addTransfer(TransferInformationInterface $transfer)
+    {
         $this->transfers[] = $transfer;
         $this->numberOfTransactions++;
         $this->controlSumCents += $transfer->getTransferAmount();
@@ -142,7 +144,8 @@ class PaymentInformation
     /**
      * @return array
      */
-    public function getTransfers() {
+    public function getTransfers()
+    {
         return $this->transfers;
     }
 
@@ -151,7 +154,8 @@ class PaymentInformation
      *
      * @param DomBuilderInterface $domBuilder
      */
-    public function accept(DomBuilderInterface $domBuilder) {
+    public function accept(DomBuilderInterface $domBuilder)
+    {
         $domBuilder->visitPaymentInformation($this);
         /** @var $transfer TransferInformationInterface */
         foreach ($this->getTransfers() as $transfer) {
@@ -164,10 +168,14 @@ class PaymentInformation
      * @param string $method
      * @throws InvalidArgumentException
      */
-    public function setPaymentMethod($method) {
+    public function setPaymentMethod($method)
+    {
         $method = strtoupper($method);
         if (!in_array($method, $this->validPaymentMethods)) {
-            throw new InvalidArgumentException("Invalid Payment Method: $method, must be one of " . implode(',', $this->validPaymentMethods));
+            throw new InvalidArgumentException("Invalid Payment Method: $method, must be one of " . implode(
+                ',',
+                $this->validPaymentMethods
+            ));
         }
         $this->paymentMethod = $method;
     }
@@ -176,7 +184,8 @@ class PaymentInformation
      * @param string $localInstrumentCode
      * @throws InvalidArgumentException
      */
-    public function setLocalInstrumentCode($localInstrumentCode) {
+    public function setLocalInstrumentCode($localInstrumentCode)
+    {
         $localInstrumentCode = strtoupper($localInstrumentCode);
         if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
@@ -187,175 +196,200 @@ class PaymentInformation
     /**
      * @param mixed $validPaymentMethods
      */
-    public function setValidPaymentMethods($validPaymentMethods) {
+    public function setValidPaymentMethods($validPaymentMethods)
+    {
         $this->validPaymentMethods = $validPaymentMethods;
     }
 
     /**
      * @param string $categoryPurposeCode
      */
-    public function setCategoryPurposeCode($categoryPurposeCode) {
+    public function setCategoryPurposeCode($categoryPurposeCode)
+    {
         $this->categoryPurposeCode = $categoryPurposeCode;
     }
 
     /**
      * @return string
      */
-    public function getCategoryPurposeCode() {
+    public function getCategoryPurposeCode()
+    {
         return $this->categoryPurposeCode;
     }
 
     /**
      * @param \DateTime $dueDate
      */
-    public function setDueDate($dueDate) {
+    public function setDueDate($dueDate)
+    {
         $this->dueDate = $dueDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getDueDate() {
+    public function getDueDate()
+    {
         return $this->dueDate->format('Y-m-d');
     }
 
     /**
      * @param \DateTime $mandateSignDate
      */
-    public function setMandateSignDate($mandateSignDate) {
+    public function setMandateSignDate($mandateSignDate)
+    {
         $this->mandateSignDate = $mandateSignDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getMandateSignDate() {
+    public function getMandateSignDate()
+    {
         return $this->mandateSignDate;
     }
 
     /**
      * @param string $originName
      */
-    public function setOriginName($originName) {
+    public function setOriginName($originName)
+    {
         $this->originName = StringHelper::sanitizeString($originName);
     }
 
     /**
      * @return string
      */
-    public function getOriginName() {
+    public function getOriginName()
+    {
         return $this->originName;
     }
 
     /**
      * @param string $originAgentBIC
      */
-    public function setOriginAgentBIC($originAgentBIC) {
+    public function setOriginAgentBIC($originAgentBIC)
+    {
         $this->originAgentBIC = $originAgentBIC;
     }
 
     /**
      * @return string
      */
-    public function getOriginAgentBIC() {
+    public function getOriginAgentBIC()
+    {
         return $this->originAgentBIC;
     }
 
     /**
      * @param string $originAccountIBAN
      */
-    public function setOriginAccountIBAN($originAccountIBAN) {
+    public function setOriginAccountIBAN($originAccountIBAN)
+    {
         $this->originAccountIBAN = $originAccountIBAN;
     }
 
     /**
      * @return string
      */
-    public function getOriginAccountIBAN() {
+    public function getOriginAccountIBAN()
+    {
         return $this->originAccountIBAN;
     }
 
     /**
      * @param string $originAccountCurrency
      */
-    public function setOriginAccountCurrency($originAccountCurrency) {
+    public function setOriginAccountCurrency($originAccountCurrency)
+    {
         $this->originAccountCurrency = $originAccountCurrency;
     }
 
     /**
      * @return string
      */
-    public function getOriginAccountCurrency() {
+    public function getOriginAccountCurrency()
+    {
         return $this->originAccountCurrency;
     }
 
     /**
      * @param string $id
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
     /**
      * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @return int
      */
-    public function getControlSumCents() {
+    public function getControlSumCents()
+    {
         return $this->controlSumCents;
     }
 
     /**
      * @return string
      */
-    public function getLocalInstrumentCode() {
+    public function getLocalInstrumentCode()
+    {
         return $this->localInstrumentCode;
     }
 
     /**
      * @return int
      */
-    public function getNumberOfTransactions() {
+    public function getNumberOfTransactions()
+    {
         return $this->numberOfTransactions;
     }
 
     /**
      * @return string
      */
-    public function getPaymentMethod() {
+    public function getPaymentMethod()
+    {
         return $this->paymentMethod;
     }
 
     /**
      * @param string $creditorSchemeId
      */
-    public function setCreditorId($creditorSchemeId) {
+    public function setCreditorId($creditorSchemeId)
+    {
         $this->creditorId = StringHelper::sanitizeString($creditorSchemeId);
     }
 
     /**
      * @return string
      */
-    public function getCreditorId() {
+    public function getCreditorId()
+    {
         return $this->creditorId;
     }
 
     /**
      * @param mixed $sequenceType
      */
-    public function setSequenceType($sequenceType) {
+    public function setSequenceType($sequenceType)
+    {
         $this->sequenceType = $sequenceType;
     }
 
     /**
      * @return mixed
      */
-    public function getSequenceType() {
+    public function getSequenceType()
+    {
         return $this->sequenceType;
     }
 

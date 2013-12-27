@@ -31,12 +31,14 @@ use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
-class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase {
+class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @test
      */
-    public function createReturnsCustomerCreditDomBuilderForCustomerCreditTransfer() {
+    public function createReturnsCustomerCreditDomBuilderForCustomerCreditTransfer()
+    {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -51,7 +53,8 @@ class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase {
     /**
      * @test
      */
-    public function createReturnsCustomerDebitDomBuilderForCustomerDebitTransfer() {
+    public function createReturnsCustomerDebitDomBuilderForCustomerDebitTransfer()
+    {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');
         $paymentInformation->setSequenceType(PaymentInformation::S_ONEOFF);

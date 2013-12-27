@@ -42,22 +42,26 @@ abstract class BaseTransferFile implements TransferFileInterface
     /**
      * @param GroupHeader $groupHeader
      */
-    public function __construct(GroupHeader $groupHeader) {
+    public function __construct(GroupHeader $groupHeader)
+    {
         $this->groupHeader = $groupHeader;
     }
 
     /**
      * @return GroupHeader
      */
-    public function getGroupHeader() {
+    public function getGroupHeader()
+    {
         return $this->groupHeader;
     }
 
     /**
      * @param PaymentInformation $paymentInformation
      */
-    public function addPaymentInformation(PaymentInformation $paymentInformation) {
-        $numberOfTransactions = $this->getGroupHeader()->getNumberOfTransactions() + $paymentInformation->getNumberOfTransactions();
+    public function addPaymentInformation(PaymentInformation $paymentInformation)
+    {
+        $numberOfTransactions = $this->getGroupHeader()->getNumberOfTransactions(
+            ) + $paymentInformation->getNumberOfTransactions();
         $transactionTotal = $this->getGroupHeader()->getControlSumCents() + $paymentInformation->getControlSumCents();
         $this->groupHeader->setNumberOfTransactions($numberOfTransactions);
         $this->groupHeader->setControlSumCents($transactionTotal);
@@ -67,12 +71,13 @@ abstract class BaseTransferFile implements TransferFileInterface
     /**
      * @param DomBuilderInterface $domBuilder
      */
-    public function accept(DomBuilderInterface $domBuilder) {
+    public function accept(DomBuilderInterface $domBuilder)
+    {
         $this->validate();
         $domBuilder->visitTransferFile($this);
         $this->groupHeader->accept($domBuilder);
         /** @var $paymentInformation PaymentInformation */
-        foreach($this->paymentInformations as $paymentInformation) {
+        foreach ($this->paymentInformations as $paymentInformation) {
             $paymentInformation->accept($domBuilder);
         }
     }
@@ -81,8 +86,9 @@ abstract class BaseTransferFile implements TransferFileInterface
      * update the group header with transaction informations collected
      * by paymentinformation
      */
-    public function validate() {
-        if(count($this->paymentInformations) === 0) {
+    public function validate()
+    {
+        if (count($this->paymentInformations) === 0) {
             throw new InvalidTransferFileConfiguration('No paymentinformations available, add paymentInformation via addPaymentInformation()');
         }
     }

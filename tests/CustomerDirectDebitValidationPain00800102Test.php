@@ -30,7 +30,8 @@ use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 
-class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_TestCase {
+class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_TestCase
+{
     protected $schema;
 
     /**
@@ -38,7 +39,8 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
      */
     protected $dom;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->schema = __DIR__ . "/pain.008.001.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
@@ -46,7 +48,8 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
     /**
      * Sanity check: test reference file with XSD.
      */
-    public function testSanity() {
+    public function testSanity()
+    {
         $this->dom->load(__DIR__ . '/pain.008.001.02.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);

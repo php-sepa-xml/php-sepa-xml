@@ -43,8 +43,9 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      * @return mixed
      *
      */
-    public function addPaymentInfo($paymentName, array $paymentInformation) {
-        if(isset($this->payments[$paymentName])) {
+    public function addPaymentInfo($paymentName, array $paymentInformation)
+    {
+        if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
         $payment = new PaymentInformation(
@@ -58,14 +59,14 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($paymentInformation['localInstrumentCode'])) {
             $payment->setLocalInstrumentCode($paymentInformation['localInstrumentCode']);
         }
-        if(isset($paymentInformation['dueDate'])) {
-            if($paymentInformation['dueDate'] instanceof \DateTime) {
+        if (isset($paymentInformation['dueDate'])) {
+            if ($paymentInformation['dueDate'] instanceof \DateTime) {
                 $payment->setDueDate($paymentInformation['dueDate']);
             } else {
                 $payment->setDueDate(new \DateTime($paymentInformation['dueDate']));
             }
         } else {
-            $payment->setDueDate(new \DateTime(date('Y-m-d',strtotime('now + 5 days'))));
+            $payment->setDueDate(new \DateTime(date('Y-m-d', strtotime('now + 5 days'))));
         }
 
         $this->payments[$paymentName] = $payment;
@@ -86,9 +87,13 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
      * @return mixed
      */
-    public function addTransfer($paymentName, array $transferInformation) {
-        if(!isset($this->payments[$paymentName])) {
-            throw new InvalidArgumentException(sprintf('Payment with the name %s does not exists, create one first with addPaymentInfo', $paymentName));
+    public function addTransfer($paymentName, array $transferInformation)
+    {
+        if (!isset($this->payments[$paymentName])) {
+            throw new InvalidArgumentException(sprintf(
+                'Payment with the name %s does not exists, create one first with addPaymentInfo',
+                $paymentName
+            ));
         }
         $transfer = new CustomerDirectDebitTransferInformation(
             $transferInformation['amount'],
@@ -97,16 +102,18 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         );
         $transfer->setBic($transferInformation['debtorBic']);
         $transfer->setMandateId($transferInformation['debtorMandate']);
-        if($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
+        if ($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
             $transfer->setMandateSignDate($transferInformation['debtorMandateSignDate']);
         } else {
             $transfer->setMandateSignDate(new \DateTime($transferInformation['debtorMandateSignDate']));
         }
         $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
-        if(isset($transferInformation['endToEndId'])) {
+        if (isset($transferInformation['endToEndId'])) {
             $transfer->setEndToEndIdentification($transferInformation['endToEndId']);
         } else {
-            $transfer->setEndToEndIdentification($this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers()));
+            $transfer->setEndToEndIdentification(
+                $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
+            );
         }
 
         $this->payments[$paymentName]->addTransfer($transfer);

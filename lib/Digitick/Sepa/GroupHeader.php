@@ -71,105 +71,120 @@ class GroupHeader
      * @param $isTest
      * @param $initiatingPartyName
      */
-    function __construct($messageIdentification, $initiatingPartyName, $isTest = false) {
+    function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
+    {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
         $this->creationDateTime = new \DateTime();
     }
 
-    public function accept(DomBuilderInterface $domBuilder) {
+    public function accept(DomBuilderInterface $domBuilder)
+    {
         $domBuilder->visitGroupHeader($this);
     }
 
     /**
      * @param int $controlSumCents
      */
-    public function setControlSumCents($controlSumCents) {
+    public function setControlSumCents($controlSumCents)
+    {
         $this->controlSumCents = $controlSumCents;
     }
 
     /**
      * @return int
      */
-    public function getControlSumCents() {
+    public function getControlSumCents()
+    {
         return $this->controlSumCents;
     }
 
     /**
      * @param string $initiatingPartyId
      */
-    public function setInitiatingPartyId($initiatingPartyId) {
+    public function setInitiatingPartyId($initiatingPartyId)
+    {
         $this->initiatingPartyId = $initiatingPartyId;
     }
 
     /**
      * @return string
      */
-    public function getInitiatingPartyId() {
+    public function getInitiatingPartyId()
+    {
         return $this->initiatingPartyId;
     }
 
     /**
      * @param string $initiatingPartyName
      */
-    public function setInitiatingPartyName($initiatingPartyName) {
+    public function setInitiatingPartyName($initiatingPartyName)
+    {
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
     }
 
     /**
      * @return string
      */
-    public function getInitiatingPartyName() {
+    public function getInitiatingPartyName()
+    {
         return $this->initiatingPartyName;
     }
 
     /**
      * @param boolean $isTest
      */
-    public function setIsTest($isTest) {
+    public function setIsTest($isTest)
+    {
         $this->isTest = $isTest;
     }
 
     /**
      * @return boolean
      */
-    public function getIsTest() {
+    public function getIsTest()
+    {
         return $this->isTest;
     }
 
     /**
      * @param string $messageIdentification
      */
-    public function setMessageIdentification($messageIdentification) {
+    public function setMessageIdentification($messageIdentification)
+    {
         $this->messageIdentification = $messageIdentification;
     }
 
     /**
      * @return string
      */
-    public function getMessageIdentification() {
+    public function getMessageIdentification()
+    {
         return $this->messageIdentification;
     }
 
     /**
      * @param int $numberOfTransactions
      */
-    public function setNumberOfTransactions($numberOfTransactions) {
+    public function setNumberOfTransactions($numberOfTransactions)
+    {
         $this->numberOfTransactions = $numberOfTransactions;
     }
 
     /**
      * @return int
      */
-    public function getNumberOfTransactions() {
+    public function getNumberOfTransactions()
+    {
         return $this->numberOfTransactions;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCreationDateTime() {
+    public function getCreationDateTime()
+    {
         return $this->creationDateTime;
     }
 

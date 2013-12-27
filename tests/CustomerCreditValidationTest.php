@@ -33,34 +33,34 @@ use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
  */
 class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 {
-	protected $schema;
+    protected $schema;
 
     /**
      * @var \DOMDocument
      */
     protected $dom;
 
-	protected function setUp()
-	{
-		$this->schema = __DIR__ . "/pain.001.002.03.xsd";
-		$this->dom = new \DOMDocument('1.0', 'UTF-8');
-	}
+    protected function setUp()
+    {
+        $this->schema = __DIR__ . "/pain.001.002.03.xsd";
+        $this->dom = new \DOMDocument('1.0', 'UTF-8');
+    }
 
-	/**
-	 * Sanity check: test reference file with XSD.
-	 */
-	public function testSanity()
-	{
-		$this->dom->load(__DIR__ . '/pain.001.002.03.xml');
-		$validated = $this->dom->schemaValidate($this->schema);
-		$this->assertTrue($validated);
-	}
+    /**
+     * Sanity check: test reference file with XSD.
+     */
+    public function testSanity()
+    {
+        $this->dom->load(__DIR__ . '/pain.001.002.03.xml');
+        $validated = $this->dom->schemaValidate($this->schema);
+        $this->assertTrue($validated);
+    }
 
-	/**
-	 * Test a transfer file with one payment and one transaction.
-	 */
-	public function testSinglePaymentSingleTrans()
-	{
+    /**
+     * Test a transfer file with one payment and one transaction.
+     */
+    public function testSinglePaymentSingleTrans()
+    {
 
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -70,24 +70,24 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $transfer->setRemittanceInformation('Transaction Description');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-		$payment->addTransfer($transfer);
+        $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);
 
         $domBuilder = new CustomerCreditTransferDomBuilder();
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
-		$this->dom->loadXML($xml);
+        $this->dom->loadXML($xml);
 
-		$validated = $this->dom->schemaValidate($this->schema);
-		$this->assertTrue($validated);
-	}
+        $validated = $this->dom->schemaValidate($this->schema);
+        $this->assertTrue($validated);
+    }
 
-	/**
-	 * Test a transfer file with one payment and several transactions.
-	 */
-	public function testSinglePaymentMultiTrans()
-	{
+    /**
+     * Test a transfer file with one payment and several transactions.
+     */
+    public function testSinglePaymentMultiTrans()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
@@ -110,14 +110,15 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $this->dom->loadXML($xml);
 
         $validated = $this->dom->schemaValidate($this->schema);
-		$this->assertTrue($validated);
-	}
+        $this->assertTrue($validated);
+    }
 
     /**
      * Test that a transferfile without Payments throws understandable exception
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      */
-    public function testInvalidTransferFileThrowsException() {
+    public function testInvalidTransferFileThrowsException()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
@@ -129,7 +130,8 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test correct calulation of controlsum and transaction count
      */
-    public function testControlSumAndTransactionCount() {
+    public function testControlSumAndTransactionCount()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
@@ -163,7 +165,8 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the payment informations in the xml
      */
-    public function testPaymentMetaData() {
+    public function testPaymentMetaData()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
@@ -201,11 +204,11 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('My Corp', $originName->item(0)->textContent);
     }
 
-	/**
-	 * Test a transfer file with several payments, several transactions each.
-	 */
-	public function testMultiPaymentMultiTrans()
-	{
+    /**
+     * Test a transfer file with several payments, several transactions each.
+     */
+    public function testMultiPaymentMultiTrans()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
@@ -241,10 +244,10 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
 
-		$this->dom->loadXML($xml);
+        $this->dom->loadXML($xml);
 
-		$validated = $this->dom->schemaValidate($this->schema);
-		$this->assertTrue($validated);
+        $validated = $this->dom->schemaValidate($this->schema);
+        $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
@@ -255,5 +258,5 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
         $this->assertEquals('10000.04', $ctrlSum->item(0)->textContent);
 
-	}
+    }
 }
