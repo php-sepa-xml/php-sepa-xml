@@ -29,12 +29,12 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferFile extends BaseTransferFile
 {
-    const PAIN_FORMAT = 'pain.008.002.02';
 
     /**
      * @param PaymentInformation $paymentInformation
      */
-    public function addPaymentInformation(PaymentInformation $paymentInformation) {
+    public function addPaymentInformation(PaymentInformation $paymentInformation)
+    {
         $paymentInformation->setValidPaymentMethods(array('DD'));
         $paymentInformation->setPaymentMethod('DD');
         parent::addPaymentInformation($paymentInformation);
@@ -45,19 +45,22 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
      *
      * @throws \Digitick\Sepa\Exception\InvalidTransferTypeException
      */
-    public function validate() {
+    public function validate()
+    {
         parent::validate();
         /** @var $payment PaymentInformation */
-        foreach($this->paymentInformations as $payment) {
-            if((string)$payment->getSequenceType() === '') {
+        foreach ($this->paymentInformations as $payment) {
+            if ((string)$payment->getSequenceType() === '') {
                 throw new InvalidTransferFileConfiguration('Payment must contain a SequenceType');
             }
-            if((string)$payment->getCreditorId() === '') {
+            if ((string)$payment->getCreditorId() === '') {
                 throw new InvalidTransferFileConfiguration('Payment must contain a CreditorSchemeId');
             }
-            foreach($payment->getTransfers() as $transfer) {
-                if(!$transfer instanceof CustomerDirectDebitTransferInformation) {
-                    throw new InvalidTransferTypeException('Transfers must be of type \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class($transfer));
+            foreach ($payment->getTransfers() as $transfer) {
+                if (!$transfer instanceof CustomerDirectDebitTransferInformation) {
+                    throw new InvalidTransferTypeException('Transfers must be of type \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class(
+                        $transfer
+                    ));
                 }
             }
         }

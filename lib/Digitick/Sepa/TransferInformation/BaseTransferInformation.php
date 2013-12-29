@@ -80,10 +80,11 @@ class BaseTransferInformation implements TransferInformationInterface
      * @param string $iban
      * @param string $name
      */
-    public function __construct($amount, $iban, $name) {
+    public function __construct($amount, $iban, $name)
+    {
         $amount += 0;
         if (is_float($amount)) {
-            $amount = (integer) ($amount * 100);
+            $amount = (integer)($amount * 100);
         }
         $this->transferAmount = $amount;
         $this->iban = $iban;
@@ -93,56 +94,64 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * @param DomBuilderInterface $domBuilder
      */
-    public function accept(DomBuilderInterface $domBuilder) {
+    public function accept(DomBuilderInterface $domBuilder)
+    {
         $domBuilder->visitTransferInformation($this);
     }
 
     /**
      * @return mixed
      */
-    public function getTransferAmount() {
+    public function getTransferAmount()
+    {
         return $this->transferAmount;
     }
 
     /**
      * @param mixed $currency
      */
-    public function setCurrency($currency) {
+    public function setCurrency($currency)
+    {
         $this->currency = $currency;
     }
 
     /**
      * @return mixed
      */
-    public function getCurrency() {
+    public function getCurrency()
+    {
         return $this->currency;
     }
 
     /**
      * @param string $EndToEndIdentification
      */
-    public function setEndToEndIdentification($EndToEndIdentification) {
+    public function setEndToEndIdentification($EndToEndIdentification)
+    {
         $this->EndToEndIdentification = $EndToEndIdentification;
     }
 
     /**
      * @return string
      */
-    public function getEndToEndIdentification() {
+    public function getEndToEndIdentification()
+    {
         return $this->EndToEndIdentification;
     }
 
     /**
      * @param string $instructionId
      */
-    public function setInstructionId($instructionId) {
+    public function setInstructionId($instructionId)
+    {
         $this->instructionId = $instructionId;
     }
 
     /**
      * @return string
      */
-    public function getInstructionId() {
+    public function getInstructionId()
+    {
         return $this->instructionId;
     }
 
@@ -150,42 +159,48 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * @param string $iban
      */
-    public function setIban($iban) {
+    public function setIban($iban)
+    {
         $this->iban = $iban;
     }
 
     /**
      * @return string
      */
-    public function getIban() {
+    public function getIban()
+    {
         return $this->iban;
     }
 
     /**
      * @param string $bic
      */
-    public function setBic($bic) {
+    public function setBic($bic)
+    {
         $this->bic = $bic;
     }
 
     /**
      * @return string
      */
-    public function getBic() {
+    public function getBic()
+    {
         return $this->bic;
     }
 
     /**
      * @param string $remittanceInformation
      */
-    public function setRemittanceInformation($remittanceInformation) {
+    public function setRemittanceInformation($remittanceInformation)
+    {
         $this->remittanceInformation = StringHelper::sanitizeString($remittanceInformation);
     }
 
     /**
      * @return string
      */
-    public function getRemittanceInformation() {
+    public function getRemittanceInformation()
+    {
         return $this->remittanceInformation;
     }
 

@@ -31,8 +31,9 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
-    function __construct() {
-        parent::__construct(CustomerCreditTransferFile::PAIN_FORMAT);
+    function __construct($painFormat = 'pain.001.002.03')
+    {
+        parent::__construct($painFormat);
     }
 
 
@@ -42,7 +43,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * @param TransferFileInterface $transferFile
      * @return mixed
      */
-    public function visitTransferFile(TransferFileInterface $transferFile) {
+    public function visitTransferFile(TransferFileInterface $transferFile)
+    {
         $this->currentTransfer = $this->doc->createElement('CstmrCdtTrfInitn');
         $this->root->appendChild($this->currentTransfer);
     }
@@ -53,7 +55,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * @param PaymentInformation $paymentInformation
      * @return mixed
      */
-    public function visitPaymentInformation(PaymentInformation $paymentInformation) {
+    public function visitPaymentInformation(PaymentInformation $paymentInformation)
+    {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
         if ($paymentInformation->getCategoryPurposeCode()) {
@@ -62,9 +65,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $this->currentPayment->appendChild($categoryPurpose);
         }
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
-        $this->currentPayment->appendChild($this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions()));
+        $this->currentPayment->appendChild(
+            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+        );
 
-        $this->currentPayment->appendChild($this->createElement('CtrlSum', $this->intToCurrency($paymentInformation->getControlSumCents())));
+        $this->currentPayment->appendChild(
+            $this->createElement('CtrlSum', $this->intToCurrency($paymentInformation->getControlSumCents()))
+        );
 
         $paymentTypeInformation = $this->createElement('PmtTpInf');
         $serviceLevel = $this->createElement('SvcLvl');
@@ -86,7 +93,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
         $debtorAccount->appendChild($id);
-        if($paymentInformation->getOriginAccountCurrency()) {
+        if ($paymentInformation->getOriginAccountCurrency()) {
             $debtorAccount->appendChild($this->createElement('Ccy', $paymentInformation->getOriginAccountCurrency()));
         }
         $this->currentPayment->appendChild($debtorAccount);
@@ -97,7 +104,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $debtorAgent->appendChild($financialInstitutionId);
         $this->currentPayment->appendChild($debtorAgent);
 
-        $this->currentPayment->appendChild($this->createElement('ChrgBr','SLEV'));
+        $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
         $this->currentTransfer->appendChild($this->currentPayment);
     }
 
@@ -107,7 +114,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * @param TransferInformationInterface $transactionInformation
      * @return mixed
      */
-    public function visitTransferInformation(TransferInformationInterface $transactionInformation) {
+    public function visitTransferInformation(TransferInformationInterface $transactionInformation)
+    {
         /** @var $transactionInformation  CustomerCreditTransferInformation */
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
 
@@ -118,7 +126,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         // Amount 2.42
         $amount = $this->createElement('Amt');
-        $instructedAmount = $this->createElement('InstdAmt', $this->intToCurrency($transactionInformation->getTransferAmount()));
+        $instructedAmount = $this->createElement(
+            'InstdAmt',
+            $this->intToCurrency($transactionInformation->getTransferAmount())
+        );
         $instructedAmount->setAttribute('Ccy', $transactionInformation->getCurrency());
         $amount->appendChild($instructedAmount);
         $CdtTrfTxInf->appendChild($amount);

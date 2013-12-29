@@ -28,8 +28,9 @@ class StringHelper
      * @param string $inputString
      * @return string
      */
-    public static function sanitizeString($inputString) {
-        $searches =     array('Ä', 'Ö', 'Ü', 'ä', 'ö', 'ü', 'ß');
+    public static function sanitizeString($inputString)
+    {
+        $searches = array('Ä', 'Ö', 'Ü', 'ä', 'ö', 'ü', 'ß');
         $replacements = array('Ae', 'Oe', 'Ue', 'ae', 'oe', 'ue', 'ss');
 
         return str_replace($searches, $replacements, $inputString);

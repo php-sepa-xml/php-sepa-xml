@@ -31,7 +31,8 @@ use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 
-class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
+class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
+{
     protected $schema;
 
     /**
@@ -39,7 +40,8 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
      */
     protected $dom;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->schema = __DIR__ . "/pain.008.002.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
@@ -47,7 +49,8 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
     /**
      * Sanity check: test reference file with XSD.
      */
-    public function testSanity() {
+    public function testSanity()
+    {
         $this->dom->load(__DIR__ . '/pain.008.002.02.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
@@ -88,7 +91,8 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a SequenceType
      */
-    public function testValidationFailureSeqType() {
+    public function testValidationFailureSeqType()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
@@ -107,7 +111,8 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a CreditorSchemeId
      */
-    public function testValidationFailureCreditorId() {
+    public function testValidationFailureCreditorId()
+    {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
@@ -126,7 +131,8 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase {
     /**
      * Test the payment informations in the xml
      */
-    public function testUmlautConversion() {
+    public function testUmlautConversion()
+    {
         $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'Only A-Z without äöüßÄÖÜ creditorName');

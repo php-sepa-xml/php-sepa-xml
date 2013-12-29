@@ -25,11 +25,13 @@ namespace Digitick\Sepa\DomBuilder;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 
-class DomBuilderFactory {
+class DomBuilderFactory
+{
 
-    public static function createDomBuilder(TransferFileInterface $transferFile) {
+    public static function createDomBuilder(TransferFileInterface $transferFile)
+    {
         $transferFileClass = get_class($transferFile);
-        switch($transferFileClass) {
+        switch ($transferFileClass) {
             case 'Digitick\Sepa\TransferFile\CustomerCreditTransferFile':
                 $domBuilder = new CustomerCreditTransferDomBuilder();
                 $transferFile->accept($domBuilder);
