@@ -23,6 +23,7 @@
 namespace Digitick\Sepa\TransferInformation;
 
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\Util\StringHelper;
 
 class BaseTransferInformation implements TransferInformationInterface
@@ -84,7 +85,11 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         $amount += 0;
         if (is_float($amount)) {
-            $amount = (integer)($amount * 100);
+            if(!function_exists('bcscale')) {
+                throw new InvalidArgumentException('Using floats for amount is only possible with bcmath enabled');
+            }
+            bcscale(2);
+            $amount = (integer)bcmul($amount, 100);
         }
         $this->transferAmount = $amount;
         $this->iban = $iban;
