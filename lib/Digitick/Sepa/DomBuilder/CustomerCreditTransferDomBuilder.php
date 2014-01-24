@@ -36,7 +36,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         parent::__construct($painFormat);
     }
 
-
     /**
      * Build the root of the document
      *
@@ -160,5 +159,29 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($CdtTrfTxInf);
     }
 
+    /**
+     * Add the specific OrgId element for the format 'pain.001.001.03'
+     *
+     * @param  GroupHeader $groupHeader
+     * @return mixed
+     */
+    public function visitGroupHeader(GroupHeader $groupHeader)
+    {
+        parent::visitGroupHeader($groupHeader);
 
+        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.001.001.03') {
+            $newId = $this->createElement('Id');
+            $orgId = $this->createElement('OrgId');
+            $othr  = $this->createElement('Othr');
+            $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $orgId->appendChild($othr);
+            $newId->appendChild($orgId);
+
+            $xpath = new \DOMXpath($this->doc);
+            $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
+            $oldId = $items->item(0);
+
+            $oldId->parentNode->replaceChild($newId, $oldId);
+        }
+    }
 }
