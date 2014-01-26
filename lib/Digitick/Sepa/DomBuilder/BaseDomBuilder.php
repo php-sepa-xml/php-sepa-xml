@@ -105,6 +105,9 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $groupHeaderTag->appendChild(
             $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
         );
+        if($groupHeader->getBatchBooking() !== null) {
+            $groupHeaderTag->appendChild($this->createElement('BtchBookg', $groupHeader->getBatchBooking()));
+        }
         $initiatingParty = $this->createElement('InitgPty');
         $initiatingPartyName = $this->createElement('Nm', $groupHeader->getInitiatingPartyName());
         $initiatingParty->appendChild($initiatingPartyName);

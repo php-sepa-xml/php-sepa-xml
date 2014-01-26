@@ -67,6 +67,13 @@ class GroupHeader
     protected $creationDateTime;
 
     /**
+     * Should the bank book multiple transaction as a batch
+     *
+     * @var int
+     */
+    protected $batchBooking = null;
+
+    /**
      * @param $messageIdentification
      * @param $isTest
      * @param $initiatingPartyName
@@ -146,6 +153,22 @@ class GroupHeader
     public function getIsTest()
     {
         return $this->isTest;
+    }
+    
+    /**
+     * @param boolean $batchBooking
+     */
+    public function setBatchBooking($batchBooking)
+    {
+        $this->batchBooking = $batchBooking;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getBatchBooking()
+    {
+        return $this->batchBooking;
     }
 
     /**
