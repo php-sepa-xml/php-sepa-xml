@@ -58,11 +58,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
-        if ($paymentInformation->getCategoryPurposeCode()) {
-            $categoryPurpose = $this->createElement('CtgyPurp');
-            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
-            $this->currentPayment->appendChild($categoryPurpose);
-        }
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
         $this->currentPayment->appendChild(
             $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
@@ -76,7 +71,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
+        if ($paymentInformation->getCategoryPurposeCode()) {
+            $categoryPurpose = $this->createElement('CtgyPurp');
+            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
+            $paymentTypeInformation->appendChild($categoryPurpose);
+        }
         $this->currentPayment->appendChild($paymentTypeInformation);
+
         if ($paymentInformation->getLocalInstrumentCode()) {
             $localInstrument = $this->createElement('LclInstr');
             $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));

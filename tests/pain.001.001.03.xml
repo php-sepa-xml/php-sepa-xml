@@ -8,6 +8,13 @@
 			<CtrlSum>10.1</CtrlSum>
 			<InitgPty>
 				<Nm>Bedrijfsnaam</Nm>
+				<Id>
+					<OrgId>
+						<Othr>
+							<Id>123456789123456</Id>
+						</Othr>
+					</OrgId>
+				</Id>
 			</InitgPty>
 		</GrpHdr>
 		<PmtInf>
@@ -55,7 +62,6 @@
 				</RmtInf>
 			</CdtTrfTxInf>
 		</PmtInf>
-		<!--
 		<PmtInf>
 			<PmtInfId>maximaal gevuld</PmtInfId>
 			<PmtMtd>TRF</PmtMtd>
@@ -130,7 +136,7 @@
 				</Cdtr>
 				<CdtrAcct>
 					<Id>
-						<IBAN>NL90ABNA0111111111 </IBAN>
+						<IBAN>NL90ABNA0111111111</IBAN>
 					</Id>
 				</CdtrAcct>
 				<UltmtCdtr>
@@ -162,6 +168,5 @@
 				</RmtInf>
 			</CdtTrfTxInf>
 		</PmtInf>
-		-->
 	</CstmrCdtTrfInitn>
 </Document>

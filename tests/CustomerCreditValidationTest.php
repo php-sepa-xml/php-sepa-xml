@@ -70,6 +70,9 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $transfer->setRemittanceInformation('Transaction Description');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);

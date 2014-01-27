@@ -59,7 +59,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
     /**
      * Test a transfer file with one payment and one transaction.
      */
-    public function testSinglePaymentSingleTransWithInitiatingPartyId()
+    public function testSinglePaymentSingleTransWithMoreInfo()
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $groupHeader->setInitiatingPartyId('XXXXXXXXXX');
@@ -73,6 +73,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setValidPaymentMethods(array('TRANSFER'));
         $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);
