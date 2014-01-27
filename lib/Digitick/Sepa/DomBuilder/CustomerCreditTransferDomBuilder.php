@@ -121,6 +121,9 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         // Payment ID 2.28
         $PmtId = $this->createElement('PmtId');
+        if ($transactionInformation->getInstructionId()) {
+            $PmtId->appendChild($this->createElement('InstrId', $transactionInformation->getInstructionId()));
+        }
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 

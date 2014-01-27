@@ -69,6 +69,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setValidPaymentMethods(array('TRANSFER'));
