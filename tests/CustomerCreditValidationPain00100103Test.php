@@ -71,8 +71,8 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $transfer->setEndToEndIdentification(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANFER'));
-        $payment->setPaymentMethod('TRANFER');
+        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setPaymentMethod('TRANSFER');
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);
