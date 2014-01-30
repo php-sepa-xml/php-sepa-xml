@@ -34,29 +34,31 @@ class TransferFileFacadeFactory
     /**
      * @param string $uniqueMessageIdentification
      * @param string $initiatingPartyName
+     * @param string $painFormat
      *
      * @return CustomerDirectDebitFacade
      */
-    public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName)
+    public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.008.002.02')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
         $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
 
         return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
     }
 
     /**
-     * @param $uniqueMessageIdentification
-     * @param $initiatingPartyName
+     * @param string $uniqueMessageIdentification
+     * @param string $initiatingPartyName
+     * @param string $painFormat
      *
      * @return CustomerCreditFacade
      */
-    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName)
+    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.001.002.03')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
         $directDebitTransferFile = new CustomerCreditTransferFile($groupHeader);
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($painFormat);
 
         return new CustomerCreditFacade($directDebitTransferFile, $domBuilder);
     }
