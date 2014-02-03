@@ -10,7 +10,9 @@ Creates an XML file for a Single Euro Payments Area (SEPA) Credit Transfer and D
 License: GNU Lesser General Public License v3.0
 
 
-The version of the standard followed is: _pain.001.002.03_ and _pain.008.002.02_
+The versions of the standard followed are:
+* _pain.001.002.03_ (or _pain.001.001.03_) for credits
+* and _pain.008.002.02_ (or _pain.008.001.02_) for debits
 
 Institutions and associations that should accept this format:
 * Deutsche Kreditwirtschaft
@@ -80,7 +82,7 @@ $transfer = new CustomerCreditTransferInformation(
     '0.02', // Amount
     'FI1350001540000056', //IBAN of creditor
     'Their Corp' //Name of Creditor
-    );
+);
 $transfer->setBic('OKOYFIHH'); // Set the BIC explicitly
 $transfer->setRemittanceInformation('Transaction Description');
 
@@ -90,7 +92,7 @@ $payment = new PaymentInformation(
     'FR1420041010050500013M02606', // IBAN the money is transferred from
     'PSSTFRPPMON',  // BIC
     'My Corp' // Debitor Name
-    );
+);
 // It's possible to add multiple Transfers in one Payment
 $payment->addTransfer($transfer);
 
@@ -99,6 +101,9 @@ $sepaFile->addPaymentInformation($payment);
 
 // Attach a dombuilder to the sepaFile to create the XML output
 $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
+
+// Or if you want to use the format 'pain.001.001.03' instead
+// $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
 
 $domBuilder->asXml();
 ```

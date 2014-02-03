@@ -27,7 +27,9 @@ use Digitick\Sepa\GroupHeader;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
-
+    /**
+     * @var \DOMDocument
+     */
     protected $doc;
 
     protected $root;
@@ -42,8 +44,17 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     protected $currentPayment = null;
 
+    /**
+     * @var string
+     */
+    protected $painFormat;
+
+    /**
+     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
+     */
     function __construct($painFormat)
     {
+        $this->painFormat = $painFormat;
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
         $this->doc->formatOutput = true;
         $this->root = $this->doc->createElement('Document');

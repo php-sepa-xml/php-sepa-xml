@@ -68,8 +68,13 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);

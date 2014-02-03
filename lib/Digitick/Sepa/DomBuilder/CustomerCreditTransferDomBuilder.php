@@ -36,7 +36,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         parent::__construct($painFormat);
     }
 
-
     /**
      * Build the root of the document
      *
@@ -59,11 +58,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
-        if ($paymentInformation->getCategoryPurposeCode()) {
-            $categoryPurpose = $this->createElement('CtgyPurp');
-            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
-            $this->currentPayment->appendChild($categoryPurpose);
-        }
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
         $this->currentPayment->appendChild(
             $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
@@ -77,7 +71,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
+        if ($paymentInformation->getCategoryPurposeCode()) {
+            $categoryPurpose = $this->createElement('CtgyPurp');
+            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
+            $paymentTypeInformation->appendChild($categoryPurpose);
+        }
         $this->currentPayment->appendChild($paymentTypeInformation);
+
         if ($paymentInformation->getLocalInstrumentCode()) {
             $localInstrument = $this->createElement('LclInstr');
             $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
@@ -121,6 +121,9 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         // Payment ID 2.28
         $PmtId = $this->createElement('PmtId');
+        if ($transactionInformation->getInstructionId()) {
+            $PmtId->appendChild($this->createElement('InstrId', $transactionInformation->getInstructionId()));
+        }
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 
@@ -160,5 +163,29 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($CdtTrfTxInf);
     }
 
+    /**
+     * Add the specific OrgId element for the format 'pain.001.001.03'
+     *
+     * @param  GroupHeader $groupHeader
+     * @return mixed
+     */
+    public function visitGroupHeader(GroupHeader $groupHeader)
+    {
+        parent::visitGroupHeader($groupHeader);
 
+        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.001.001.03') {
+            $newId = $this->createElement('Id');
+            $orgId = $this->createElement('OrgId');
+            $othr  = $this->createElement('Othr');
+            $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $orgId->appendChild($othr);
+            $newId->appendChild($orgId);
+
+            $xpath = new \DOMXpath($this->doc);
+            $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
+            $oldId = $items->item(0);
+
+            $oldId->parentNode->replaceChild($newId, $oldId);
+        }
+    }
 }
