@@ -50,7 +50,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     {
         parent::__construct($amount, $iban, $name);
         // FIXME broken implementation find suitable IDs
-        $this->EndToEndIdentification = StringHelper::sanitizeString($name);
+        $this->setEndToEndIdentification($name);
     }
 
     /**
