@@ -33,7 +33,7 @@ class CustomerCreditTransferInformation extends BaseTransferInformation
     {
         parent::__construct($amount, $iban, $name);
         // FIXME broken implementation find suitable IDs
-        $this->EndToEndIdentification = $name;
+        $this->setEndToEndIdentification($name);
     }
 
     /**

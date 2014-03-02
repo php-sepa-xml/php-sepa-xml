@@ -264,4 +264,45 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('10000.04', $ctrlSum->item(0)->textContent);
 
     }
+
+    /**
+     * Test the payment informations in the xml
+     */
+    public function testUmlautConversion()
+    {
+        $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'Only A-Z without äöüßÄÖÜ debtorName');
+        $payment->setDueDate(new \DateTime('20.11.2012'));
+        $payment->setSequenceType(PaymentInformation::S_ONEOFF);
+        $payment->setCreditorId('Only A-Z without äöüßÄÖÜ creditorSchemeId');
+
+        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ creditorName');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setRemittanceInformation('Only A-Z without äöüßÄÖÜ remittanceInformation');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        // Date is correctly coded
+        $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
+        $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
+        $testNode = $xpathDoc->query('//sepa:EndToEndId');
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
+        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
+        $testNode = $xpathDoc->query('//sepa:Ustrd');
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
+    }
 }
