@@ -60,6 +60,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->root = $this->doc->createElement('Document');
         $this->root->setAttribute('xmlns', sprintf("urn:iso:std:iso:20022:tech:xsd:%s", $painFormat));
         $this->root->setAttribute('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance");
+        $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
         $this->doc->appendChild($this->root);
     }
 

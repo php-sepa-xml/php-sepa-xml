@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02 pain.008.003.02.xsd">
+	<CstmrDrctDbtInitn>
+		<GrpHdr>
+			<MsgId>Message-ID</MsgId>
+			<CreDtTm>2010-11-21T09:30:47.000Z</CreDtTm>
+			<NbOfTxs>2</NbOfTxs>
+			<InitgPty>
+				<Nm>Initiator Name</Nm>
+			</InitgPty>
+		</GrpHdr>
+		<PmtInf>
+			<PmtInfId>Payment-ID</PmtInfId>
+			<PmtMtd>DD</PmtMtd>
+			<NbOfTxs>2</NbOfTxs>
+			<CtrlSum>6655.86</CtrlSum>
+			<PmtTpInf>
+				<SvcLvl>
+					<Cd>SEPA</Cd>
+				</SvcLvl>
+				<LclInstrm>
+					<Cd>CORE</Cd>
+				</LclInstrm>
+				<SeqTp>FRST</SeqTp>
+			</PmtTpInf>
+			<ReqdColltnDt>2010-12-03</ReqdColltnDt>
+			<Cdtr>
+				<Nm>Creditor Name</Nm>
+			</Cdtr>
+			<CdtrAcct>
+				<Id>
+					<IBAN>DE87200500001234567890</IBAN>
+				</Id>
+			</CdtrAcct>
+			<CdtrAgt>
+				<FinInstnId>
+					<BIC>BANKDEFFXXX</BIC>
+				</FinInstnId>
+			</CdtrAgt>
+			<ChrgBr>SLEV</ChrgBr>
+			<CdtrSchmeId>
+				<Id>
+					<PrvtId>
+						<Othr>
+							<Id>DE00ZZZ00099999999</Id>
+							<SchmeNm>
+								<Prtry>SEPA</Prtry>
+							</SchmeNm>
+						</Othr>
+					</PrvtId>
+				</Id>
+			</CdtrSchmeId>
+			<DrctDbtTxInf>
+				<PmtId>
+					<EndToEndId>OriginatorID1234</EndToEndId>
+				</PmtId>
+				<InstdAmt Ccy="EUR">6543.14</InstdAmt>
+				<DrctDbtTx>
+					<MndtRltdInf>
+						<MndtId>Mandate-Id</MndtId>
+						<DtOfSgntr>2010-11-20</DtOfSgntr>
+						<AmdmntInd>true</AmdmntInd>
+						<AmdmntInfDtls>
+							<OrgnlCdtrSchmeId>
+								<Nm>Original Creditor Name</Nm>
+								<Id>
+									<PrvtId>
+										<Othr>
+											<Id>AA00ZZZOriginalCreditorID</Id>
+											<SchmeNm>
+												<Prtry>SEPA</Prtry>
+											</SchmeNm>
+										</Othr>
+									</PrvtId>
+								</Id>
+							</OrgnlCdtrSchmeId>
+						</AmdmntInfDtls>
+					</MndtRltdInf>
+				</DrctDbtTx>
+				<DbtrAgt>
+					<FinInstnId>
+						<BIC>SPUEDE2UXXX</BIC>
+					</FinInstnId>
+				</DbtrAgt>
+				<Dbtr>
+					<Nm>Debtor Name</Nm>
+				</Dbtr>
+				<DbtrAcct>
+					<Id>
+						<IBAN>DE21500500009876543210</IBAN>
+					</Id>
+				</DbtrAcct>
+				<UltmtDbtr>
+					<Nm>Ultimate Debtor Name</Nm>
+				</UltmtDbtr>
+				<RmtInf>
+					<Ustrd>Unstructured Remittance Information</Ustrd>
+				</RmtInf>
+			</DrctDbtTxInf>
+			<DrctDbtTxInf>
+				<PmtId>
+					<EndToEndId>OriginatorID1235</EndToEndId>
+				</PmtId>
+				<InstdAmt Ccy="EUR">112.72</InstdAmt>
+				<DrctDbtTx>
+					<MndtRltdInf>
+						<MndtId>Other-Mandate-Id</MndtId>
+						<DtOfSgntr>2010-11-20</DtOfSgntr>
+						<AmdmntInd>false</AmdmntInd>
+					</MndtRltdInf>
+				</DrctDbtTx>
+				<DbtrAgt>
+					<FinInstnId>
+						<BIC>SPUEDE2UXXX</BIC>
+					</FinInstnId>
+				</DbtrAgt>
+				<Dbtr>
+					<Nm>Other Debtor Name</Nm>
+				</Dbtr>
+				<DbtrAcct>
+					<Id>
+						<IBAN>DE21500500001234567897</IBAN>
+					</Id>
+				</DbtrAcct>
+				<UltmtDbtr>
+					<Nm>Ultimate Debtor Name</Nm>
+				</UltmtDbtr>
+				<RmtInf>
+					<Ustrd>Unstructured Remittance Information</Ustrd>
+				</RmtInf>
+			</DrctDbtTxInf>
+		</PmtInf>
+	</CstmrDrctDbtInitn>
+</Document>
