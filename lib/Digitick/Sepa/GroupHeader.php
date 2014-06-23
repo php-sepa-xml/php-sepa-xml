@@ -79,9 +79,12 @@ class GroupHeader
     protected $creationDateTimeFormat = 'Y-m-d\TH:i:s\Z';
 
     /**
-     * @param $messageIdentification
-     * @param $isTest
-     * @param $initiatingPartyName
+     * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.
+     *                                      Part of the duplication check (unique daily reference).
+     *                                      The first 8 or 11 characters of <Msgld> must match the BIC of the
+     *                                      Instructing Agent. The rest of the field can be freely defined.
+     * @param string $initiatingPartyName
+     * @param boolean $isTest
      */
     function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
     {
