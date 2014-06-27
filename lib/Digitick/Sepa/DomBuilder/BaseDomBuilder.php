@@ -109,7 +109,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $groupHeaderTag->appendChild($messageId);
         $creationDateTime = $this->createElement(
             'CreDtTm',
-            $groupHeader->getCreationDateTime()->format('Y-m-d\TH:i:s\Z')
+            $groupHeader->getCreationDateTime()->format($groupHeader->getCreationDateTimeFormat())
         );
         $groupHeaderTag->appendChild($creationDateTime);
         $groupHeaderTag->appendChild($this->createElement('NbOfTxs', $groupHeader->getNumberOfTransactions()));

@@ -305,4 +305,46 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $testNode = $xpathDoc->query('//sepa:Ustrd');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
     }
+
+    /**
+     * Test a transfer file using other date format.
+     * There are different representations possible for IsoDateTime:
+     * http://www.swift.com/assets/corporates/documents/business_areas/ebam_standards_mx/business/x68910b9357eed3cf49770d42b07d70f1.htm
+     */
+    public function testSinglePaymentOtherCreationDateTimeFormat()
+    {
+        $dateTimeFormat = 'Y-m-d\TH:i:s.000P';
+
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $groupHeader->setCreationDateTimeFormat($dateTimeFormat);
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+
+        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
+
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+
+        $dateTime = new \DateTime();
+        $testNode = $xpathDoc->query('//sepa:CreDtTm');
+        $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm has specified format.');
+    }
 }

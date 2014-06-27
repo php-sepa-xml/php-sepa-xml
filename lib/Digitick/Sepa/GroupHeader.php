@@ -74,6 +74,11 @@ class GroupHeader
     protected $creationDateTime;
 
     /**
+     * @var string
+     */
+    protected $creationDateTimeFormat = 'Y-m-d\TH:i:s\Z';
+
+    /**
      * @param $messageIdentification
      * @param $isTest
      * @param $initiatingPartyName
@@ -211,4 +216,19 @@ class GroupHeader
         return $this->creationDateTime;
     }
 
+    /**
+     * @param string $creationDateTimeFormat
+     */
+    public function setCreationDateTimeFormat($creationDateTimeFormat)
+    {
+        $this->creationDateTimeFormat = $creationDateTimeFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreationDateTimeFormat()
+    {
+        return $this->creationDateTimeFormat;
+    }
 }
