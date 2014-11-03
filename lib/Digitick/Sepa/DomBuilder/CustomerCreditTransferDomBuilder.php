@@ -143,11 +143,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $CdtTrfTxInf->appendChild($amount);
 
         //Creditor Agent 2.77
-        $creditorAgent = $this->createElement('CdtrAgt');
-        $financialInstitution = $this->createElement('FinInstnId');
-        $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
-        $creditorAgent->appendChild($financialInstitution);
-        $CdtTrfTxInf->appendChild($creditorAgent);
+        if ($transactionInformation->getBic()) {
+            $creditorAgent = $this->createElement('CdtrAgt');
+            $financialInstitution = $this->createElement('FinInstnId');
+            $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
+            $creditorAgent->appendChild($financialInstitution);
+            $CdtTrfTxInf->appendChild($creditorAgent);
+        }
 
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');
