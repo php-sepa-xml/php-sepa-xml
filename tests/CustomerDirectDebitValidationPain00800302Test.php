@@ -31,7 +31,7 @@ use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 
-class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
+class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_TestCase
 {
     protected $schema;
 
@@ -77,7 +77,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);
-        
+
         $painFormat = "pain.008.003.02";
 
         $domBuilder = new CustomerDirectDebitTransferDomBuilder( $painFormat );
@@ -88,11 +88,11 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
     }
-    
+
     /**
-     *  Test a Transfer file with one payment and one transaction without BIC provided
+     * Test a Transfer file with one payment and one transaction without BIC provided
      */
-     public function testSinglePaymentSingleTransNoBic()
+    public function testSinglePaymentSingleTransNoBic()
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -109,7 +109,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $payment->addTransfer($transfer);
 
         $sepaFile->addPaymentInformation($payment);
-        
+
         $painFormat = "pain.008.003.02";
 
         $domBuilder = new CustomerDirectDebitTransferDomBuilder( $painFormat );
