@@ -129,6 +129,13 @@ class PaymentInformation
     protected $sequenceType;
 
     /**
+     * Should the bank book multiple transaction as a batch
+     *
+     * @var int
+     */
+    protected $batchBooking = null;
+
+    /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
@@ -408,4 +415,19 @@ class PaymentInformation
         return $this->sequenceType;
     }
 
+    /**
+     * @param boolean $batchBooking
+     */
+    public function setBatchBooking($batchBooking)
+    {
+        $this->batchBooking = $batchBooking;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getBatchBooking()
+    {
+        return $this->batchBooking;
+    }
 }
