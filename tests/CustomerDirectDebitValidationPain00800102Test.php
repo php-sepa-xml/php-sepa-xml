@@ -57,8 +57,9 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
 
     /**
      * Test a transfer file with one payment and one transaction.
+     * @dataProvider scenarios
      */
-    public function testDomBuilderAcceptsPainFormatAsConstructor()
+    public function testDomBuilderAcceptsPainFormatAsConstructor($scenario)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -70,6 +71,14 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
         $transfer->setRemittanceInformation('Transaction Description');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+
+        if($scenario['originAgentBic'] !== '') {
+            $payment->setOriginAgentBIC($scenario['originAgentBic']);
+        }
+        if($scenario['batchBooking']) {
+            $payment->setBatchBooking(true);
+        }
+
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
         $payment->setDueDate(new \DateTime('22.08.2013'));
         $payment->setCreditorId('DE21WVM1234567890');
@@ -84,5 +93,25 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
+    }
+
+    /**
+     * @return array
+     */
+    public function scenarios() {
+        return array(
+            array(
+                array(
+                'batchBooking' => true,
+                'originAgentBic' => 'NOLADKIE'
+                )
+            ),
+            array(
+                array(
+                'batchBooking' => false,
+                'originAgentBic' => ''
+                )
+            ),
+        );
     }
 }
