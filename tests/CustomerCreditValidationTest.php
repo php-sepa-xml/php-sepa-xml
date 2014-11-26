@@ -315,6 +315,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     {
         $dateTimeFormat = 'Y-m-d\TH:i:s.000P';
 
+        $dateTime = new \DateTime();
         $groupHeader = new GroupHeader('transferID', 'Me');
         $groupHeader->setCreationDateTimeFormat($dateTimeFormat);
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -343,8 +344,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
 
-        $dateTime = new \DateTime();
         $testNode = $xpathDoc->query('//sepa:CreDtTm');
-        $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm has specified format.');
+        $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
     }
 }
