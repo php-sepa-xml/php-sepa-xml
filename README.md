@@ -1,7 +1,7 @@
 php-sepa-xml
 ============
 
-Master: [![Build Status](https://api.travis-ci.org/monofone/php-sepa-xml.png?branch=master)](http://travis-ci.org/monofone/php-sepa-xml)
+Master: [![Build Status](https://api.travis-ci.org/php-sepa-xml/php-sepa-xml.png?branch=master)](http://travis-ci.org/monofone/php-sepa-xml)
 
 SEPA file generator for PHP.
 
