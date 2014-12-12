@@ -45,12 +45,17 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
      * @param string $amount
      * @param string $iban
      * @param string $name
+     * @param string $identification
      */
-    function __construct($amount, $iban, $name)
+    public function __construct($amount, $iban, $name, $identification = null)
     {
         parent::__construct($amount, $iban, $name);
-        // FIXME broken implementation find suitable IDs
-        $this->setEndToEndIdentification($name);
+
+        if (null === $identification) {
+            $identification = $name;
+        }
+
+        $this->setEndToEndIdentification($identification);
     }
 
     /**
