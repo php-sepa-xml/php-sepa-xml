@@ -44,39 +44,19 @@ class TransferFileFacadeFactory
     public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.008.002.02')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
-        $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
 
-        return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
+        return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
     }
-/**
-    I have added this factory to fit spanish banks. In particular Banc Sabadell
-    but it should be valid for all.
-    We need the id and name of the presentator of the document. This is a MUST.
-    Hope you can use it for all spanish bank
-    ADEUDOS DIRECTOS = DirectDebit
-    
-    $nifPresentador ha de ser ESXXX000{nif}
-    
-     @param string $uniqueMessageIdentification Maximum length: 35. Reference Number of the bulk.
-     *                                            Part of the duplication check (unique daily reference).
-     *                                            The first 8 or 11 characters of <Msgld> must match the BIC of the
-     *                                            Instructing Agent. The rest of the field can be freely defined.
-     * @param string $nombrePresentador
-     * @param string $nifPresentador
-     * @param string $initiatingPartyName
+
+    /**
+     * @param object $groupHeader
      * @param string $painFormat
      *
      * @return CustomerDirectDebitFacade
-*/
-public static function createDirectDebit_BancSabadell($uniqueMessageIdentification, $nombrePresentador,$nifPresentador, $painFormat = 'pain.008.002.02')
+     */
+    public static function createDirectDebitFromGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.008.002.02')
     {
-        $groupHeader = new GroupHeader($uniqueMessageIdentification, $nombrePresentador);
-        $groupHeader->setInitiatingPartyId($nifPresentador);
-        $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
-
-        return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
+        return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
     }
 
     /**
@@ -89,9 +69,18 @@ public static function createDirectDebit_BancSabadell($uniqueMessageIdentificati
     public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.001.002.03')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
-        $directDebitTransferFile = new CustomerCreditTransferFile($groupHeader);
-        $domBuilder = new CustomerCreditTransferDomBuilder($painFormat);
 
-        return new CustomerCreditFacade($directDebitTransferFile, $domBuilder);
+        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
+    }
+
+    /**
+     * @param object $groupHeader
+     * @param string $painFormat
+     *
+     * @return CustomerCreditFacade
+     */
+    public static function createCustomerCreditFromGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.001.002.03')
+    {
+        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
     }
 }
