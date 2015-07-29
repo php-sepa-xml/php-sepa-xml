@@ -49,6 +49,35 @@ class TransferFileFacadeFactory
 
         return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
     }
+/**
+    I have added this factory to fit spanish banks. In particular Banc Sabadell
+    but it should be valid for all.
+    We need the id and name of the presentator of the document. This is a MUST.
+    Hope you can use it for all spanish bank
+    ADEUDOS DIRECTOS = DirectDebit
+    
+    $nifPresentador ha de ser ESXXX000{nif}
+    
+     @param string $uniqueMessageIdentification Maximum length: 35. Reference Number of the bulk.
+     *                                            Part of the duplication check (unique daily reference).
+     *                                            The first 8 or 11 characters of <Msgld> must match the BIC of the
+     *                                            Instructing Agent. The rest of the field can be freely defined.
+     * @param string $nombrePresentador
+     * @param string $nifPresentador
+     * @param string $initiatingPartyName
+     * @param string $painFormat
+     *
+     * @return CustomerDirectDebitFacade
+*/
+public static function createDirectDebit_BancSabadell($uniqueMessageIdentification, $nombrePresentador,$nifPresentador, $painFormat = 'pain.008.002.02')
+    {
+        $groupHeader = new GroupHeader($uniqueMessageIdentification, $nombrePresentador);
+        $groupHeader->setInitiatingPartyId($nifPresentador);
+        $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
+
+        return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
+    }
 
     /**
      * @param string $uniqueMessageIdentification
