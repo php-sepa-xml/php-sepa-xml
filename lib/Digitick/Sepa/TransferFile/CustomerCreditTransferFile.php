@@ -29,7 +29,6 @@ use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferFile extends BaseTransferFile
 {
-
     /**
      * @param PaymentInformation $paymentInformation
      */

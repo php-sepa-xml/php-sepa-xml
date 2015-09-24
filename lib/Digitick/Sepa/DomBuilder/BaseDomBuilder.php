@@ -24,7 +24,6 @@ namespace Digitick\Sepa\DomBuilder;
 
 use Digitick\Sepa\GroupHeader;
 
-
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
     /**
@@ -53,7 +52,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
      * @param boolean $withSchemaLocation define if xsi:schemaLocation tag is added to root
      */
-    function __construct($painFormat, $withSchemaLocation = true)
+    public function __construct($painFormat, $withSchemaLocation = true)
     {
         $this->painFormat = $painFormat;
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
@@ -142,7 +141,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     {
         $finInstitution = $this->createElement('FinInstnId');
 
-        if(!$bic) {
+        if (!$bic) {
             $other = $this->createElement('Othr');
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);

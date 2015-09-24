@@ -92,5 +92,4 @@ abstract class BaseTransferFile implements TransferFileInterface
             throw new InvalidTransferFileConfiguration('No paymentinformations available, add paymentInformation via addPaymentInformation()');
         }
     }
-
 }

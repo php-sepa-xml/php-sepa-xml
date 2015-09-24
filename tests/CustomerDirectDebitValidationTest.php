@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
@@ -29,7 +29,6 @@ use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-
 
 class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 {
@@ -172,6 +171,5 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
-
     }
 }

@@ -48,6 +48,4 @@ class CustomerCreditTransferInformation extends BaseTransferInformation
     {
         return $this->name;
     }
-
-
 }

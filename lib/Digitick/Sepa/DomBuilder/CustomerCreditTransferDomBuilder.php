@@ -31,7 +31,7 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
-    function __construct($painFormat = 'pain.001.002.03')
+    public function __construct($painFormat = 'pain.001.002.03')
     {
         parent::__construct($painFormat);
     }
@@ -60,7 +60,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
 
-        if($paymentInformation->getBatchBooking() !== null) {
+        if ($paymentInformation->getBatchBooking() !== null) {
             $this->currentPayment->appendChild($this->createElement('BtchBookg', $paymentInformation->getBatchBooking()));
         }
 

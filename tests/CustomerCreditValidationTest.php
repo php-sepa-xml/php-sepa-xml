@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
@@ -61,7 +61,6 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSinglePaymentSingleTrans()
     {
-
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
@@ -262,7 +261,6 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $numberOfTxs->item(2)->textContent);
         $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
         $this->assertEquals('10000.04', $ctrlSum->item(0)->textContent);
-
     }
 
     /**

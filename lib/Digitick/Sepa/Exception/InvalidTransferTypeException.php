@@ -24,5 +24,4 @@ namespace Digitick\Sepa\Exception;
 
 class InvalidTransferTypeException extends Exception
 {
-
 }

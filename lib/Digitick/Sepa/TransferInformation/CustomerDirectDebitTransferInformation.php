@@ -113,6 +113,4 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     {
         return $this->name;
     }
-
-
 }

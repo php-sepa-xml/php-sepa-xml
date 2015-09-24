@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
@@ -68,7 +68,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
         $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
-        if($scenario['bic'] !== '') {
+        if ($scenario['bic'] !== '') {
             $transfer->setBic($scenario['bic']);
         }
         $transfer->setRemittanceInformation('Transaction Description');
@@ -76,7 +76,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        if($scenario['batchBooking']) {
+        if ($scenario['batchBooking']) {
             $payment->setBatchBooking(true);
         }
         $payment->setValidPaymentMethods(array('TRANSFER'));
@@ -98,7 +98,8 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
     /**
      * @return array
      */
-    public function scenarios() {
+    public function scenarios()
+    {
         return array(
             array(
                 array(

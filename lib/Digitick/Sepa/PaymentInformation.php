@@ -142,7 +142,7 @@ class PaymentInformation
      * @param string $originName This is your Name
      * @param string $originAccountCurrency
      */
-    function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR')
+    public function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR')
     {
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;

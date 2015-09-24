@@ -46,12 +46,12 @@ class GroupHeader
      */
     protected $initiatingPartyId;
 
-	/**
-	 * The Issuer.
-	 *
-	 * @var string
-	 */
-	protected $issuer;
+    /**
+     * The Issuer.
+     *
+     * @var string
+     */
+    protected $issuer;
 
     /**
      * @var int
@@ -86,7 +86,7 @@ class GroupHeader
      * @param string $initiatingPartyName
      * @param boolean $isTest
      */
-    function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
+    public function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
     {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
@@ -131,21 +131,21 @@ class GroupHeader
         return $this->initiatingPartyId;
     }
 
-	/**
-	 * @return string
-	 */
-	public function getIssuer()
-	{
-		return $this->issuer;
-	}
+    /**
+     * @return string
+     */
+    public function getIssuer()
+    {
+        return $this->issuer;
+    }
 
-	/**
-	 * @param string $issuer
-	 */
-	public function setIssuer($issuer)
-	{
-		$this->issuer = $issuer;
-	}
+    /**
+     * @param string $issuer
+     */
+    public function setIssuer($issuer)
+    {
+        $this->issuer = $issuer;
+    }
 
     /**
      * @param string $initiatingPartyName

@@ -24,5 +24,4 @@ namespace Digitick\Sepa\Exception;
 
 class Exception extends \Exception
 {
-
 }
