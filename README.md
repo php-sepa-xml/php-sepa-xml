@@ -85,7 +85,7 @@ use Digitick\Sepa\GroupHeader;
 $header = new GroupHeader(date('Y-m-d-H-i-s'), 'Me');
 $header->setInitiatingPartyId('DE21WVM1234567890');
 
-$directDebit = TransferFileFacadeFactory::createDirectDebitFromGroupHeader($header, 'pain.008.001.02');
+$directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($header, 'pain.008.001.02');
 
 // create a payment, it's possible to create multiple payments,
 // "firstPayment" is the identifier for the transactions
