@@ -54,7 +54,7 @@ class TransferFileFacadeFactory
      *
      * @return CustomerDirectDebitFacade
      */
-    public static function createDirectDebitFromGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.008.002.02')
+    public static function createDirectDebitWithGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.008.002.02')
     {
         return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
     }
@@ -79,7 +79,7 @@ class TransferFileFacadeFactory
      *
      * @return CustomerCreditFacade
      */
-    public static function createCustomerCreditFromGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.001.002.03')
+    public static function createCustomerCreditWithGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.001.002.03')
     {
         return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
     }
