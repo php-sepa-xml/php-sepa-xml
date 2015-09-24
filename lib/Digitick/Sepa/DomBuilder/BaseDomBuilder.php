@@ -52,14 +52,19 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
      */
-    function __construct($painFormat)
+    function __construct($painFormat, $withSchemaLocation = true)
     {
         $this->painFormat = $painFormat;
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
         $this->doc->formatOutput = true;
         $this->root = $this->doc->createElement('Document');
-        $this->root->setAttribute('xmlns', sprintf("urn:iso:std:iso:20022:tech:xsd:%s", $painFormat));
-        $this->root->setAttribute('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance");
+        $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+        $this->root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+
+        if ($withSchemaLocation) {
+            $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+        }
+
         $this->doc->appendChild($this->root);
     }
 
@@ -93,7 +98,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     protected function intToCurrency($amount)
     {
-        return sprintf("%01.2F", ($amount / 100));
+        return sprintf('%01.2F', ($amount / 100));
     }
 
     /**
@@ -136,7 +141,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     protected function getFinancialInstitutionElement($bic)
     {
         $finInstitution = $this->createElement('FinInstnId');
-        
+
         if(!$bic) {
             $other = $this->createElement('Othr');
             $id = $this->createElement('Id', 'NOTPROVIDED');
@@ -145,7 +150,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         } else {
             $finInstitution->appendChild($this->createElement('BIC', $bic));
         }
-        
+
 
         return $finInstitution;
     }
