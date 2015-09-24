@@ -51,6 +51,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
+     * @param boolean $withSchemaLocation define if xsi:schemaLocation tag is added to root
      */
     function __construct($painFormat, $withSchemaLocation = true)
     {
@@ -133,7 +134,6 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->currentTransfer->appendChild($groupHeaderTag);
     }
 
-
     /**
      * @param string $bic
      * @return \DOMElement
@@ -151,10 +151,8 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $finInstitution->appendChild($this->createElement('BIC', $bic));
         }
 
-
         return $finInstitution;
     }
-
 
     /**
      * @param string $iban
@@ -167,7 +165,6 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
         return $id;
     }
-
 
     /**
      * @param string $remittenceInformation
