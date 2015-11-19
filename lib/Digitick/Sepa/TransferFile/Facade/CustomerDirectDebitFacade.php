@@ -83,6 +83,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *      - debtorMandateSignDate
      *      - remittanceInformation
      *      - [endToEndId]
+     *      - [amendments]
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
      * @return mixed
@@ -114,6 +115,15 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
             $transfer->setEndToEndIdentification(
                 $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
             );
+        }
+        if (isset($transferInformation['originalMandateId'])) {
+            $transfer->setOriginalMandateId($transferInformation['originalMandateId']);
+        }
+        if (isset($transferInformation['originalDebtorIban'])) {
+            $transfer->setOriginalDebtorIban($transferInformation['originalDebtorIban']);
+        }
+        if (isset($transferInformation['amendedDebtorAgent'])) {
+            $transfer->setAmendedDebtorAgent((bool)$transferInformation['amendedDebtorAgent']);
         }
 
         $this->payments[$paymentName]->addTransfer($transfer);
