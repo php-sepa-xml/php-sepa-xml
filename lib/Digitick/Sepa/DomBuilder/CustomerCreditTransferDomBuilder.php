@@ -23,15 +23,23 @@
 namespace Digitick\Sepa\DomBuilder;
 
 use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
+/**
+ * Class CustomerCreditTransferDomBuilder
+ */
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
-    public function __construct($painFormat = 'pain.001.002.03')
+
+    /**
+     * CustomerCreditTransferDomBuilder constructor
+     *
+     * @param string $painFormat
+     */
+    function __construct($painFormat = 'pain.001.003.03')
     {
         parent::__construct($painFormat);
     }

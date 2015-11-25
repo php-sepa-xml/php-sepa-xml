@@ -65,7 +65,7 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $EndToEndIdentification;
 
     /**
-     * @var
+     * @var string
      */
     protected $currency = 'EUR';
 
@@ -80,6 +80,8 @@ class BaseTransferInformation implements TransferInformationInterface
      * @param string $amount
      * @param string $iban
      * @param string $name
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct($amount, $iban, $name)
     {
@@ -208,4 +210,5 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         return $this->remittanceInformation;
     }
+
 }
