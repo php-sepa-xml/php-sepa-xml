@@ -44,10 +44,19 @@ class TransferFileFacadeFactory
     public static function createDirectDebit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.008.002.02')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
-        $directDebitTransferFile = new CustomerDirectDebitTransferFile($groupHeader);
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
 
-        return new CustomerDirectDebitFacade($directDebitTransferFile, $domBuilder);
+        return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
+    }
+
+    /**
+     * @param object $groupHeader
+     * @param string $painFormat
+     *
+     * @return CustomerDirectDebitFacade
+     */
+    public static function createDirectDebitWithGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.008.002.02')
+    {
+        return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
     }
 
     /**
@@ -60,9 +69,18 @@ class TransferFileFacadeFactory
     public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.001.002.03')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
-        $directDebitTransferFile = new CustomerCreditTransferFile($groupHeader);
-        $domBuilder = new CustomerCreditTransferDomBuilder($painFormat);
 
-        return new CustomerCreditFacade($directDebitTransferFile, $domBuilder);
+        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
+    }
+
+    /**
+     * @param object $groupHeader
+     * @param string $painFormat
+     *
+     * @return CustomerCreditFacade
+     */
+    public static function createCustomerCreditWithGroupHeader(GroupHeader $groupHeader, $painFormat = 'pain.001.002.03')
+    {
+        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
     }
 }

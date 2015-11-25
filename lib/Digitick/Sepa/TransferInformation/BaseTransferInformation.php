@@ -85,7 +85,7 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         $amount += 0;
         if (is_float($amount)) {
-            if(!function_exists('bcscale')) {
+            if (!function_exists('bcscale')) {
                 throw new InvalidArgumentException('Using floats for amount is only possible with bcmath enabled');
             }
             bcscale(2);
@@ -208,5 +208,4 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         return $this->remittanceInformation;
     }
-
 }

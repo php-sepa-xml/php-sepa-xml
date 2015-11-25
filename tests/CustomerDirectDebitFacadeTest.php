@@ -20,8 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
-
+namespace tests;
 
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;

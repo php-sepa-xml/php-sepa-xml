@@ -27,7 +27,6 @@ use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 class DomBuilderFactory
 {
-
     public static function createDomBuilder(TransferFileInterface $transferFile, $painFormat = '')
     {
         $transferFileClass = get_class($transferFile);
@@ -46,5 +45,4 @@ class DomBuilderFactory
 
         return $domBuilder;
     }
-
 }

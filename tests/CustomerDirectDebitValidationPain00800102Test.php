@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
@@ -28,7 +28,6 @@ use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-
 
 class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_TestCase
 {
@@ -72,10 +71,10 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
 
-        if($scenario['originAgentBic'] !== '') {
+        if ($scenario['originAgentBic'] !== '') {
             $payment->setOriginAgentBIC($scenario['originAgentBic']);
         }
-        if($scenario['batchBooking']) {
+        if ($scenario['batchBooking']) {
             $payment->setBatchBooking(true);
         }
 
@@ -98,7 +97,8 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
     /**
      * @return array
      */
-    public function scenarios() {
+    public function scenarios()
+    {
         return array(
             array(
                 array(

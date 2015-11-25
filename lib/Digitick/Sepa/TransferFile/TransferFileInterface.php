@@ -24,7 +24,6 @@ namespace Digitick\Sepa\TransferFile;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\GroupHeader;
 
-
 interface TransferFileInterface
 {
     public function __construct(GroupHeader $groupHeader);
@@ -41,5 +40,4 @@ interface TransferFileInterface
     public function validate();
 
     public function accept(DomBuilderInterface $domBuilder);
-
 }

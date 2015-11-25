@@ -7,8 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Tests\Unit;
-
+namespace tests\Unit;
 
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
@@ -17,7 +16,6 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class SumOutputTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \DOMXPath
      */
@@ -112,7 +110,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
      */
     public function floatsAreAcceptedIfBcMathExtensionIsAvailable()
     {
-        if(!function_exists('bcscale')) {
+        if (!function_exists('bcscale')) {
             $this->markTestSkipped('no bcmath extension available');
         }
         $transfer = new CustomerDirectDebitTransferInformation(
@@ -130,7 +128,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
      */
     public function exceptionIsThrownIfBcMathExtensionIsNotAvailableAndInputIsFloat()
     {
-        if(function_exists('bcscale')) {
+        if (function_exists('bcscale')) {
             $this->markTestSkipped('bcmath extension available, not possible to test exceptions');
         }
         $transfer = new CustomerDirectDebitTransferInformation(

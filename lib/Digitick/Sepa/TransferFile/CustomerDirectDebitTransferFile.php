@@ -29,7 +29,6 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferFile extends BaseTransferFile
 {
-
     /**
      * @param PaymentInformation $paymentInformation
      */

@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
@@ -29,7 +29,6 @@ use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-
 
 class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_TestCase
 {
@@ -80,7 +79,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
 
         $painFormat = "pain.008.003.02";
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder( $painFormat );
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
@@ -112,7 +111,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
 
         $painFormat = "pain.008.003.02";
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder( $painFormat );
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($painFormat);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
@@ -206,6 +205,5 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
-
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace Tests;
+namespace tests;
 
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferInformationTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Tests whether the EndToEndId equals the name if no other identifier was supplied
      */
@@ -24,5 +23,4 @@ class CustomerCreditTransferInformationTest extends \PHPUnit_Framework_TestCase
         $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
-
 }

@@ -117,6 +117,5 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
 
         $this->payments[$paymentName]->addTransfer($transfer);
-
     }
 }

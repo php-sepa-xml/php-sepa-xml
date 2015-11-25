@@ -64,6 +64,4 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
 
         return $this->domBuilder->asXml();
     }
-
-
 }

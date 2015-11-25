@@ -30,10 +30,8 @@ use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 use Digitick\Sepa\GroupHeader;
 
-
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
-
     public function __construct($painFormat = 'pain.008.002.02')
     {
         parent::__construct($painFormat);
@@ -174,34 +172,32 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
         );
         $this->currentPayment->appendChild($directDebitTransactionInformation);
-
     }
 
 
-	/**
-	 * Add the specific OrgId element for the format 'pain.008.001.02'
-	 *
-	 * @param  GroupHeader $groupHeader
-	 * @return mixed
-	 */
-	public function visitGroupHeader(GroupHeader $groupHeader)
-	{
-		parent::visitGroupHeader($groupHeader);
+    /**
+     * Add the specific OrgId element for the format 'pain.008.001.02'
+     *
+     * @param  GroupHeader $groupHeader
+     * @return mixed
+     */
+    public function visitGroupHeader(GroupHeader $groupHeader)
+    {
+        parent::visitGroupHeader($groupHeader);
 
-		if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.008.001.02') {
-			$newId = $this->createElement('Id');
-			$orgId = $this->createElement('OrgId');
-			$othr  = $this->createElement('Othr');
-			$othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
-			$orgId->appendChild($othr);
-			$newId->appendChild($orgId);
+        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.008.001.02') {
+            $newId = $this->createElement('Id');
+            $orgId = $this->createElement('OrgId');
+            $othr  = $this->createElement('Othr');
+            $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $orgId->appendChild($othr);
+            $newId->appendChild($orgId);
 
-			$xpath = new \DOMXpath($this->doc);
-			$items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
-			$oldId = $items->item(0);
+            $xpath = new \DOMXpath($this->doc);
+            $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
+            $oldId = $items->item(0);
 
-			$oldId->parentNode->replaceChild($newId, $oldId);
-		}
-	}
-
+            $oldId->parentNode->replaceChild($newId, $oldId);
+        }
+    }
 }

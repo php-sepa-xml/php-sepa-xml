@@ -20,8 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Tests\Unit;
-
+namespace tests\Unit;
 
 use Digitick\Sepa\DomBuilder\DomBuilderFactory;
 use Digitick\Sepa\GroupHeader;
@@ -33,7 +32,6 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
