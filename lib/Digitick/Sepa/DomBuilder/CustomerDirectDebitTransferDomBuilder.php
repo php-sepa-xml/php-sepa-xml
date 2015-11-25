@@ -30,7 +30,6 @@ use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 use Digitick\Sepa\GroupHeader;
 
-
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
 
@@ -173,35 +172,67 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $directDebitTransactionInformation->appendChild(
             $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
         );
+
+        if ($transactionInformation->hasAmendments()) {
+            $amendmentIndicator = $this->createElement('AmdmntInd', 'true');
+            $mandateRelatedInformation->appendChild($amendmentIndicator);
+
+            $amendmentInformationDetails = $this->createElement('AmdmntInfDtls');
+
+            if ($transactionInformation->hasAmendedDebtorAgent()) {
+                $originalDebtorAgent = $this->createElement('OrgnlDbtrAgt');
+                $financialInstitutionIdentification = $this->createElement('FinInstnId');
+                $other = $this->createElement('Othr');
+                $id = $this->createElement('Id', 'SMNDA');
+
+                $other->appendChild($id);
+                $financialInstitutionIdentification->appendChild($other);
+                $originalDebtorAgent->appendChild($financialInstitutionIdentification);
+                $amendmentInformationDetails->appendChild($originalDebtorAgent);
+            }
+
+            if ($transactionInformation->getOriginalDebtorIban() !== null) {
+                $originalDebtorAccount = $this->createElement('OrgnlDbtrAcct');
+                $originalDebtorAccount->appendChild($this->getIbanElement($transactionInformation->getOriginalDebtorIban()));
+                $amendmentInformationDetails->appendChild($originalDebtorAccount);
+            }
+
+            if ($transactionInformation->getOriginalMandateId() !== null) {
+                $originalMandateId = $this->createElement('OrgnlMndtId', $transactionInformation->getOriginalMandateId());
+                $amendmentInformationDetails->appendChild($originalMandateId);
+            }
+
+            $mandateRelatedInformation->appendChild($amendmentInformationDetails);
+        }
+
         $this->currentPayment->appendChild($directDebitTransactionInformation);
 
     }
 
 
-	/**
-	 * Add the specific OrgId element for the format 'pain.008.001.02'
-	 *
-	 * @param  GroupHeader $groupHeader
-	 * @return mixed
-	 */
-	public function visitGroupHeader(GroupHeader $groupHeader)
-	{
-		parent::visitGroupHeader($groupHeader);
+    /**
+     * Add the specific OrgId element for the format 'pain.008.001.02'
+     *
+     * @param  GroupHeader $groupHeader
+     * @return mixed
+     */
+    public function visitGroupHeader(GroupHeader $groupHeader)
+    {
+        parent::visitGroupHeader($groupHeader);
 
-		if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.008.001.02') {
-			$newId = $this->createElement('Id');
-			$orgId = $this->createElement('OrgId');
-			$othr  = $this->createElement('Othr');
-			$othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
-			$orgId->appendChild($othr);
-			$newId->appendChild($orgId);
+        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.008.001.02') {
+            $newId = $this->createElement('Id');
+            $orgId = $this->createElement('OrgId');
+            $othr  = $this->createElement('Othr');
+            $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $orgId->appendChild($othr);
+            $newId->appendChild($orgId);
 
-			$xpath = new \DOMXpath($this->doc);
-			$items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
-			$oldId = $items->item(0);
+            $xpath = new \DOMXpath($this->doc);
+            $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
+            $oldId = $items->item(0);
 
-			$oldId->parentNode->replaceChild($newId, $oldId);
-		}
-	}
-
+            $oldId->parentNode->replaceChild($newId, $oldId);
+        }
+    }
 }
