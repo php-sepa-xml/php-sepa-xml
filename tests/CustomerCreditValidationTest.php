@@ -35,11 +35,6 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var string
-     */
-    protected $schema;
-
-    /**
      * @var \DOMDocument
      */
     protected $dom;
@@ -49,24 +44,32 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->schema = __DIR__ . "/pain.001.002.03.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
     /**
      * Sanity check: test reference file with XSD.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSanity()
+    public function testSanity($schema)
     {
-        $this->dom->load(__DIR__ . '/pain.001.002.03.xml');
-        $validated = $this->dom->schemaValidate($this->schema);
+        $this->dom->load(__DIR__ . '/' . $schema . '.xml');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+
         $this->assertTrue($validated);
     }
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTrans()
+    public function testSinglePaymentSingleTrans($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -85,19 +88,23 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate($this->schema);
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
     /**
      * Test a transfer file with one payment and several transactions.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSinglePaymentMultiTrans()
+    public function testSinglePaymentMultiTrans($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -115,33 +122,40 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate($this->schema);
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
     /**
      * Test that a transferfile without Payments throws understandable exception
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testInvalidTransferFileThrowsException()
+    public function testInvalidTransferFileThrowsException($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
     }
 
-
     /**
      * Test correct calulation of controlsum and transaction count
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testControlSumAndTransactionCount()
+    public function testControlSumAndTransactionCount($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -159,14 +173,15 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $doc = new \DOMDocument();
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+
         $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
         $this->assertEquals(2, $numberOfTxs->item(0)->textContent);
         $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
@@ -175,8 +190,12 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the payment informations in the xml
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testPaymentMetaData()
+    public function testPaymentMetaData($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -190,14 +209,15 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $doc = new \DOMDocument();
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+
         // Date is correctly coded
         $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
         $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
@@ -217,8 +237,12 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test a transfer file with several payments, several transactions each.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testMultiPaymentMultiTrans()
+    public function testMultiPaymentMultiTrans($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -251,17 +275,18 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment2);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
 
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate($this->schema);
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+
         $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
         $this->assertEquals(4, $numberOfTxs->item(0)->textContent);
         $this->assertEquals(2, $numberOfTxs->item(1)->textContent);
@@ -272,8 +297,12 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the payment informations in the xml
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testUmlautConversion()
+    public function testUmlautConversion($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -289,7 +318,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
 
@@ -297,7 +326,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
@@ -315,8 +344,12 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      * Test a transfer file using other date format.
      * There are different representations possible for IsoDateTime:
      * http://www.swift.com/assets/corporates/documents/business_areas/ebam_standards_mx/business/x68910b9357eed3cf49770d42b07d70f1.htm
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSinglePaymentOtherCreationDateTimeFormat()
+    public function testSinglePaymentOtherCreationDateTimeFormat($schema)
     {
         $dateTimeFormat = 'Y-m-d\TH:i:s.000P';
 
@@ -339,7 +372,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerCreditTransferDomBuilder();
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
 
@@ -347,9 +380,22 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
 
         $testNode = $xpathDoc->query('//sepa:CreDtTm');
         $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
     }
+
+    /**
+     * @return array
+     */
+    public function provideSchema()
+    {
+        return array(
+            array("pain.001.001.03"),
+            array("pain.001.002.03"),
+            array("pain.001.003.03")
+        );
+    }
+
 }
