@@ -51,10 +51,10 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaProvider()
     {
-        return [
-            ["pain.001.001.03"],
-            ["pain.001.002.03"],
-            ["pain.001.003.03"]
-        ];
+        return array(
+            array("pain.001.001.03"),
+            array("pain.001.002.03"),
+            array("pain.001.003.03")
+        );
     }
 }
