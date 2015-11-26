@@ -33,14 +33,9 @@ Always up to date (bleeding edge, API *not* guaranteed stable)
 "digitick/sepa-xml" : "dev-master"
 ```
 
-No namespaces, only bugfixes
+Specific version, API stability
 ```javascript
-"digitick/sepa-xml" : "dev-no_namespace"
-```
-
-Specific minor version, API stability
-```javascript
-"digitick/sepa-xml" : "0.10.*"
+"digitick/sepa-xml" : "1.1.*"
 ```
 
 ##Sample Usage DirectDebit with Factory
