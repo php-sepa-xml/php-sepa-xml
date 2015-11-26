@@ -11,30 +11,17 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var string
-     */
-    protected $schema;
-
-    /**
-     * @var \DOMDocument
-     */
-    protected $dom;
-
-    /**
-     * Setup
-     */
-    protected function setUp()
-    {
-        $this->schema = __DIR__ . "/pain.001.003.03.xsd";
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
-    }
-
-    /**
      * Test creation of file via Factory and Facade
+     *
+     * @param string $schema
+     *
+     * @dataProvider schemaProvider
      */
-    public function testValidFileCreationWithFacade()
+    public function testValidFileCreationWithFacade($schema)
     {
-        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me');
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $credit->addPaymentInfo(
             'firstPayment',
             array(
@@ -55,7 +42,19 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->dom->loadXML($credit->asXML());
-        $this->assertTrue($this->dom->schemaValidate($this->schema));
+        $dom->loadXML($credit->asXML());
+        $this->assertTrue($dom->schemaValidate(__DIR__ . "/" . $schema . ".xsd"));
+    }
+
+    /**
+     * @return array
+     */
+    public function schemaProvider()
+    {
+        return [
+            ["pain.001.001.03"],
+            ["pain.001.002.03"],
+            ["pain.001.003.03"]
+        ];
     }
 }
