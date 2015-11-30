@@ -23,7 +23,7 @@
 namespace Digitick\Sepa;
 
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
-use Digitick\Sepa\Exception\InvalidPaymentMethodException;
+use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 use Digitick\Sepa\Util\StringHelper;
 
@@ -134,6 +134,11 @@ class PaymentInformation
      * @var int
      */
     protected $batchBooking = null;
+
+    /**
+     * @var \DateTime
+     */
+    protected $mandateSignDate;
 
     /**
      * @param string $id
