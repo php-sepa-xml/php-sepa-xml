@@ -106,7 +106,34 @@ $directDebit->addTransfer('firstPayment', array(
 $directDebit->asXML();
 ```
 
-##Extended Usage Credit Transfer
+##Sample Usage CreditTransfer with Factory
+```php
+use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+
+//Set the initial information
+$customerCredit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me');
+
+// create a payment, it's possible to create multiple payments,
+// "firstPayment" is the identifier for the transactions
+$customerCredit->addPaymentInfo('firstPayment', array(
+    'id'                      => 'firstPayment',
+    'debtorName'              => 'My Company',
+    'debtorAccountIBAN'       => 'FI1350001540000056',
+    'debtorAgentBIC'          => 'PSSTFRPPMON',
+));
+// Add a Single Transaction to the named payment
+$customerCredit->addTransfer('firstPayment', array(
+    'amount'                  => '500',
+    'creditorIban'            => 'FI1350001540000056',
+    'creditorBic'             => 'OKOYFIHH',
+    'creditorName'            => 'Their Company',
+    'remittanceInformation'   => 'Purpose of this credit transfer'
+));
+// Retrieve the resulting XML
+$customerCredit->asXML();
+```
+
+##Extended Usage CreditTransfer
 ```php
 // Create the initiating information
 $groupHeader = new GroupHeader('SEPA File Identifier', 'Your Company Name');
