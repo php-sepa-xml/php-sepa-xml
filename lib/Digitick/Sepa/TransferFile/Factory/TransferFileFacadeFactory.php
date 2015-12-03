@@ -67,7 +67,7 @@ class TransferFileFacadeFactory
      *
      * @return CustomerCreditFacade
      */
-    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.001.003.03')
+    public static function createCustomerCredit($uniqueMessageIdentification, $initiatingPartyName, $painFormat = 'pain.001.002.03')
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
 

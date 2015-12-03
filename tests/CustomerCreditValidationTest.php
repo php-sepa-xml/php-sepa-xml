@@ -49,7 +49,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->schema = __DIR__ . "/pain.001.003.03.xsd";
+        $this->schema = __DIR__ . "/pain.001.002.03.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -58,7 +58,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSanity()
     {
-        $this->dom->load(__DIR__ . '/pain.001.003.03.xml');
+        $this->dom->load(__DIR__ . '/pain.001.002.03.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
     }
@@ -166,7 +166,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.003.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
         $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
         $this->assertEquals(2, $numberOfTxs->item(0)->textContent);
         $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
@@ -197,7 +197,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.003.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
         // Date is correctly coded
         $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
         $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
@@ -261,7 +261,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.003.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
         $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
         $this->assertEquals(4, $numberOfTxs->item(0)->textContent);
         $this->assertEquals(2, $numberOfTxs->item(1)->textContent);
@@ -297,7 +297,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.003.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
@@ -347,7 +347,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.003.03');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.002.03');
 
         $testNode = $xpathDoc->query('//sepa:CreDtTm');
         $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
