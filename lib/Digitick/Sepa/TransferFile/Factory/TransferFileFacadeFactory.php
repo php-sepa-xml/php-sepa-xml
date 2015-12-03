@@ -26,6 +26,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
+use Digitick\Sepa\TransferFile\Facade\CustomerCreditFacade;
 use Digitick\Sepa\TransferFile\Facade\CustomerDirectDebitFacade;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 

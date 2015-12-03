@@ -33,6 +33,10 @@ use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
  */
 class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var string
+     */
     protected $schema;
 
     /**
@@ -40,6 +44,9 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     protected $dom;
 
+    /**
+     * Setup
+     */
     protected function setUp()
     {
         $this->schema = __DIR__ . "/pain.001.002.03.xsd";
