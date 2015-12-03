@@ -42,6 +42,21 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     protected $finalCollectionDate;
 
     /**
+     * @var bool
+     */
+    protected $amendedDebtorAgent = false;
+
+    /**
+     * @var string|null
+     */
+    protected $originalDebtorIban = null;
+
+    /**
+     * @var string|null
+     */
+    protected $originalMandateId = null;
+
+    /**
      * @param string $amount
      * @param string $iban
      * @param string $name
@@ -59,6 +74,32 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     }
 
     /**
+     * @return boolean
+     */
+    public function hasAmendments()
+    {
+        return $this->amendedDebtorAgent
+            || $this->originalDebtorIban !== null
+            || $this->originalMandateId !== null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasAmendedDebtorAgent()
+    {
+        return $this->amendedDebtorAgent;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setAmendedDebtorAgent($status)
+    {
+        $this->amendedDebtorAgent = $status;
+    }
+
+    /**
      * @param \DateTime $finalCollectionDate
      */
     public function setFinalCollectionDate($finalCollectionDate)
@@ -72,6 +113,38 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     public function getFinalCollectionDate()
     {
         return $this->finalCollectionDate;
+    }
+
+    /**
+     * @param string $originalDebtorIban
+     */
+    public function setOriginalDebtorIban($originalDebtorIban)
+    {
+        $this->originalDebtorIban = $originalDebtorIban;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOriginalDebtorIban()
+    {
+        return $this->originalDebtorIban;
+    }
+
+    /**
+     * @param string $originalMandateId
+     */
+    public function setOriginalMandateId($originalMandateId)
+    {
+        $this->originalMandateId = StringHelper::sanitizeString($originalMandateId);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOriginalMandateId()
+    {
+        return $this->originalMandateId;
     }
 
     /**
