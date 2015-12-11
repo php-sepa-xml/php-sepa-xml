@@ -32,33 +32,42 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 {
-    protected $schema;
 
     /**
      * @var \DOMDocument
      */
     protected $dom;
 
+    /**
+     * Setup
+     */
     protected function setUp()
     {
-        $this->schema = __DIR__ . "/pain.008.002.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
     /**
      * Sanity check: test reference file with XSD.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSanity()
+    public function testSanity($schema)
     {
-        $this->dom->load(__DIR__ . '/pain.008.002.02.xml');
-        $validated = $this->dom->schemaValidate($this->schema);
+        $this->dom->load(__DIR__ . '/' . $schema . '.xml');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTrans()
+    public function testSinglePaymentSingleTrans($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -77,20 +86,24 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate($this->schema);
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
     /**
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a SequenceType
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testValidationFailureSeqType()
+    public function testValidationFailureSeqType($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -102,15 +115,19 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
     }
 
     /**
      * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a CreditorSchemeId
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testValidationFailureCreditorId()
+    public function testValidationFailureCreditorId($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -123,14 +140,18 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
     }
 
     /**
      * Test the payment informations in the xml
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testUmlautConversion()
+    public function testUmlautConversion($schema)
     {
         $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -148,14 +169,14 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 
         $sepaFile->addPaymentInformation($payment);
 
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($schema);
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $doc = new \DOMDocument();
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.008.002.02');
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
@@ -171,5 +192,17 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
+    }
+
+    /**
+     * @return array
+     */
+    public function provideSchema()
+    {
+        return array(
+            array('pain.008.001.02'),
+            array('pain.008.002.02'),
+            array('pain.008.003.02')
+        );
     }
 }

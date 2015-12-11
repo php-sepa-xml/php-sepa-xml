@@ -58,6 +58,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
      * @dataProvider scenarios
      */
     public function testSinglePaymentSingleTransWithMoreInfo($scenario)

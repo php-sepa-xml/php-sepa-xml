@@ -42,10 +42,14 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test creation of file via Factory and Facade
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
      */
-    public function testValidFileCreationWithFacade()
+    public function testValidFileCreationWithFacade($schema)
     {
-        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
         $directDebit->addPaymentInfo(
             'firstPayment',
             array(
@@ -71,6 +75,18 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->dom->loadXML($directDebit->asXML());
-        $this->assertTrue($this->dom->schemaValidate($this->schema));
+        $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd'));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideSchema()
+    {
+        return array(
+            array('pain.008.001.02'),
+            array('pain.008.002.02'),
+            array('pain.008.003.02')
+        );
     }
 }
