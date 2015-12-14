@@ -9,3 +9,6 @@ php:
 
 before_script:
   - composer install
+  
+script:
+  - ./bin/phpunit
