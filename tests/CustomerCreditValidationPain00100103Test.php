@@ -22,11 +22,11 @@
 
 namespace tests;
 
-use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder;
+use PhpSepa\GroupHeader;
+use PhpSepa\PaymentInformation;
+use PhpSepa\TransferFile\CustomerCreditTransferFile;
+use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
 
 /**
  * Various schema validation tests.

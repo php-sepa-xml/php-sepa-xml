@@ -22,13 +22,13 @@
 
 namespace tests;
 
-use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
-use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder;
+use PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
+use PhpSepa\Exception\InvalidTransferFileConfiguration;
+use PhpSepa\GroupHeader;
+use PhpSepa\PaymentInformation;
+use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +63,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation('2', 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
@@ -96,7 +96,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation('2', 'FI1350001540000056', 'Their Corp');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
         $transfer->setRemittanceInformation('Transaction Description');
@@ -121,7 +121,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
     }
 
     /**
-     * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
+     * @expectedException \PhpSepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a SequenceType
      */
     public function testValidationFailureSeqType()
@@ -129,7 +129,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation('2', 'FI1350001540000056', 'Their Corp');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->addTransfer($transfer);
@@ -141,7 +141,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
     }
 
     /**
-     * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
+     * @expectedException \PhpSepa\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a CreditorSchemeId
      */
     public function testValidationFailureCreditorId()
@@ -149,7 +149,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation('2', 'FI1350001540000056', 'Their Corp');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
@@ -173,7 +173,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
         $payment->setCreditorId('Only A-Z without äöüßÄÖÜ creditorSchemeId');
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ debtorName');
+        $transfer = new CustomerDirectDebitTransferInformation('2', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ debtorName');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Only A-Z without äöüßÄÖÜ remittanceInformation');
         $transfer->setMandateSignDate(new \DateTime());

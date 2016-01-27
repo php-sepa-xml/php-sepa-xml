@@ -22,13 +22,13 @@
 
 namespace tests\Unit;
 
-use Digitick\Sepa\DomBuilder\DomBuilderFactory;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
-use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepa\DomBuilder\DomBuilderFactory;
+use PhpSepa\GroupHeader;
+use PhpSepa\PaymentInformation;
+use PhpSepa\TransferFile\CustomerCreditTransferFile;
+use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
         $sepaFile->addPaymentInformation($paymentInformation);
 
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
-        $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
+        $this->assertInstanceOf('\PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
     }
 
     /**
@@ -65,6 +65,6 @@ class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
         $sepaFile->addPaymentInformation($paymentInformation);
 
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
-        $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder', $domBuilder);
+        $this->assertInstanceOf('\PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder', $domBuilder);
     }
 }

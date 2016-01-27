@@ -18,8 +18,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Digitick\\Sepa": "lib/"
+        "psr-4": {
+            "PhpSepa\\": "src/"
         }
     },
     "require": {

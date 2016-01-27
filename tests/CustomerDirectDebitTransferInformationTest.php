@@ -2,7 +2,7 @@
 
 namespace tests;
 
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferInformationTest extends \PHPUnit_Framework_TestCase
 {

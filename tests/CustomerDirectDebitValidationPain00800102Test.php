@@ -22,12 +22,12 @@
 
 namespace tests;
 
-use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
+use PhpSepa\Exception\InvalidTransferFileConfiguration;
+use PhpSepa\GroupHeader;
+use PhpSepa\PaymentInformation;
+use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_TestCase
 {

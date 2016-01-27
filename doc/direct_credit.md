@@ -2,7 +2,7 @@
 
 ##Sample Usage CreditTransfer with Factory
 ```php
-use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
 
 //Set the initial information
 $customerCredit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me');

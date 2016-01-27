@@ -9,10 +9,10 @@
 
 namespace tests\Unit;
 
-use Digitick\Sepa\Exception\InvalidArgumentException;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepa\Exception\InvalidArgumentException;
+use PhpSepa\PaymentInformation;
+use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class SumOutputTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +64,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
      */
     public function validSumIsCalculatedCorrectly()
     {
-        $this->createDirectDebitXpathObject('19.99');
+        $this->createDirectDebitXpathObject('1999');
         $controlSum = $this->directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
         $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
@@ -82,61 +82,6 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function floatSumIsCalculatedCorrectly()
-    {
-        $this->createDirectDebitXpathObject('19.999');
-        $controlSum = $this->directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
-        $controlSum = $this->directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'PaymentInformation ControlSum should be 19.99'
-        );
-        $controlSum = $this->directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'DirectDebitTransferInformation InstructedAmount should be 19.99'
-        );
-    }
 
-    /**
-     * @test
-     */
-    public function floatsAreAcceptedIfBcMathExtensionIsAvailable()
-    {
-        if (!function_exists('bcscale')) {
-            $this->markTestSkipped('no bcmath extension available');
-        }
-        $transfer = new CustomerDirectDebitTransferInformation(
-            '19.999',
-            'IbanOfDebitor',
-            'DebitorName'
-        );
-
-        $this->assertEquals(1999, $transfer->getTransferAmount());
-    }
-
-    /**
-     * @test
-     * @expectedException \Digitick\Sepa\Exception\InvalidArgumentException
-     */
-    public function exceptionIsThrownIfBcMathExtensionIsNotAvailableAndInputIsFloat()
-    {
-        if (function_exists('bcscale')) {
-            $this->markTestSkipped('bcmath extension available, not possible to test exceptions');
-        }
-        $transfer = new CustomerDirectDebitTransferInformation(
-            '19.999',
-            'IbanOfDebitor',
-            'DebitorName'
-        );
-
-        $this->assertEquals(1999, $transfer->getTransferAmount());
-    }
 }
