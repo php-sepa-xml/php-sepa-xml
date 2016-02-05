@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpSepa\TransferFile\Facade;
+namespace PhpSepaXml\TransferFile\Facade;
 
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferInformation\CustomerCreditTransferInformation;
 
 /**
  * Class CustomerCreditFacade

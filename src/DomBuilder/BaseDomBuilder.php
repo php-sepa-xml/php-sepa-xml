@@ -20,9 +20,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\DomBuilder;
+namespace PhpSepaXml\DomBuilder;
 
-use PhpSepa\GroupHeader;
+use PhpSepaXml\GroupHeader;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {

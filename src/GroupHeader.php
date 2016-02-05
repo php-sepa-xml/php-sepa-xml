@@ -20,10 +20,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa;
+namespace PhpSepaXml;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
-use PhpSepa\Util\StringHelper;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\Util\StringHelper;
 
 class GroupHeader
 {

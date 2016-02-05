@@ -20,10 +20,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile\Facade;
+namespace PhpSepaXml\TransferFile\Facade;
 
-use PhpSepa\DomBuilder\BaseDomBuilder;
-use PhpSepa\TransferFile\TransferFileInterface;
+use PhpSepaXml\DomBuilder\BaseDomBuilder;
+use PhpSepaXml\TransferFile\TransferFileInterface;
 
 abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFacadeInterface
 {
@@ -33,7 +33,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     protected $transferFile;
 
     /**
-     * @var \PhpSepa\DomBuilder\BaseDomBuilder
+     * @var \PhpSepaXml\DomBuilder\BaseDomBuilder
      */
     protected $domBuilder;
 

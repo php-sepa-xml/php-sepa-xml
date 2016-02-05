@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpSepa\Exception;
+namespace PhpSepaXml\Exception;
 
 /**
  * SEPA file generator.

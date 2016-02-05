@@ -2,7 +2,7 @@
 
 namespace tests;
 
-use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepaXml\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferInformationTest extends \PHPUnit_Framework_TestCase
 {

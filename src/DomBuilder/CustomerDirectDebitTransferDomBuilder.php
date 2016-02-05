@@ -20,15 +20,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\DomBuilder;
+namespace PhpSepaXml\DomBuilder;
 
-use PhpSepa\TransferFile\CustomerCreditTransferFile;
-use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use PhpSepa\TransferInformation\TransferInformationInterface;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\TransferFileInterface;
-use PhpSepa\GroupHeader;
+use PhpSepaXml\TransferFile\CustomerCreditTransferFile;
+use PhpSepaXml\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\TransferInformation\TransferInformationInterface;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\TransferFileInterface;
+use PhpSepaXml\GroupHeader;
 
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {

@@ -20,11 +20,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile\Facade;
+namespace PhpSepaXml\TransferFile\Facade;
 
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
@@ -39,7 +39,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     - creditorId
      *     - [dueDate] if not set: now + 5 days
      *
-     * @throws \PhpSepa\Exception\InvalidArgumentException
+     * @throws \PhpSepaXml\Exception\InvalidArgumentException
      * @return mixed
      *
      */
@@ -85,7 +85,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *      - [endToEndId]
      *      - [amendments]
      *
-     * @throws \PhpSepa\Exception\InvalidArgumentException
+     * @throws \PhpSepaXml\Exception\InvalidArgumentException
      * @return mixed
      */
     public function addTransfer($paymentName, array $transferInformation)

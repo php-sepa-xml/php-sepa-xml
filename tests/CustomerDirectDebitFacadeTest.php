@@ -22,8 +22,8 @@
 
 namespace tests;
 
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\Factory\TransferFileFacadeFactory;
 
 class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
 {

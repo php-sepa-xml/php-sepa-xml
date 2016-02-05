@@ -22,13 +22,13 @@
 
 namespace tests;
 
-use PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder;
-use PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use PhpSepa\Exception\InvalidTransferFileConfiguration;
-use PhpSepa\GroupHeader;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\DomBuilder\CustomerCreditTransferDomBuilder;
+use PhpSepaXml\DomBuilder\CustomerDirectDebitTransferDomBuilder;
+use PhpSepaXml\Exception\InvalidTransferFileConfiguration;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,7 +96,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PhpSepa\Exception\InvalidTransferFileConfiguration
+     * @expectedException \PhpSepaXml\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a SequenceType
      *
      * @param string $schema
@@ -120,7 +120,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PhpSepa\Exception\InvalidTransferFileConfiguration
+     * @expectedException \PhpSepaXml\Exception\InvalidTransferFileConfiguration
      * @expectedExceptionMessage Payment must contain a CreditorSchemeId
      *
      * @param string $schema

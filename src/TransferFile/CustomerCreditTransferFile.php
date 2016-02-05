@@ -20,12 +20,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile;
+namespace PhpSepaXml\TransferFile;
 
-use PhpSepa\Exception\InvalidTransferFileConfiguration;
-use PhpSepa\Exception\InvalidTransferTypeException;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepaXml\Exception\InvalidTransferFileConfiguration;
+use PhpSepaXml\Exception\InvalidTransferTypeException;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferFile extends BaseTransferFile
 {
@@ -42,7 +42,7 @@ class CustomerCreditTransferFile extends BaseTransferFile
     /**
      * validate the transferfile
      *
-     * @throws \PhpSepa\Exception\InvalidTransferTypeException
+     * @throws \PhpSepaXml\Exception\InvalidTransferTypeException
      */
     public function validate()
     {

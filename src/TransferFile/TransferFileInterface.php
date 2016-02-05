@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace PhpSepa\TransferFile;
+namespace PhpSepaXml\TransferFile;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
-use PhpSepa\GroupHeader;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\GroupHeader;
 
 interface TransferFileInterface
 {

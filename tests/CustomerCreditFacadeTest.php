@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepaXml\TransferFile\Factory\TransferFileFacadeFactory;
 
 /**
  * Class CustomerCreditFacadeTest

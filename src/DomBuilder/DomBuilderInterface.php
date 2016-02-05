@@ -20,18 +20,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\DomBuilder;
+namespace PhpSepaXml\DomBuilder;
 
-use PhpSepa\GroupHeader;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\TransferFileInterface;
-use PhpSepa\TransferInformation\TransferInformationInterface;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\TransferFileInterface;
+use PhpSepaXml\TransferInformation\TransferInformationInterface;
 
 /**
  * Used to build the Dom-structure for the different types of SEPA files
  *
  * Class DomBuilderInterface
- * @package PhpSepa\DomBuilder
+ * @package PhpSepaXml\DomBuilder
  */
 interface DomBuilderInterface
 {

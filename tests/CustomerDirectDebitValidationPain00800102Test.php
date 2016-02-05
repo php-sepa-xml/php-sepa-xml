@@ -22,12 +22,12 @@
 
 namespace tests;
 
-use PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use PhpSepa\Exception\InvalidTransferFileConfiguration;
-use PhpSepa\GroupHeader;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\DomBuilder\CustomerDirectDebitTransferDomBuilder;
+use PhpSepaXml\Exception\InvalidTransferFileConfiguration;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_TestCase
 {

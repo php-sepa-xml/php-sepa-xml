@@ -20,9 +20,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferInformation;
+namespace PhpSepaXml\TransferInformation;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
 
 interface TransferInformationInterface
 {

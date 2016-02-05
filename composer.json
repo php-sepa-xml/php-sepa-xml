@@ -19,7 +19,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "PhpSepa\\": "src/"
+            "PhpSepaXml\\": "src/"
         }
     },
     "require": {

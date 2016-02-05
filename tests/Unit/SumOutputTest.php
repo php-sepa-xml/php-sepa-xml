@@ -9,10 +9,10 @@
 
 namespace tests\Unit;
 
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class SumOutputTest extends \PHPUnit_Framework_TestCase
 {

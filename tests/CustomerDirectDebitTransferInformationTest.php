@@ -2,7 +2,7 @@
 
 namespace tests;
 
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferInformationTest extends \PHPUnit_Framework_TestCase
 {

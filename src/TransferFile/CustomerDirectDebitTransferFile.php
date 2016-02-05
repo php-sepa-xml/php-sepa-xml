@@ -20,12 +20,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile;
+namespace PhpSepaXml\TransferFile;
 
-use PhpSepa\Exception\InvalidTransferFileConfiguration;
-use PhpSepa\Exception\InvalidTransferTypeException;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PhpSepaXml\Exception\InvalidTransferFileConfiguration;
+use PhpSepaXml\Exception\InvalidTransferTypeException;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferFile extends BaseTransferFile
 {
@@ -42,7 +42,7 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
     /**
      * validate the transferfile
      *
-     * @throws \PhpSepa\Exception\InvalidTransferTypeException
+     * @throws \PhpSepaXml\Exception\InvalidTransferTypeException
      */
     public function validate()
     {
@@ -57,7 +57,7 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
             }
             foreach ($payment->getTransfers() as $transfer) {
                 if (!$transfer instanceof CustomerDirectDebitTransferInformation) {
-                    throw new InvalidTransferTypeException('Transfers must be of type \PhpSepa\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class(
+                    throw new InvalidTransferTypeException('Transfers must be of type \PhpSepaXml\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class(
                         $transfer
                     ));
                 }

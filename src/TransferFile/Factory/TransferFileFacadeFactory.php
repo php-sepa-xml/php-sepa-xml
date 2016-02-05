@@ -20,15 +20,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile\Factory;
+namespace PhpSepaXml\TransferFile\Factory;
 
-use PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder;
-use PhpSepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use PhpSepa\GroupHeader;
-use PhpSepa\TransferFile\CustomerCreditTransferFile;
-use PhpSepa\TransferFile\Facade\CustomerCreditFacade;
-use PhpSepa\TransferFile\Facade\CustomerDirectDebitFacade;
-use PhpSepa\TransferFile\CustomerDirectDebitTransferFile;
+use PhpSepaXml\DomBuilder\CustomerCreditTransferDomBuilder;
+use PhpSepaXml\DomBuilder\CustomerDirectDebitTransferDomBuilder;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\TransferFile\CustomerCreditTransferFile;
+use PhpSepaXml\TransferFile\Facade\CustomerCreditFacade;
+use PhpSepaXml\TransferFile\Facade\CustomerDirectDebitFacade;
+use PhpSepaXml\TransferFile\CustomerDirectDebitTransferFile;
 
 class TransferFileFacadeFactory
 {

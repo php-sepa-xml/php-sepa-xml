@@ -20,12 +20,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa;
+namespace PhpSepaXml;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\TransferInformation\TransferInformationInterface;
-use PhpSepa\Util\StringHelper;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\TransferInformation\TransferInformationInterface;
+use PhpSepaXml\Util\StringHelper;
 
 class PaymentInformation
 {

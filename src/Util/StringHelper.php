@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\Util;
+namespace PhpSepaXml\Util;
 
 class StringHelper
 {

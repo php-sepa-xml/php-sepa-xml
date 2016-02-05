@@ -22,11 +22,11 @@
 
 namespace tests;
 
-use PhpSepa\DomBuilder\CustomerCreditTransferDomBuilder;
-use PhpSepa\GroupHeader;
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\CustomerCreditTransferFile;
-use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepaXml\DomBuilder\CustomerCreditTransferDomBuilder;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\CustomerCreditTransferFile;
+use PhpSepaXml\TransferInformation\CustomerCreditTransferInformation;
 
 /**
  * Various schema validation tests.
@@ -133,7 +133,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that a transferfile without Payments throws understandable exception
-     * @expectedException \PhpSepa\Exception\InvalidTransferFileConfiguration
+     * @expectedException \PhpSepaXml\Exception\InvalidTransferFileConfiguration
      *
      * @param string $schema
      *

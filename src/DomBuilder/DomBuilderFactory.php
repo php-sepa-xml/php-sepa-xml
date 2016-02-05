@@ -20,10 +20,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\DomBuilder;
+namespace PhpSepaXml\DomBuilder;
 
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\TransferFile\TransferFileInterface;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\TransferFile\TransferFileInterface;
 
 class DomBuilderFactory
 {
@@ -31,11 +31,11 @@ class DomBuilderFactory
     {
         $transferFileClass = get_class($transferFile);
         switch ($transferFileClass) {
-            case 'PhpSepa\TransferFile\CustomerCreditTransferFile':
+            case 'PhpSepaXml\TransferFile\CustomerCreditTransferFile':
                 $domBuilder = $painFormat ? new CustomerCreditTransferDomBuilder($painFormat) : new CustomerCreditTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;
-            case 'PhpSepa\TransferFile\CustomerDirectDebitTransferFile':
+            case 'PhpSepaXml\TransferFile\CustomerDirectDebitTransferFile':
                 $domBuilder = $painFormat ? new CustomerDirectDebitTransferDomBuilder($painFormat) : new CustomerDirectDebitTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;

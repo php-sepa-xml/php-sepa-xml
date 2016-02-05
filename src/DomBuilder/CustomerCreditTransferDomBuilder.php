@@ -20,13 +20,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\DomBuilder;
+namespace PhpSepaXml\DomBuilder;
 
-use PhpSepa\PaymentInformation;
-use PhpSepa\TransferFile\TransferFileInterface;
-use PhpSepa\GroupHeader;
-use PhpSepa\TransferInformation\CustomerCreditTransferInformation;
-use PhpSepa\TransferInformation\TransferInformationInterface;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\TransferFile\TransferFileInterface;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\TransferInformation\CustomerCreditTransferInformation;
+use PhpSepaXml\TransferInformation\TransferInformationInterface;
 
 /**
  * Class CustomerCreditTransferDomBuilder

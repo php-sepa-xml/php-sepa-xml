@@ -20,12 +20,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile;
+namespace PhpSepaXml\TransferFile;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
-use PhpSepa\Exception\InvalidTransferFileConfiguration;
-use PhpSepa\GroupHeader;
-use PhpSepa\PaymentInformation;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\Exception\InvalidTransferFileConfiguration;
+use PhpSepaXml\GroupHeader;
+use PhpSepaXml\PaymentInformation;
 
 abstract class BaseTransferFile implements TransferFileInterface
 {

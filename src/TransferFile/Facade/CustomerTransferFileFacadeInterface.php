@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferFile\Facade;
+namespace PhpSepaXml\TransferFile\Facade;
 
 interface CustomerTransferFileFacadeInterface
 {

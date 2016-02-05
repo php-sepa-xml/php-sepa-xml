@@ -1,7 +1,7 @@
 ##Sample Usage DirectDebit with Factory
 ```php
-use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
-use PhpSepa\PaymentInformation;
+use PhpSepaXml\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepaXml\PaymentInformation;
 
 //Set the initial information
 $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
@@ -32,9 +32,9 @@ $directDebit->asXML();
 
 ##Sample Usage DirectDebit with Factory and Custom Header
 ```php
-use PhpSepa\TransferFile\Factory\TransferFileFacadeFactory;
-use PhpSepa\PaymentInformation;
-use PhpSepa\GroupHeader;
+use PhpSepaXml\TransferFile\Factory\TransferFileFacadeFactory;
+use PhpSepaXml\PaymentInformation;
+use PhpSepaXml\GroupHeader;
 
 //Set the custom header (Spanish banks example) information
 $header = new GroupHeader(date('Y-m-d-H-i-s'), 'Me');

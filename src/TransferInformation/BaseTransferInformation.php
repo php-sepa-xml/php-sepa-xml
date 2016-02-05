@@ -20,11 +20,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace PhpSepa\TransferInformation;
+namespace PhpSepaXml\TransferInformation;
 
-use PhpSepa\DomBuilder\DomBuilderInterface;
-use PhpSepa\Exception\InvalidArgumentException;
-use PhpSepa\Util\StringHelper;
+use PhpSepaXml\DomBuilder\DomBuilderInterface;
+use PhpSepaXml\Exception\InvalidArgumentException;
+use PhpSepaXml\Util\StringHelper;
 
 class BaseTransferInformation implements TransferInformationInterface
 {
