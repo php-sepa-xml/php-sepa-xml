@@ -50,7 +50,7 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
     public function testValidFileCreationWithFacade($schema)
     {
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
-        $directDebit->addPaymentInfo(
+        $paymentInformation = $directDebit->addPaymentInfo(
             'firstPayment',
             array(
                 'id' => 'firstPayment',
@@ -61,6 +61,8 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
                 'creditorId' => 'DE21WVM1234567890'
             )
         );
+        $paymentInformation->setBatchBooking(true);
+
         $directDebit->addTransfer(
             'firstPayment',
             array(

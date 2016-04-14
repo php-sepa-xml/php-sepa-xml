@@ -25,6 +25,7 @@ namespace Digitick\Sepa\TransferFile\Facade;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
@@ -40,8 +41,8 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     - [dueDate] if not set: now + 5 days
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
-     * @return mixed
      *
+     * @return PaymentInformation
      */
     public function addPaymentInfo($paymentName, array $paymentInformation)
     {
@@ -70,6 +71,8 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
 
         $this->payments[$paymentName] = $payment;
+
+        return $payment;
     }
 
     /**
@@ -86,7 +89,8 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *      - [amendments]
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
-     * @return mixed
+     *
+     * @return TransferInformationInterface
      */
     public function addTransfer($paymentName, array $transferInformation)
     {
@@ -127,5 +131,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
 
         $this->payments[$paymentName]->addTransfer($transfer);
+
+        return $transfer;
     }
 }

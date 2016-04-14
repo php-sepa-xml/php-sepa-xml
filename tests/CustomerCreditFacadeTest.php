@@ -22,7 +22,7 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument('1.0', 'UTF-8');
 
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
-        $credit->addPaymentInfo(
+        $paymentInformation = $credit->addPaymentInfo(
             'firstPayment',
             array(
                 'id' => 'firstPayment',
@@ -31,6 +31,8 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
                 'debtorAgentBIC' => 'PSSTFRPPMON'
             )
         );
+        $paymentInformation->setBatchBooking(true);
+
         $credit->addTransfer(
             'firstPayment',
             array(
