@@ -50,8 +50,8 @@ class TransferFileFacadeFactory
     }
 
     /**
-     * @param object $groupHeader
-     * @param string $painFormat
+     * @param GroupHeader $groupHeader
+     * @param string      $painFormat
      *
      * @return CustomerDirectDebitFacade
      */
@@ -75,8 +75,8 @@ class TransferFileFacadeFactory
     }
 
     /**
-     * @param object $groupHeader
-     * @param string $painFormat
+     * @param GroupHeader $groupHeader
+     * @param string      $painFormat
      *
      * @return CustomerCreditFacade
      */
