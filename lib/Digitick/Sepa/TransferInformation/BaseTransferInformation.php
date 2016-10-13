@@ -91,7 +91,7 @@ class BaseTransferInformation implements TransferInformationInterface
                 throw new InvalidArgumentException('Using floats for amount is only possible with bcmath enabled');
             }
             bcscale(2);
-            $amount = (integer)bcmul($amount, 100);
+            $amount = (integer)bcmul(number_format($amount, 2), '100');
         }
         $this->transferAmount = $amount;
         $this->iban = $iban;
