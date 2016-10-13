@@ -108,6 +108,35 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function floatSumIsCalculatedCorrectlyWithNonEnglishLocale()
+    {
+        $result = setlocale(LC_ALL, 'es_ES.UTF-8', 'es_ES@UTF-8', 'spanish');
+
+        if($result == false) {
+            $this->markTestSkipped('spanish locale is not available');
+        }
+
+        $this->createDirectDebitXpathObject('19.999');
+        $controlSum = $this->directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
+        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
+
+        $controlSum = $this->directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'PaymentInformation ControlSum should be 19.99'
+        );
+        $controlSum = $this->directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'DirectDebitTransferInformation InstructedAmount should be 19.99'
+        );
+    }
+
+    /**
+     * @test
+     */
     public function floatsAreAcceptedIfBcMathExtensionIsAvailable()
     {
         if (!function_exists('bcscale')) {
