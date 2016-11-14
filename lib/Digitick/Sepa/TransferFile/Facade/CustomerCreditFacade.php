@@ -29,7 +29,8 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['debtorAccountIBAN'],
-            $paymentInformation['debtorAgentBIC'],
+            (isset ($paymentInformation['debtorAgentBIC']))
+                ? $paymentInformation['debtorAgentBIC'] : NULL,
             $paymentInformation['debtorName']
         );
 
