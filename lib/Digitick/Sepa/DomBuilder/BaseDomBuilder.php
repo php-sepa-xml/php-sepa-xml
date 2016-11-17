@@ -75,7 +75,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     protected function createElement($name, $value = null)
     {
-        if ($value) {
+        if ($value !== null) {
             $elm = $this->doc->createElement($name);
             $elm->appendChild($this->doc->createTextNode($value));
 
