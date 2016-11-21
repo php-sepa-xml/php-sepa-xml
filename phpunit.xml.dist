@@ -18,6 +18,7 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
+                <directory>./vendor/phpunit</directory>
                 <directory>./vendor</directory>
                 <directory>./tests</directory>
             </exclude>
