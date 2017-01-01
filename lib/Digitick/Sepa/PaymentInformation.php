@@ -109,7 +109,7 @@ class PaymentInformation
     /**
      * @var array<TransferInformationInterface>
      */
-    protected $transfers;
+    protected $transfers = array();
 
     /**
      * Valid Payment Methods set by the TransferFile
