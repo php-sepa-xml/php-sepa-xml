@@ -34,10 +34,10 @@ class CustomerDirectDebitTransferInformationTest extends \PHPUnit_Framework_Test
         );
         $this->assertFalse($transferInformation->hasAmendments());
 
-        $transferInformation->setAmendedDebtorAgent(true);
+        $transferInformation->setAmendedDebtorAccount(true);
         $this->assertTrue($transferInformation->hasAmendments());
 
-        $transferInformation->setAmendedDebtorAgent(false);
+        $transferInformation->setAmendedDebtorAccount(false);
         $transferInformation->setOriginalDebtorIban('DE89370400440532013000');
         $this->assertTrue($transferInformation->hasAmendments());
     }

@@ -44,7 +44,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     /**
      * @var bool
      */
-    protected $amendedDebtorAgent = false;
+    protected $amendedDebtorAccount = false;
 
     /**
      * @var string|null
@@ -78,7 +78,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
      */
     public function hasAmendments()
     {
-        return $this->amendedDebtorAgent
+        return $this->amendedDebtorAccount
             || $this->originalDebtorIban !== null
             || $this->originalMandateId !== null;
     }
@@ -86,17 +86,17 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     /**
      * @return boolean
      */
-    public function hasAmendedDebtorAgent()
+    public function hasAmendedDebtorAccount()
     {
-        return $this->amendedDebtorAgent;
+        return $this->amendedDebtorAccount;
     }
 
     /**
      * @param bool $status
      */
-    public function setAmendedDebtorAgent($status)
+    public function setAmendedDebtorAccount($status)
     {
-        $this->amendedDebtorAgent = $status;
+        $this->amendedDebtorAccount = $status;
     }
 
     /**
