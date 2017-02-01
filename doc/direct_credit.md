@@ -62,20 +62,3 @@ $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 
 $domBuilder->asXml();
 ```
-
-## Add an amendment to a transfer
-
-```php
-// Add a Single Transaction to the named payment
-$customerCredit->addTransfer('firstPayment', array(
-    'amount'                  => '500',
-    'creditorIban'            => 'FI1350001540000056',
-    'creditorBic'             => 'OKOYFIHH',
-    'creditorName'            => 'Their Company',
-    'remittanceInformation'   => 'Purpose of this credit transfer',
-    // Amendments start here
-    'originalMandateId'     => '1234567890',
-    'originalDebtorIban'    => 'AT711100015440033700',
-    'amendedDebtorAgent'    => true
-));
-```
