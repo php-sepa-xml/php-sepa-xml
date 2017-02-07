@@ -65,6 +65,11 @@ class PaymentInformation
     public $originName;
 
     /**
+     * @var array of strings Debtor's address.
+     */
+    public $addressLines;
+
+    /**
      * @var string Debtor's account IBAN.
      */
     public $originAccountIBAN;
@@ -434,5 +439,27 @@ class PaymentInformation
     public function getBatchBooking()
     {
         return $this->batchBooking;
+    }
+
+    /**
+     * @param array of strings $addressLines
+     */
+    public function setAddressLines($addressLines)
+    {
+        if (is_array($addressLines)) {
+            foreach ($addressLines as $addressLine) {
+                $this->addressLines[] = StringHelper::sanitizeString($addressLine);
+            } 
+        } else {
+            $this->addressLines[] = StringHelper::sanitizeString($addressLines);
+        }        
+    }
+
+    /**
+     * @return array of strings
+     */
+    public function getAddressLines()
+    {
+        return $this->addressLines;
     }
 }

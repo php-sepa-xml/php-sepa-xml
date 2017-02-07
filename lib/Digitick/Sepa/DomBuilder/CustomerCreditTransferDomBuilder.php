@@ -98,9 +98,20 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
+        
+        // 2.19
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
         $this->currentPayment->appendChild($debtor);
+
+        if ($paymentInformation->getAddressLines()) {
+            $postalAddress = $this->createElement('PstlAdr');
+            foreach ($paymentInformation->getAddressLines() as $addressLine) {
+                $postalAddress->appendChild($this->createElement('AdrLine', $addressLine));
+            }
+
+            $debtor->appendChild($postalAddress);
+        }
 
         $debtorAccount = $this->createElement('DbtrAcct');
         $id = $this->createElement('Id');
