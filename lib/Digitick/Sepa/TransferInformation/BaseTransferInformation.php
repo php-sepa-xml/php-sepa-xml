@@ -275,7 +275,7 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * @return string
      */
-    public function getReference()
+    public function getReference()    
     {
         return $this->reference;
     }
