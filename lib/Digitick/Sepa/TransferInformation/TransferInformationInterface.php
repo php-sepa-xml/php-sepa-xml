@@ -35,4 +35,6 @@ interface TransferInformationInterface
     public function getInstructionId();
 
     public function getAddressLines();
+
+    public function getCategoryPurposeCode();
 }

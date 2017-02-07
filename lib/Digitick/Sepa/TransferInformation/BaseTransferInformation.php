@@ -50,6 +50,11 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $transferAmount;
 
     /**
+     * @var string Purpose of the transaction(s).
+     */
+    public $categoryPurposeCode;
+
+    /**
      * @var string
      */
     protected $name;
@@ -236,6 +241,22 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getAddressLines()
     {
         return $this->addressLines;
+    }
+
+    /**
+     * @param string $categoryPurposeCode
+     */
+    public function setCategoryPurposeCode($categoryPurposeCode)
+    {
+        $this->categoryPurposeCode = $categoryPurposeCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryPurposeCode()
+    {
+        return $this->categoryPurposeCode;
     }
 
 }

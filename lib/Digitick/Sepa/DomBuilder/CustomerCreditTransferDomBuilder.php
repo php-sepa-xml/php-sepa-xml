@@ -192,6 +192,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $creditorAccount->appendChild($id);
         $CdtTrfTxInf->appendChild($creditorAccount);
 
+        // Code 2.87
+        if ($transactionInformation->getCategoryPurposeCode()) {
+            $categoryPurpose = $this->createElement('Purp');
+            $categoryPurpose->appendChild($this->createElement('Cd', $transactionInformation->getCategoryPurposeCode()));
+            $CdtTrfTxInf->appendChild($categoryPurpose);
+        }
+
         // remittance 2.98 2.99
         $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
         $CdtTrfTxInf->appendChild($remittanceInformation);
