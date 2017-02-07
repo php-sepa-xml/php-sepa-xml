@@ -57,6 +57,11 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * @var string
      */
+    protected $addressLines;
+
+    /**
+     * @var string
+     */
     protected $instructionId;
 
     /**
@@ -209,6 +214,28 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getRemittanceInformation()
     {
         return $this->remittanceInformation;
+    }
+
+    /**
+     * @param array of strings $addressLines
+     */
+    public function setAddressLines($addressLines)
+    {
+        if (is_array($addressLines)) {
+            foreach ($addressLines as $addressLine) {
+                $this->addressLines[] = StringHelper::sanitizeString($addressLine);
+            } 
+        } else {
+            $this->addressLines[] = StringHelper::sanitizeString($addressLines);
+        }        
+    }
+
+    /**
+     * @return array of strings
+     */
+    public function getAddressLines()
+    {
+        return $this->addressLines;
     }
 
 }

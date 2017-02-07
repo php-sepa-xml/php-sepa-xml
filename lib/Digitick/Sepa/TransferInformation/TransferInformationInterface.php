@@ -33,4 +33,6 @@ interface TransferInformationInterface
     public function getEndToEndIdentification();
 
     public function getInstructionId();
+
+    public function getAddressLines();
 }
