@@ -37,4 +37,6 @@ interface TransferInformationInterface
     public function getAddressLines();
 
     public function getCategoryPurposeCode();
+
+    public function getReference();
 }

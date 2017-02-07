@@ -169,10 +169,22 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      * @param string $remittenceInformation
      * @return \DOMElement
      */
-    public function getRemittenceElement($remittenceInformation)
+    public function getRemittenceElement($remittenceInformation, $reference)
     {
-        $remittanceInformation = $this->createElement('RmtInf');
-        $remittanceInformation->appendChild($this->createElement('Ustrd', $remittenceInformation));
+        $remittanceInformation = $this->createElement('RmtInf');        
+
+        if ($reference) {
+            $strd = $this->createElement('Strd');
+            $cdtrRefIn = $this->createElement('CdtrRefInf');                       
+
+            $cdtrRefIn->appendChild($this->createElement('Ref', $reference));
+            $strd->appendChild($cdtrRefIn);
+            $strd->appendChild($this->createElement('AddtlRmtInf', $remittenceInformation)); 
+            
+            $remittanceInformation->appendChild($strd);
+        } else {
+            $remittanceInformation->appendChild($this->createElement('Ustrd', $remittenceInformation));
+        }
 
         return $remittanceInformation;
     }

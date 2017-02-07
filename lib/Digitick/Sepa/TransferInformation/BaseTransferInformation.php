@@ -77,6 +77,11 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * @var string
      */
+    protected $reference;
+
+    /**
+     * @var string
+     */
     protected $currency = 'EUR';
 
     /**
@@ -257,6 +262,22 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getCategoryPurposeCode()
     {
         return $this->categoryPurposeCode;
+    }
+
+    /**
+     * @param string $reference
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
     }
 
 }

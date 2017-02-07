@@ -144,10 +144,14 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
 
         // Payment ID 2.28
-        $PmtId = $this->createElement('PmtId');
+        $PmtId = $this->createElement('PmtId');        
+
+        // InstructionIdentification 2.29
         if ($transactionInformation->getInstructionId()) {
             $PmtId->appendChild($this->createElement('InstrId', $transactionInformation->getInstructionId()));
         }
+
+        // EndToEndIdentification 2.30
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 
@@ -200,7 +204,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         // remittance 2.98 2.99
-        $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
+        $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation(), $transactionInformation->getReference());
         $CdtTrfTxInf->appendChild($remittanceInformation);
 
         $this->currentPayment->appendChild($CdtTrfTxInf);
