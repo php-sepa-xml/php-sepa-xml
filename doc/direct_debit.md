@@ -65,20 +65,3 @@ $directDebit->addTransfer('firstPayment', array(
 // Retrieve the resulting XML
 $directDebit->asXML();
 ```
-
-## Add an amendment to a transfer
-
-```php
-// Add a Single Transaction to the named payment
-$directDebit->addTransfer('firstPayment', array(
-    'amount'                  => '500',
-    'creditorIban'            => 'FI1350001540000056',
-    'creditorBic'             => 'OKOYFIHH',
-    'creditorName'            => 'Their Company',
-    'remittanceInformation'   => 'Purpose of this credit transfer',
-    // Amendments start here
-    'originalMandateId'     => '1234567890',
-    'originalDebtorIban'    => 'AT711100015440033700',
-    'amendedDebtorAccount' => true
-));
-```

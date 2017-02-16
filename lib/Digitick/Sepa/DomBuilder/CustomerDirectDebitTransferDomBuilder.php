@@ -22,6 +22,8 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
+use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
+use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 use Digitick\Sepa\PaymentInformation;
@@ -39,7 +41,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
     /**
      * Build the root of the document
      *
-     * @param  TransferFileInterface $transferFile
+     * @param TransferFileInterface $transferFile
      * @return mixed
      */
     public function visitTransferFile(TransferFileInterface $transferFile)
@@ -51,7 +53,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
     /**
      * Crawl PaymentInformation containing the Transactions
      *
-     * @param  PaymentInformation $paymentInformation
+     * @param PaymentInformation $paymentInformation
      * @return mixed
      */
     public function visitPaymentInformation(PaymentInformation $paymentInformation)
@@ -126,7 +128,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
     /**
      * Crawl Transactions
      *
-     * @param  TransferInformationInterface $transactionInformation
+     * @param TransferInformationInterface $transactionInformation
      * @return mixed
      */
     public function visitTransferInformation(TransferInformationInterface $transactionInformation)
@@ -182,16 +184,22 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
             $amendmentInformationDetails = $this->createElement('AmdmntInfDtls');
 
-            if ($transactionInformation->hasAmendedDebtorAccount() || $transactionInformation->getOriginalDebtorIban() !== null) {
-                $originalDebtorAccount = $this->createElement('OrgnlDbtrAcct');
-                $identification = $this->createElement('Id');
+            if ($transactionInformation->hasAmendedDebtorAgent()) {
+                $originalDebtorAgent = $this->createElement('OrgnlDbtrAgt');
+                $financialInstitutionIdentification = $this->createElement('FinInstnId');
                 $other = $this->createElement('Othr');
-                // Same Mandate New Debtor Account
+                // Same Mandate New Debtor Agent
                 $id = $this->createElement('Id', 'SMNDA');
 
                 $other->appendChild($id);
-                $identification->appendChild($other);
-                $originalDebtorAccount->appendChild($identification);
+                $financialInstitutionIdentification->appendChild($other);
+                $originalDebtorAgent->appendChild($financialInstitutionIdentification);
+                $amendmentInformationDetails->appendChild($originalDebtorAgent);
+            }
+
+            if ($transactionInformation->getOriginalDebtorIban() !== null) {
+                $originalDebtorAccount = $this->createElement('OrgnlDbtrAcct');
+                $originalDebtorAccount->appendChild($this->getIbanElement($transactionInformation->getOriginalDebtorIban()));
                 $amendmentInformationDetails->appendChild($originalDebtorAccount);
             }
 
@@ -205,6 +213,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
         $this->currentPayment->appendChild($directDebitTransactionInformation);
     }
+
 
     /**
      * Add the specific OrgId element for the format 'pain.008.001.02'

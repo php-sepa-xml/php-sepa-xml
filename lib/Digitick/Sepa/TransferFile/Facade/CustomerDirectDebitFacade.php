@@ -32,13 +32,13 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
     /**
      * @param $paymentName
      * @param array $paymentInformation
-     *                                  - id
-     *                                  - creditorName
-     *                                  - creditorAccountIBAN
-     *                                  - creditorAgentBIC
-     *                                  - seqType
-     *                                  - creditorId
-     *                                  - [dueDate] if not set: now + 5 days
+     *     - id
+     *     - creditorName
+     *     - creditorAccountIBAN
+     *     - creditorAgentBIC
+     *     - seqType
+     *     - creditorId
+     *     - [dueDate] if not set: now + 5 days
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
      *
@@ -78,15 +78,15 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
     /**
      * @param $paymentName
      * @param array $transferInformation
-     *                                   - amount
-     *                                   - debtorIban
-     *                                   - debtorBic
-     *                                   - debtorName
-     *                                   - debtorMandate
-     *                                   - debtorMandateSignDate
-     *                                   - remittanceInformation
-     *                                   - [endToEndId]
-     *                                   - [amendments]
+     *      - amount
+     *      - debtorIban
+     *      - debtorBic
+     *      - debtorName
+     *      - debtorMandate
+     *      - debtorMandateSignDate
+     *      - remittanceInformation
+     *      - [endToEndId]
+     *      - [amendments]
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
      *
@@ -126,8 +126,8 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['originalDebtorIban'])) {
             $transfer->setOriginalDebtorIban($transferInformation['originalDebtorIban']);
         }
-        if (isset($transferInformation['amendedDebtorAccount'])) {
-            $transfer->setAmendedDebtorAccount((bool) $transferInformation['amendedDebtorAccount']);
+        if (isset($transferInformation['amendedDebtorAgent'])) {
+            $transfer->setAmendedDebtorAgent((bool)$transferInformation['amendedDebtorAgent']);
         }
 
         $this->payments[$paymentName]->addTransfer($transfer);

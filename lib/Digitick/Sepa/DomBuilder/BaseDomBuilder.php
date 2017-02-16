@@ -176,4 +176,24 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
         return $remittanceInformation;
     }
+    
+    /**
+     * @param string $remittenceInformation
+     * @return \DOMElement
+     */
+    public function getCreditorReferenceInformation($creditorReferenceInformation)
+    {
+        $refElement=$this->createElement('Ref',$creditorReferenceInformation);
+        $CdtrRefInfElement=$this->createElement('CdtrRefInf');
+        $CdtrRefInfElement->appendChild($refElement);
+        
+        $StrdElement=$this->createElement('Strd');
+        $StrdElement->appendChild($CdtrRefInfElement);
+        
+        $creditorReferenceInformationElement = $this->createElement('RmtInf');
+        $creditorReferenceInformationElement->appendChild($StrdElement);
+          
+        return $creditorReferenceInformationElement;
+    }
+    
 }
