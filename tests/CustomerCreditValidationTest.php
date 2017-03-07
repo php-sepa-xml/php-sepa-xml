@@ -387,6 +387,40 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test a transfer file with one payment without remittance information
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
+     */
+    public function testSinglePaymentSingleTransWithoutRemitttanceInformation($schema)
+    {
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+
+        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
+
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $this->dom->loadXML($xml);
+
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $this->assertTrue($validated);
+    }
+
+    /**
      * @return array
      */
     public function provideSchema()
