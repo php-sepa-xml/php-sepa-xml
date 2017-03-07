@@ -49,6 +49,9 @@ class StringHelper
             'Ð' => 'Dj','Ž' => 'Z', 'ž' => 'z',
         );
 
-        return strtr($inputString, $map);
+        $mapped = strtr($inputString, $map);
+        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-(+.) ]/', ' ', $mapped);
+
+        return $sanitized;
     }
 }
