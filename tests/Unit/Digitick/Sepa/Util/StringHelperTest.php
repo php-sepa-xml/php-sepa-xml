@@ -20,4 +20,14 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('AeOeUeaeoeuess', StringHelper::sanitizeString($string));
     }
 
+    /**
+     * Tests german character translation
+     */
+    public function testSpecialCharacters()
+    {
+        $string = 'Az09#_:?,-(+.)';
+
+        $this->assertEquals('Az09  :?,-(+.)', StringHelper::sanitizeString($string));
+    }
+
 }
