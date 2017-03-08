@@ -10,9 +10,15 @@ Creates an XML file for a Single Euro Payments Area (SEPA) Credit Transfer and D
 License: GNU Lesser General Public License v3.0
 
 
-The versions of the standard followed are:
-* _pain.001.002.03_ (or _pain.001.001.03_) for credits
-* and _pain.008.002.02_ (or _pain.008.001.02_) for debits
+## Supported PAIN Formats
+### Credit
+* _pain.001.003.03_
+* _pain.001.002.03_ 
+* _pain.001.001.03_
+### Debit
+* _pain.008.002.03_
+* _pain.008.002.02_ 
+* _pain.008.001.02_
 
 Institutions and associations that should accept this format:
 * Deutsche Kreditwirtschaft
@@ -42,3 +48,11 @@ Specific version, API stability
 
 * [handling Direct Debit](doc/direct_debit.md)
 * [handling Direct Credit](doc/direct_credit.md)
+
+## Development
+* [complete dev setup](doc/dev_setup.md)
+
+
+
+
+
