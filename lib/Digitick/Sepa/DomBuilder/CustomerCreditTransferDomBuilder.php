@@ -177,9 +177,14 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $CdtTrfTxInf->appendChild($creditorReferenceInformation);
         }
         else {
-            // remittance 2.98 2.99
-            $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
-            $CdtTrfTxInf->appendChild($remittanceInformation);
+
+		// remittance 2.98 2.99
+        	if (strlen($transactionInformation->getRemittanceInformation()) > 0)
+        	{
+            		$remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
+            		$CdtTrfTxInf->appendChild($remittanceInformation);
+        	}
+
         }
         
         $this->currentPayment->appendChild($CdtTrfTxInf);
