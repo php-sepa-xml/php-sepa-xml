@@ -171,6 +171,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $creditorAccount->appendChild($id);
         $CdtTrfTxInf->appendChild($creditorAccount);
 
+
         if($transactionInformation->getCreditorReferenceInformation())
         {
             $creditorReferenceInformation = $this->getCreditorReferenceInformation($transactionInformation->getCreditorReferenceInformation());
@@ -184,6 +185,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             		$remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
             		$CdtTrfTxInf->appendChild($remittanceInformation);
         	}
+
 
         }
         
