@@ -21,8 +21,10 @@ Institutions and associations that should accept this format:
 However, always verify generated files with your bank before using!
 
 
-##Installation
-###Composer
+## Installation
+
+### Composer
+
 This library is available in packagist.org, you can add it to your project
 via Composer.
 
