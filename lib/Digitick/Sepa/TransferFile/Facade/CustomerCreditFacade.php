@@ -62,7 +62,7 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
         );
         $transfer->setBic($transferInformation['creditorBic']);
         
-        if(array_key_exists('creditorReferenceInformation', $transferInformation) &&
+        if (array_key_exists('creditorReferenceInformation', $transferInformation) &&
             strlen($transferInformation['creditorReferenceInformation'])>5 ) {
                 
             $transfer->setCreditorReferenceInformation($transferInformation['creditorReferenceInformation']); 
