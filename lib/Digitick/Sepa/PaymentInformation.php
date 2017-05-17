@@ -65,6 +65,18 @@ class PaymentInformation
     public $originName;
 
     /**
+     * Unique identification of an organisation, as assigned by an institution, using an identification scheme.
+     * @var string
+     */
+    public $originBankPartyIdentification;
+
+    /**
+     * Name of the identification scheme, in a coded form as published in an external list. 1-4 characters.
+     * @var string
+     */
+    public $originBankPartyIdentificationScheme;
+
+    /**
      * @var string Debtor's account IBAN.
      */
     public $originAccountIBAN;
@@ -290,6 +302,38 @@ class PaymentInformation
     public function getOriginName()
     {
         return $this->originName;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setOriginBankPartyIdentification($id)
+    {
+        $this->originBankPartyIdentification = StringHelper::sanitizeString($id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginBankPartyIdentification()
+    {
+        return $this->originBankPartyIdentification;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setOriginBankPartyIdentificationScheme($scheme)
+    {
+        $this->originBankPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginBankPartyIdentificationScheme()
+    {
+        return $this->originBankPartyIdentificationScheme;
     }
 
     /**
