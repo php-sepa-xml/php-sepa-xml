@@ -47,6 +47,12 @@ class GroupHeader
     protected $initiatingPartyId;
 
     /**
+     * Name of the identification scheme, in a coded form as published in an external list. 1-4 characters.
+     * @var string
+     */
+    public $initiatingPartyIdentificationScheme;
+
+    /**
      * The Issuer.
      *
      * @var string
@@ -129,6 +135,22 @@ class GroupHeader
     public function getInitiatingPartyId()
     {
         return $this->initiatingPartyId;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setInitiatingPartyIdentificationScheme($scheme)
+    {
+        $this->initiatingPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+    }
+
+    /**
+     * @return string
+     */
+    public function getInitiatingPartyIdentificationScheme()
+    {
+        return $this->initiatingPartyIdentificationScheme;
     }
 
     /**
