@@ -77,8 +77,8 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        if ($scenario['batchBooking']) {
-            $payment->setBatchBooking(true);
+        if (isset($scenario['batchBooking'])) {
+            $payment->setBatchBooking($scenario['batchBooking']);
         }
         $payment->setValidPaymentMethods(array('TRANSFER'));
         $payment->setPaymentMethod('TRANSFER');

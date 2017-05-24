@@ -74,8 +74,8 @@ class CustomerDirectDebitValidationPain00800102Test extends \PHPUnit_Framework_T
         if ($scenario['originAgentBic'] !== '') {
             $payment->setOriginAgentBIC($scenario['originAgentBic']);
         }
-        if ($scenario['batchBooking']) {
-            $payment->setBatchBooking(true);
+        if (isset($scenario['batchBooking'])) {
+            $payment->setBatchBooking($scenario['batchBooking']);
         }
 
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
