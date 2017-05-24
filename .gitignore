@@ -15,6 +15,7 @@ Thumbs.db
 *.dmg
 *.zip
 *.deb
+node_modules/
 
 # Editors
 .idea/
