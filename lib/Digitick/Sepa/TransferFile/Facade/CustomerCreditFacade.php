@@ -61,7 +61,12 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $transferInformation['creditorName']
         );
         $transfer->setBic($transferInformation['creditorBic']);
-        $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
+
+        if (isset($transferInformation['creditorReference'])) {
+            $transfer->setCreditorReference($transferInformation['creditorReference']);
+        } else {
+            $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
+        }
 
         if (isset($transferInformation['endToEndId'])) {
             $transfer->setEndToEndIdentification($transferInformation['endToEndId']);

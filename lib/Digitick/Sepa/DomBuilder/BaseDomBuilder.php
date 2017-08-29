@@ -166,14 +166,45 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     }
 
     /**
-     * @param string $remittenceInformation
+     * Create remittance element with un-structured message.
+     *
+     * @param string $message
      * @return \DOMElement
      */
-    public function getRemittenceElement($remittenceInformation)
+    public function getRemittenceElement($message)
     {
         $remittanceInformation = $this->createElement('RmtInf');
-        $remittanceInformation->appendChild($this->createElement('Ustrd', $remittenceInformation));
+        $remittanceInformation->appendChild($this->createElement('Ustrd', $message));
 
         return $remittanceInformation;
     }
+
+    /**
+     * Create remittance element with structured creditor reference.
+     *
+     * @param string $creditorReference
+     * @return \DOMElement
+     */
+    public function getStructuredRemittanceElement($creditorReference = null)
+    {
+        $remittanceInformation = $this->createElement('RmtInf');
+
+        $structured = $this->createElement('Strd');
+        $creditorReferenceInformation = $this->createElement('CdtrRefInf');
+
+        $tp = $this->createElement('Tp');
+        $CdOrPrtry = $this->createElement('CdOrPrtry');
+        $CdOrPrtry->appendChild($this->createElement('Cd', 'SCOR'));
+        $tp->appendChild($CdOrPrtry);
+
+        $reference = $this->createElement('Ref', $creditorReference);
+
+        $creditorReferenceInformation->appendChild($tp);
+        $creditorReferenceInformation->appendChild($reference);
+        $structured->appendChild($creditorReferenceInformation);
+        $remittanceInformation->appendChild($structured);
+
+        return $remittanceInformation;
+    }
+
 }
