@@ -46,7 +46,7 @@ class TransferFileFacadeFactory
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
 
-        return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
+        return self::createDirectDebitWithGroupHeader($groupHeader, $painFormat);
     }
 
     /**
@@ -71,7 +71,7 @@ class TransferFileFacadeFactory
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
 
-        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
+        return self::createCustomerCreditWithGroupHeader($groupHeader, $painFormat);
     }
 
     /**
