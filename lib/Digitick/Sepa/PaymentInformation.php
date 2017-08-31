@@ -488,7 +488,7 @@ class PaymentInformation
     /**
      * @param string $format
      */
-    public function setDateFormat($format)
+    public function setDueDateFormat($format)
     {
         $this->dateFormat = $format;
     }

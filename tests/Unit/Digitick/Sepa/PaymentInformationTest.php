@@ -26,7 +26,7 @@ class PaymentInformationTest extends \PHPUnit_Framework_TestCase
     public function dateIsReturnedWithGivenFormat() {
         $pi = new PaymentInformation('1', 'DE121212121212121212', 'DE1212121212121212', 'Jon Doe');
         $pi->setDueDate(new \DateTime('2017-08-31 12:13:14'));
-        $pi->setDateFormat('d.m.Y');
+        $pi->setDueDateFormat('d.m.Y');
         $this->assertEquals('31.08.2017', $pi->getDueDate());
     }
 }
