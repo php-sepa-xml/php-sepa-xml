@@ -105,7 +105,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
             $transferInformation['debtorIban'],
             $transferInformation['debtorName']
         );
-        $transfer->setBic($transferInformation['debtorBic']);
+
+        if (isset($transferInformation['debtorBic'])) {
+            $transfer->setBic($transferInformation['debtorBic']);
+        }
         $transfer->setMandateId($transferInformation['debtorMandate']);
         if ($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
             $transfer->setMandateSignDate($transferInformation['debtorMandateSignDate']);
