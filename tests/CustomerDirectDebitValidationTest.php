@@ -253,4 +253,71 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
             array('pain.008.003.02')
         );
     }
+
+    /**
+     * Test a transfer file with one payment and one transaction.
+     * @dataProvider scenarios
+     */
+    public function testDomBuilderAcceptsPainFormatAsConstructor($scenario)
+    {
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
+
+        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
+        $transfer->setMandateId('ABCDE');
+        $transfer->setRemittanceInformation('Transaction Description');
+
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+
+        if ($scenario['originAgentBic'] !== '') {
+            $payment->setOriginAgentBIC($scenario['originAgentBic']);
+        }
+        if ($scenario['batchBooking']) {
+            $payment->setBatchBooking(true);
+        }
+
+        $payment->setSequenceType(PaymentInformation::S_ONEOFF);
+        $payment->setDueDate(new \DateTime('22.08.2013'));
+        $payment->setCreditorId('DE21WVM1234567890');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerDirectDebitTransferDomBuilder($scenario['pain']);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $this->dom->loadXML($xml);
+
+        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $scenario['pain'] . '.xsd');
+        $this->assertTrue($validated);
+    }
+
+    /**
+     * @return array
+     */
+    public function scenarios()
+    {
+
+        $scenarios = array();
+        foreach (array('pain.008.001.02','pain.008.002.02','pain.008.003.02') as $pain) {
+            $scenarios[] = array(
+                array(
+                    'pain' => $pain,
+                    'batchBooking' => true,
+                    'originAgentBic' => 'NOLADKIE'
+                )
+            );
+            $scenarios[] = array(
+                array(
+                    'pain' => $pain,
+                    'batchBooking' => false,
+                    'originAgentBic' => ''
+                )
+            );
+        }
+
+        return $scenarios;
+    }
 }

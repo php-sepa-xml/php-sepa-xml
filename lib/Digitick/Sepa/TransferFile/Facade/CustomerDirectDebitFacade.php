@@ -49,10 +49,11 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
+        $creditorAgentBIC = (isset ($paymentInformation['creditorAgentBIC'])) ? $paymentInformation['creditorAgentBIC'] : null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['creditorAccountIBAN'],
-            $paymentInformation['creditorAgentBIC'],
+            $creditorAgentBIC,
             $paymentInformation['creditorName']
         );
         $payment->setSequenceType($paymentInformation['seqType']);
@@ -109,6 +110,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['debtorBic'])) {
             $transfer->setBic($transferInformation['debtorBic']);
         }
+
         $transfer->setMandateId($transferInformation['debtorMandate']);
         if ($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
             $transfer->setMandateSignDate($transferInformation['debtorMandateSignDate']);
