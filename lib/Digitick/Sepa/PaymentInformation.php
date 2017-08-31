@@ -153,6 +153,11 @@ class PaymentInformation
     protected $mandateSignDate;
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d';
+
+    /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
@@ -269,7 +274,7 @@ class PaymentInformation
      */
     public function getDueDate()
     {
-        return $this->dueDate->format('Y-m-d');
+        return $this->dueDate->format($this->dateFormat);
     }
 
     /**
@@ -478,5 +483,13 @@ class PaymentInformation
     public function getBatchBooking()
     {
         return $this->batchBooking;
+    }
+
+    /**
+     * @param string $format
+     */
+    public function setDateFormat($format)
+    {
+        $this->dateFormat = $format;
     }
 }
