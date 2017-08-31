@@ -265,7 +265,7 @@ class PaymentInformation
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getDueDate()
     {
