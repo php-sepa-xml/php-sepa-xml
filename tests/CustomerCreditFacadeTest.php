@@ -44,6 +44,17 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $credit->addTransfer(
+            'firstPayment',
+            array(
+                'amount' => '200',
+                'creditorIban' => 'FI1350001540000056',
+                'creditorBic' => 'OKOYFIHH',
+                'creditorName' => 'Their Company',
+                'creditorReference' => 'RF81123453'
+            )
+        );
+
         $dom->loadXML($credit->asXML());
         $this->assertTrue($dom->schemaValidate(__DIR__ . "/" . $schema . ".xsd"));
     }

@@ -76,6 +76,19 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $directDebit->addTransfer(
+            'firstPayment',
+            array(
+                'amount' => '500',
+                'debtorIban' => 'FI1350001540000056',
+                'debtorBic' => 'OKOYFIHH',
+                'debtorName' => 'Their Company',
+                'debtorMandate' => 'AB12345',
+                'debtorMandateSignDate' => '13.10.2012',
+                'creditorReference' => 'RF81123453'
+            )
+        );
+
         $this->dom->loadXML($directDebit->asXML());
         $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd'));
     }

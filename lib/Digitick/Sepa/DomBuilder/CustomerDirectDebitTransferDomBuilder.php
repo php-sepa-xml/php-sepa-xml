@@ -172,9 +172,16 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $debtorAccount->appendChild($this->getIbanElement($transactionInformation->getIban()));
         $directDebitTransactionInformation->appendChild($debtorAccount);
 
-        $directDebitTransactionInformation->appendChild(
-            $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
-        );
+        if (strlen($transactionInformation->getCreditorReference()) > 0)
+        {
+            $directDebitTransactionInformation->appendChild(
+                $this->getStructuredRemittanceElement($transactionInformation->getCreditorReference())
+            );
+        } else {
+            $directDebitTransactionInformation->appendChild(
+                $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
+            );
+        }
 
         if ($transactionInformation->hasAmendments()) {
             $amendmentIndicator = $this->createElement('AmdmntInd', 'true');

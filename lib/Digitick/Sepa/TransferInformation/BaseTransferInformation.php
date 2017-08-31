@@ -77,6 +77,13 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $remittanceInformation;
 
     /**
+     * Structured creditor reference.
+     *
+     * @var string
+     */
+    protected $creditorReference;
+
+    /**
      * @param string $amount
      * @param string $iban
      * @param string $name
@@ -193,6 +200,22 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getBic()
     {
         return $this->bic;
+    }
+
+    /**
+     * @param string $creditorReference
+     */
+    public function setCreditorReference($creditorReference)
+    {
+        $this->creditorReference = StringHelper::sanitizeString($creditorReference);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreditorReference()
+    {
+        return $this->creditorReference;
     }
 
     /**

@@ -112,7 +112,13 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         } else {
             $transfer->setMandateSignDate(new \DateTime($transferInformation['debtorMandateSignDate']));
         }
-        $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
+
+        if (isset($transferInformation['creditorReference'])) {
+            $transfer->setCreditorReference($transferInformation['creditorReference']);
+        } else {
+            $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
+        }
+
         if (isset($transferInformation['endToEndId'])) {
             $transfer->setEndToEndIdentification($transferInformation['endToEndId']);
         } else {
