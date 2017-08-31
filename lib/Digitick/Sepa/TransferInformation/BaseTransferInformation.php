@@ -70,6 +70,14 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $currency = 'EUR';
 
     /**
+     * Creditor Reference printed on invoice or deposit slip
+     * if provided the remittanceInformation will be ignored.
+     * 
+     * @var string
+     */
+    protected $creditorReferenceInformation;
+    
+    /**
      * Purpose of this transaction
      *
      * @var string
@@ -195,6 +203,23 @@ class BaseTransferInformation implements TransferInformationInterface
         return $this->bic;
     }
 
+    /**
+     * @param string $creditorReferenceInformation
+     */
+    public function setCreditorReferenceInformation($creditorReferenceInformation)
+    {
+        $this->creditorReferenceInformation = StringHelper::sanitizeString($creditorReferenceInformation);
+        
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCreditorReferenceInformation()
+    {
+        return $this->creditorReferenceInformation;
+    }   
+    
     /**
      * @param string $remittanceInformation
      */

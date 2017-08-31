@@ -20,8 +20,12 @@ $customerCredit->addTransfer('firstPayment', array(
     'amount'                  => '500',
     'creditorIban'            => 'FI1350001540000056',
     'creditorBic'             => 'OKOYFIHH',
-    'creditorName'            => 'Their Company',
+    'creditorName'            => 'Their Company',    
+    // this is the payment reference given by the creditor
+    'creditorReferenceInformation'=> '123456789012',
+    //OR
     'remittanceInformation'   => 'Purpose of this credit transfer'
+    // if you provide 'creditorReferenceInformation' the 'remittanceInformation' will be ignored
 ));
 // Retrieve the resulting XML
 $customerCredit->asXML();
@@ -61,4 +65,21 @@ $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 // $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
 
 $domBuilder->asXml();
+```
+
+## Add an amendment to a transfer
+
+```php
+// Add a Single Transaction to the named payment
+$customerCredit->addTransfer('firstPayment', array(
+    'amount'                  => '500',
+    'creditorIban'            => 'FI1350001540000056',
+    'creditorBic'             => 'OKOYFIHH',
+    'creditorName'            => 'Their Company',
+    'remittanceInformation'   => 'Purpose of this credit transfer',
+    // Amendments start here
+    'originalMandateId'     => '1234567890',
+    'originalDebtorIban'    => 'AT711100015440033700',
+    'amendedDebtorAgent'    => true
+));
 ```
