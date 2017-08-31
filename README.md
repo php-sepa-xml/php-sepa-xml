@@ -17,6 +17,7 @@ The versions of the standard followed are:
 Institutions and associations that should accept this format:
 * Deutsche Kreditwirtschaft
 * Fédération bancaire française
+* ING (tested on direct credit, use _pain.001.001.03_)
 
 Always verify generated files with your bank before using in production! If you encounter an institution that does accept this library's generated files please notify us to add it to the list or send a PR!
 

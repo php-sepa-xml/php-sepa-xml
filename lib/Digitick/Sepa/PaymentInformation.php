@@ -259,13 +259,13 @@ class PaymentInformation
     /**
      * @param \DateTime $dueDate
      */
-    public function setDueDate($dueDate)
+    public function setDueDate(\DateTime $dueDate)
     {
         $this->dueDate = $dueDate;
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getDueDate()
     {

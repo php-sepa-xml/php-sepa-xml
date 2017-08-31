@@ -23,6 +23,7 @@
 namespace Digitick\Sepa\TransferFile\Facade;
 
 use Digitick\Sepa\DomBuilder\BaseDomBuilder;
+use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFacadeInterface
@@ -38,7 +39,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     protected $domBuilder;
 
     /**
-     * @var array
+     * @var PaymentInformation[]
      */
     protected $payments = array();
 
