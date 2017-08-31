@@ -185,7 +185,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      * @param string $creditorReference
      * @return \DOMElement
      */
-    public function getStructuredRemittanceElement($creditorReference = null)
+    public function getStructuredRemittanceElement($creditorReference)
     {
         $remittanceInformation = $this->createElement('RmtInf');
 
