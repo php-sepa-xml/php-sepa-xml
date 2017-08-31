@@ -44,14 +44,40 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $dom->loadXML($credit->asXML());
+        $this->assertTrue($dom->schemaValidate(__DIR__ . "/" . $schema . ".xsd"));
+    }
+
+    /**
+     * Test creation of file via Factory and Facade
+     *
+     * @param string $schema
+     *
+     * @dataProvider schemaProviderEmptyBic
+     */
+    public function testValidFileCreationWithFacadeWithoutDebtorBic($schema)
+    {
+
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
+        $paymentInformation = $credit->addPaymentInfo(
+            'firstPayment',
+            array(
+                'id' => 'firstPayment',
+                'debtorName' => 'My Company',
+                'debtorAccountIBAN' => 'FI1350001540000056'
+            )
+        );
+        $paymentInformation->setBatchBooking(true);
+
         $credit->addTransfer(
             'firstPayment',
             array(
-                'amount' => '200',
+                'amount' => '500',
                 'creditorIban' => 'FI1350001540000056',
-                'creditorBic' => 'OKOYFIHH',
                 'creditorName' => 'Their Company',
-                'creditorReference' => 'RF81123453'
+                'remittanceInformation' => 'Purpose of this credit'
             )
         );
 
@@ -67,6 +93,17 @@ class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
         return array(
             array("pain.001.001.03"),
             array("pain.001.002.03"),
+            array("pain.001.003.03")
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function schemaProviderEmptyBic()
+    {
+        return array(
+            array("pain.001.001.03"),
             array("pain.001.003.03")
         );
     }

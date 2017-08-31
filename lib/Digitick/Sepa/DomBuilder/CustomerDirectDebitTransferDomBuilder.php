@@ -99,11 +99,9 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($creditorAccount);
 
         // <CdtrAgt>
-        if ($paymentInformation->getOriginAgentBIC()) {
-            $creditorAgent = $this->createElement('CdtrAgt');
-            $creditorAgent->appendChild($this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC()));
-            $this->currentPayment->appendChild($creditorAgent);
-        }
+        $creditorAgent = $this->createElement('CdtrAgt');
+        $creditorAgent->appendChild($this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC()));
+        $this->currentPayment->appendChild($creditorAgent);
 
         $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
 

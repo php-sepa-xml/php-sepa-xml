@@ -76,12 +76,42 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->dom->loadXML($directDebit->asXML());
+        $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd'));
+    }
+
+
+    /**
+     * Test creation of file via Factory and Facade
+     *
+     * @param string $schema
+     *
+     * @dataProvider provideSchema
+     */
+    public function testValidFileCreationWithFacadeWithoutBic($schema)
+    {
+        if ($schema === 'pain.008.002.02') {
+            $this->markTestSkipped('Will fail for this schema as the BIC is required');
+        }
+
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
+        $paymentInformation = $directDebit->addPaymentInfo(
+            'firstPayment',
+            array(
+                'id' => 'firstPayment',
+                'creditorName' => 'My Company',
+                'creditorAccountIBAN' => 'FI1350001540000056',
+                'seqType' => PaymentInformation::S_ONEOFF,
+                'creditorId' => 'DE21WVM1234567890'
+            )
+        );
+        $paymentInformation->setBatchBooking(true);
+
         $directDebit->addTransfer(
             'firstPayment',
             array(
                 'amount' => '500',
                 'debtorIban' => 'FI1350001540000056',
-                'debtorBic' => 'OKOYFIHH',
                 'debtorName' => 'Their Company',
                 'debtorMandate' => 'AB12345',
                 'debtorMandateSignDate' => '13.10.2012',
