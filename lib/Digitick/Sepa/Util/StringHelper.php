@@ -50,7 +50,7 @@ class StringHelper
         );
 
         $mapped = strtr($inputString, $map);
-        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-(+.) ]/', ' ', $mapped);
+        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-\/(+.) ]/', ' ', $mapped);
 
         return $sanitized;
     }
