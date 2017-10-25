@@ -8,13 +8,16 @@ $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
 
 // create a payment, it's possible to create multiple payments,
 // "firstPayment" is the identifier for the transactions
+// This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
 $directDebit->addPaymentInfo('firstPayment', array(
     'id'                    => 'firstPayment',
+    'dueDate'               => new DateTime('now + 7 days'), // optional. Otherwise default period is used
     'creditorName'          => 'My Company',
     'creditorAccountIBAN'   => 'FI1350001540000056',
     'creditorAgentBIC'      => 'PSSTFRPPMON',
     'seqType'               => PaymentInformation::S_ONEOFF,
-    'creditorId'            => 'DE21WVM1234567890'
+    'creditorId'            => 'DE21WVM1234567890',
+    'localInstrumentCode'   => 'CORE' // default. optional.
 ));
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
@@ -22,9 +25,10 @@ $directDebit->addTransfer('firstPayment', array(
     'debtorIban'            => 'FI1350001540000056',
     'debtorBic'             => 'OKOYFIHH',
     'debtorName'            => 'Their Company',
-    'debtorMandate'         =>  'AB12345',
+    'debtorMandate'         => 'AB12345',
     'debtorMandateSignDate' => '13.10.2012',
-    'remittanceInformation' => 'Purpose of this direct debit'
+    'remittanceInformation' => 'Purpose of this direct debit',
+    'endToEndId'            => 'Invoice-No X' // optional, if you want to provide additional structured info
 ));
 // Retrieve the resulting XML
 $directDebit->asXML();
@@ -46,11 +50,13 @@ $directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($head
 // "firstPayment" is the identifier for the transactions
 $directDebit->addPaymentInfo('firstPayment', array(
     'id'                    => 'firstPayment',
+    'dueDate'               => new DateTime('now + 7 days'), // optional. Otherwise default period is used
     'creditorName'          => 'My Company',
     'creditorAccountIBAN'   => 'FI1350001540000056',
     'creditorAgentBIC'      => 'PSSTFRPPMON',
     'seqType'               => PaymentInformation::S_ONEOFF,
-    'creditorId'            => 'DE21WVM1234567890'
+    'creditorId'            => 'DE21WVM1234567890',
+    'localInstrumentCode'   => 'CORE' // default. optional.
 ));
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
@@ -60,7 +66,8 @@ $directDebit->addTransfer('firstPayment', array(
     'debtorName'            => 'Their Company',
     'debtorMandate'         =>  'AB12345',
     'debtorMandateSignDate' => '13.10.2012',
-    'remittanceInformation' => 'Purpose of this direct debit'
+    'remittanceInformation' => 'Purpose of this direct debit',
+    'endToEndId'            => 'Invoice-No X' // optional, if you want to provide additional structured info
 ));
 // Retrieve the resulting XML
 $directDebit->asXML();
@@ -76,9 +83,10 @@ $directDebit->addTransfer('firstPayment', array(
     'creditorBic'             => 'OKOYFIHH',
     'creditorName'            => 'Their Company',
     'remittanceInformation'   => 'Purpose of this credit transfer',
+    'endToEndId'              => 'Invoice-No X' // optional, if you want to provide additional structured info
     // Amendments start here
-    'originalMandateId'     => '1234567890',
-    'originalDebtorIban'    => 'AT711100015440033700',
-    'amendedDebtorAccount' => true
+    'originalMandateId'       => '1234567890',
+    'originalDebtorIban'      => 'AT711100015440033700',
+    'amendedDebtorAccount'    => true
 ));
 ```
