@@ -4,7 +4,8 @@ use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\PaymentInformation;
 
 //Set the initial information
-$directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+// third parameter 'pain.008.003.02' is optional would default to 'pain.008.002.02' if not changed
+$directDebit = TransferFileFacadeFactory::createDirectDebit('SampleUniqueMsgId', 'SampleInitiatingPartyName', 'pain.008.003.02');
 
 // create a payment, it's possible to create multiple payments,
 // "firstPayment" is the identifier for the transactions
