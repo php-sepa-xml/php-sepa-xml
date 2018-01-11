@@ -56,18 +56,19 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
     }
 
     /**
-     * Test a transfer file with one payment and one transaction.
+     * Test a Transfer file with one payment and one transaction without BIC provided
      */
-    public function testSinglePaymentSingleTrans()
+    public function test_given_country_is_returned_For_path()
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
         $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
-        $transfer->setBic('OKOYFIHH');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
         $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setCountry('AT');
+        $transfer->setPostalAddress('Postal Address');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
@@ -83,6 +84,18 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
+
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $painFormat);
+        // Date is correctly coded
+        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:Ctry');
+        $this->assertEquals('AT', $testNode->item(0)->textContent);
+
+        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine');
+        $this->assertEquals('Postal Address', $testNode->item(0)->textContent);
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
@@ -91,7 +104,7 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
     /**
      * Test a Transfer file with one payment and one transaction without BIC provided
      */
-    public function testSinglePaymentSingleTransNoBic()
+    public function test_multiple_address_lines_are_added_with_array()
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -100,6 +113,8 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
         $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setCountry('AT');
+        $transfer->setPostalAddress(['Postal Address 1','Postal Address 2']);
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
@@ -115,6 +130,16 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
         $sepaFile->accept($domBuilder);
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
+
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $painFormat);
+
+        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine');
+        $this->assertEquals('Postal Address 1', $testNode->item(0)->textContent);
+        $this->assertEquals('Postal Address 2', $testNode->item(1)->textContent);
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
@@ -159,51 +184,5 @@ class CustomerDirectDebitValidationPain00800302Test extends \PHPUnit_Framework_T
 
         $domBuilder = new CustomerDirectDebitTransferDomBuilder();
         $sepaFile->accept($domBuilder);
-    }
-
-    /**
-     * Test the payment informations in the xml
-     */
-    public function testUmlautConversion()
-    {
-        $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
-        $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
-        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'Only A-Z without äöüßÄÖÜ creditorName');
-        $payment->setDueDate(new \DateTime('20.11.2012'));
-        $payment->setSequenceType(PaymentInformation::S_ONEOFF);
-        $payment->setCreditorId('Only A-Z without äöüßÄÖÜ creditorSchemeId');
-
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ debtorName');
-        $transfer->setBic('OKOYFIHH');
-        $transfer->setRemittanceInformation('Only A-Z without äöüßÄÖÜ remittanceInformation');
-        $transfer->setMandateSignDate(new \DateTime());
-        $transfer->setMandateId('Only A-Z without äöüßÄÖÜ mandateId');
-        $payment->addTransfer($transfer);
-
-        $sepaFile->addPaymentInformation($payment);
-
-        $domBuilder = new CustomerDirectDebitTransferDomBuilder();
-        $sepaFile->accept($domBuilder);
-        $xml = $domBuilder->asXml();
-        $doc = new \DOMDocument();
-        $doc->loadXML($xml);
-
-        $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.008.002.02');
-        // Date is correctly coded
-        $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:EndToEndId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:MndtId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
     }
 }
