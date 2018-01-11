@@ -88,6 +88,8 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *                                   - remittanceInformation
      *                                   - [endToEndId]
      *                                   - [amendments]
+     *                                   - [debtorCountry]
+     *                                   - [debtorAdrLine]
      *
      * @throws \Digitick\Sepa\Exception\InvalidArgumentException
      *
@@ -140,7 +142,12 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['amendedDebtorAccount'])) {
             $transfer->setAmendedDebtorAccount((bool) $transferInformation['amendedDebtorAccount']);
         }
-
+        if (isset($transferInformation['debtorCountry'])) {
+            $transfer->setCountry($transferInformation['debtorCountry']);
+        }
+        if (isset($transferInformation['debtorAdrLine'])) {
+            $transfer->setPostalAddress($transferInformation['debtorAdrLine']);
+        }
         $this->payments[$paymentName]->addTransfer($transfer);
 
         return $transfer;

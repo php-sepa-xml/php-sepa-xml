@@ -164,6 +164,28 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
+        if (in_array($this->painFormat, array('pain.008.003.02'))) {
+            $addPostalAddress = false;
+            $postalAddress = $this->createElement('PstlAdr');
+            if (!empty($transactionInformation->getCountry())) {
+                $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
+                $addPostalAddress = true;
+            }
+            if (!empty($transactionInformation->getPostalAddress())) {
+                $postalAddressData = $transactionInformation->getPostalAddress();
+                if (is_array($postalAddressData)) {
+                    foreach($postalAddressData as $postalAddressLine) {
+                        $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressLine));
+                    }
+                } else {
+                    $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressData));
+                }
+                $addPostalAddress = true;
+            }
+            if ($addPostalAddress) {
+                $debtor->appendChild($postalAddress);
+            }
+        }
         $directDebitTransactionInformation->appendChild($debtor);
 
         $debtorAccount = $this->createElement('DbtrAcct');
@@ -221,7 +243,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
     {
         parent::visitGroupHeader($groupHeader);
 
-        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.008.001.02') {
+        if ($groupHeader->getInitiatingPartyId() !== null && in_array($this->painFormat , array('pain.008.001.02','pain.008.003.02'))) {
             $newId = $this->createElement('Id');
             $orgId = $this->createElement('OrgId');
             $othr  = $this->createElement('Othr');

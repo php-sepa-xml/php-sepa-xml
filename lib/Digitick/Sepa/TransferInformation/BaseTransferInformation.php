@@ -84,6 +84,16 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $creditorReference;
 
     /**
+     * @var string
+     */
+    protected $country;
+
+    /**
+     * @var string|array
+     */
+    protected $postalAddress;
+
+    /**
      * @param string $amount
      * @param string $iban
      * @param string $name
@@ -234,4 +244,35 @@ class BaseTransferInformation implements TransferInformationInterface
         return $this->remittanceInformation;
     }
 
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getPostalAddress()
+    {
+        return $this->postalAddress;
+    }
+
+    /**
+     * @param array|string $postalAddress
+     */
+    public function setPostalAddress($postalAddress)
+    {
+        $this->postalAddress = $postalAddress;
+    }
 }
