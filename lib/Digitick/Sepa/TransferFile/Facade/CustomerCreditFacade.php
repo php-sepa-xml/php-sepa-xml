@@ -79,6 +79,10 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
                 $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
             );
         }
+        
+        if (isset($transferInformation['instructionId'])) {
+            $transfer->setInstructionId($transferInformation['instructionId']);
+        }
 
         $this->payments[$paymentName]->addTransfer($transfer);
 
