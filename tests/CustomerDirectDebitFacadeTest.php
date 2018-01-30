@@ -72,7 +72,9 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
                 'debtorName' => 'Their Company',
                 'debtorMandate' => 'AB12345',
                 'debtorMandateSignDate' => '13.10.2012',
-                'remittanceInformation' => 'Purpose of this direct debit'
+                'remittanceInformation' => 'Purpose of this direct debit',
+                'debtorCountry' => 'DE',
+                'debtorAdrLine' => 'Some Address',
             )
         );
 
@@ -115,7 +117,9 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
                 'debtorName' => 'Their Company',
                 'debtorMandate' => 'AB12345',
                 'debtorMandateSignDate' => '13.10.2012',
-                'creditorReference' => 'RF81123453'
+                'creditorReference' => 'RF81123453',
+                'debtorCountry' => 'DE',
+                'debtorAdrLine' => 'Some Address',
             )
         );
 

@@ -167,11 +167,11 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         if (in_array($this->painFormat, array('pain.008.003.02'))) {
             $addPostalAddress = false;
             $postalAddress = $this->createElement('PstlAdr');
-            if (!empty($transactionInformation->getCountry())) {
+            if ((bool)$transactionInformation->getCountry()) {
                 $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
                 $addPostalAddress = true;
             }
-            if (!empty($transactionInformation->getPostalAddress())) {
+            if ((bool)$transactionInformation->getPostalAddress()) {
                 $postalAddressData = $transactionInformation->getPostalAddress();
                 if (is_array($postalAddressData)) {
                     foreach($postalAddressData as $postalAddressLine) {

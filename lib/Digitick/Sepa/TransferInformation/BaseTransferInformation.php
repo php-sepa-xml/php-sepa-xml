@@ -179,15 +179,6 @@ class BaseTransferInformation implements TransferInformationInterface
         return $this->instructionId;
     }
 
-
-    /**
-     * @param string $iban
-     */
-    public function setIban($iban)
-    {
-        $this->iban = $iban;
-    }
-
     /**
      * @return string
      */
