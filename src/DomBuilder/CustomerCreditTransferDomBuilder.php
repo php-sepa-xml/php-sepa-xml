@@ -34,15 +34,23 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
 
-    function __construct(string $painFormat = 'pain.001.002.03')
+    /**
+     * CustomerCreditTransferDomBuilder constructor
+     *
+     * @param string $painFormat
+     */
+    function __construct($painFormat = 'pain.001.002.03', $withSchemaLocation = true)
     {
-        parent::__construct($painFormat);
+        parent::__construct($painFormat, $withSchemaLocation);
     }
 
     /**
      * Build the root of the document
+     *
+     * @param TransferFileInterface $transferFile
+     * @return mixed
      */
-    public function visitTransferFile(TransferFileInterface $transferFile): void
+    public function visitTransferFile(TransferFileInterface $transferFile)
     {
         $this->currentTransfer = $this->doc->createElement('CstmrCdtTrfInitn');
         $this->root->appendChild($this->currentTransfer);
@@ -50,8 +58,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl PaymentInformation containing the Transactions
+     *
+     * @param PaymentInformation $paymentInformation
+     * @return mixed
      */
-    public function visitPaymentInformation(PaymentInformation $paymentInformation): void
+    public function visitPaymentInformation(PaymentInformation $paymentInformation)
     {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
@@ -70,10 +81,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         );
 
         $paymentTypeInformation = $this->createElement('PmtTpInf');
-        if ($paymentInformation->getInstructionPriority()) {
-            $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
-            $paymentTypeInformation->appendChild($instructionPriority);
-        }
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
@@ -123,8 +130,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl Transactions
+     *
+     * @param TransferInformationInterface $transactionInformation
+     * @return mixed
      */
-    public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
+    public function visitTransferInformation(TransferInformationInterface $transactionInformation)
     {
         /** @var $transactionInformation  CustomerCreditTransferInformation */
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
@@ -159,12 +169,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');
         $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
-
-        // Creditor address if needed and supported by schema.
-        if (in_array($this->painFormat, array('pain.001.001.03'))) {
-            $this->appendAddressToDomElement($creditor, $transactionInformation);
-        }
-
         $CdtTrfTxInf->appendChild($creditor);
 
         // CreditorAccount 2.80
@@ -177,7 +181,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // remittance 2.98 2.99
         if (strlen($transactionInformation->getCreditorReference()) > 0)
         {
-            $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation);
+            $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation->getCreditorReference());
             $CdtTrfTxInf->appendChild($remittanceInformation);
         } elseif (strlen($transactionInformation->getRemittanceInformation()) > 0) {
             $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
@@ -189,8 +193,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Add the specific OrgId element for the format 'pain.001.001.03'
+     *
+     * @param  GroupHeader $groupHeader
+     * @return mixed
      */
-    public function visitGroupHeader(GroupHeader $groupHeader): void
+    public function visitGroupHeader(GroupHeader $groupHeader)
     {
         parent::visitGroupHeader($groupHeader);
 
@@ -214,8 +221,9 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * @param  string      $id         Unique and unambiguous identification of a party. Length 1-35
      * @param  string|null $schemeCode Name of the identification scheme. Length 1-4 or null
      * @param  string|null $issr       Issuer
+     * @return \DOMElement
      */
-    protected function getOrganizationIdentificationElement(string $id, ?string $schemeCode = null, ?string $issr = null): \DOMElement
+    protected function getOrganizationIdentificationElement($id, $schemeCode = null, $issr = null)
     {
         $newId = $this->createElement('Id');
         $orgId = $this->createElement('OrgId');
@@ -236,36 +244,5 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $newId->appendChild($orgId);
 
         return $newId;
-    }
-
-    /**
-     * Appends an address node to the passed dom element containing country and unstructured address lines.
-     * Does nothing if no address exists in $transactionInformation.
-     */
-    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation): void
-    {
-        if (!$transactionInformation->getCountry() && !$transactionInformation->getPostalAddress()) {
-            return; // No address exists, nothing to do.
-        }
-
-        $postalAddress = $this->createElement('PstlAdr');
-
-        // Gemerate country address node.
-        if ((bool)$transactionInformation->getCountry()) {
-            $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
-        }
-
-        // Ensure $postalAddressData is an array as getPostalAddress() returns either string or string[].
-        $postalAddressData = $transactionInformation->getPostalAddress();
-        if (!is_array($postalAddressData)) {
-            $postalAddressData = array($postalAddressData);
-        }
-
-        // Generate nodes for each address line.
-        foreach (array_filter($postalAddressData) as $postalAddressLine) {
-            $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressLine));
-        }
-
-        $creditor->appendChild($postalAddress);
     }
 }
