@@ -27,16 +27,16 @@ use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 class DomBuilderFactory
 {
-    public static function createDomBuilder(TransferFileInterface $transferFile, $painFormat = '')
+    public static function createDomBuilder(TransferFileInterface $transferFile, $painFormat = '', $withSchemaLocation = true)
     {
         $transferFileClass = get_class($transferFile);
         switch ($transferFileClass) {
             case 'Digitick\Sepa\TransferFile\CustomerCreditTransferFile':
-                $domBuilder = $painFormat ? new CustomerCreditTransferDomBuilder($painFormat) : new CustomerCreditTransferDomBuilder();
+                $domBuilder = $painFormat ? new CustomerCreditTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerCreditTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;
             case 'Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile':
-                $domBuilder = $painFormat ? new CustomerDirectDebitTransferDomBuilder($painFormat) : new CustomerDirectDebitTransferDomBuilder();
+                $domBuilder = $painFormat ? new CustomerDirectDebitTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerDirectDebitTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;
             default:
