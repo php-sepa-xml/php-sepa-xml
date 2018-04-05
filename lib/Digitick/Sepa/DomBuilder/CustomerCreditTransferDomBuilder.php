@@ -39,9 +39,9 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      *
      * @param string $painFormat
      */
-    function __construct($painFormat = 'pain.001.002.03')
+    function __construct($painFormat = 'pain.001.002.03', $withSchemaLocation = true)
     {
-        parent::__construct($painFormat);
+        parent::__construct($painFormat, $withSchemaLocation);
     }
 
     /**
