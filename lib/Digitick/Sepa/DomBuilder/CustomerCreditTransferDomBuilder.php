@@ -38,6 +38,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * CustomerCreditTransferDomBuilder constructor
      *
      * @param string $painFormat
+     * @param boolean $withSchemaLocation define if xsi:schemaLocation tag is added to root
      */
     function __construct($painFormat = 'pain.001.002.03', $withSchemaLocation = true)
     {
