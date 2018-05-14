@@ -34,6 +34,8 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $paymentInformation['debtorName']
         );
 
+        $payment->setDueDate($this->HandleDueDate($paymentInformation));
+
         $this->payments[$paymentName] = $payment;
 
         return $payment;

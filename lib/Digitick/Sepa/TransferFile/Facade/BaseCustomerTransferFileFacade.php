@@ -64,4 +64,20 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
 
         return $this->domBuilder->asXml();
     }
+
+    /**
+     * @return DateTime  
+    */
+    public function HandleDueDate(array $paymentInformation)
+    {
+        if (isset($paymentInformation['dueDate'])) {
+            if ($paymentInformation['dueDate'] instanceof \DateTime) {
+                return $paymentInformation['dueDate'];
+            } else {
+                return new \DateTime($paymentInformation['dueDate']);
+            }
+        } else {
+            return new \DateTime(date('Y-m-d', strtotime('now + 5 days')));
+        }
+    }
 }
