@@ -34,6 +34,16 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $paymentInformation['debtorName']
         );
 
+        if (isset($paymentInformation['dueDate'])) {
+            if ($paymentInformation['dueDate'] instanceof \DateTime) {
+                $payment->setDueDate($paymentInformation['dueDate']);
+            } else {
+                $payment->setDueDate(new \DateTime($paymentInformation['dueDate']));
+            }
+        } else {
+            $payment->setDueDate(new \DateTime(date('Y-m-d', strtotime('now + 5 days'))));
+        }
+
         $this->payments[$paymentName] = $payment;
 
         return $payment;
