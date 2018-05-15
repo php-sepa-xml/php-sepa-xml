@@ -68,7 +68,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     /**
      * @return DateTime  
     */
-    public function HandleDueDate(array $paymentInformation)
+    public function handleDueDate(array $paymentInformation)
     {
         if (isset($paymentInformation['dueDate'])) {
             if ($paymentInformation['dueDate'] instanceof \DateTime) {
