@@ -81,6 +81,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
         $payment->setDueDate(new \DateTime('22.08.2013'));
+        $payment->setInstructionPriority('NORM');
         $payment->setCreditorId('DE21WVM1234567890');
         $payment->addTransfer($transfer);
 

@@ -109,6 +109,11 @@ class PaymentInformation
     protected $dueDate;
 
     /**
+     * @var string Instruction priority.
+     */
+    protected $instructionPriority;
+
+    /**
      * @var integer
      */
     protected $controlSumCents = 0;
@@ -275,6 +280,26 @@ class PaymentInformation
     public function getDueDate()
     {
         return $this->dueDate->format($this->dateFormat);
+    }
+
+    /**
+     * @param string $instructionPriority
+     */
+    public function setInstructionPriority($instructionPriority)
+    {
+        $instructionPriority = strtoupper($instructionPriority);
+        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
+            throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
+        }
+        $this->instructionPriority = $instructionPriority;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstructionPriority()
+    {
+        return $this->instructionPriority;
     }
 
     /**
