@@ -81,7 +81,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         );
 
         $paymentTypeInformation = $this->createElement('PmtTpInf');
-        if($paymentInformation->getInstructionPriority()) {
+        if ($paymentInformation->getInstructionPriority()) {
             $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
             $paymentTypeInformation->appendChild($instructionPriority);
         }
