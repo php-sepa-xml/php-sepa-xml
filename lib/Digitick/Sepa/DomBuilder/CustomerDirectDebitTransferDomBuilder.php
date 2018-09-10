@@ -73,6 +73,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         );
 
         $paymentTypeInformation = $this->createElement('PmtTpInf');
+        if ($paymentInformation->getInstructionPriority() && $this->painFormat === 'pain.008.001.02') {
+            $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
+            $paymentTypeInformation->appendChild($instructionPriority);
+        }
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);

@@ -201,6 +201,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setDueDate(new \DateTime('20.11.2012'));
+        $payment->setInstructionPriority('NORM');
 
         $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
