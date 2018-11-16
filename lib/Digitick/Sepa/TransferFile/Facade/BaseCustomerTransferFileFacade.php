@@ -68,7 +68,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     /**
      * @return DateTime
      */
-    public function createDueDateFromPaymentInformation(array $paymentInformation)
+    public function createDueDateFromPaymentInformation(array $paymentInformation, $default = 'now')
     {
         if (isset($paymentInformation['dueDate'])) {
             if ($paymentInformation['dueDate'] instanceof \DateTime) {
@@ -77,7 +77,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
                 return new \DateTime($paymentInformation['dueDate']);
             }
         } else {
-            return new \DateTime(date('Y-m-d', strtotime('now + 5 days')));
+            return new \DateTime(date('Y-m-d', strtotime($default)));
         }
     }
 }
