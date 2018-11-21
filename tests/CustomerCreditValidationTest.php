@@ -237,6 +237,60 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the payment informations in the xml
+     *
+     * @param string[] $schema
+     *
+     * @dataProvider provideAddressTests
+     */
+    public function testCreditorAddressGeneration(array $address)
+    {
+        $schema = "pain.001.001.03"; // Addresses are only supported using this pain format.
+
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setDueDate(new \DateTime('20.11.2012'));
+
+        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setRemittanceInformation('Transaction description');
+        // Test additional postal information
+
+        $country = $address[0];
+        $addressLines = $address[1];
+        $transfer->setCountry($country);
+        $transfer->setPostalAddress($addressLines);
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+
+        // Creditor country is correctly added
+        $originAddressCountry = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
+        $this->assertEquals($country, $originAddressCountry->item(0)->textContent);
+        // Creditor address lines are correctly added
+        $originAddressLines = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine');
+
+        // $addressLines could be string instead of array. Ensure array for easier testing.
+        if (!is_array($addressLines)) {
+            $addressLines = array($addressLines);
+        }
+
+        for ($index = 0; $index < count($addressLines); $index++) {
+            $this->assertEquals($addressLines[$index], $originAddressLines->item($index)->textContent);
+        }
+    }
+
+    /**
      * Test a transfer file with several payments, several transactions each.
      *
      * @param string $schema
@@ -482,4 +536,16 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return string[]
+     */
+    public function provideAddressTests()
+    {
+        return array(
+            array(array('CH', array('Teststreet 1', '21345 Somewhere'))),
+            array(array(null, array('Teststreet 2', null))),
+            array(array('DE', array('Teststreet 3'))),
+            array(array('NL', '21456 Rightthere')),
+        );
+    }
 }
