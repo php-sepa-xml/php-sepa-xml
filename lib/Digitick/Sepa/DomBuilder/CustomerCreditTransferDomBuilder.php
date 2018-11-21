@@ -173,6 +173,12 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');
         $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
+
+        // Creditor address if needed and supported by schema.
+        if (in_array($this->painFormat, array('pain.001.001.03'))) {
+            $this->appendAddressToDomElement($creditor, $transactionInformation);
+        }
+
         $CdtTrfTxInf->appendChild($creditor);
 
         // CreditorAccount 2.80
@@ -248,5 +254,39 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $newId->appendChild($orgId);
 
         return $newId;
+    }
+
+    /**
+     * Appends an address node to the passed dom element containing country and unstructured address lines.
+     * Does nothing if no address exists in $transactionInformation.
+     *
+     * @param \DOMElement $creditor
+     * @param CustomerCreditTransferInformation $transactionInformation
+     */
+    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation)
+    {
+        if (!$transactionInformation->getCountry() && !$transactionInformation->getPostalAddress()) {
+            return; // No address exists, nothing to do.
+        }
+
+        $postalAddress = $this->createElement('PstlAdr');
+
+        // Gemerate country address node.
+        if ((bool)$transactionInformation->getCountry()) {
+            $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
+        }
+
+        // Ensure $postalAddressData is an array as getPostalAddress() returns either string or string[].
+        $postalAddressData = $transactionInformation->getPostalAddress();
+        if (!is_array($postalAddressData)) {
+            $postalAddressData = array($postalAddressData);
+        }
+
+        // Generate nodes for each address line.
+        foreach (array_filter($postalAddressData) as $postalAddressLine) {
+            $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressLine));
+        }
+
+        $creditor->appendChild($postalAddress);
     }
 }
