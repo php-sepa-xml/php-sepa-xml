@@ -185,7 +185,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      * @param string $creditorReference
      * @return \DOMElement
      */
-    public function getStructuredRemittanceElement($creditorReference)
+    public function getStructuredRemittanceElement($creditorReference, $creditorReferenceType = null)
     {
         $remittanceInformation = $this->createElement('RmtInf');
 
@@ -196,6 +196,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $CdOrPrtry = $this->createElement('CdOrPrtry');
         $CdOrPrtry->appendChild($this->createElement('Cd', 'SCOR'));
         $tp->appendChild($CdOrPrtry);
+
+        if($creditorReferenceType != null) {
+            $issuer = $this->createElement('Issr', $creditorReferenceType);
+            $tp->appendChild($issuer);
+        }
 
         $reference = $this->createElement('Ref', $creditorReference);
 
