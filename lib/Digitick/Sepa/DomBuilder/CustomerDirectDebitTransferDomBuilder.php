@@ -199,7 +199,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         if (strlen($transactionInformation->getCreditorReference()) > 0)
         {
             $directDebitTransactionInformation->appendChild(
-                $this->getStructuredRemittanceElement($transactionInformation->getCreditorReference())
+                $this->getStructuredRemittanceElement($transactionInformation)
             );
         } else {
             $directDebitTransactionInformation->appendChild(
