@@ -15,10 +15,6 @@
         {
             "name": "Sören Rohweder (monofone)",
             "email": "s.rohweder@blage.net"
-        },
-        {
-            "name": "Joose Vettenranta",
-            "email": "joose.vettenranta@kompassi.fi"
         }
     ],
     "autoload": {

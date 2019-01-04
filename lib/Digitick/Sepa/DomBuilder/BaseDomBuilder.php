@@ -23,6 +23,7 @@
 namespace Digitick\Sepa\DomBuilder;
 
 use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
@@ -182,11 +183,12 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with structured creditor reference.
      *
-     * @param string $creditorReference
+     * @param TransferInformationInterface $transactionInformation
      * @return \DOMElement
      */
-    public function getStructuredRemittanceElement($creditorReference, $creditorReferenceType = null)
+    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation)
     {
+        $creditorReference = $transactionInformation->getCreditorReference();
         $remittanceInformation = $this->createElement('RmtInf');
 
         $structured = $this->createElement('Strd');
@@ -197,8 +199,9 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $CdOrPrtry->appendChild($this->createElement('Cd', 'SCOR'));
         $tp->appendChild($CdOrPrtry);
 
-        if($creditorReferenceType != null) {
-            $issuer = $this->createElement('Issr', $creditorReferenceType);
+        /** @var $transactionInformation  \Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation */
+        if ($transactionInformation->getCreditorReferenceType() != null) {
+            $issuer = $this->createElement('Issr', $transactionInformation->getCreditorReferenceType());
             $tp->appendChild($issuer);
         }
 

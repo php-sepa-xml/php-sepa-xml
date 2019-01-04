@@ -185,7 +185,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // remittance 2.98 2.99
         if (strlen($transactionInformation->getCreditorReference()) > 0)
         {
-            $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation->getCreditorReference(), $transactionInformation->getCreditorReferenceType());
+            $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation);
             $CdtTrfTxInf->appendChild($remittanceInformation);
         } elseif (strlen($transactionInformation->getRemittanceInformation()) > 0) {
             $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
