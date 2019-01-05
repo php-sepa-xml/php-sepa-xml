@@ -23,6 +23,7 @@
 namespace Digitick\Sepa\DomBuilder;
 
 use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
@@ -50,7 +51,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
-     * @param boolean $withSchemaLocation define if xsi:schemaLocation tag is added to root
+     * @param boolean $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      */
     public function __construct($painFormat, $withSchemaLocation = true)
     {
@@ -182,11 +183,12 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with structured creditor reference.
      *
-     * @param string $creditorReference
+     * @param TransferInformationInterface $transactionInformation
      * @return \DOMElement
      */
-    public function getStructuredRemittanceElement($creditorReference)
+    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation)
     {
+        $creditorReference = $transactionInformation->getCreditorReference();
         $remittanceInformation = $this->createElement('RmtInf');
 
         $structured = $this->createElement('Strd');
@@ -196,6 +198,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $CdOrPrtry = $this->createElement('CdOrPrtry');
         $CdOrPrtry->appendChild($this->createElement('Cd', 'SCOR'));
         $tp->appendChild($CdOrPrtry);
+
+        if ($transactionInformation->getCreditorReferenceType() != null) {
+            $issuer = $this->createElement('Issr', $transactionInformation->getCreditorReferenceType());
+            $tp->appendChild($issuer);
+        }
 
         $reference = $this->createElement('Ref', $creditorReference);
 
