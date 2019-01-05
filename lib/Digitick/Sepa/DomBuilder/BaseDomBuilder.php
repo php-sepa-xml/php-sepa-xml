@@ -51,7 +51,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
-     * @param boolean $withSchemaLocation define if xsi:schemaLocation tag is added to root
+     * @param boolean $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      */
     public function __construct($painFormat, $withSchemaLocation = true)
     {
@@ -199,7 +199,6 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $CdOrPrtry->appendChild($this->createElement('Cd', 'SCOR'));
         $tp->appendChild($CdOrPrtry);
 
-        /** @var $transactionInformation  \Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation */
         if ($transactionInformation->getCreditorReferenceType() != null) {
             $issuer = $this->createElement('Issr', $transactionInformation->getCreditorReferenceType());
             $tp->appendChild($issuer);
