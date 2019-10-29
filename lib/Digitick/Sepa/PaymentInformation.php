@@ -236,7 +236,7 @@ class PaymentInformation
     public function setLocalInstrumentCode($localInstrumentCode)
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
+        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1', 'IN', 'ONCL'))) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
