@@ -163,6 +163,13 @@ class PaymentInformation
     protected $dateFormat = 'Y-m-d';
 
     /**
+     * Servicelevel used in payment, default is SEPA
+     *
+     * @var string
+     */
+    protected $serviceLevel = 'SEPA';
+
+    /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
@@ -516,5 +523,21 @@ class PaymentInformation
     public function setDueDateFormat($format)
     {
         $this->dateFormat = $format;
+    }
+
+    /**
+     * @param string $serviceLevel
+     */
+    public function setServiceLevel($serviceLevel)
+    {
+        $this->serviceLevel = $serviceLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceLevel()
+    {
+        return $this->serviceLevel;
     }
 }
