@@ -163,6 +163,13 @@ class PaymentInformation
     protected $dateFormat = 'Y-m-d';
 
     /**
+     * Servicelevel used in payment, default is SEPA
+     *
+     * @var string
+     */
+    protected $serviceLevel = 'SEPA';
+
+    /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
@@ -236,7 +243,7 @@ class PaymentInformation
     public function setLocalInstrumentCode($localInstrumentCode)
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
+        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1', 'IN', 'ONCL'))) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
@@ -516,5 +523,21 @@ class PaymentInformation
     public function setDueDateFormat($format)
     {
         $this->dateFormat = $format;
+    }
+
+    /**
+     * @param string $serviceLevel
+     */
+    public function setServiceLevel($serviceLevel)
+    {
+        $this->serviceLevel = $serviceLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceLevel()
+    {
+        return $this->serviceLevel;
     }
 }
