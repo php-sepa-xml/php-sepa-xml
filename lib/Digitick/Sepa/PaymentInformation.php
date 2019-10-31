@@ -579,7 +579,7 @@ class PaymentInformation
         $this->hideOriginAccountIBAN = true;
     }
 
-    public function isHiddenOriginAccountIBAN()
+    public function hasHiddenOriginAccountIBAN()
     {
         return $this->hideOriginAccountIBAN;
     }

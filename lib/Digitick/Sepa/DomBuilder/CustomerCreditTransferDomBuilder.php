@@ -124,7 +124,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $debtorAccount = $this->createElement('DbtrAcct');
         $id = $this->createElement('Id');
-        if ($paymentInformation->isHiddenOriginAccountIBAN() === false) {
+        if ($paymentInformation->hasHiddenOriginAccountIBAN() === false) {
             $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
         } else {
             $othr = $this->createElement('Othr');
