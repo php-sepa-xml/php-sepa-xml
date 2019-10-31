@@ -53,6 +53,18 @@ class GroupHeader
     public $initiatingPartyIdentificationScheme;
 
     /**
+     * Will use the ID instead of name in the header
+     *
+     * @var bool
+     */
+    protected $forceInitiatingPartyId = false;
+
+    /**
+     * @var bool
+     */
+    protected $hideControlSum = false;
+
+    /**
      * The Issuer.
      *
      * @var string
@@ -73,6 +85,11 @@ class GroupHeader
      * @var string
      */
     protected $initiatingPartyName;
+
+    /**
+     * @var bool
+     */
+    protected $hideInitiatingPartyName = false;
 
     /**
      * @var \DateTime
@@ -255,5 +272,44 @@ class GroupHeader
     public function getCreationDateTimeFormat()
     {
         return $this->creationDateTimeFormat;
+    }
+
+    public function forceInitiatingPartyId()
+    {
+        $this->forceInitiatingPartyId = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasForcedInitiatingPartyId()
+    {
+        return $this->forceInitiatingPartyId;
+    }
+
+    public function hideControlSum()
+    {
+        $this->hideControlSum = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasHiddenControlSum()
+    {
+        return $this->hideControlSum;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasHiddenInitiatingPartyName()
+    {
+        return $this->hideInitiatingPartyName;
+    }
+
+    public function hideInitiatingPartyName()
+    {
+        $this->hideInitiatingPartyName = true;
     }
 }

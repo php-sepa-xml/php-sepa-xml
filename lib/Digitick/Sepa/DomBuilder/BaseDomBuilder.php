@@ -119,13 +119,18 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         );
         $groupHeaderTag->appendChild($creationDateTime);
         $groupHeaderTag->appendChild($this->createElement('NbOfTxs', $groupHeader->getNumberOfTransactions()));
-        $groupHeaderTag->appendChild(
-            $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
-        );
+
+        if ($groupHeader->hasHiddenControlSum() === false) {
+            $groupHeaderTag->appendChild(
+                $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
+            );
+        }
 
         $initiatingParty = $this->createElement('InitgPty');
-        $initiatingPartyName = $this->createElement('Nm', $groupHeader->getInitiatingPartyName());
-        $initiatingParty->appendChild($initiatingPartyName);
+        if ($groupHeader->hasHiddenInitiatingPartyName() === false) {
+            $initiatingPartyName = $this->createElement('Nm', $groupHeader->getInitiatingPartyName());
+            $initiatingParty->appendChild($initiatingPartyName);
+        }
         if ($groupHeader->getInitiatingPartyId() !== null) {
             $id = $this->createElement('Id', $groupHeader->getInitiatingPartyId());
             $initiatingParty->appendChild($id);

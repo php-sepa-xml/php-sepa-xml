@@ -72,28 +72,31 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $this->currentPayment->appendChild($this->createElement('BtchBookg', $paymentInformation->getBatchBooking() ? 'true' : 'false'));
         }
 
-        $this->currentPayment->appendChild(
-            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
-        );
+        if ($paymentInformation->hasHiddenGeneralSettings() === false) {
+            $this->currentPayment->appendChild(
+                $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+            );
 
-        $this->currentPayment->appendChild(
-            $this->createElement('CtrlSum', $this->intToCurrency($paymentInformation->getControlSumCents()))
-        );
+            $this->currentPayment->appendChild(
+                $this->createElement('CtrlSum', $this->intToCurrency($paymentInformation->getControlSumCents()))
+            );
 
-        $paymentTypeInformation = $this->createElement('PmtTpInf');
-        if ($paymentInformation->getInstructionPriority()) {
-            $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
-            $paymentTypeInformation->appendChild($instructionPriority);
+            $paymentTypeInformation = $this->createElement('PmtTpInf');
+            if ($paymentInformation->getInstructionPriority()) {
+                $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
+                $paymentTypeInformation->appendChild($instructionPriority);
+            }
+            $serviceLevel = $this->createElement('SvcLvl');
+            $serviceLevel->appendChild($this->createElement('Cd', $paymentInformation->getServiceLevel()));
+            $paymentTypeInformation->appendChild($serviceLevel);
+
+            if ($paymentInformation->getCategoryPurposeCode()) {
+                $categoryPurpose = $this->createElement('CtgyPurp');
+                $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
+                $paymentTypeInformation->appendChild($categoryPurpose);
+            }
+            $this->currentPayment->appendChild($paymentTypeInformation);
         }
-        $serviceLevel = $this->createElement('SvcLvl');
-        $serviceLevel->appendChild($this->createElement('Cd', $paymentInformation->getServiceLevel()));
-        $paymentTypeInformation->appendChild($serviceLevel);
-        if ($paymentInformation->getCategoryPurposeCode()) {
-            $categoryPurpose = $this->createElement('CtgyPurp');
-            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
-            $paymentTypeInformation->appendChild($categoryPurpose);
-        }
-        $this->currentPayment->appendChild($paymentTypeInformation);
 
         if ($paymentInformation->getLocalInstrumentCode()) {
             $localInstrument = $this->createElement('LclInstr');
@@ -104,6 +107,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
+        if ($paymentInformation->getCountry()) {
+            $postalAddress = $this->createElement('PstlAdr');
+            $postalAddress->appendChild($this->createElement('Ctry', $paymentInformation->getCountry()));
+            $debtor->appendChild($postalAddress);
+        }
         $this->currentPayment->appendChild($debtor);
 
         if ($paymentInformation->getOriginBankPartyIdentification() !== null && $this->painFormat === 'pain.001.001.03') {
@@ -116,7 +124,16 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $debtorAccount = $this->createElement('DbtrAcct');
         $id = $this->createElement('Id');
-        $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
+        if ($paymentInformation->isHiddenOriginAccountIBAN() === false) {
+            $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
+        } else {
+            $othr = $this->createElement('Othr');
+            $schemeName = $this->createElement('SchmeNm');
+            $schemeName->appendChild($this->createElement('Cd', $paymentInformation->getOriginBankPartyIdentificationScheme()));
+            $othr->appendChild($this->createElement('Id', $paymentInformation->getOriginAccountIBAN()));
+            $othr->appendChild($schemeName);
+            $id->appendChild($othr);
+        }
         $debtorAccount->appendChild($id);
         if ($paymentInformation->getOriginAccountCurrency()) {
             $debtorAccount->appendChild($this->createElement('Ccy', $paymentInformation->getOriginAccountCurrency()));
@@ -124,11 +141,21 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($debtorAccount);
 
         $debtorAgent = $this->createElement('DbtrAgt');
-        $financialInstitutionId = $this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC());
+        if ($paymentInformation->getOriginAgentBIC() === null && $paymentInformation->getCountry()) {
+            $financialInstitutionId = $this->createElement('FinInstnId');
+            $postalAddress = $this->createElement('PstlAdr');
+            $postalAddress->appendChild($this->createElement('Ctry', $paymentInformation->getCountry()));
+            $financialInstitutionId->appendChild($postalAddress);
+        } else {
+            $financialInstitutionId = $this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC());
+        }
         $debtorAgent->appendChild($financialInstitutionId);
         $this->currentPayment->appendChild($debtorAgent);
 
-        $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
+        if ($paymentInformation->hasHiddenGeneralSettings() === false) {
+            $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
+        }
+
         $this->currentTransfer->appendChild($this->currentPayment);
     }
 
@@ -151,6 +178,31 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 
+        // Add payment settings
+        if ($transactionInformation->getServiceLevel() && $transactionInformation->getLocalInstrumentCode()) {
+            $paymentTypeInformation = $this->createElement('PmtTpInf');
+            $serviceLevel = $this->createElement('SvcLvl');
+            $serviceLevel->appendChild($this->createElement('Cd', $transactionInformation->getServiceLevel()));
+            $paymentTypeInformation->appendChild($serviceLevel);
+
+            if ($transactionInformation->getLocalInstrumentCode()) {
+                $localInstrumentCode = $this->createElement('LclInstrm');
+                $localInstrumentCode->appendChild(
+                    $this->createElement('Cd', $transactionInformation->getLocalInstrumentCode())
+                );
+                $paymentTypeInformation->appendChild($localInstrumentCode);
+            }
+
+            if ($transactionInformation->getCategoryPurposeCode()) {
+                $categoryPurpose = $this->createElement('CtgyPurp');
+                $categoryPurpose->appendChild(
+                    $this->createElement('Cd', $transactionInformation->getCategoryPurposeCode())
+                );
+                $paymentTypeInformation->appendChild($categoryPurpose);
+            }
+            $CdtTrfTxInf->appendChild($paymentTypeInformation);
+        }
+
         // Amount 2.42
         $amount = $this->createElement('Amt');
         $instructedAmount = $this->createElement(
@@ -160,6 +212,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $instructedAmount->setAttribute('Ccy', $transactionInformation->getCurrency());
         $amount->appendChild($instructedAmount);
         $CdtTrfTxInf->appendChild($amount);
+
+        // Add charge bearer
+        if ($transactionInformation->getChargeBearer()) {
+            $CdtTrfTxInf->appendChild($this->createElement('ChrgBr', $transactionInformation->getChargeBearer()));
+        }
 
         //Creditor Agent 2.77
         if ($transactionInformation->getBic()) {
@@ -271,7 +328,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $postalAddress = $this->createElement('PstlAdr');
 
-        // Gemerate country address node.
+        // Generate country address node.
         if ((bool)$transactionInformation->getCountry()) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
         }
