@@ -126,7 +126,7 @@ class PaymentInformation
     /**
      * @var array<TransferInformationInterface>
      */
-    protected $transfers = array();
+    protected $transfers = [];
 
     /**
      * Valid Payment Methods set by the TransferFile
@@ -170,6 +170,33 @@ class PaymentInformation
     protected $serviceLevel = 'SEPA';
 
     /**
+     * IBAN or BBAN
+     *
+     * @var string
+     */
+    protected $schemaName = 'IBAN';
+
+    /**
+     * @var bool
+     */
+    protected $hideControlSum = false;
+
+    /**
+     * @var bool
+     */
+    protected $hideOriginAccountIBAN = false;
+
+    /**
+     * @var bool
+     */
+    protected $hideGeneralSettings = false;
+
+    /**
+     * @var string
+     */
+    protected $country;
+
+    /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
      * @param string $originAgentBIC This is your BIC
@@ -185,7 +212,6 @@ class PaymentInformation
         $this->originAccountCurrency = $originAccountCurrency;
         $this->dueDate = new \DateTime();
     }
-
 
     /**
      * @param TransferInformationInterface $transfer
@@ -243,7 +269,7 @@ class PaymentInformation
     public function setLocalInstrumentCode($localInstrumentCode)
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1', 'IN', 'ONCL'))) {
+        if (!in_array($localInstrumentCode, ['B2B', 'CORE', 'COR1', 'IN', 'ONCL'])) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
@@ -295,7 +321,7 @@ class PaymentInformation
     public function setInstructionPriority($instructionPriority)
     {
         $instructionPriority = strtoupper($instructionPriority);
-        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
+        if (!in_array($instructionPriority, ['NORM', 'HIGH'])) {
             throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
         }
         $this->instructionPriority = $instructionPriority;
@@ -526,10 +552,17 @@ class PaymentInformation
     }
 
     /**
-     * @param string $serviceLevel
+     * @param $serviceLevel
+     *
+     * @throws InvalidArgumentException
      */
     public function setServiceLevel($serviceLevel)
     {
+        $serviceLevel = strtoupper($serviceLevel);
+        if (!in_array($serviceLevel, ['SEPA', 'NURG'])) {
+            throw new InvalidArgumentException("Invalid Service Level: $serviceLevel");
+        }
+
         $this->serviceLevel = $serviceLevel;
     }
 
@@ -539,5 +572,41 @@ class PaymentInformation
     public function getServiceLevel()
     {
         return $this->serviceLevel;
+    }
+
+    public function hideOriginAccountIBAN()
+    {
+        $this->hideOriginAccountIBAN = true;
+    }
+
+    public function hasHiddenOriginAccountIBAN()
+    {
+        return $this->hideOriginAccountIBAN;
+    }
+
+    public function hideGeneralSettings()
+    {
+        $this->hideGeneralSettings = true;
+    }
+
+    public function hasHiddenGeneralSettings()
+    {
+        return $this->hideGeneralSettings;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry(string $country)
+    {
+        $this->country = $country;
     }
 }

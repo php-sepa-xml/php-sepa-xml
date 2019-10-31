@@ -101,6 +101,26 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
+     * @var string
+     */
+    protected $localInstrumentCode;
+
+    /**
+     * @var string
+     */
+    protected $serviceLevel;
+
+    /**
+     * @var string
+     */
+    protected $chargeBearer;
+
+    /**
+     * @var string
+     */
+    protected $categoryPurposeCode;
+
+    /**
      * @param string $amount
      * @param string $iban
      * @param string $name
@@ -289,5 +309,73 @@ class BaseTransferInformation implements TransferInformationInterface
     public function setPostalAddress($postalAddress)
     {
         $this->postalAddress = $postalAddress;
+    }
+    /**
+     * @param string $localInstrumentCode
+     * @throws InvalidArgumentException
+     */
+    public function setLocalInstrumentCode($localInstrumentCode)
+    {
+        $localInstrumentCode = strtoupper($localInstrumentCode);
+        if (!in_array($localInstrumentCode, ['B2B', 'CORE', 'COR1', 'IN', 'ONCL'])) {
+            throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
+        }
+        $this->localInstrumentCode = $localInstrumentCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLocalInstrumentCode()
+    {
+        return $this->localInstrumentCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getServiceLevel()
+    {
+        return $this->serviceLevel;
+    }
+
+    /**
+     * @param string $serviceLevel
+     */
+    public function setServiceLevel(string $serviceLevel): void
+    {
+        $this->serviceLevel = $serviceLevel;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getChargeBearer()
+    {
+        return $this->chargeBearer;
+    }
+
+    /**
+     * @param string $chargeBearer
+     */
+    public function setChargeBearer(string $chargeBearer): void
+    {
+        $this->chargeBearer = $chargeBearer;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCategoryPurposeCode()
+    {
+        return $this->categoryPurposeCode;
+    }
+
+    /**
+     * @param string $categoryPurposeCode
+     */
+    public function setCategoryPurposeCode(string $categoryPurposeCode): void
+    {
+        $this->categoryPurposeCode = $categoryPurposeCode;
     }
 }
