@@ -37,7 +37,7 @@ abstract class BaseTransferFile implements TransferFileInterface
     /**
      * @var array<PaymentInformation>
      */
-    protected $paymentInformations;
+    protected $paymentInformations = [];
 
     /**
      * @param GroupHeader $groupHeader
