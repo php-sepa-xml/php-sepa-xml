@@ -168,7 +168,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
-        if (in_array($this->painFormat, array('pain.008.003.02'))) {
+        if (in_array($this->painFormat, array('pain.008.003.02', 'pain.008.001.02'))) {
             $addPostalAddress = false;
             $postalAddress = $this->createElement('PstlAdr');
             if ((bool)$transactionInformation->getCountry()) {
