@@ -3,8 +3,9 @@
 namespace tests;
 
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use PHPUnit\Framework\TestCase;
 
-class CustomerCreditTransferInformationTest extends \PHPUnit_Framework_TestCase
+class CustomerCreditTransferInformationTest extends TestCase
 {
     /**
      * Tests whether the EndToEndId equals the name if no other identifier was supplied

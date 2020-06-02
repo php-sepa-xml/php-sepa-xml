@@ -24,8 +24,9 @@ namespace tests;
 
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PHPUnit\Framework\TestCase;
 
-class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
+class CustomerDirectDebitFacadeTest extends TestCase
 {
     protected $schema;
 
@@ -34,7 +35,7 @@ class CustomerDirectDebitFacadeTest extends \PHPUnit_Framework_TestCase
      */
     protected $dom;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schema = __DIR__ . "/pain.008.002.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');

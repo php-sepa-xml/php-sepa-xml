@@ -27,11 +27,12 @@ use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Various schema validation tests.
  */
-class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCase
+class CustomerCreditValidationPain00100103Test extends TestCase
 {
     protected $schema;
 
@@ -40,7 +41,7 @@ class CustomerCreditValidationPain00100103Test extends \PHPUnit_Framework_TestCa
      */
     protected $dom;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schema = __DIR__ . "/pain.001.001.03.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');

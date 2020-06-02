@@ -22,14 +22,9 @@
 
 namespace tests;
 
-use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
-use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
-use Digitick\Sepa\GroupHeader;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PHPUnit\Framework\TestCase;
 
-class TestFileSanityCheckTest extends \PHPUnit_Framework_TestCase
+class TestFileSanityCheckTest extends TestCase
 {
     protected $schema;
 
@@ -38,9 +33,8 @@ class TestFileSanityCheckTest extends \PHPUnit_Framework_TestCase
      */
     protected $dom;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -56,7 +50,8 @@ class TestFileSanityCheckTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($validated);
     }
 
-    public function painProvider() {
+    public function painProvider()
+    {
         return array(
             array('pain.001.001.03'),
             array('pain.001.002.03'),
@@ -64,7 +59,6 @@ class TestFileSanityCheckTest extends \PHPUnit_Framework_TestCase
             array('pain.008.001.02'),
             array('pain.008.002.02'),
             array('pain.008.003.02'),
-
         );
     }
 }
