@@ -18,8 +18,13 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Digitick\\Sepa": "lib/"
+        "psr-4": {
+            "Digitick\\Sepa\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Digitick\\Sepa\\Tests\\": "tests/"
         }
     },
     "require": {
