@@ -13,8 +13,9 @@ use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PHPUnit\Framework\TestCase;
 
-class SumOutputTest extends \PHPUnit_Framework_TestCase
+class SumOutputTest extends TestCase
 {
     /**
      * @var \DOMXPath
@@ -59,10 +60,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         $this->directDebitXpath->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.008.002.02');
     }
 
-    /**
-     * @test
-     */
-    public function validSumIsCalculatedCorrectly()
+    public function testValidSumIsCalculatedCorrectly()
     {
         $this->createDirectDebitXpathObject('19.99');
         $controlSum = $this->directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
@@ -82,10 +80,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function floatSumIsCalculatedCorrectly()
+    public function testFloatSumIsCalculatedCorrectly()
     {
         $this->createDirectDebitXpathObject('19.999');
         $controlSum = $this->directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
@@ -105,10 +100,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function floatSumIsCalculatedCorrectlyWithNonEnglishLocale()
+    public function testFloatSumIsCalculatedCorrectlyWithNonEnglishLocale()
     {
         $result = setlocale(LC_ALL, 'es_ES.UTF-8', 'es_ES@UTF-8', 'spanish');
 
@@ -134,10 +126,7 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function floatsAreAcceptedIfBcMathExtensionIsAvailable()
+    public function testFloatsAreAcceptedIfBcMathExtensionIsAvailable()
     {
         if (!function_exists('bcscale')) {
             $this->markTestSkipped('no bcmath extension available');
@@ -151,12 +140,10 @@ class SumOutputTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1999, $transfer->getTransferAmount());
     }
 
-    /**
-     * @test
-     * @expectedException \Digitick\Sepa\Exception\InvalidArgumentException
-     */
-    public function exceptionIsThrownIfBcMathExtensionIsNotAvailableAndInputIsFloat()
+    public function testExceptionIsThrownIfBcMathExtensionIsNotAvailableAndInputIsFloat()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         if (function_exists('bcscale')) {
             $this->markTestSkipped('bcmath extension available, not possible to test exceptions');
         }

@@ -29,13 +29,11 @@ use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PHPUnit\Framework\TestCase;
 
-class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
+class DomBuilderFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function createReturnsCustomerCreditDomBuilderForCustomerCreditTransfer()
+    public function testCreateReturnsCustomerCreditDomBuilderForCustomerCreditTransfer()
     {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');
@@ -48,10 +46,7 @@ class DomBuilderFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function createReturnsCustomerDebitDomBuilderForCustomerDebitTransfer()
+    public function testCreateReturnsCustomerDebitDomBuilderForCustomerDebitTransfer()
     {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');

@@ -1,4 +1,7 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * SEPA file generator.
  *
@@ -19,13 +22,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-class CustomerDirectDebitTransferInformationTest extends \PHPUnit_Framework_TestCase
+class CustomerDirectDebitTransferInformationTest extends TestCase
 {
 
-    /**
-     * @test
-     */
-    public function hasAmendmentReturnsTrueForAmendments()
+    public function testHasAmendmentReturnsTrueForAmendments()
     {
         $transferInformation = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(
             100,

@@ -22,15 +22,15 @@
 
 namespace tests;
 
-use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use PHPUnit\Framework\TestCase;
 
-class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
+class CustomerDirectDebitValidationTest extends TestCase
 {
 
     /**
@@ -41,7 +41,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
@@ -145,15 +145,15 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
-     * @expectedExceptionMessage Payment must contain a SequenceType
-     *
      * @param string $schema
      *
      * @dataProvider provideSchema
      */
     public function testValidationFailureSeqType($schema)
     {
+        $this->expectException(InvalidTransferFileConfiguration::class);
+        $this->expectExceptionMessage('Payment must contain a SequenceType');
+
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
@@ -169,15 +169,15 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
-     * @expectedExceptionMessage Payment must contain a CreditorSchemeId
-     *
      * @param string $schema
      *
      * @dataProvider provideSchema
      */
     public function testValidationFailureCreditorId($schema)
     {
+        $this->expectException(InvalidTransferFileConfiguration::class);
+        $this->expectExceptionMessage('Payment must contain a CreditorSchemeId');
+
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 

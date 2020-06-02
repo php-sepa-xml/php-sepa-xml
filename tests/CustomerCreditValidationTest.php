@@ -23,15 +23,17 @@
 namespace tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
+use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Various schema validation tests.
  */
-class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
+class CustomerCreditValidationTest extends TestCase
 {
 
     /**
@@ -42,7 +44,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
@@ -133,7 +135,6 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that a transferfile without Payments throws understandable exception
-     * @expectedException \Digitick\Sepa\Exception\InvalidTransferFileConfiguration
      *
      * @param string $schema
      *
@@ -141,6 +142,8 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidTransferFileThrowsException($schema)
     {
+        $this->expectException(InvalidTransferFileConfiguration::class);
+
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 

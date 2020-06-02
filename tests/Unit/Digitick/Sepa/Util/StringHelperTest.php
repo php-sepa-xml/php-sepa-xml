@@ -3,11 +3,12 @@
 namespace Tests\Unit\Digitick\Sepa\Util;
 
 use Digitick\Sepa\Util\StringHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for StringHelper
  */
-class StringHelperTest extends \PHPUnit_Framework_TestCase
+class StringHelperTest extends TestCase
 {
 
     /**

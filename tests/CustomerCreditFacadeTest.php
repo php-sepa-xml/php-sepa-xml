@@ -3,11 +3,12 @@
 namespace Tests;
 
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CustomerCreditFacadeTest
  */
-class CustomerCreditFacadeTest extends \PHPUnit_Framework_TestCase
+class CustomerCreditFacadeTest extends TestCase
 {
 
     /**
