@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerCreditFacadeTest extends TestCase
 {
-
     /**
      * Test creation of file via Factory and Facade
      *
@@ -46,7 +45,7 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/" . $schema . ".xsd"));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
     }
 
     /**
@@ -58,7 +57,6 @@ class CustomerCreditFacadeTest extends TestCase
      */
     public function testValidFileCreationWithFacadeWithoutDebtorBic($schema)
     {
-
         $dom = new \DOMDocument('1.0', 'UTF-8');
 
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
@@ -83,7 +81,7 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/" . $schema . ".xsd"));
+        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
     }
 
     /**

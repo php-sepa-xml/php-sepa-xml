@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace tests;
+namespace Digitick\Sepa\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -44,8 +44,8 @@ class TestFileSanityCheckTest extends TestCase
      */
     public function testSanity($pain)
     {
-        $schema = __DIR__ . '/' . $pain . '.xsd';
-        $this->dom->load(__DIR__ . '/' . $pain . '.xml');
+        $schema = __DIR__ . '/fixtures/' . $pain . '.xsd';
+        $this->dom->load(__DIR__ . '/fixtures/' . $pain . '.xml');
         $validated = $this->dom->schemaValidate($schema);
         $this->assertTrue($validated);
     }

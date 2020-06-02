@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace tests;
+namespace Digitick\Sepa\Tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
@@ -43,7 +43,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = __DIR__ . "/pain.001.001.03.xsd";
+        $this->schema = __DIR__ . "/../fixtures/pain.001.001.03.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -52,7 +52,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
      */
     public function testSanity()
     {
-        $this->dom->load(__DIR__ . '/pain.001.001.03.xml');
+        $this->dom->load(__DIR__ . '/../fixtures/pain.001.001.03.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace Digitick\Sepa\Tests\Unit\TransferInformation;
 
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +12,7 @@ class CustomerCreditTransferInformationTest extends TestCase
      */
     public function testEndToEndIndentifierEqualsName()
     {
-        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
+        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp');
         $this->assertEquals('Their Corp', $information->getEndToEndIdentification());
     }
 
@@ -21,7 +21,7 @@ class CustomerCreditTransferInformationTest extends TestCase
      */
     public function testOptionalEndToEndIdentifier()
     {
-        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
+        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
 }

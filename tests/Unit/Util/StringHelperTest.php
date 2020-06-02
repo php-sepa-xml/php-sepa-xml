@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Digitick\Sepa\Util;
+namespace Digitick\Sepa\Tests\Unit\Util;
 
 use Digitick\Sepa\Util\StringHelper;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
  */
 class StringHelperTest extends TestCase
 {
-
     /**
      * Tests german character translation
      */
@@ -30,5 +29,4 @@ class StringHelperTest extends TestCase
 
         $this->assertEquals('Az09  :?,-(+.)', StringHelper::sanitizeString($string));
     }
-
 }
