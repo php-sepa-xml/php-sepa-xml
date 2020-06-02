@@ -1,5 +1,7 @@
 <?php
 
+namespace Digitick\Tests\Sepa\TransferInformation;
+
 use PHPUnit\Framework\TestCase;
 
 /**
