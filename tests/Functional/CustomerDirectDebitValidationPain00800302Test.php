@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace tests;
+namespace Digitick\Sepa\Tests;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
@@ -41,7 +41,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = __DIR__ . "/pain.008.003.02.xsd";
+        $this->schema = __DIR__ . "/../fixtures/pain.008.003.02.xsd";
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -50,7 +50,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
      */
     public function testSanity()
     {
-        $this->dom->load(__DIR__ . '/pain.008.003.02.xml');
+        $this->dom->load(__DIR__ . '/../fixtures/pain.008.003.02.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
     }

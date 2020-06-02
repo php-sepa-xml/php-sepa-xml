@@ -1,7 +1,9 @@
 <?php
 
-namespace Digitick\Tests\Sepa\TransferInformation;
+namespace Digitick\Sepa\Tests\Unit\TransferInformation;
 
+use Digitick\Sepa\Exception\InvalidArgumentException;
+use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,11 +28,28 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitTransferInformationTest extends TestCase
 {
+    /**
+     * Tests whether the EndToEndId equals the name if no other identifier was supplied
+     */
+    public function testEndToEndIndentifierEqualsName()
+    {
+        $information = new CustomerDirectDebitTransferInformation('100', 'DE12500105170648489890', 'Their Corp');
+        $this->assertEquals('Their Corp', $information->getEndToEndIdentification());
+    }
+
+    /**
+     * Tests whether the EndToEndId equals the supplied EndToEndId
+     */
+    public function testOptionalEndToEndIdentifier()
+    {
+        $information = new CustomerDirectDebitTransferInformation('100', 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
+        $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
+    }
 
     public function testHasAmendmentReturnsTrueForAmendments()
     {
-        $transferInformation = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(
-            100,
+        $transferInformation = new CustomerDirectDebitTransferInformation(
+            '100',
             'DE89370400440532013000',
             'Me'
         );
@@ -42,5 +61,35 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
         $transferInformation->setAmendedDebtorAccount(false);
         $transferInformation->setOriginalDebtorIban('DE89370400440532013000');
         $this->assertTrue($transferInformation->hasAmendments());
+    }
+
+    public function testFloatsAreAcceptedIfBcMathExtensionIsAvailable()
+    {
+        if (!function_exists('bcscale')) {
+            $this->markTestSkipped('no bcmath extension available');
+        }
+        $transfer = new CustomerDirectDebitTransferInformation(
+            '19.999',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(1999, $transfer->getTransferAmount());
+    }
+
+    public function testExceptionIsThrownIfBcMathExtensionIsNotAvailableAndInputIsFloat()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        if (function_exists('bcscale')) {
+            $this->markTestSkipped('bcmath extension available, not possible to test exceptions');
+        }
+        $transfer = new CustomerDirectDebitTransferInformation(
+            '19.999',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(1999, $transfer->getTransferAmount());
     }
 }

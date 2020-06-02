@@ -4,14 +4,13 @@
  * copyright 2017 blage.net Sören Rohweder
  */
 
-namespace Unit\Digitick\Sepa;
+namespace Digitick\Sepa\Tests\Unit;
 
 use Digitick\Sepa\PaymentInformation;
 use PHPUnit\Framework\TestCase;
 
 class PaymentInformationTest extends TestCase
 {
-
     public function testDateIsReturnedInDefaultFormat()
     {
         $pi = new PaymentInformation('1', 'DE121212121212121212', 'DE1212121212121212', 'Jon Doe');

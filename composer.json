@@ -28,10 +28,10 @@
         }
     },
     "require": {
+        "ext-dom": "*",
         "php": ">=7.2"
     },
     "require-dev": {
-        "ext-dom": "*",
         "phpunit/phpunit": "^9.0"
     },
     "config": {

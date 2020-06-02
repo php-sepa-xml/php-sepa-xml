@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace tests;
+namespace Digitick\Sepa\Tests;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
@@ -35,7 +35,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerCreditValidationTest extends TestCase
 {
-
     /**
      * @var \DOMDocument
      */
@@ -58,8 +57,8 @@ class CustomerCreditValidationTest extends TestCase
      */
     public function testSanity($schema)
     {
-        $this->dom->load(__DIR__ . '/' . $schema . '.xml');
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $this->dom->load(__DIR__ . '/../fixtures/' . $schema . '.xml');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
 
         $this->assertTrue($validated);
     }
@@ -95,7 +94,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -129,7 +128,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -349,7 +348,7 @@ class CustomerCreditValidationTest extends TestCase
 
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
@@ -484,7 +483,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -520,7 +519,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
