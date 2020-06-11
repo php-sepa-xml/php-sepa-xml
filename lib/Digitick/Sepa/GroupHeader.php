@@ -87,12 +87,12 @@ class GroupHeader
     /**
      * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.
      *                                      Part of the duplication check (unique daily reference).
-     *                                      The first 8 or 11 characters of <Msgld> must match the BIC of the
-     *                                      Instructing Agent. The rest of the field can be freely defined.
+     *                                      The HCT domestic default <Msgld> contains the prefix 'HUF-'
+     *                                      followed by the date+time using the format 'ymdHis'.
      * @param string $initiatingPartyName
      * @param boolean $isTest
      */
-    public function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
+    public function __construct($messageIdentification = 'HUF-'.date('ymdHis'), $initiatingPartyName, $isTest = false)
     {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;

@@ -80,20 +80,24 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $this->createElement('CtrlSum', $this->intToCurrency($paymentInformation->getControlSumCents()))
         );
 
-        $paymentTypeInformation = $this->createElement('PmtTpInf');
-        if ($paymentInformation->getInstructionPriority()) {
-            $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
-            $paymentTypeInformation->appendChild($instructionPriority);
+
+        // HCT domestic HUF payments are not SEPA, so we skip this
+        if ( $paymentInformation->getOriginAccountCurrency() !== 'HUF') {
+            $paymentTypeInformation = $this->createElement('PmtTpInf');
+            if ($paymentInformation->getInstructionPriority()) {
+                $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
+                $paymentTypeInformation->appendChild($instructionPriority);
+            }
+            $serviceLevel = $this->createElement('SvcLvl');
+            $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
+            $paymentTypeInformation->appendChild($serviceLevel);
+            if ($paymentInformation->getCategoryPurposeCode()) {
+                $categoryPurpose = $this->createElement('CtgyPurp');
+                $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
+                $paymentTypeInformation->appendChild($categoryPurpose);
+            }
+            $this->currentPayment->appendChild($paymentTypeInformation);
         }
-        $serviceLevel = $this->createElement('SvcLvl');
-        $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
-        $paymentTypeInformation->appendChild($serviceLevel);
-        if ($paymentInformation->getCategoryPurposeCode()) {
-            $categoryPurpose = $this->createElement('CtgyPurp');
-            $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
-            $paymentTypeInformation->appendChild($categoryPurpose);
-        }
-        $this->currentPayment->appendChild($paymentTypeInformation);
 
         if ($paymentInformation->getLocalInstrumentCode()) {
             $localInstrument = $this->createElement('LclInstr');
@@ -123,10 +127,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
         $this->currentPayment->appendChild($debtorAccount);
 
-        $debtorAgent = $this->createElement('DbtrAgt');
-        $financialInstitutionId = $this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC());
-        $debtorAgent->appendChild($financialInstitutionId);
-        $this->currentPayment->appendChild($debtorAgent);
+        // HCT domestic HUF payments dont need BIC, so we skip this
+        if ( $paymentInformation->getOriginAccountCurrency() !== 'HUF') {
+            $debtorAgent = $this->createElement('DbtrAgt');
+            $financialInstitutionId = $this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC());
+            $debtorAgent->appendChild($financialInstitutionId);
+            $this->currentPayment->appendChild($debtorAgent);
+        }
 
         $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
         $this->currentTransfer->appendChild($this->currentPayment);

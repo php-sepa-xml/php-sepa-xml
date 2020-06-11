@@ -165,17 +165,17 @@ class PaymentInformation
     /**
      * @param string $id
      * @param string $originAccountIBAN This is your IBAN
-     * @param string $originAgentBIC This is your BIC
      * @param string $originName This is your Name
-     * @param string $originAccountCurrency
+     * @param string $originAccountCurrency The HCT defaults to HUF
+     * @param string $originAgentBIC Not required for HCT
      */
-    public function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR')
+    public function __construct($id, $originAccountIBAN, $originName, $originAccountCurrency = 'HUF', $originAgentBIC = null)
     {
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
-        $this->originAgentBIC = $originAgentBIC;
         $this->originName = StringHelper::sanitizeString($originName);
         $this->originAccountCurrency = $originAccountCurrency;
+        $this->originAgentBIC = $originAgentBIC;
         $this->dueDate = new \DateTime();
     }
 
