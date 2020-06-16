@@ -27,6 +27,9 @@ use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 class DomBuilderFactory
 {
+    /**
+     * @throws InvalidArgumentException
+     **/
     public static function createDomBuilder(TransferFileInterface $transferFile, $painFormat = '', $withSchemaLocation = true)
     {
         $transferFileClass = get_class($transferFile);

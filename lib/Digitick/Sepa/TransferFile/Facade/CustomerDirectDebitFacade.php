@@ -61,16 +61,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($paymentInformation['localInstrumentCode'])) {
             $payment->setLocalInstrumentCode($paymentInformation['localInstrumentCode']);
         }
-        if (isset($paymentInformation['dueDate'])) {
-            if ($paymentInformation['dueDate'] instanceof \DateTime) {
-                $payment->setDueDate($paymentInformation['dueDate']);
-            } else {
-                $payment->setDueDate(new \DateTime($paymentInformation['dueDate']));
-            }
-        } else {
-            $payment->setDueDate(new \DateTime(date('Y-m-d', strtotime('now + 5 days'))));
+        $payment->setDueDate($this->createDueDateFromPaymentInformation($paymentInformation, '+5 day'));
+        if (isset($paymentInformation['batchBooking'])) {
+            $payment->setBatchBooking($paymentInformation['batchBooking']);
         }
-
         $this->payments[$paymentName] = $payment;
 
         return $payment;

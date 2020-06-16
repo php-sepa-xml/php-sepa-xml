@@ -201,6 +201,7 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setDueDate(new \DateTime('20.11.2012'));
+        $payment->setInstructionPriority('NORM');
 
         $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
@@ -233,6 +234,70 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         //Originating Name
         $originName = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
         $this->assertEquals('My Corp', $originName->item(0)->textContent);
+    }
+
+    /**
+     * Test the payment informations in the xml
+     *
+     * @param string[] $schema
+     *
+     * @dataProvider provideAddressTests
+     */
+    public function testCreditorAddressGeneration(array $address)
+    {
+        $schema = "pain.001.001.03"; // Addresses are only supported using this pain format.
+
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setDueDate(new \DateTime('20.11.2012'));
+
+        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setRemittanceInformation('Transaction description');
+
+        $country = $address[0];
+        $addressLines = $address[1];
+        $transfer->setCountry($country);
+        $transfer->setPostalAddress($addressLines);
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $doc = new \DOMDocument();
+        $doc->loadXML($xml);
+
+        $xpathDoc = new \DOMXPath($doc);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+
+        // Creditor country is correctly added:
+        $originAddressCountry = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
+        // if country is null, whole node should not exist in document.
+        if (is_null($country)) {
+            $this->assertNull($originAddressCountry->item(0));
+        } else {
+            $this->assertEquals($country, $originAddressCountry->item(0)->textContent);
+        }
+
+        // Creditor address lines are correctly added:
+        $originAddressLines = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine');
+
+        // $addressLines could be string instead of array. Ensure array for easier testing.
+        if (!is_array($addressLines)) {
+            $addressLines = array($addressLines);
+        }
+
+        // check that all address lines do (not) exist and match the expected inputs.
+        for ($index = 0; $index < count($addressLines); $index++) {
+            if (is_null($addressLines[$index])) {
+                $this->assertNull($originAddressLines->item($index));
+            } else {
+                $this->assertEquals($addressLines[$index], $originAddressLines->item($index)->textContent);
+            }
+        }
     }
 
     /**
@@ -481,4 +546,17 @@ class CustomerCreditValidationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return string[]
+     */
+    public function provideAddressTests()
+    {
+        return array(
+            array(array('CH', array('Teststreet 1', '21345 Somewhere'))),
+            array(array(null, array('Teststreet 2', null))),
+            array(array('DE', array('Teststreet 3'))),
+            array(array('NL', '21456 Rightthere')),
+            array(array('NL', array())),
+        );
+    }
 }
