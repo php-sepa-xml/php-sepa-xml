@@ -17,7 +17,7 @@ $customerCredit->addPaymentInfo('firstPayment', array(
 ));
 // Add a Single Transaction to the named payment
 $customerCredit->addTransfer('firstPayment', array(
-    'amount'                  => '500',
+    'amount'                  => 500,
     'creditorIban'            => 'FI1350001540000056',
     'creditorBic'             => 'OKOYFIHH',
     'creditorName'            => 'Their Company',
@@ -34,7 +34,7 @@ $groupHeader = new GroupHeader('SEPA File Identifier', 'Your Company Name');
 $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
 $transfer = new CustomerCreditTransferInformation(
-    '0.02', // Amount
+    2, // Amount
     'FI1350001540000056', //IBAN of creditor
     'Their Corp' //Name of Creditor
 );
