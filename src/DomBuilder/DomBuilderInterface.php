@@ -37,33 +37,21 @@ interface DomBuilderInterface
 {
     /**
      * Build the root of the document
-     *
-     * @param TransferFileInterface $transferFile
-     * @return mixed
      */
-    public function visitTransferFile(TransferFileInterface $transferFile);
+    public function visitTransferFile(TransferFileInterface $transferFile): void;
 
     /**
      * Add GroupHeader Information to the document
-     *
-     * @param GroupHeader $groupHeader
-     * @return mixed
      */
-    public function visitGroupHeader(GroupHeader $groupHeader);
+    public function visitGroupHeader(GroupHeader $groupHeader): void;
 
     /**
      * Crawl PaymentInformation containing the Transactions
-     *
-     * @param PaymentInformation $paymentInformation
-     * @return mixed
      */
-    public function visitPaymentInformation(PaymentInformation $paymentInformation);
+    public function visitPaymentInformation(PaymentInformation $paymentInformation): void;
 
     /**
      * Crawl Transactions
-     *
-     * @param TransferInformationInterface $transactionInformation
-     * @return mixed
      */
-    public function visitTransferInformation(TransferInformationInterface $transactionInformation);
+    public function visitTransferInformation(TransferInformationInterface $transactionInformation): void;
 }

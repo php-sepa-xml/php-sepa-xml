@@ -5,6 +5,7 @@ namespace Digitick\Sepa\TransferFile\Facade;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 /**
  * Class CustomerCreditFacade
@@ -13,14 +14,17 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 {
 
     /**
-     * @param string $paymentName
-     * @param array  $paymentInformation
+     * @param array{
+     *             id: string,
+     *             debtorName: string,
+     *             debtorAccountIBAN: string,
+     *             debtorAgentBIC?: string,
+     *             dueDate?: string|\DateTime
+     *             } $paymentInformation
      *
      * @throws InvalidArgumentException
-     *
-     * @return PaymentInformation
      */
-    public function addPaymentInfo($paymentName, array $paymentInformation)
+    public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
@@ -41,14 +45,22 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
-     * @param string $paymentName
-     * @param array  $transferInformation
+     * @param array{
+     *             amount: int,
+     *             creditorIban: string,
+     *             creditorName: string,
+     *             creditorBic?: string,
+     *             creditorReference?: string,
+     *             remittanceInformation: string,
+     *             endToEndId?: string,
+     *             instructionId?: string
+     *             } $transferInformation
      *
      * @throws InvalidArgumentException
      *
      * @return CustomerCreditTransferInformation
      */
-    public function addTransfer($paymentName, array $transferInformation)
+    public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
         if (!isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf(
@@ -80,7 +92,7 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
                 $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
             );
         }
-        
+
         if (isset($transferInformation['instructionId'])) {
             $transfer->setInstructionId($transferInformation['instructionId']);
         }

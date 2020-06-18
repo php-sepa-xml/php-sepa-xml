@@ -22,22 +22,23 @@
 namespace Digitick\Sepa\TransferFile;
 
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
+use Digitick\Sepa\Exception\InvalidTransferTypeException;
 use Digitick\Sepa\GroupHeader;
 
 interface TransferFileInterface
 {
     public function __construct(GroupHeader $groupHeader);
 
-    /**
-     * @return GroupHeader
-     */
-    public function getGroupHeader();
+    public function getGroupHeader(): GroupHeader;
 
     /**
      * Validate the transferfile
-     * @return mixed
+     *
+     * @throws InvalidTransferFileConfiguration
+     * @throws InvalidTransferTypeException
      */
-    public function validate();
+    public function validate(): void;
 
-    public function accept(DomBuilderInterface $domBuilder);
+    public function accept(DomBuilderInterface $domBuilder): void;
 }

@@ -31,18 +31,15 @@ use Digitick\Sepa\GroupHeader;
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
 
-    public function __construct($painFormat = 'pain.008.002.02')
+    public function __construct(string $painFormat = 'pain.008.002.02')
     {
         parent::__construct($painFormat);
     }
 
     /**
      * Build the root of the document
-     *
-     * @param  TransferFileInterface $transferFile
-     * @return mixed
      */
-    public function visitTransferFile(TransferFileInterface $transferFile)
+    public function visitTransferFile(TransferFileInterface $transferFile): void
     {
         $this->currentTransfer = $this->doc->createElement('CstmrDrctDbtInitn');
         $this->root->appendChild($this->currentTransfer);
@@ -50,11 +47,8 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl PaymentInformation containing the Transactions
-     *
-     * @param  PaymentInformation $paymentInformation
-     * @return mixed
      */
-    public function visitPaymentInformation(PaymentInformation $paymentInformation)
+    public function visitPaymentInformation(PaymentInformation $paymentInformation): void
     {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
@@ -127,11 +121,8 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl Transactions
-     *
-     * @param  TransferInformationInterface $transactionInformation
-     * @return mixed
      */
-    public function visitTransferInformation(TransferInformationInterface $transactionInformation)
+    public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
         /** @var  $transactionInformation CustomerDirectDebitTransferInformation */
         $directDebitTransactionInformation = $this->createElement('DrctDbtTxInf');
@@ -239,11 +230,8 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Add the specific OrgId element for the format 'pain.008.001.02'
-     *
-     * @param  GroupHeader $groupHeader
-     * @return mixed
      */
-    public function visitGroupHeader(GroupHeader $groupHeader)
+    public function visitGroupHeader(GroupHeader $groupHeader): void
     {
         parent::visitGroupHeader($groupHeader);
 
