@@ -24,4 +24,54 @@ class CustomerCreditTransferInformationTest extends TestCase
         $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
+
+    public function testIntAsStringAreAccepted()
+    {
+        $transfer = new CustomerCreditTransferInformation(
+            '19',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(19, $transfer->getTransferAmount());
+    }
+
+    public function testIntAreAccepted()
+    {
+        $transfer = new CustomerCreditTransferInformation(
+            19,
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(19, $transfer->getTransferAmount());
+    }
+
+    public function testFloatsAsStringAreAcceptedIfBcMathExtensionIsAvailable()
+    {
+        if (!function_exists('bcscale')) {
+            $this->markTestSkipped('no bcmath extension available');
+        }
+        $transfer = new CustomerCreditTransferInformation(
+            '19.999',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(1999, $transfer->getTransferAmount());
+    }
+
+    public function testFloatsAreAcceptedIfBcMathExtensionIsAvailable()
+    {
+        if (!function_exists('bcscale')) {
+            $this->markTestSkipped('no bcmath extension available');
+        }
+        $transfer = new CustomerCreditTransferInformation(
+            19.999,
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(1999, $transfer->getTransferAmount());
+    }
 }
