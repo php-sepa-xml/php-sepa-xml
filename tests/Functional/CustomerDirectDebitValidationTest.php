@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Digitick\Sepa\Tests;
+namespace Digitick\Sepa\Tests\Functional;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
@@ -72,7 +72,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
@@ -108,7 +108,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');
@@ -157,7 +157,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Their Corp');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->addTransfer($transfer);
@@ -181,7 +181,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Their Corp');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
@@ -209,7 +209,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
         $payment->setCreditorId('Only A-Z without äöüßÄÖÜ creditorSchemeId');
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ debtorName');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ debtorName');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Only A-Z without äöüßÄÖÜ remittanceInformation');
         $transfer->setMandateSignDate(new \DateTime());
@@ -264,7 +264,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
 
-        $transfer = new CustomerDirectDebitTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerDirectDebitTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setMandateSignDate(new \DateTime('16.08.2013'));
         $transfer->setMandateId('ABCDE');

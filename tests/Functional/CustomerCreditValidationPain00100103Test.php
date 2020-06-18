@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Digitick\Sepa\Tests;
+namespace Digitick\Sepa\Tests\Functional;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
@@ -69,7 +69,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $groupHeader->setIssuer('Issuing Party');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         if ($scenario['bic'] !== '') {
             $transfer->setBic($scenario['bic']);
         }

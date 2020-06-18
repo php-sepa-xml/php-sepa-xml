@@ -25,7 +25,7 @@ namespace Digitick\Sepa\TransferInformation;
 class CustomerCreditTransferInformation extends BaseTransferInformation
 {
     /**
-     * @param string $amount
+     * @param int $amount amount in cents
      * @param string $iban
      * @param string $name
      * @param string $identification

@@ -27,3 +27,4 @@ Session.vim
 bin/
 /vendor/
 composer.lock
+.phpunit.result.cache
