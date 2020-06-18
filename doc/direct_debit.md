@@ -22,7 +22,7 @@ $directDebit->addPaymentInfo('firstPayment', array(
 ));
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
-    'amount'                => '500',
+    'amount'                => 500,
     'debtorIban'            => 'FI1350001540000056',
     'debtorBic'             => 'OKOYFIHH',
     'debtorName'            => 'Their Company',
@@ -61,7 +61,7 @@ $directDebit->addPaymentInfo('firstPayment', array(
 ));
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
-    'amount'                => '500',
+    'amount'                => 500,
     'debtorIban'            => 'FI1350001540000056',
     'debtorBic'             => 'OKOYFIHH',
     'debtorName'            => 'Their Company',
@@ -79,7 +79,7 @@ $directDebit->asXML();
 ```php
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
-    'amount'                  => '500',
+    'amount'                  => 500,
     'creditorIban'            => 'FI1350001540000056',
     'creditorBic'             => 'OKOYFIHH',
     'creditorName'            => 'Their Company',
