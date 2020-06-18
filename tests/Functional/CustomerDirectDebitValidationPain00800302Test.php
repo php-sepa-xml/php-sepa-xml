@@ -32,6 +32,9 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationPain00800302Test extends TestCase
 {
+    /**
+     * @var string
+     */
     protected $schema;
 
     /**
@@ -48,7 +51,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
     /**
      * Sanity check: test reference file with XSD.
      */
-    public function testSanity()
+    public function testSanity(): void
     {
         $this->dom->load(__DIR__ . '/../fixtures/pain.008.003.02.xml');
         $validated = $this->dom->schemaValidate($this->schema);
@@ -58,7 +61,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
     /**
      * Test a Transfer file with one payment and one transaction without BIC provided
      */
-    public function test_given_country_is_returned_For_path()
+    public function testGivenCountryIsReturnedForPath(): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -104,7 +107,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
     /**
      * Test a Transfer file with one payment and one transaction without BIC provided
      */
-    public function test_multiple_address_lines_are_added_with_array()
+    public function testMultipleAddressLinesAreAddedWithArray(): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -145,7 +148,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function testValidationFailureSeqType()
+    public function testValidationFailureSeqType(): void
     {
         $this->expectException(InvalidTransferFileConfiguration::class);
         $this->expectExceptionMessage('Payment must contain a SequenceType');
@@ -164,7 +167,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $sepaFile->accept($domBuilder);
     }
 
-    public function testValidationFailureCreditorId()
+    public function testValidationFailureCreditorId(): void
     {
         $this->expectException(InvalidTransferFileConfiguration::class);
         $this->expectExceptionMessage('Payment must contain a CreditorSchemeId');

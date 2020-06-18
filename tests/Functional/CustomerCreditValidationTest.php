@@ -51,11 +51,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Sanity check: test reference file with XSD.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSanity($schema)
+    public function testSanity(string $schema): void
     {
         $this->dom->load(__DIR__ . '/../fixtures/' . $schema . '.xml');
         $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
@@ -66,11 +64,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test a transfer file with one payment and one transaction.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTrans($schema)
+    public function testSinglePaymentSingleTrans(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -101,11 +97,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test a transfer file with one payment and several transactions.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentMultiTrans($schema)
+    public function testSinglePaymentMultiTrans(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -135,11 +129,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test that a transferfile without Payments throws understandable exception
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testInvalidTransferFileThrowsException($schema)
+    public function testInvalidTransferFileThrowsException(string $schema): void
     {
         $this->expectException(InvalidTransferFileConfiguration::class);
 
@@ -153,11 +145,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test correct calulation of controlsum and transaction count
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testControlSumAndTransactionCount($schema)
+    public function testControlSumAndTransactionCount(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -193,11 +183,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test the payment informations in the xml
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testPaymentMetaData($schema)
+    public function testPaymentMetaData(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -241,11 +229,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test the payment informations in the xml
      *
-     * @param string[] $schema
-     *
      * @dataProvider provideAddressTests
      */
-    public function testCreditorAddressGeneration(array $address)
+    public function testCreditorAddressGeneration(array $address): void
     {
         $schema = "pain.001.001.03"; // Addresses are only supported using this pain format.
 
@@ -305,11 +291,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test a transfer file with several payments, several transactions each.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testMultiPaymentMultiTrans($schema)
+    public function testMultiPaymentMultiTrans(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -365,11 +349,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test the payment informations in the xml
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testUmlautConversion($schema)
+    public function testUmlautConversion(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -412,11 +394,9 @@ class CustomerCreditValidationTest extends TestCase
      * There are different representations possible for IsoDateTime:
      * http://www.swift.com/assets/corporates/documents/business_areas/ebam_standards_mx/business/x68910b9357eed3cf49770d42b07d70f1.htm
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentOtherCreationDateTimeFormat($schema)
+    public function testSinglePaymentOtherCreationDateTimeFormat(string $schema): void
     {
         $dateTimeFormat = 'Y-m-d\TH:i:s.000P';
 
@@ -456,11 +436,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test a transfer file with one payment without remittance information
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTransWithoutRemitttanceInformation($schema)
+    public function testSinglePaymentSingleTransWithoutRemitttanceInformation(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -490,11 +468,9 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test a transfer file with one payment without remittance information
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTransWithStructuredCreditorReference($schema)
+    public function testSinglePaymentSingleTransWithStructuredCreditorReference(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
@@ -536,10 +512,7 @@ class CustomerCreditValidationTest extends TestCase
 
     }
 
-    /**
-     * @return array
-     */
-    public function provideSchema()
+    public function provideSchema(): iterable
     {
         return array(
             array("pain.001.001.03"),
@@ -548,15 +521,11 @@ class CustomerCreditValidationTest extends TestCase
         );
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideAddressTests()
+    public function provideAddressTests(): iterable
     {
         return array(
             array(array('CH', array('Teststreet 1', '21345 Somewhere'))),
-            array(array(null, array('Teststreet 2', null))),
-            array(array('DE', array('Teststreet 3'))),
+            array(array('DE', array('Teststreet 2'))),
             array(array('NL', '21456 Rightthere')),
             array(array('NL', array())),
         );

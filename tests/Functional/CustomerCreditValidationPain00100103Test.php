@@ -34,6 +34,9 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerCreditValidationPain00100103Test extends TestCase
 {
+    /**
+     * @var string
+     */
     protected $schema;
 
     /**
@@ -50,7 +53,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
     /**
      * Sanity check: test reference file with XSD.
      */
-    public function testSanity()
+    public function testSanity(): void
     {
         $this->dom->load(__DIR__ . '/../fixtures/pain.001.001.03.xml');
         $validated = $this->dom->schemaValidate($this->schema);
@@ -62,7 +65,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
      *
      * @dataProvider scenarios
      */
-    public function testSinglePaymentSingleTransWithMoreInfo($scenario)
+    public function testSinglePaymentSingleTransWithMoreInfo(array $scenario): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $groupHeader->setInitiatingPartyId('XXXXXXXXXX');
@@ -97,10 +100,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $this->assertTrue($validated);
     }
 
-    /**
-     * @return array
-     */
-    public function scenarios()
+    public function scenarios(): iterable
     {
         return array(
             array(

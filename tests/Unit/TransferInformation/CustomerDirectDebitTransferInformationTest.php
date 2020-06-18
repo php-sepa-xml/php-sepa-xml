@@ -31,7 +31,7 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
     /**
      * Tests whether the EndToEndId equals the name if no other identifier was supplied
      */
-    public function testEndToEndIndentifierEqualsName()
+    public function testEndToEndIndentifierEqualsName(): void
     {
         $information = new CustomerDirectDebitTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
         $this->assertEquals('Their Corp', $information->getEndToEndIdentification());
@@ -40,13 +40,13 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
     /**
      * Tests whether the EndToEndId equals the supplied EndToEndId
      */
-    public function testOptionalEndToEndIdentifier()
+    public function testOptionalEndToEndIdentifier(): void
     {
         $information = new CustomerDirectDebitTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
 
-    public function testHasAmendmentReturnsTrueForAmendments()
+    public function testHasAmendmentReturnsTrueForAmendments(): void
     {
         $transferInformation = new CustomerDirectDebitTransferInformation(
             100,
@@ -63,7 +63,7 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
         $this->assertTrue($transferInformation->hasAmendments());
     }
 
-    public function testIntAreAccepted()
+    public function testIntAreAccepted(): void
     {
         $transfer = new CustomerDirectDebitTransferInformation(
             19,
