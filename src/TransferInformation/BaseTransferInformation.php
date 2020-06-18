@@ -101,7 +101,9 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
-     * @param string $amount
+     * @param string|int|float $amount If int is provided, the amount should be in cents
+     *                                 If float is provided, the amount will be multiply by 100
+     *                                 If string is provided, it depends on the value
      * @param string $iban
      * @param string $name
      *

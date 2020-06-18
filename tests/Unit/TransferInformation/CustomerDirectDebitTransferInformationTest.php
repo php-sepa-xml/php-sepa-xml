@@ -63,13 +63,49 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
         $this->assertTrue($transferInformation->hasAmendments());
     }
 
-    public function testFloatsAreAcceptedIfBcMathExtensionIsAvailable()
+    public function testIntAsStringAreAccepted()
+    {
+        $transfer = new CustomerDirectDebitTransferInformation(
+            '19',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(19, $transfer->getTransferAmount());
+    }
+
+    public function testIntAreAccepted()
+    {
+        $transfer = new CustomerDirectDebitTransferInformation(
+            19,
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(19, $transfer->getTransferAmount());
+    }
+
+    public function testFloatsAsStringAreAcceptedIfBcMathExtensionIsAvailable()
     {
         if (!function_exists('bcscale')) {
             $this->markTestSkipped('no bcmath extension available');
         }
         $transfer = new CustomerDirectDebitTransferInformation(
             '19.999',
+            'IbanOfDebitor',
+            'DebitorName'
+        );
+
+        $this->assertEquals(1999, $transfer->getTransferAmount());
+    }
+
+    public function testFloatsAreAcceptedIfBcMathExtensionIsAvailable()
+    {
+        if (!function_exists('bcscale')) {
+            $this->markTestSkipped('no bcmath extension available');
+        }
+        $transfer = new CustomerDirectDebitTransferInformation(
+            19.999,
             'IbanOfDebitor',
             'DebitorName'
         );
