@@ -36,7 +36,7 @@ class CustomerCreditFacadeTest extends TestCase
         $credit->addTransfer(
             'firstPayment',
             array(
-                'amount' => '500',
+                'amount' => 500,
                 'creditorIban' => 'FI1350001540000056',
                 'creditorBic' => 'OKOYFIHH',
                 'creditorName' => 'Their Company',
@@ -73,7 +73,7 @@ class CustomerCreditFacadeTest extends TestCase
         $credit->addTransfer(
             'firstPayment',
             array(
-                'amount' => '500',
+                'amount' => 500,
                 'creditorIban' => 'FI1350001540000056',
                 'creditorName' => 'Their Company',
                 'remittanceInformation' => 'Purpose of this credit'

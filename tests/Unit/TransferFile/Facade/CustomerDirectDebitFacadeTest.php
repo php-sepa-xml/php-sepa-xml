@@ -83,7 +83,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     public function testValidSumIsCalculatedCorrectly()
     {
-        $directDebitXpath = $this->createDirectDebitXpathObject('19.99');
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
         $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
@@ -103,7 +103,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     public function testFloatSumIsCalculatedCorrectly()
     {
-        $directDebitXpath = $this->createDirectDebitXpathObject('19.999');
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
         $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
@@ -129,7 +129,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
             $this->markTestSkipped('spanish locale is not available');
         }
 
-        $directDebitXpath = $this->createDirectDebitXpathObject('19.999');
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
         $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
@@ -173,7 +173,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $directDebit->addTransfer(
             'firstPayment',
             array(
-                'amount' => '500',
+                'amount' => 500,
                 'debtorIban' => 'FI1350001540000056',
                 'debtorBic' => 'OKOYFIHH',
                 'debtorName' => 'Their Company',
@@ -219,7 +219,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $directDebit->addTransfer(
             'firstPayment',
             array(
-                'amount' => '500',
+                'amount' => 500,
                 'debtorIban' => 'FI1350001540000056',
                 'debtorName' => 'Their Company',
                 'debtorMandate' => 'AB12345',

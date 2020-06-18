@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Digitick\Sepa\Tests;
+namespace Digitick\Sepa\Tests\Functional;
 
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
@@ -75,7 +75,7 @@ class CustomerCreditValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
@@ -111,12 +111,12 @@ class CustomerCreditValidationTest extends TestCase
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction description');
         $payment->addTransfer($transfer);
 
-        $transfer = new CustomerCreditTransferInformation('5000.00', 'BE30001216371411', 'GHI Semiconductors');
+        $transfer = new CustomerCreditTransferInformation(500000, 'BE30001216371411', 'GHI Semiconductors');
         $transfer->setBic('DDDDBEBB');
         $transfer->setRemittanceInformation('Transaction description');
         $payment->addTransfer($transfer);
@@ -163,12 +163,12 @@ class CustomerCreditValidationTest extends TestCase
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction description');
         $payment->addTransfer($transfer);
 
-        $transfer = new CustomerCreditTransferInformation('5000.00', 'BE30001216371411', 'GHI Semiconductors');
+        $transfer = new CustomerCreditTransferInformation(500000, 'BE30001216371411', 'GHI Semiconductors');
         $transfer->setBic('DDDDBEBB');
         $transfer->setRemittanceInformation('Transaction description');
         $payment->addTransfer($transfer);
@@ -205,7 +205,7 @@ class CustomerCreditValidationTest extends TestCase
         $payment->setDueDate(new \DateTime('20.11.2012'));
         $payment->setInstructionPriority('NORM');
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction description');
         $payment->addTransfer($transfer);
@@ -254,7 +254,7 @@ class CustomerCreditValidationTest extends TestCase
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         $payment->setDueDate(new \DateTime('20.11.2012'));
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction description');
 
@@ -316,12 +316,12 @@ class CustomerCreditValidationTest extends TestCase
 
         $payment1 = new PaymentInformation('account settlement', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
 
-        $transfer1 = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer1 = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer1->setBic('OKOYFIHH');
         $transfer1->setRemittanceInformation('Transaction description');
         $payment1->addTransfer($transfer1);
 
-        $transfer2 = new CustomerCreditTransferInformation('5000.00', 'BE30001216371411', 'GHI Semiconductors');
+        $transfer2 = new CustomerCreditTransferInformation(500000, 'BE30001216371411', 'GHI Semiconductors');
         $transfer2->setBic('DDDDBEBB');
         $transfer2->setRemittanceInformation('Transaction description');
         $payment1->addTransfer($transfer2);
@@ -330,12 +330,12 @@ class CustomerCreditValidationTest extends TestCase
 
         $payment2 = new PaymentInformation('account settlement', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
 
-        $transfer1 = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer1 = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer1->setBic('OKOYFIHH');
         $transfer1->setRemittanceInformation('Transaction description');
         $payment2->addTransfer($transfer1);
 
-        $transfer2 = new CustomerCreditTransferInformation('5000.00', 'BE30001216371411', 'GHI Semiconductors');
+        $transfer2 = new CustomerCreditTransferInformation(500000, 'BE30001216371411', 'GHI Semiconductors');
         $transfer2->setBic('DDDDBEBB');
         $transfer2->setRemittanceInformation('Transaction description');
         $payment2->addTransfer($transfer2);
@@ -378,7 +378,7 @@ class CustomerCreditValidationTest extends TestCase
         $payment->setSequenceType(PaymentInformation::S_ONEOFF);
         $payment->setCreditorId('Only A-Z without äöüßÄÖÜ creditorSchemeId');
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ creditorName');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Only A-Z without äöüßÄÖÜ creditorName');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Only A-Z without äöüßÄÖÜ remittanceInformation');
         $payment->addTransfer($transfer);
@@ -425,7 +425,7 @@ class CustomerCreditValidationTest extends TestCase
         $groupHeader->setCreationDateTimeFormat($dateTimeFormat);
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
@@ -465,7 +465,7 @@ class CustomerCreditValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
@@ -499,7 +499,7 @@ class CustomerCreditValidationTest extends TestCase
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $transfer = new CustomerCreditTransferInformation('0.02', 'FI1350001540000056', 'Their Corp');
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
         $transfer->setBic('OKOYFIHH');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());

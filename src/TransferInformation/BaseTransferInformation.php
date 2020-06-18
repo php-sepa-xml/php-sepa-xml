@@ -43,9 +43,9 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $bic;
 
     /**
-     * Must be between 0.01 and 999999999.99
+     * Amount in cents; must be between 1 and 99999999999
      *
-     * @var string
+     * @var int
      */
     protected $transferAmount;
 
@@ -101,24 +101,12 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
-     * @param string|int|float $amount If int is provided, the amount should be in cents
-     *                                 If float is provided, the amount will be multiply by 100
-     *                                 If string is provided, it depends on the value
+     * @param int $amount amount in cents
      * @param string $iban
      * @param string $name
-     *
-     * @throws InvalidArgumentException
      */
     public function __construct($amount, $iban, $name)
     {
-        $amount += 0;
-        if (is_float($amount)) {
-            if (!function_exists('bcscale')) {
-                throw new InvalidArgumentException('Using floats for amount is only possible with bcmath enabled');
-            }
-            bcscale(2);
-            $amount = (integer)bcmul(sprintf('%01.4F', $amount), '100');
-        }
         $this->transferAmount = $amount;
         $this->iban = $iban;
         $this->name = StringHelper::sanitizeString($name);
@@ -133,7 +121,7 @@ class BaseTransferInformation implements TransferInformationInterface
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getTransferAmount()
     {
