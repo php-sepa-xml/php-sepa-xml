@@ -24,27 +24,7 @@ namespace Digitick\Sepa\TransferInformation;
 
 class CustomerCreditTransferInformation extends BaseTransferInformation
 {
-    /**
-     * @param int $amount amount in cents
-     * @param string $iban
-     * @param string $name
-     * @param string $identification
-     */
-    public function __construct($amount, $iban, $name, $identification = null)
-    {
-        parent::__construct($amount, $iban, $name);
-
-        if (null === $identification) {
-            $identification = $name;
-        }
-
-        $this->setEndToEndIdentification($identification);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreditorName()
+    public function getCreditorName(): string
     {
         return $this->name;
     }

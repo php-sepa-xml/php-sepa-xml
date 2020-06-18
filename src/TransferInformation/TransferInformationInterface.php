@@ -26,13 +26,13 @@ use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 
 interface TransferInformationInterface
 {
-    public function accept(DomBuilderInterface $domBuilder);
+    public function accept(DomBuilderInterface $domBuilder): void;
 
-    public function getTransferAmount();
+    public function getTransferAmount(): int;
 
-    public function getEndToEndIdentification();
+    public function getEndToEndIdentification(): string;
 
-    public function getInstructionId();
+    public function getInstructionId(): ?string;
 
-    public function getCreditorReferenceType();
+    public function getCreditorReferenceType(): ?string;
 }

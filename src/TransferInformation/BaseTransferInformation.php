@@ -38,7 +38,7 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * Financial Institution Identifier;
      *
-     * @var string
+     * @var string|null
      */
     protected $bic;
 
@@ -55,7 +55,7 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $instructionId;
 
@@ -72,201 +72,146 @@ class BaseTransferInformation implements TransferInformationInterface
     /**
      * Purpose of this transaction
      *
-     * @var string
+     * @var string|null
      */
     protected $remittanceInformation;
 
     /**
      * Structured creditor reference type.
      *
-     * @var string
+     * @var string|null
      */
     protected $creditorReferenceType;
 
     /**
      * Structured creditor reference.
      *
-     * @var string
+     * @var string|null
      */
     protected $creditorReference;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $country;
 
     /**
-     * @var string|array
+     * @var string|string[]|null
      */
     protected $postalAddress;
 
     /**
      * @param int $amount amount in cents
-     * @param string $iban
-     * @param string $name
      */
-    public function __construct($amount, $iban, $name)
+    public function __construct(int $amount, string $iban, string $name, ?string $identification = null)
     {
+        if (null === $identification) {
+            $identification = $name;
+        }
+
         $this->transferAmount = $amount;
         $this->iban = $iban;
         $this->name = StringHelper::sanitizeString($name);
+        $this->EndToEndIdentification = StringHelper::sanitizeString($identification);
     }
 
-    /**
-     * @param DomBuilderInterface $domBuilder
-     */
-    public function accept(DomBuilderInterface $domBuilder)
+    public function accept(DomBuilderInterface $domBuilder): void
     {
         $domBuilder->visitTransferInformation($this);
     }
 
-    /**
-     * @return int
-     */
-    public function getTransferAmount()
+    public function getTransferAmount(): int
     {
         return $this->transferAmount;
     }
 
-    /**
-     * @param mixed $currency
-     */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency): void
     {
         $this->currency = $currency;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @param string $EndToEndIdentification
-     */
-    public function setEndToEndIdentification($EndToEndIdentification)
+    public function setEndToEndIdentification(string $EndToEndIdentification): void
     {
         $this->EndToEndIdentification = StringHelper::sanitizeString($EndToEndIdentification);
     }
 
-    /**
-     * @return string
-     */
-    public function getEndToEndIdentification()
+    public function getEndToEndIdentification(): string
     {
         return $this->EndToEndIdentification;
     }
 
-    /**
-     * @param string $instructionId
-     */
-    public function setInstructionId($instructionId)
+    public function setInstructionId(string $instructionId): void
     {
         $this->instructionId = $instructionId;
     }
 
-    /**
-     * @return string
-     */
-    public function getInstructionId()
+    public function getInstructionId(): ?string
     {
         return $this->instructionId;
     }
 
-    /**
-     * @return string
-     */
-    public function getIban()
+    public function getIban(): string
     {
         return $this->iban;
     }
 
-    /**
-     * @param string $bic
-     */
-    public function setBic($bic)
+    public function setBic(string $bic): void
     {
         $this->bic = $bic;
     }
 
-    /**
-     * @return string
-     */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
 
-    /**
-     * @param string $creditorReference
-     */
-    public function setCreditorReference($creditorReference)
+    public function setCreditorReference(string $creditorReference): void
     {
         $this->creditorReference = StringHelper::sanitizeString($creditorReference);
     }
 
-    /**
-     * @return string
-     */
-    public function getCreditorReference()
+    public function getCreditorReference(): ?string
     {
         return $this->creditorReference;
     }
 
-    /**
-     * @param string $creditorReferenceType
-     */
-    public function setCreditorReferenceType($creditorReferenceType)
+    public function setCreditorReferenceType(string $creditorReferenceType): void
     {
         $this->creditorReferenceType = StringHelper::sanitizeString($creditorReferenceType);
     }
 
-    /**
-     * @return string
-     */
-    public function getCreditorReferenceType()
+    public function getCreditorReferenceType(): ?string
     {
         return $this->creditorReferenceType;
     }
 
-
-    /**
-     * @param string $remittanceInformation
-     */
-    public function setRemittanceInformation($remittanceInformation)
+    public function setRemittanceInformation(string $remittanceInformation): void
     {
         $this->remittanceInformation = StringHelper::sanitizeString($remittanceInformation);
     }
 
-    /**
-     * @return string
-     */
-    public function getRemittanceInformation()
+    public function getRemittanceInformation(): ?string
     {
         return $this->remittanceInformation;
     }
 
-    /**
-     * @return string
-     */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    /**
-     * @param string $country
-     */
-    public function setCountry($country)
+    public function setCountry(string $country): void
     {
         $this->country = $country;
     }
 
     /**
-     * @return array|string
+     * @return string|string[]|null
      */
     public function getPostalAddress()
     {
@@ -274,9 +219,9 @@ class BaseTransferInformation implements TransferInformationInterface
     }
 
     /**
-     * @param array|string $postalAddress
+     * @param string|string[] $postalAddress
      */
-    public function setPostalAddress($postalAddress)
+    public function setPostalAddress($postalAddress): void
     {
         $this->postalAddress = $postalAddress;
     }

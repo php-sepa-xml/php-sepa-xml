@@ -29,10 +29,7 @@ use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 
 class CustomerDirectDebitTransferFile extends BaseTransferFile
 {
-    /**
-     * @param PaymentInformation $paymentInformation
-     */
-    public function addPaymentInformation(PaymentInformation $paymentInformation)
+    public function addPaymentInformation(PaymentInformation $paymentInformation): void
     {
         $paymentInformation->setValidPaymentMethods(array('DD'));
         $paymentInformation->setPaymentMethod('DD');
@@ -40,14 +37,15 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
     }
 
     /**
-     * validate the transferfile
+     * Validate the transferfile
      *
-     * @throws \Digitick\Sepa\Exception\InvalidTransferTypeException
+     * @throws InvalidTransferFileConfiguration
+     * @throws InvalidTransferTypeException
      */
-    public function validate()
+    public function validate(): void
     {
         parent::validate();
-        /** @var $payment PaymentInformation */
+
         foreach ($this->paymentInformations as $payment) {
             if ((string)$payment->getSequenceType() === '') {
                 throw new InvalidTransferFileConfiguration('Payment must contain a SequenceType');
@@ -57,8 +55,10 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
             }
             foreach ($payment->getTransfers() as $transfer) {
                 if (!$transfer instanceof CustomerDirectDebitTransferInformation) {
-                    throw new InvalidTransferTypeException('Transfers must be of type \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation instead of: ' . get_class(
-                        $transfer
+                    throw new InvalidTransferTypeException(sprintf(
+                        'Transfers must be of type %s instead of: %s',
+                        CustomerDirectDebitTransferInformation::class,
+                        get_class($transfer)
                     ));
                 }
             }

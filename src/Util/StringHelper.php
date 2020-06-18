@@ -24,11 +24,7 @@ namespace Digitick\Sepa\Util;
 
 class StringHelper
 {
-    /**
-     * @param string $inputString
-     * @return string
-     */
-    public static function sanitizeString($inputString)
+    public static function sanitizeString(string $inputString): string
     {
         $map = array(
             // German

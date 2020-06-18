@@ -35,58 +35,51 @@ abstract class BaseTransferFile implements TransferFileInterface
     protected $groupHeader;
 
     /**
-     * @var array<PaymentInformation>
+     * @var PaymentInformation[]
      */
     protected $paymentInformations = [];
 
-    /**
-     * @param GroupHeader $groupHeader
-     */
     public function __construct(GroupHeader $groupHeader)
     {
         $this->groupHeader = $groupHeader;
     }
 
-    /**
-     * @return GroupHeader
-     */
-    public function getGroupHeader()
+    public function getGroupHeader(): GroupHeader
     {
         return $this->groupHeader;
     }
 
-    /**
-     * @param PaymentInformation $paymentInformation
-     */
-    public function addPaymentInformation(PaymentInformation $paymentInformation)
+    public function addPaymentInformation(PaymentInformation $paymentInformation): void
     {
-        $numberOfTransactions = $this->getGroupHeader()->getNumberOfTransactions(
-            ) + $paymentInformation->getNumberOfTransactions();
-        $transactionTotal = $this->getGroupHeader()->getControlSumCents() + $paymentInformation->getControlSumCents();
+        $numberOfTransactions = $this->getGroupHeader()->getNumberOfTransactions()
+            + $paymentInformation->getNumberOfTransactions();
+        $transactionTotal = $this->getGroupHeader()->getControlSumCents()
+            + $paymentInformation->getControlSumCents();
         $this->groupHeader->setNumberOfTransactions($numberOfTransactions);
         $this->groupHeader->setControlSumCents($transactionTotal);
         $this->paymentInformations[] = $paymentInformation;
     }
 
     /**
-     * @param DomBuilderInterface $domBuilder
+     * @throws InvalidTransferFileConfiguration
      */
-    public function accept(DomBuilderInterface $domBuilder)
+    public function accept(DomBuilderInterface $domBuilder): void
     {
         $this->validate();
         $domBuilder->visitTransferFile($this);
         $this->groupHeader->accept($domBuilder);
-        /** @var $paymentInformation PaymentInformation */
+
         foreach ($this->paymentInformations as $paymentInformation) {
             $paymentInformation->accept($domBuilder);
         }
     }
 
     /**
-     * update the group header with transaction informations collected
-     * by paymentinformation
+     * Update the group header with transaction informations collected by paymentinformation
+     *
+     * @throws InvalidTransferFileConfiguration
      */
-    public function validate()
+    public function validate(): void
     {
         if (count($this->paymentInformations) === 0) {
             throw new InvalidTransferFileConfiguration('No paymentinformations available, add paymentInformation via addPaymentInformation()');

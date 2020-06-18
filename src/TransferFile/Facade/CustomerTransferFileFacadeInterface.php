@@ -22,29 +22,21 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 interface CustomerTransferFileFacadeInterface
 {
     /**
-     * @param $payment
-     * @param array $paymentInformation
-     *
-     * @return PaymentInformation
+     * @throws InvalidArgumentException
      */
-    public function addPaymentInfo($payment, array $paymentInformation);
+    public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation;
 
     /**
-     * @param $payment
-     * @param array $transferInformation
-     *
-     * @return TransferInformationInterface
+     * @throws InvalidArgumentException
      */
-    public function addTransfer($payment, array $transferInformation);
+    public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface;
 
-    /**
-     * @return string
-     */
-    public function asXML();
+    public function asXML(): string;
 }

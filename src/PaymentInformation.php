@@ -55,7 +55,7 @@ class PaymentInformation
     public $id;
 
     /**
-     * @var string Purpose of the transaction(s).
+     * @var string|null Purpose of the transaction(s).
      */
     public $categoryPurposeCode;
 
@@ -66,13 +66,15 @@ class PaymentInformation
 
     /**
      * Unique identification of an organisation, as assigned by an institution, using an identification scheme.
-     * @var string
+     *
+     * @var string|null
      */
     public $originBankPartyIdentification;
 
     /**
      * Name of the identification scheme, in a coded form as published in an external list. 1-4 characters.
-     * @var string
+     *
+     * @var string|null
      */
     public $originBankPartyIdentificationScheme;
 
@@ -82,7 +84,7 @@ class PaymentInformation
     public $originAccountIBAN;
 
     /**
-     * @var string Debtor's account bank BIC code.
+     * @var string|null Debtor's account bank BIC code.
      */
     public $originAgentBIC;
 
@@ -92,12 +94,12 @@ class PaymentInformation
     protected $originAccountCurrency;
 
     /**
-     * @var string Payment method.
+     * @var string|null Payment method.
      */
     protected $paymentMethod;
 
     /**
-     * @var string Local service instrument code.
+     * @var string|null Local service instrument code.
      */
     protected $localInstrumentCode;
 
@@ -109,51 +111,51 @@ class PaymentInformation
     protected $dueDate;
 
     /**
-     * @var string Instruction priority.
+     * @var string|null Instruction priority.
      */
     protected $instructionPriority;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $controlSumCents = 0;
 
     /**
-     * @var integer Number of payment transactions.
+     * @var int Number of payment transactions.
      */
     protected $numberOfTransactions = 0;
 
     /**
-     * @var array<TransferInformationInterface>
+     * @var TransferInformationInterface[]
      */
     protected $transfers = array();
 
     /**
      * Valid Payment Methods set by the TransferFile
      *
-     * @var
+     * @var string[]
      */
-    protected $validPaymentMethods;
+    protected $validPaymentMethods = array();
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $creditorId;
 
     /**
-     * @var
+     * @var string|null
      */
     protected $sequenceType;
 
     /**
      * Should the bank book multiple transaction as a batch
      *
-     * @var int
+     * @var bool|null
      */
-    protected $batchBooking = null;
+    protected $batchBooking;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $mandateSignDate;
 
@@ -162,14 +164,7 @@ class PaymentInformation
      */
     protected $dateFormat = 'Y-m-d';
 
-    /**
-     * @param string $id
-     * @param string $originAccountIBAN This is your IBAN
-     * @param string $originAgentBIC This is your BIC
-     * @param string $originName This is your Name
-     * @param string $originAccountCurrency
-     */
-    public function __construct($id, $originAccountIBAN, $originAgentBIC, $originName, $originAccountCurrency = 'EUR')
+    public function __construct(string $id, string $originAccountIBAN, ?string $originAgentBIC, string $originName, string $originAccountCurrency = 'EUR')
     {
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
@@ -180,10 +175,7 @@ class PaymentInformation
     }
 
 
-    /**
-     * @param TransferInformationInterface $transfer
-     */
-    public function addTransfer(TransferInformationInterface $transfer)
+    public function addTransfer(TransferInformationInterface $transfer): void
     {
         $this->transfers[] = $transfer;
         $this->numberOfTransactions++;
@@ -191,49 +183,45 @@ class PaymentInformation
     }
 
     /**
-     * @return array
+     * @return TransferInformationInterface[]
      */
-    public function getTransfers()
+    public function getTransfers(): array
     {
         return $this->transfers;
     }
 
     /**
      * The domBuilder accept this Object
-     *
-     * @param DomBuilderInterface $domBuilder
      */
-    public function accept(DomBuilderInterface $domBuilder)
+    public function accept(DomBuilderInterface $domBuilder): void
     {
         $domBuilder->visitPaymentInformation($this);
-        /** @var $transfer TransferInformationInterface */
+
         foreach ($this->getTransfers() as $transfer) {
             $transfer->accept($domBuilder);
         }
     }
 
     /**
-     * Set the payment method.
-     * @param string $method
      * @throws InvalidArgumentException
      */
-    public function setPaymentMethod($method)
+    public function setPaymentMethod(string $method): void
     {
         $method = strtoupper($method);
         if (!in_array($method, $this->validPaymentMethods)) {
-            throw new InvalidArgumentException("Invalid Payment Method: $method, must be one of " . implode(
-                ',',
-                $this->validPaymentMethods
+            throw new InvalidArgumentException(sprintf(
+                'Invalid Payment Method: %s, must be one of %s',
+                $method,
+                implode(',', $this->validPaymentMethods)
             ));
         }
         $this->paymentMethod = $method;
     }
 
     /**
-     * @param string $localInstrumentCode
      * @throws InvalidArgumentException
      */
-    public function setLocalInstrumentCode($localInstrumentCode)
+    public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
         if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
@@ -243,49 +231,37 @@ class PaymentInformation
     }
 
     /**
-     * @param mixed $validPaymentMethods
+     * @param string[] $validPaymentMethods
      */
-    public function setValidPaymentMethods($validPaymentMethods)
+    public function setValidPaymentMethods(array $validPaymentMethods): void
     {
         $this->validPaymentMethods = $validPaymentMethods;
     }
 
-    /**
-     * @param string $categoryPurposeCode
-     */
-    public function setCategoryPurposeCode($categoryPurposeCode)
+    public function setCategoryPurposeCode(string $categoryPurposeCode): void
     {
         $this->categoryPurposeCode = $categoryPurposeCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCategoryPurposeCode()
+    public function getCategoryPurposeCode(): ?string
     {
         return $this->categoryPurposeCode;
     }
 
-    /**
-     * @param \DateTime $dueDate
-     */
-    public function setDueDate($dueDate)
+    public function setDueDate(\DateTime $dueDate): void
     {
         $this->dueDate = $dueDate;
     }
 
-    /**
-     * @return string
-     */
-    public function getDueDate()
+    public function getDueDate(): string
     {
         return $this->dueDate->format($this->dateFormat);
     }
 
     /**
-     * @param string $instructionPriority
+     * @throws InvalidArgumentException
      */
-    public function setInstructionPriority($instructionPriority)
+    public function setInstructionPriority(string $instructionPriority): void
     {
         $instructionPriority = strtoupper($instructionPriority);
         if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
@@ -294,226 +270,142 @@ class PaymentInformation
         $this->instructionPriority = $instructionPriority;
     }
 
-    /**
-     * @return string
-     */
-    public function getInstructionPriority()
+    public function getInstructionPriority(): ?string
     {
         return $this->instructionPriority;
     }
 
-    /**
-     * @param \DateTime $mandateSignDate
-     */
-    public function setMandateSignDate($mandateSignDate)
+    public function setMandateSignDate(\DateTime $mandateSignDate): void
     {
         $this->mandateSignDate = $mandateSignDate;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getMandateSignDate()
+    public function getMandateSignDate(): ?\DateTime
     {
         return $this->mandateSignDate;
     }
 
-    /**
-     * @param string $originName
-     */
-    public function setOriginName($originName)
+    public function setOriginName(string $originName): void
     {
         $this->originName = StringHelper::sanitizeString($originName);
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginName()
+    public function getOriginName(): string
     {
         return $this->originName;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setOriginBankPartyIdentification($id)
+    public function setOriginBankPartyIdentification(string $id): void
     {
         $this->originBankPartyIdentification = StringHelper::sanitizeString($id);
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginBankPartyIdentification()
+    public function getOriginBankPartyIdentification(): ?string
     {
         return $this->originBankPartyIdentification;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setOriginBankPartyIdentificationScheme($scheme)
+    public function setOriginBankPartyIdentificationScheme(string $scheme): void
     {
         $this->originBankPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginBankPartyIdentificationScheme()
+    public function getOriginBankPartyIdentificationScheme(): ?string
     {
         return $this->originBankPartyIdentificationScheme;
     }
 
-    /**
-     * @param string $originAgentBIC
-     */
-    public function setOriginAgentBIC($originAgentBIC)
+    public function setOriginAgentBIC(string $originAgentBIC): void
     {
         $this->originAgentBIC = $originAgentBIC;
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginAgentBIC()
+    public function getOriginAgentBIC(): ?string
     {
         return $this->originAgentBIC;
     }
 
-    /**
-     * @param string $originAccountIBAN
-     */
-    public function setOriginAccountIBAN($originAccountIBAN)
+    public function setOriginAccountIBAN(string $originAccountIBAN): void
     {
         $this->originAccountIBAN = $originAccountIBAN;
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginAccountIBAN()
+    public function getOriginAccountIBAN(): string
     {
         return $this->originAccountIBAN;
     }
 
-    /**
-     * @param string $originAccountCurrency
-     */
-    public function setOriginAccountCurrency($originAccountCurrency)
+    public function setOriginAccountCurrency(string $originAccountCurrency): void
     {
         $this->originAccountCurrency = $originAccountCurrency;
     }
 
-    /**
-     * @return string
-     */
-    public function getOriginAccountCurrency()
+    public function getOriginAccountCurrency(): string
     {
         return $this->originAccountCurrency;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setId($id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getControlSumCents()
+    public function getControlSumCents(): int
     {
         return $this->controlSumCents;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocalInstrumentCode()
+    public function getLocalInstrumentCode(): ?int
     {
         return $this->localInstrumentCode;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfTransactions()
+    public function getNumberOfTransactions(): int
     {
         return $this->numberOfTransactions;
     }
 
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
+    public function getPaymentMethod(): ?string
     {
         return $this->paymentMethod;
     }
 
-    /**
-     * @param string $creditorSchemeId
-     */
-    public function setCreditorId($creditorSchemeId)
+    public function setCreditorId(string $creditorSchemeId): void
     {
         $this->creditorId = StringHelper::sanitizeString($creditorSchemeId);
     }
 
-    /**
-     * @return string
-     */
-    public function getCreditorId()
+    public function getCreditorId(): ?string
     {
         return $this->creditorId;
     }
 
-    /**
-     * @param mixed $sequenceType
-     */
-    public function setSequenceType($sequenceType)
+    public function setSequenceType(string $sequenceType): void
     {
         $this->sequenceType = $sequenceType;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSequenceType()
+    public function getSequenceType(): ?string
     {
         return $this->sequenceType;
     }
 
-    /**
-     * @param boolean $batchBooking
-     */
-    public function setBatchBooking($batchBooking)
+    public function setBatchBooking(bool $batchBooking): void
     {
         $this->batchBooking = $batchBooking;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getBatchBooking()
+    public function getBatchBooking(): ?bool
     {
         return $this->batchBooking;
     }
 
-    /**
-     * @param string $format
-     */
-    public function setDueDateFormat($format)
+    public function setDueDateFormat(string $format): void
     {
         $this->dateFormat = $format;
     }

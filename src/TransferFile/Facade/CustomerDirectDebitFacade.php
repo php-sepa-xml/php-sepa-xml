@@ -30,21 +30,21 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
     /**
-     * @param $paymentName
-     * @param array $paymentInformation
-     *                                  - id
-     *                                  - creditorName
-     *                                  - creditorAccountIBAN
-     *                                  - creditorAgentBIC
-     *                                  - seqType
-     *                                  - creditorId
-     *                                  - [dueDate] if not set: now + 5 days
+     * @param array{
+     *             id: string,
+     *             creditorName: string,
+     *             creditorAccountIBAN: string,
+     *             creditorAgentBIC?: string,
+     *             seqType: string,
+     *             creditorId: string,
+     *             localInstrumentCode?: string,
+     *             batchBooking?: bool,
+     *             dueDate?: string|\DateTime
+     *             } $paymentInformation
      *
-     * @throws \Digitick\Sepa\Exception\InvalidArgumentException
-     *
-     * @return PaymentInformation
+     * @throws InvalidArgumentException
      */
-    public function addPaymentInfo($paymentName, array $paymentInformation)
+    public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
@@ -71,25 +71,27 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
-     * @param $paymentName
-     * @param array $transferInformation
-     *                                   - amount
-     *                                   - debtorIban
-     *                                   - debtorBic
-     *                                   - debtorName
-     *                                   - debtorMandate
-     *                                   - debtorMandateSignDate
-     *                                   - remittanceInformation
-     *                                   - [endToEndId]
-     *                                   - [amendments]
-     *                                   - [debtorCountry]
-     *                                   - [debtorAdrLine]
+     * @param array{
+     *             amount: int,
+     *             debtorIban: string,
+     *             debtorBic?: string,
+     *             debtorMandate: string,
+     *             debtorMandateSignDate: string|\DateTime,
+     *             remittanceInformation: string,
+     *             creditorReference?: string,
+     *             endToEndId?: string,
+     *             originalMandateId?: string
+     *             originalDebtorIban?: string
+     *             amendedDebtorAccount?: string
+     *             debtorCountry?: string
+     *             debtorAdrLine?: string
+     *             } $transferInformation
      *
-     * @throws \Digitick\Sepa\Exception\InvalidArgumentException
+     * @return CustomerDirectDebitTransferInformation
      *
-     * @return TransferInformationInterface
+     * @throws InvalidArgumentException
      */
-    public function addTransfer($paymentName, array $transferInformation)
+    public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
         if (!isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf(

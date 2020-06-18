@@ -30,7 +30,7 @@ class GroupHeader
     /**
      * Whether this is a test Transaction
      *
-     * @var boolean
+     * @var bool
      */
     protected $isTest;
 
@@ -42,20 +42,21 @@ class GroupHeader
     /**
      * The initiating Party for this payment
      *
-     * @var string
+     * @var string|null
      */
     protected $initiatingPartyId;
 
     /**
      * Name of the identification scheme, in a coded form as published in an external list. 1-4 characters.
-     * @var string
+     *
+     * @var string|null
      */
     public $initiatingPartyIdentificationScheme;
 
     /**
      * The Issuer.
      *
-     * @var string
+     * @var string|null
      */
     protected $issuer;
 
@@ -89,10 +90,8 @@ class GroupHeader
      *                                      Part of the duplication check (unique daily reference).
      *                                      The first 8 or 11 characters of <Msgld> must match the BIC of the
      *                                      Instructing Agent. The rest of the field can be freely defined.
-     * @param string $initiatingPartyName
-     * @param boolean $isTest
      */
-    public function __construct($messageIdentification, $initiatingPartyName, $isTest = false)
+    public function __construct(string $messageIdentification, string $initiatingPartyName, bool $isTest = false)
     {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
@@ -100,159 +99,102 @@ class GroupHeader
         $this->creationDateTime = new \DateTime();
     }
 
-    public function accept(DomBuilderInterface $domBuilder)
+    public function accept(DomBuilderInterface $domBuilder): void
     {
         $domBuilder->visitGroupHeader($this);
     }
 
-    /**
-     * @param int $controlSumCents
-     */
-    public function setControlSumCents($controlSumCents)
+    public function setControlSumCents(int $controlSumCents): void
     {
         $this->controlSumCents = $controlSumCents;
     }
 
-    /**
-     * @return int
-     */
-    public function getControlSumCents()
+    public function getControlSumCents(): int
     {
         return $this->controlSumCents;
     }
 
-    /**
-     * @param string $initiatingPartyId
-     */
-    public function setInitiatingPartyId($initiatingPartyId)
+    public function setInitiatingPartyId(string $initiatingPartyId): void
     {
         $this->initiatingPartyId = $initiatingPartyId;
     }
 
-    /**
-     * @return string
-     */
-    public function getInitiatingPartyId()
+    public function getInitiatingPartyId(): ?string
     {
         return $this->initiatingPartyId;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setInitiatingPartyIdentificationScheme($scheme)
+    public function setInitiatingPartyIdentificationScheme(string $scheme): void
     {
         $this->initiatingPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
     }
 
-    /**
-     * @return string
-     */
-    public function getInitiatingPartyIdentificationScheme()
+    public function getInitiatingPartyIdentificationScheme(): ?string
     {
         return $this->initiatingPartyIdentificationScheme;
     }
 
-    /**
-     * @return string
-     */
-    public function getIssuer()
+    public function getIssuer(): ?string
     {
         return $this->issuer;
     }
 
-    /**
-     * @param string $issuer
-     */
-    public function setIssuer($issuer)
+    public function setIssuer(string $issuer): void
     {
         $this->issuer = $issuer;
     }
 
-    /**
-     * @param string $initiatingPartyName
-     */
-    public function setInitiatingPartyName($initiatingPartyName)
+    public function setInitiatingPartyName(string $initiatingPartyName): void
     {
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
     }
 
-    /**
-     * @return string
-     */
-    public function getInitiatingPartyName()
+    public function getInitiatingPartyName(): string
     {
         return $this->initiatingPartyName;
     }
 
-    /**
-     * @param boolean $isTest
-     */
-    public function setIsTest($isTest)
+    public function setIsTest(bool $isTest): void
     {
         $this->isTest = $isTest;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getIsTest()
+    public function getIsTest(): bool
     {
         return $this->isTest;
     }
 
-    /**
-     * @param string $messageIdentification
-     */
-    public function setMessageIdentification($messageIdentification)
+    public function setMessageIdentification(string $messageIdentification): void
     {
         $this->messageIdentification = $messageIdentification;
     }
 
-    /**
-     * @return string
-     */
-    public function getMessageIdentification()
+    public function getMessageIdentification(): string
     {
         return $this->messageIdentification;
     }
 
-    /**
-     * @param int $numberOfTransactions
-     */
-    public function setNumberOfTransactions($numberOfTransactions)
+    public function setNumberOfTransactions(int $numberOfTransactions): void
     {
         $this->numberOfTransactions = $numberOfTransactions;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfTransactions()
+    public function getNumberOfTransactions(): int
     {
         return $this->numberOfTransactions;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreationDateTime()
+    public function getCreationDateTime(): \DateTime
     {
         return $this->creationDateTime;
     }
 
-    /**
-     * @param string $creationDateTimeFormat
-     */
-    public function setCreationDateTimeFormat($creationDateTimeFormat)
+    public function setCreationDateTimeFormat(string $creationDateTimeFormat): void
     {
         $this->creationDateTimeFormat = $creationDateTimeFormat;
     }
 
-    /**
-     * @return string
-     */
-    public function getCreationDateTimeFormat()
+    public function getCreationDateTimeFormat(): string
     {
         return $this->creationDateTimeFormat;
     }

@@ -23,6 +23,7 @@
 namespace Digitick\Sepa\TransferFile\Facade;
 
 use Digitick\Sepa\DomBuilder\BaseDomBuilder;
+use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFacadeInterface
@@ -33,7 +34,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     protected $transferFile;
 
     /**
-     * @var \Digitick\Sepa\DomBuilder\BaseDomBuilder
+     * @var BaseDomBuilder
      */
     protected $domBuilder;
 
@@ -42,20 +43,13 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
      */
     protected $payments = array();
 
-    /**
-     * @param TransferFileInterface $transferFile
-     * @param BaseDomBuilder $domBuilder
-     */
     public function __construct(TransferFileInterface $transferFile, BaseDomBuilder $domBuilder)
     {
         $this->transferFile = $transferFile;
         $this->domBuilder = $domBuilder;
     }
 
-    /**
-     * @return string
-     */
-    public function asXML()
+    public function asXML(): string
     {
         foreach ($this->payments as $payment) {
             $this->transferFile->addPaymentInformation($payment);
@@ -66,15 +60,21 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     }
 
     /**
-     * @return DateTime
+     * @param array{dueDate: string|\DateTime} $paymentInformation
+     *
+     * @throws InvalidArgumentException if the dueDate is not valid
      */
-    public function createDueDateFromPaymentInformation(array $paymentInformation, $default = 'now')
+    public function createDueDateFromPaymentInformation(array $paymentInformation, string $default = 'now'): \DateTime
     {
         if (isset($paymentInformation['dueDate'])) {
             if ($paymentInformation['dueDate'] instanceof \DateTime) {
                 return $paymentInformation['dueDate'];
             } else {
-                return new \DateTime($paymentInformation['dueDate']);
+                try {
+                    return new \DateTime($paymentInformation['dueDate']);
+                } catch (\Exception $exception) {
+                    throw new InvalidArgumentException('Invalid due date', 0, $exception);
+                }
             }
         } else {
             return new \DateTime(date('Y-m-d', strtotime($default)));

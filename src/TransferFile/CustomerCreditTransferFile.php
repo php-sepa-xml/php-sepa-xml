@@ -29,10 +29,7 @@ use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 
 class CustomerCreditTransferFile extends BaseTransferFile
 {
-    /**
-     * @param PaymentInformation $paymentInformation
-     */
-    public function addPaymentInformation(PaymentInformation $paymentInformation)
+    public function addPaymentInformation(PaymentInformation $paymentInformation): void
     {
         $paymentInformation->setValidPaymentMethods(array('TRF'));
         $paymentInformation->setPaymentMethod('TRF');
@@ -40,22 +37,24 @@ class CustomerCreditTransferFile extends BaseTransferFile
     }
 
     /**
-     * validate the transferfile
+     * Validate the transferfile
      *
-     * @throws \Digitick\Sepa\Exception\InvalidTransferTypeException
+     * @throws InvalidTransferFileConfiguration
+     * @throws InvalidTransferTypeException
      */
-    public function validate()
+    public function validate(): void
     {
         parent::validate();
-        /** @var $payment PaymentInformation */
+
         foreach ($this->paymentInformations as $payment) {
             if (count($payment->getTransfers()) === 0) {
                 throw new InvalidTransferFileConfiguration('PaymentInformation must at least contain one payment');
             }
             foreach ($payment->getTransfers() as $transfer) {
                 if (!$transfer instanceof CustomerCreditTransferInformation) {
-                    throw new InvalidTransferTypeException('Transfers must be of type CustomerCreditTransferInformation instead of: ' . get_class(
-                        $transfer
+                    throw new InvalidTransferTypeException(sprintf(
+                        'Transfers must be of type CustomerCreditTransferInformation instead of: %s',
+                        get_class($transfer)
                     ));
                 }
             }

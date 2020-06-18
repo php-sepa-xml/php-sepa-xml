@@ -30,7 +30,7 @@ class DomBuilderFactory
     /**
      * @throws InvalidArgumentException
      **/
-    public static function createDomBuilder(TransferFileInterface $transferFile, $painFormat = '')
+    public static function createDomBuilder(TransferFileInterface $transferFile, string $painFormat = ''): DomBuilderInterface
     {
         $transferFileClass = get_class($transferFile);
         switch ($transferFileClass) {

@@ -32,17 +32,20 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     protected $doc;
 
-    protected $root;
-
     /**
      * @var \DOMElement
      */
-    protected $currentTransfer = null;
+    protected $root;
 
     /**
-     * @var \DOMELement
+     * @var \DOMElement|null
      */
-    protected $currentPayment = null;
+    protected $currentTransfer;
+
+    /**
+     * @var \DOMELement|null
+     */
+    protected $currentPayment;
 
     /**
      * @var string
@@ -51,9 +54,9 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
-     * @param boolean $withSchemaLocation define if xsi:schemaLocation attribute is added to root
+     * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      */
-    public function __construct($painFormat, $withSchemaLocation = true)
+    public function __construct(string $painFormat, bool $withSchemaLocation = true)
     {
         $this->painFormat = $painFormat;
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
@@ -69,12 +72,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->doc->appendChild($this->root);
     }
 
-    /**
-     * @param $name
-     * @param null $value
-     * @return \DOMElement
-     */
-    protected function createElement($name, $value = null)
+    protected function createElement(string $name, ?string $value = null): \DOMElement
     {
         if ($value !== null) {
             $elm = $this->doc->createElement($name);
@@ -86,10 +84,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    public function asXml()
+    public function asXml(): string
     {
         return $this->doc->saveXML();
     }
@@ -97,18 +92,15 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Format an integer as a monetary value.
      */
-    protected function intToCurrency($amount)
+    protected function intToCurrency(int $amount): string
     {
         return sprintf('%01.2F', ($amount / 100));
     }
 
     /**
      * Add GroupHeader Information to the document
-     *
-     * @param GroupHeader $groupHeader
-     * @return mixed
      */
-    public function visitGroupHeader(GroupHeader $groupHeader)
+    public function visitGroupHeader(GroupHeader $groupHeader): void
     {
         $groupHeaderTag = $this->doc->createElement('GrpHdr');
         $messageId = $this->createElement('MsgId', $groupHeader->getMessageIdentification());
@@ -134,11 +126,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->currentTransfer->appendChild($groupHeaderTag);
     }
 
-    /**
-     * @param string $bic
-     * @return \DOMElement
-     */
-    protected function getFinancialInstitutionElement($bic)
+    protected function getFinancialInstitutionElement(?string $bic): \DOMElement
     {
         $finInstitution = $this->createElement('FinInstnId');
 
@@ -154,11 +142,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $finInstitution;
     }
 
-    /**
-     * @param string $iban
-     * @return \DOMElement
-     */
-    public function getIbanElement($iban)
+    public function getIbanElement(string $iban): \DOMElement
     {
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $iban));
@@ -168,11 +152,8 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * Create remittance element with un-structured message.
-     *
-     * @param string $message
-     * @return \DOMElement
      */
-    public function getRemittenceElement($message)
+    public function getRemittenceElement(string $message): \DOMElement
     {
         $remittanceInformation = $this->createElement('RmtInf');
         $remittanceInformation->appendChild($this->createElement('Ustrd', $message));
@@ -182,11 +163,8 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     /**
      * Create remittance element with structured creditor reference.
-     *
-     * @param TransferInformationInterface $transactionInformation
-     * @return \DOMElement
      */
-    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation)
+    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation): \DOMElement
     {
         $creditorReference = $transactionInformation->getCreditorReference();
         $remittanceInformation = $this->createElement('RmtInf');

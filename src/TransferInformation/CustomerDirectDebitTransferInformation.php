@@ -27,17 +27,17 @@ use Digitick\Sepa\Util\StringHelper;
 class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected $mandateId;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $mandateSignDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $finalCollectionDate;
 
@@ -49,140 +49,81 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     /**
      * @var string|null
      */
-    protected $originalDebtorIban = null;
+    protected $originalDebtorIban;
 
     /**
      * @var string|null
      */
-    protected $originalMandateId = null;
+    protected $originalMandateId;
 
-    /**
-     * @param int $amount amount in cents
-     * @param string $iban
-     * @param string $name
-     * @param string $identification
-     */
-    public function __construct($amount, $iban, $name, $identification = null)
-    {
-        parent::__construct($amount, $iban, $name);
-
-        if (null === $identification) {
-            $identification = $name;
-        }
-
-        $this->setEndToEndIdentification($identification);
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasAmendments()
+    public function hasAmendments(): bool
     {
         return $this->amendedDebtorAccount
             || $this->originalDebtorIban !== null
             || $this->originalMandateId !== null;
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasAmendedDebtorAccount()
+    public function hasAmendedDebtorAccount(): bool
     {
         return $this->amendedDebtorAccount;
     }
 
-    /**
-     * @param bool $status
-     */
-    public function setAmendedDebtorAccount($status)
+    public function setAmendedDebtorAccount(bool $status): void
     {
         $this->amendedDebtorAccount = $status;
     }
 
-    /**
-     * @param \DateTime $finalCollectionDate
-     */
-    public function setFinalCollectionDate($finalCollectionDate)
+    public function setFinalCollectionDate(\DateTime $finalCollectionDate): void
     {
         $this->finalCollectionDate = $finalCollectionDate;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getFinalCollectionDate()
+    public function getFinalCollectionDate(): ?\DateTime
     {
         return $this->finalCollectionDate;
     }
 
-    /**
-     * @param string $originalDebtorIban
-     */
-    public function setOriginalDebtorIban($originalDebtorIban)
+    public function setOriginalDebtorIban(string $originalDebtorIban): void
     {
         $this->originalDebtorIban = $originalDebtorIban;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getOriginalDebtorIban()
+    public function getOriginalDebtorIban(): ?string
     {
         return $this->originalDebtorIban;
     }
 
-    /**
-     * @param string $originalMandateId
-     */
-    public function setOriginalMandateId($originalMandateId)
+    public function setOriginalMandateId(string $originalMandateId): void
     {
         $this->originalMandateId = StringHelper::sanitizeString($originalMandateId);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getOriginalMandateId()
+    public function getOriginalMandateId(): ?string
     {
         return $this->originalMandateId;
     }
 
-    /**
-     * @param string $mandateId
-     */
-    public function setMandateId($mandateId)
+    public function setMandateId(string $mandateId): void
     {
         $this->mandateId = StringHelper::sanitizeString($mandateId);
     }
 
-    /**
-     * @return string
-     */
-    public function getMandateId()
+    public function getMandateId(): ?string
     {
         return $this->mandateId;
     }
 
-    /**
-     * @param \DateTime $mandateSignDate
-     */
-    public function setMandateSignDate($mandateSignDate)
+    public function setMandateSignDate(\DateTime $mandateSignDate): void
     {
         $this->mandateSignDate = $mandateSignDate;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getMandateSignDate()
+    public function getMandateSignDate(): ?\DateTime
     {
         return $this->mandateSignDate;
     }
 
-    /**
-     * @return string
-     */
-    public function getDebitorName()
+    public function getDebitorName(): string
     {
         return $this->name;
     }

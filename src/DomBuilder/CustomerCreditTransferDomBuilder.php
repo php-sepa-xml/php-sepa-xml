@@ -34,23 +34,15 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
 
-    /**
-     * CustomerCreditTransferDomBuilder constructor
-     *
-     * @param string $painFormat
-     */
-    function __construct($painFormat = 'pain.001.002.03')
+    function __construct(string $painFormat = 'pain.001.002.03')
     {
         parent::__construct($painFormat);
     }
 
     /**
      * Build the root of the document
-     *
-     * @param TransferFileInterface $transferFile
-     * @return mixed
      */
-    public function visitTransferFile(TransferFileInterface $transferFile)
+    public function visitTransferFile(TransferFileInterface $transferFile): void
     {
         $this->currentTransfer = $this->doc->createElement('CstmrCdtTrfInitn');
         $this->root->appendChild($this->currentTransfer);
@@ -58,11 +50,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl PaymentInformation containing the Transactions
-     *
-     * @param PaymentInformation $paymentInformation
-     * @return mixed
      */
-    public function visitPaymentInformation(PaymentInformation $paymentInformation)
+    public function visitPaymentInformation(PaymentInformation $paymentInformation): void
     {
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
@@ -134,11 +123,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Crawl Transactions
-     *
-     * @param TransferInformationInterface $transactionInformation
-     * @return mixed
      */
-    public function visitTransferInformation(TransferInformationInterface $transactionInformation)
+    public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
         /** @var $transactionInformation  CustomerCreditTransferInformation */
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
@@ -203,11 +189,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
     /**
      * Add the specific OrgId element for the format 'pain.001.001.03'
-     *
-     * @param  GroupHeader $groupHeader
-     * @return mixed
      */
-    public function visitGroupHeader(GroupHeader $groupHeader)
+    public function visitGroupHeader(GroupHeader $groupHeader): void
     {
         parent::visitGroupHeader($groupHeader);
 
@@ -231,9 +214,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * @param  string      $id         Unique and unambiguous identification of a party. Length 1-35
      * @param  string|null $schemeCode Name of the identification scheme. Length 1-4 or null
      * @param  string|null $issr       Issuer
-     * @return \DOMElement
      */
-    protected function getOrganizationIdentificationElement($id, $schemeCode = null, $issr = null)
+    protected function getOrganizationIdentificationElement(string $id, ?string $schemeCode = null, ?string $issr = null): \DOMElement
     {
         $newId = $this->createElement('Id');
         $orgId = $this->createElement('OrgId');
@@ -259,11 +241,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     /**
      * Appends an address node to the passed dom element containing country and unstructured address lines.
      * Does nothing if no address exists in $transactionInformation.
-     *
-     * @param \DOMElement $creditor
-     * @param CustomerCreditTransferInformation $transactionInformation
      */
-    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation)
+    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation): void
     {
         if (!$transactionInformation->getCountry() && !$transactionInformation->getPostalAddress()) {
             return; // No address exists, nothing to do.
