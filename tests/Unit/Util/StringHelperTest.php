@@ -13,7 +13,7 @@ class StringHelperTest extends TestCase
     /**
      * Tests german character translation
      */
-    public function testGermanCharacters()
+    public function testGermanCharacters(): void
     {
         $string = 'ÄÖÜäöüß';
 
@@ -23,7 +23,7 @@ class StringHelperTest extends TestCase
     /**
      * Tests german character translation
      */
-    public function testSpecialCharacters()
+    public function testSpecialCharacters(): void
     {
         $string = 'Az09#_:?,-(+.)';
 

@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Digitick\Sepa\Tests;
+namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
@@ -28,6 +28,9 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitFacadeTest extends TestCase
 {
+    /**
+     * @var string
+     */
     protected $schema;
 
     /**
@@ -41,7 +44,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
-    protected function createDirectDebitXpathObject($amount)
+    protected function createDirectDebitXpathObject(int $amount): \DOMXPath
     {
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
 
@@ -81,7 +84,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         return $directDebitXpath;
     }
 
-    public function testValidSumIsCalculatedCorrectly()
+    public function testValidSumIsCalculatedCorrectly(): void
     {
         $directDebitXpath = $this->createDirectDebitXpathObject(1999);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
@@ -101,7 +104,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         );
     }
 
-    public function testFloatSumIsCalculatedCorrectly()
+    public function testFloatSumIsCalculatedCorrectly(): void
     {
         $directDebitXpath = $this->createDirectDebitXpathObject(1999);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
@@ -121,7 +124,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         );
     }
 
-    public function testFloatSumIsCalculatedCorrectlyWithNonEnglishLocale()
+    public function testFloatSumIsCalculatedCorrectlyWithNonEnglishLocale(): void
     {
         $result = setlocale(LC_ALL, 'es_ES.UTF-8', 'es_ES@UTF-8', 'spanish');
 
@@ -150,11 +153,9 @@ class CustomerDirectDebitFacadeTest extends TestCase
     /**
      * Test creation of file via Factory and Facade
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testValidFileCreationWithFacade($schema)
+    public function testValidFileCreationWithFacade(string $schema): void
     {
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
         $paymentInformation = $directDebit->addPaymentInfo(
@@ -193,11 +194,9 @@ class CustomerDirectDebitFacadeTest extends TestCase
     /**
      * Test creation of file via Factory and Facade
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testValidFileCreationWithFacadeWithoutBic($schema)
+    public function testValidFileCreationWithFacadeWithoutBic(string $schema): void
     {
         if ($schema === 'pain.008.002.02') {
             $this->markTestSkipped('Will fail for this schema as the BIC is required');
@@ -234,10 +233,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/../../../fixtures/' . $schema . '.xsd'));
     }
 
-    /**
-     * @return array
-     */
-    public function provideSchema()
+    public function provideSchema(): iterable
     {
         return array(
             array('pain.008.001.02'),

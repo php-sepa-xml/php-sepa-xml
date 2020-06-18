@@ -192,7 +192,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $directDebitTransactionInformation->appendChild(
                 $this->getStructuredRemittanceElement($transactionInformation)
             );
-        } else {
+        } elseif (strlen($transactionInformation->getRemittanceInformation()) > 0) {
             $directDebitTransactionInformation->appendChild(
                 $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
             );

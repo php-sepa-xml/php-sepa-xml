@@ -11,14 +11,14 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentInformationTest extends TestCase
 {
-    public function testDateIsReturnedInDefaultFormat()
+    public function testDateIsReturnedInDefaultFormat(): void
     {
         $pi = new PaymentInformation('1', 'DE121212121212121212', 'DE1212121212121212', 'Jon Doe');
         $pi->setDueDate(new \DateTime('2017-08-31 12:13:14'));
         $this->assertEquals('2017-08-31', $pi->getDueDate());
     }
 
-    public function testDateIsReturnedWithGivenFormat()
+    public function testDateIsReturnedWithGivenFormat(): void
     {
         $pi = new PaymentInformation('1', 'DE121212121212121212', 'DE1212121212121212', 'Jon Doe');
         $pi->setDueDate(new \DateTime('2017-08-31 12:13:14'));

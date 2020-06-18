@@ -13,11 +13,9 @@ class CustomerCreditFacadeTest extends TestCase
     /**
      * Test creation of file via Factory and Facade
      *
-     * @param string $schema
-     *
      * @dataProvider schemaProvider
      */
-    public function testValidFileCreationWithFacade($schema)
+    public function testValidFileCreationWithFacade(string $schema): void
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
 
@@ -51,11 +49,9 @@ class CustomerCreditFacadeTest extends TestCase
     /**
      * Test creation of file via Factory and Facade
      *
-     * @param string $schema
-     *
      * @dataProvider schemaProviderEmptyBic
      */
-    public function testValidFileCreationWithFacadeWithoutDebtorBic($schema)
+    public function testValidFileCreationWithFacadeWithoutDebtorBic(string $schema): void
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
 
@@ -84,10 +80,7 @@ class CustomerCreditFacadeTest extends TestCase
         $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
     }
 
-    /**
-     * @return array
-     */
-    public function schemaProvider()
+    public function schemaProvider(): iterable
     {
         return array(
             array("pain.001.001.03"),
@@ -96,10 +89,7 @@ class CustomerCreditFacadeTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function schemaProviderEmptyBic()
+    public function schemaProviderEmptyBic(): iterable
     {
         return array(
             array("pain.001.001.03"),

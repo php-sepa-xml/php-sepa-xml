@@ -49,11 +49,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     /**
      * Sanity check: test reference file with XSD.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSanity($schema)
+    public function testSanity(string $schema): void
     {
         $this->dom->load(__DIR__ . '/../fixtures/' . $schema . '.xml');
         $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
@@ -63,11 +61,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     /**
      * Test a transfer file with one payment and one transaction.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTrans($schema)
+    public function testSinglePaymentSingleTrans(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -99,11 +95,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     /**
      * Test a transfer file with one payment and one transaction.
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testSinglePaymentSingleTransWithStructuredCreditorReference($schema)
+    public function testSinglePaymentSingleTransWithStructuredCreditorReference(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -145,11 +139,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     }
 
     /**
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testValidationFailureSeqType($schema)
+    public function testValidationFailureSeqType(string $schema): void
     {
         $this->expectException(InvalidTransferFileConfiguration::class);
         $this->expectExceptionMessage('Payment must contain a SequenceType');
@@ -169,11 +161,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     }
 
     /**
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testValidationFailureCreditorId($schema)
+    public function testValidationFailureCreditorId(string $schema): void
     {
         $this->expectException(InvalidTransferFileConfiguration::class);
         $this->expectExceptionMessage('Payment must contain a CreditorSchemeId');
@@ -196,11 +186,9 @@ class CustomerDirectDebitValidationTest extends TestCase
     /**
      * Test the payment informations in the xml
      *
-     * @param string $schema
-     *
      * @dataProvider provideSchema
      */
-    public function testUmlautConversion($schema)
+    public function testUmlautConversion(string $schema): void
     {
         $groupHeader = new GroupHeader('transferID', 'Only A-Z without äöüßÄÖÜ initiatingPartyName');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -243,10 +231,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
     }
 
-    /**
-     * @return array
-     */
-    public function provideSchema()
+    public function provideSchema(): iterable
     {
         return array(
             array('pain.008.001.02'),
@@ -257,9 +242,10 @@ class CustomerDirectDebitValidationTest extends TestCase
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
      * @dataProvider scenarios
      */
-    public function testDomBuilderAcceptsPainFormatAsConstructor($scenario)
+    public function testDomBuilderAcceptsPainFormatAsConstructor(array $scenario): void
     {
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerDirectDebitTransferFile($groupHeader);
@@ -295,12 +281,8 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertTrue($validated);
     }
 
-    /**
-     * @return array
-     */
-    public function scenarios()
+    public function scenarios(): iterable
     {
-
         $scenarios = array();
         foreach (array('pain.008.001.02','pain.008.002.02','pain.008.003.02') as $pain) {
             $scenarios[] = array(

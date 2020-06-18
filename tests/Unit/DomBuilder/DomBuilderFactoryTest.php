@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 
 class DomBuilderFactoryTest extends TestCase
 {
-    public function testCreateReturnsCustomerCreditDomBuilderForCustomerCreditTransfer()
+    public function testCreateReturnsCustomerCreditDomBuilderForCustomerCreditTransfer(): void
     {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');
@@ -46,7 +46,7 @@ class DomBuilderFactoryTest extends TestCase
         $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
     }
 
-    public function testCreateReturnsCustomerDebitDomBuilderForCustomerDebitTransfer()
+    public function testCreateReturnsCustomerDebitDomBuilderForCustomerDebitTransfer(): void
     {
         $groupHeader = new GroupHeader('123456788', 'Initiating Company');
         $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');

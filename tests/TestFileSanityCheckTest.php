@@ -26,8 +26,6 @@ use PHPUnit\Framework\TestCase;
 
 class TestFileSanityCheckTest extends TestCase
 {
-    protected $schema;
-
     /**
      * @var \DOMDocument
      */
@@ -40,9 +38,10 @@ class TestFileSanityCheckTest extends TestCase
 
     /**
      * Sanity check: test reference file with XSD.
+     *
      * @dataProvider painProvider
      */
-    public function testSanity($pain)
+    public function testSanity(string $pain): void
     {
         $schema = __DIR__ . '/fixtures/' . $pain . '.xsd';
         $this->dom->load(__DIR__ . '/fixtures/' . $pain . '.xml');
@@ -50,7 +49,7 @@ class TestFileSanityCheckTest extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function painProvider()
+    public function painProvider(): iterable
     {
         return array(
             array('pain.001.001.03'),
