@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/tree/HEAD)
+## [2.0-rc1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.0-rc1) (2020-06-19)
 
-[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/1.6.2...HEAD)
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/1.6.2...2.0-rc1)
 
 **Closed issues:**
 
@@ -13,6 +13,7 @@
 
 **Merged pull requests:**
 
+- Php 7.2 / Phpunit 9 / PSR-4 / Refacto tests [\#101](https://github.com/php-sepa-xml/php-sepa-xml/pull/101) ([VincentLanglet](https://github.com/VincentLanglet))
 - Add throws tag [\#100](https://github.com/php-sepa-xml/php-sepa-xml/pull/100) ([VincentLanglet](https://github.com/VincentLanglet))
 - Increase php versions to run tests for [\#97](https://github.com/php-sepa-xml/php-sepa-xml/pull/97) ([monofone](https://github.com/monofone))
 
@@ -189,6 +190,7 @@
 - Split the docs into two parts to get a better overview [\#22](https://github.com/php-sepa-xml/php-sepa-xml/pull/22) ([monofone](https://github.com/monofone))
 - Updated README with CreditTransfer facade example [\#19](https://github.com/php-sepa-xml/php-sepa-xml/pull/19) ([monofone](https://github.com/monofone))
 - Remove PHP7 from allow\_failures [\#17](https://github.com/php-sepa-xml/php-sepa-xml/pull/17) ([soullivaneuh](https://github.com/soullivaneuh))
+- Fixed: Custom EndToEndId in DirectDebits [\#6](https://github.com/php-sepa-xml/php-sepa-xml/pull/6) ([BenjaminPaap](https://github.com/BenjaminPaap))
 
 ## [1.1.0](https://github.com/php-sepa-xml/php-sepa-xml/tree/1.1.0) (2015-11-25)
 
@@ -210,7 +212,6 @@
 
 **Merged pull requests:**
 
-- Fixed: Custom EndToEndId in DirectDebits [\#6](https://github.com/php-sepa-xml/php-sepa-xml/pull/6) ([BenjaminPaap](https://github.com/BenjaminPaap))
 - \[TASK\] Fixed travis build state [\#5](https://github.com/php-sepa-xml/php-sepa-xml/pull/5) ([monofone](https://github.com/monofone))
 - \[TASK\] Changed the order for creating the timestamp [\#3](https://github.com/php-sepa-xml/php-sepa-xml/pull/3) ([monofone](https://github.com/monofone))
 - Allow setting an optional EndToEndId [\#1](https://github.com/php-sepa-xml/php-sepa-xml/pull/1) ([BenjaminPaap](https://github.com/BenjaminPaap))
