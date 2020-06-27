@@ -31,9 +31,9 @@ use Digitick\Sepa\GroupHeader;
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
 
-    public function __construct(string $painFormat = 'pain.008.002.02')
+    public function __construct(string $painFormat = 'pain.008.002.02', $withSchemaLocation = true)
     {
-        parent::__construct($painFormat);
+        parent::__construct($painFormat, $withSchemaLocation);
     }
 
     /**
