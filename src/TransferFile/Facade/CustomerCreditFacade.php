@@ -85,6 +85,10 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
         }
 
+        if (isset($transferInformation['creditorReferenceType'])) {
+            $transfer->setCreditorReferenceType($transferInformation['creditorReferenceType']);
+        }
+
         if (isset($transferInformation['endToEndId'])) {
             $transfer->setEndToEndIdentification($transferInformation['endToEndId']);
         } else {
