@@ -1,5 +1,27 @@
 # Changelog
 
+## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/tree/HEAD)
+
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.0-rc2...HEAD)
+
+**Closed issues:**
+
+- PaymentInformation::getLocalInstrumentCode\(\) must be of the type int or null, string returned [\#105](https://github.com/php-sepa-xml/php-sepa-xml/issues/105)
+
+## [2.0-rc2](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.0-rc2) (2020-08-12)
+
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.0-rc1...2.0-rc2)
+
+**Closed issues:**
+
+- Question about this project [\#103](https://github.com/php-sepa-xml/php-sepa-xml/issues/103)
+
+**Merged pull requests:**
+
+- fix local instrument code return type [\#106](https://github.com/php-sepa-xml/php-sepa-xml/pull/106) ([monofone](https://github.com/monofone))
+- Added support for creditorReferenceType to CustomerCreditFacade [\#104](https://github.com/php-sepa-xml/php-sepa-xml/pull/104) ([ttaelman](https://github.com/ttaelman))
+- Rebase of pull request \#66 [\#102](https://github.com/php-sepa-xml/php-sepa-xml/pull/102) ([mogilvie](https://github.com/mogilvie))
+
 ## [2.0-rc1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.0-rc1) (2020-06-19)
 
 [Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/1.6.2...2.0-rc1)
@@ -92,7 +114,6 @@
 
 - ability to set instructionId in "CreditTransfer with Factory" [\#62](https://github.com/php-sepa-xml/php-sepa-xml/pull/62) ([mwenghi](https://github.com/mwenghi))
 - Added support for pain.008.003.02 [\#61](https://github.com/php-sepa-xml/php-sepa-xml/pull/61) ([monofone](https://github.com/monofone))
-- Allow common slashes in sanitized strings [\#60](https://github.com/php-sepa-xml/php-sepa-xml/pull/60) ([keltuo](https://github.com/keltuo))
 - Readme improvements [\#57](https://github.com/php-sepa-xml/php-sepa-xml/pull/57) ([ArneTR](https://github.com/ArneTR))
 
 ## [1.2.1](https://github.com/php-sepa-xml/php-sepa-xml/tree/1.2.1) (2017-08-31)
@@ -115,6 +136,7 @@
 
 **Merged pull requests:**
 
+- Allow common slashes in sanitized strings [\#60](https://github.com/php-sepa-xml/php-sepa-xml/pull/60) ([keltuo](https://github.com/keltuo))
 - Setters for organization id and identification scheme [\#53](https://github.com/php-sepa-xml/php-sepa-xml/pull/53) ([Jontsa](https://github.com/Jontsa))
 - Better headers formatting [\#51](https://github.com/php-sepa-xml/php-sepa-xml/pull/51) ([caseycs](https://github.com/caseycs))
 - Update README.md [\#50](https://github.com/php-sepa-xml/php-sepa-xml/pull/50) ([BorislavSabev](https://github.com/BorislavSabev))
@@ -190,7 +212,6 @@
 - Split the docs into two parts to get a better overview [\#22](https://github.com/php-sepa-xml/php-sepa-xml/pull/22) ([monofone](https://github.com/monofone))
 - Updated README with CreditTransfer facade example [\#19](https://github.com/php-sepa-xml/php-sepa-xml/pull/19) ([monofone](https://github.com/monofone))
 - Remove PHP7 from allow\_failures [\#17](https://github.com/php-sepa-xml/php-sepa-xml/pull/17) ([soullivaneuh](https://github.com/soullivaneuh))
-- Fixed: Custom EndToEndId in DirectDebits [\#6](https://github.com/php-sepa-xml/php-sepa-xml/pull/6) ([BenjaminPaap](https://github.com/BenjaminPaap))
 
 ## [1.1.0](https://github.com/php-sepa-xml/php-sepa-xml/tree/1.1.0) (2015-11-25)
 
@@ -212,6 +233,7 @@
 
 **Merged pull requests:**
 
+- Fixed: Custom EndToEndId in DirectDebits [\#6](https://github.com/php-sepa-xml/php-sepa-xml/pull/6) ([BenjaminPaap](https://github.com/BenjaminPaap))
 - \[TASK\] Fixed travis build state [\#5](https://github.com/php-sepa-xml/php-sepa-xml/pull/5) ([monofone](https://github.com/monofone))
 - \[TASK\] Changed the order for creating the timestamp [\#3](https://github.com/php-sepa-xml/php-sepa-xml/pull/3) ([monofone](https://github.com/monofone))
 - Allow setting an optional EndToEndId [\#1](https://github.com/php-sepa-xml/php-sepa-xml/pull/1) ([BenjaminPaap](https://github.com/BenjaminPaap))
