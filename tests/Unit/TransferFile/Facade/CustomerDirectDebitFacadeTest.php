@@ -58,7 +58,8 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorAccountIBAN' => 'FI1350001540000056',
                 'creditorAgentBIC' => 'PSSTFRPPMON',
                 'seqType' => PaymentInformation::S_ONEOFF,
-                'creditorId' => 'DE21WVM1234567890'
+                'creditorId' => 'DE21WVM1234567890',
+                'localInstrumentCode' => 'B2B',
             )
         );
         // Add a Single Transaction to the named payment

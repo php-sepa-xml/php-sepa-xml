@@ -360,7 +360,7 @@ class PaymentInformation
         return $this->controlSumCents;
     }
 
-    public function getLocalInstrumentCode(): ?int
+    public function getLocalInstrumentCode(): ?string
     {
         return $this->localInstrumentCode;
     }
