@@ -1,6 +1,6 @@
 
 
-##Sample Usage CreditTransfer with Factory
+## Sample Usage CreditTransfer with Factory
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
@@ -27,7 +27,7 @@ $customerCredit->addTransfer('firstPayment', array(
 $customerCredit->asXML();
 ```
 
-##Extended Usage CreditTransfer
+## Extended Usage CreditTransfer
 ```php
 // Create the initiating information
 $groupHeader = new GroupHeader('SEPA File Identifier', 'Your Company Name');
