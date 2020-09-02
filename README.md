@@ -20,6 +20,7 @@ Institutions and associations that should accept this format:
 * ING (tested on direct credit, use _pain.001.001.03_)
 * Spain: CaixaBank
 * Spain: SantanderBank
+* Netherlands: direct-debit (pain.008.001.02) at RABO-bank (thanks @rodekker)
 
 Always verify generated files with your bank before using in production! If you encounter an institution that does accept this library's generated files please notify us to add it to the list or send a PR!
 
