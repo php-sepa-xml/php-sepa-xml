@@ -227,19 +227,19 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE initiatingPartyName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE creditorName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:EndToEndId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE debtorName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE debtorName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE remittanceInformation', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:MndtId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE mandateId', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE creditorSchemeId', $testNode->item(0)->textContent);
     }
 
     /**
