@@ -17,7 +17,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
     {
         $string = 'ÄÖÜäöüß';
 
-        $this->assertEquals('AeOeUeaeoeuess', StringHelper::sanitizeString($string));
+        $this->assertEquals('AEOEUEaeoeueSS', StringHelper::sanitizeString($string));
     }
 
     /**
