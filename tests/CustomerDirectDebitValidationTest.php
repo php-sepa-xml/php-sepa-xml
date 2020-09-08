@@ -227,7 +227,7 @@ class CustomerDirectDebitValidationTest extends \PHPUnit_Framework_TestCase
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeueSSAEOEUE initiatingPartyName', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeuessAEOeUE initiatingPartyName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeueSSAEOEUE creditorName', $testNode->item(0)->textContent);
         $testNode = $xpathDoc->query('//sepa:EndToEndId');
