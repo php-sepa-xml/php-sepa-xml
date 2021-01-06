@@ -35,7 +35,7 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
  */
 interface DomBuilderInterface
 {
-    public function asXml(): string
+    public function asXml(): string;
     
     /**
      * Build the root of the document
