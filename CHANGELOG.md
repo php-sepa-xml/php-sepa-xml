@@ -39,6 +39,10 @@
 - Add throws tag [\#100](https://github.com/php-sepa-xml/php-sepa-xml/pull/100) ([VincentLanglet](https://github.com/VincentLanglet))
 - Increase php versions to run tests for [\#97](https://github.com/php-sepa-xml/php-sepa-xml/pull/97) ([monofone](https://github.com/monofone))
 
+**Important changes:**
+
+- The direct debit transfer amount has been changed from string to int. You must add the amount as integer cent values, otherwise the SEPA export may contain wrong amounts.
+
 ## [1.6.2](https://github.com/php-sepa-xml/php-sepa-xml/tree/1.6.2) (2020-02-13)
 
 [Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/1.6.1...1.6.2)
