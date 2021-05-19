@@ -20,7 +20,10 @@ $directDebit->addPaymentInfo('firstPayment', array(
     'creditorId'            => 'DE21WVM1234567890',
     'localInstrumentCode'   => 'CORE' // default. optional.
 ));
+// Add/Set batch booking option, you can pass boolean value as per your requirement
+$directDebit->setBatchBooking(true);
 // Add a Single Transaction to the named payment
+// `amount` should be in cents
 $directDebit->addTransfer('firstPayment', array(
     'amount'                => 500,
     'debtorIban'            => 'FI1350001540000056',
