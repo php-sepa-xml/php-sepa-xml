@@ -18,9 +18,8 @@ $customerCredit->addPaymentInfo('firstPayment', array(
 // Add/Set batch booking option, you can pass boolean value as per your requirement
 $customerCredit->setBatchBooking(true);
 // Add a Single Transaction to the named payment
-// `amount` should be in cents
 $customerCredit->addTransfer('firstPayment', array(
-    'amount'                  => 500,
+    'amount'                  => 500, // `amount` should be in cents
     'creditorIban'            => 'FI1350001540000056',
     'creditorBic'             => 'OKOYFIHH',
     'creditorName'            => 'Their Company',
