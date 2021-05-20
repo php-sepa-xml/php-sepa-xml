@@ -23,9 +23,8 @@ $directDebit->addPaymentInfo('firstPayment', array(
 // Add/Set batch booking option, you can pass boolean value as per your requirement
 $directDebit->setBatchBooking(true);
 // Add a Single Transaction to the named payment
-// `amount` should be in cents
 $directDebit->addTransfer('firstPayment', array(
-    'amount'                => 500,
+    'amount'                => 500, // `amount` should be in cents
     'debtorIban'            => 'FI1350001540000056',
     'debtorBic'             => 'OKOYFIHH',
     'debtorName'            => 'Their Company',
