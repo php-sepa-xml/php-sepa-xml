@@ -14,9 +14,10 @@ $customerCredit->addPaymentInfo('firstPayment', array(
     'debtorName'              => 'My Company',
     'debtorAccountIBAN'       => 'FI1350001540000056',
     'debtorAgentBIC'          => 'PSSTFRPPMON',
+    // Add/Set batch booking option, you can pass boolean value as per your requirement, optional
+    'batchBooking'            => true, 
 ));
-// Add/Set batch booking option, you can pass boolean value as per your requirement
-$customerCredit->setBatchBooking(true);
+
 // Add a Single Transaction to the named payment
 $customerCredit->addTransfer('firstPayment', array(
     'amount'                  => 500, // `amount` should be in cents

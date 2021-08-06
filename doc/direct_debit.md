@@ -19,9 +19,10 @@ $directDebit->addPaymentInfo('firstPayment', array(
     'seqType'               => PaymentInformation::S_ONEOFF,
     'creditorId'            => 'DE21WVM1234567890',
     'localInstrumentCode'   => 'CORE' // default. optional.
+    // Add/Set batch booking option, you can pass boolean value as per your requirement, optional
+    'batchBooking'          => true, 
 ));
-// Add/Set batch booking option, you can pass boolean value as per your requirement
-$directDebit->setBatchBooking(true);
+
 // Add a Single Transaction to the named payment
 $directDebit->addTransfer('firstPayment', array(
     'amount'                => 500, // `amount` should be in cents
