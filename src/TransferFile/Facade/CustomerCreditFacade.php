@@ -19,7 +19,8 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
      *             debtorName: string,
      *             debtorAccountIBAN: string,
      *             debtorAgentBIC?: string,
-     *             dueDate?: string|\DateTime
+     *             dueDate?: string|\DateTime,
+     *             batchBooking?: bool
      *             } $paymentInformation
      *
      * @throws InvalidArgumentException
