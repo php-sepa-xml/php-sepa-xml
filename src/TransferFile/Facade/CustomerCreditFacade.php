@@ -37,6 +37,11 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $originAgentBic,
             $paymentInformation['debtorName']
         );
+
+        if (isset($paymentInformation['batchBooking'])) {
+            $payment->setBatchBooking($paymentInformation['batchBooking']);
+        }
+
         $payment->setDueDate($this->createDueDateFromPaymentInformation($paymentInformation));
 
         $this->payments[$paymentName] = $payment;
