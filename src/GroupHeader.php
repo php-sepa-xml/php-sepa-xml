@@ -27,6 +27,8 @@ use Digitick\Sepa\Util\StringHelper;
 
 class GroupHeader
 {
+    use PaymentMethodTrait;
+
     /**
      * Whether this is a test Transaction
      *

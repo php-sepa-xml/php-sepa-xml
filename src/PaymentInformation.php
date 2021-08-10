@@ -29,6 +29,8 @@ use Digitick\Sepa\Util\StringHelper;
 
 class PaymentInformation
 {
+    use PaymentMethodTrait;
+
     /**
      * The first drawn from several recurring debits
      */
@@ -94,11 +96,6 @@ class PaymentInformation
     protected $originAccountCurrency;
 
     /**
-     * @var string|null Payment method.
-     */
-    protected $paymentMethod;
-
-    /**
      * @var string|null Local service instrument code.
      */
     protected $localInstrumentCode;
@@ -129,13 +126,6 @@ class PaymentInformation
      * @var TransferInformationInterface[]
      */
     protected $transfers = array();
-
-    /**
-     * Valid Payment Methods set by the TransferFile
-     *
-     * @var string[]
-     */
-    protected $validPaymentMethods = array();
 
     /**
      * @var string|null
@@ -205,22 +195,6 @@ class PaymentInformation
     /**
      * @throws InvalidArgumentException
      */
-    public function setPaymentMethod(string $method): void
-    {
-        $method = strtoupper($method);
-        if (!in_array($method, $this->validPaymentMethods)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid Payment Method: %s, must be one of %s',
-                $method,
-                implode(',', $this->validPaymentMethods)
-            ));
-        }
-        $this->paymentMethod = $method;
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
     public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
@@ -228,14 +202,6 @@ class PaymentInformation
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
-    }
-
-    /**
-     * @param string[] $validPaymentMethods
-     */
-    public function setValidPaymentMethods(array $validPaymentMethods): void
-    {
-        $this->validPaymentMethods = $validPaymentMethods;
     }
 
     public function setCategoryPurposeCode(string $categoryPurposeCode): void
@@ -368,11 +334,6 @@ class PaymentInformation
     public function getNumberOfTransactions(): int
     {
         return $this->numberOfTransactions;
-    }
-
-    public function getPaymentMethod(): ?string
-    {
-        return $this->paymentMethod;
     }
 
     public function setCreditorId(string $creditorSchemeId): void

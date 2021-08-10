@@ -24,6 +24,7 @@ namespace Digitick\Sepa\DomBuilder;
 
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use DOMElement;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
@@ -33,17 +34,17 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     protected $doc;
 
     /**
-     * @var \DOMElement
+     * @var DOMElement
      */
     protected $root;
 
     /**
-     * @var \DOMElement|null
+     * @var DOMElement|null
      */
     protected $currentTransfer;
 
     /**
-     * @var \DOMELement|null
+     * @var DOMELement|null
      */
     protected $currentPayment;
 
@@ -72,7 +73,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->doc->appendChild($this->root);
     }
 
-    protected function createElement(string $name, ?string $value = null): \DOMElement
+    protected function createElement(string $name, ?string $value = null): DOMElement
     {
         if ($value !== null) {
             $elm = $this->doc->createElement($name);
@@ -123,10 +124,25 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $initiatingParty->appendChild($id);
         }
         $groupHeaderTag->appendChild($initiatingParty);
+        $this->addPaymentMethod($groupHeader, $groupHeaderTag);
         $this->currentTransfer->appendChild($groupHeaderTag);
     }
 
-    protected function getFinancialInstitutionElement(?string $bic): \DOMElement
+    private function addPaymentMethod(GroupHeader $groupHeader, DOMElement $groupHeaderTag): void
+    {
+        $paymentMethod = $groupHeader->getPaymentMethod();
+        if ($paymentMethod !== null) {
+            $groupHeaderTag->appendChild(
+                $this->createElement('PmtTpInf')->appendChild(
+                    $this->createElement('SvcLvl')->appendChild(
+                        $this->createElement('Prtry', $paymentMethod)
+                    )
+                )
+            );
+        }
+    }
+
+    protected function getFinancialInstitutionElement(?string $bic): DOMElement
     {
         $finInstitution = $this->createElement('FinInstnId');
 
@@ -142,7 +158,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $finInstitution;
     }
 
-    public function getIbanElement(string $iban): \DOMElement
+    public function getIbanElement(string $iban): DOMElement
     {
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $iban));
@@ -153,7 +169,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with un-structured message.
      */
-    public function getRemittenceElement(string $message): \DOMElement
+    public function getRemittenceElement(string $message): DOMElement
     {
         $remittanceInformation = $this->createElement('RmtInf');
         $remittanceInformation->appendChild($this->createElement('Ustrd', $message));
@@ -164,7 +180,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with structured creditor reference.
      */
-    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation): \DOMElement
+    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation): DOMElement
     {
         $creditorReference = $transactionInformation->getCreditorReference();
         $remittanceInformation = $this->createElement('RmtInf');
