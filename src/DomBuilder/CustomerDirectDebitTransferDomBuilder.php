@@ -240,6 +240,11 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $orgId = $this->createElement('OrgId');
             $othr  = $this->createElement('Othr');
             $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+
+            if ($groupHeader->getIssuer()) {
+                $othr->appendChild($this->createElement('Issr', $groupHeader->getIssuer()));
+            }
+
             $orgId->appendChild($othr);
             $newId->appendChild($orgId);
 
