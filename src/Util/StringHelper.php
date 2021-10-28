@@ -18,6 +18,8 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 28/10/2021 : Update of the regex to allow /.
  */
 
 namespace Digitick\Sepa\Util;
@@ -46,7 +48,7 @@ class StringHelper
         );
 
         $mapped = strtr($inputString, $map);
-        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-\/(+.) ]/', ' ', $mapped);
+        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-(+.) ]/', ' ', $mapped);
 
         return $sanitized;
     }
