@@ -18,7 +18,7 @@ $directDebit->addPaymentInfo('firstPayment', array(
     'creditorAgentBIC'      => 'PSSTFRPPMON',
     'seqType'               => PaymentInformation::S_ONEOFF,
     'creditorId'            => 'DE21WVM1234567890',
-    'localInstrumentCode'   => 'CORE' // default. optional.
+    'localInstrumentCode'   => 'CORE', // default. optional.
     // Add/Set batch booking option, you can pass boolean value as per your requirement, optional
     'batchBooking'          => true, 
 ));
