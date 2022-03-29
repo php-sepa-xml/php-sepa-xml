@@ -36,12 +36,12 @@ In the "require" section of your composer.json file:
 
 Always up to date (bleeding edge, API *not* guaranteed stable)
 ```javascript
-"digitick/sepa-xml" : "dev-master"
+"php-sepa-xml/php-sepa-xml" : "dev-master"
 ```
 
 Specific version, API stability
 ```javascript
-"digitick/sepa-xml" : "1.1.*"
+"php-sepa-xml/php-sepa-xml" : "1.1.*"
 ```
 
 ## Documentation
