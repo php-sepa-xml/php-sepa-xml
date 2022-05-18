@@ -128,6 +128,14 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             throw new \LogicException('Payment information have to be added before any transaction informations can be added.');
         }
 
+        if (!$transactionInformation instanceof CustomerDirectDebitTransferInformation) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected argument to be for type "%s", but "%s" given.',
+                CustomerDirectDebitTransferInformation::class,
+                get_class($transactionInformation)
+            ));
+        }
+
         /** @var  $transactionInformation CustomerDirectDebitTransferInformation */
         $directDebitTransactionInformation = $this->createElement('DrctDbtTxInf');
 
@@ -163,12 +171,33 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
+
+        // Add address data to debtor node
         if (in_array($this->painFormat, array('pain.008.003.02', 'pain.008.001.02'))) {
-            $addPostalAddress = false;
             $postalAddress = $this->createElement('PstlAdr');
+
+            // Th elements street number, building number, post code and town name
+            // are not supported by 'pain.008.003.02'.
+            if (in_array($this->painFormat, ['pain.008.001.02'])) {
+                if (!empty($transactionInformation->getStreetName())) {
+                    $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
+                }
+
+                if (!empty($transactionInformation->getBuildingNumber())) {
+                    $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+                }
+
+                if (!empty($transactionInformation->getPostCode())) {
+                    $postalAddress->appendChild($this->createElement('PstCd', $transactionInformation->getPostCode()));
+                }
+
+                if (!empty($transactionInformation->getTownName())) {
+                    $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+                }
+            }
+
             if ((bool)$transactionInformation->getCountry()) {
                 $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
-                $addPostalAddress = true;
             }
             if ((bool)$transactionInformation->getPostalAddress()) {
                 $postalAddressData = $transactionInformation->getPostalAddress();
@@ -179,9 +208,9 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
                 } else {
                     $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressData));
                 }
-                $addPostalAddress = true;
             }
-            if ($addPostalAddress) {
+
+            if ($postalAddress->childNodes->length > 0) {
                 $debtor->appendChild($postalAddress);
             }
         }

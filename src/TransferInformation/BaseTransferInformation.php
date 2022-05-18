@@ -91,11 +91,58 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $creditorReference;
 
     /**
+     * Nation with its own government.
+     *
+     * The code is checked against the list of country names obtained from the
+     * United Nations (ISO 3166, Alpha-2 code).
+     *
      * @var string|null
      */
     protected $country;
 
     /**
+     * Name of a built-up area, with defined boundaries, and a local government.
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @var string|null
+     */
+    protected $townName;
+
+    /**
+     * Identifier consisting of a group of letters and/or numbers that is added
+     * to a postal address to assist the sorting of mail.
+     *
+     * Maximum allowed length is 16 characters.
+     *
+     * @var string|null
+     */
+    protected $postCode;
+
+    /**
+     * Name of a street or thoroughfare.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected $streetName;
+
+    /**
+     * Number that identifies the position of a building on a street.
+     *
+     * Maximum allowed length is 16 characters.
+     *
+     * @var string|null
+     */
+    protected $buildingNumber;
+
+    /**
+     * Information that locates and identifies a specific address, as defined
+     * by postal services, presented in free format text.
+     *
+     * Maximum allowed length is 70 characters.
+     *
      * @var string|string[]|null
      */
     protected $postalAddress;
@@ -208,6 +255,106 @@ class BaseTransferInformation implements TransferInformationInterface
     public function setCountry(string $country): void
     {
         $this->country = $country;
+    }
+
+    /**
+     * Get the name of the town where the creditor/debtor is located
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @return string|null
+     */
+    public function getTownName(): ?string
+    {
+        return $this->townName;
+    }
+
+    /**
+     * Set the name of the town where the creditor/debtor is located.
+     *
+     * @param string|null $townName Maximum allowed length is 35 characters.
+     */
+    public function setTownName(?string $townName): void
+    {
+        if (null === $townName) {
+            $this->townName = null;
+        } else {
+            $this->townName = StringHelper::sanitizeString($townName);
+        }
+    }
+
+    /**
+     * Get the post code where the creditor/debtor is located.
+     *
+     * @return string|null
+     */
+    public function getPostCode(): ?string
+    {
+        return $this->postCode;
+    }
+
+    /**
+     * Set the post code where the creditor/debtor is located.
+     *
+     * @param string|null $postCode Maximum allowed length is 16 characters.
+     */
+    public function setPostCode(?string $postCode): void
+    {
+        if (null === $postCode) {
+            $this->postCode = null;
+        } else {
+            $this->postCode = StringHelper::sanitizeString($postCode);
+        }
+    }
+
+    /**
+     * Get the street name where the creditor/debtor is located.
+     *
+     * @return string|null
+     */
+    public function getStreetName(): ?string
+    {
+        return $this->streetName;
+    }
+
+    /**
+     * Set the street name where the creditor/debtor is located.
+     *
+     * @param string|null $streetName Maximum allowed length is 70 characters.
+     */
+    public function setStreetName(?string $streetName): void
+    {
+        if (null === $streetName) {
+            $this->streetName = null;
+        } else {
+            $this->streetName = StringHelper::sanitizeString($streetName);
+        }
+    }
+
+    /**
+     * Get the number that identifies the position of the building on the street
+     * where the creditor/debtor is located.
+     *
+     * @return string|null
+     */
+    public function getBuildingNumber(): ?string
+    {
+        return $this->buildingNumber;
+    }
+
+    /**
+     * Set the number that identifies the position of the building on the street
+     * where the creditor/debtor is located.
+     *
+     * @param string|null $buildingNumber Maximum allowed length is 16 characters.
+     */
+    public function setBuildingNumber(?string $buildingNumber): void
+    {
+        if (null === $buildingNumber) {
+            $this->buildingNumber = null;
+        } else {
+            $this->buildingNumber = StringHelper::sanitizeString($buildingNumber);
+        }
     }
 
     /**
