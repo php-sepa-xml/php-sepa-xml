@@ -124,6 +124,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
      */
     public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
+        if (!isset($this->currentPayment)) {
+            throw new \LogicException('Payment information have to be added before any transaction informations can be added.');
+        }
+
         /** @var  $transactionInformation CustomerDirectDebitTransferInformation */
         $directDebitTransactionInformation = $this->createElement('DrctDbtTxInf');
 
