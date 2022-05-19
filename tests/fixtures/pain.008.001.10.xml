@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.008.001.10 pain.008.001.10.xsd">
+  <CstmrDrctDbtInitn>
+    <GrpHdr>
+      <MsgId>TEST_DEBTOR_ADRESS</MsgId>
+      <CreDtTm>2022-05-18T14:27:54Z</CreDtTm>
+      <NbOfTxs>2</NbOfTxs>
+      <CtrlSum>20.78</CtrlSum>
+      <InitgPty>
+        <Nm>Test Company Inc.</Nm>
+        <Id>
+          <OrgId>
+            <Othr>
+              <Id>DE67ZZZ00000123456</Id>
+            </Othr>
+          </OrgId>
+        </Id>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>RAND001</PmtInfId>
+      <PmtMtd>DD</PmtMtd>
+      <NbOfTxs>2</NbOfTxs>
+      <CtrlSum>20.78</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>SEPA</Cd>
+        </SvcLvl>
+        <LclInstrm>
+          <Cd>CORE</Cd>
+        </LclInstrm>
+        <SeqTp>FRST</SeqTp>
+      </PmtTpInf>
+      <ReqdColltnDt>2022-05-18</ReqdColltnDt>
+      <Cdtr>
+        <Nm>Test Company Inc.</Nm>
+      </Cdtr>
+      <CdtrAcct>
+        <Id>
+          <IBAN>DE88500105173441451911</IBAN>
+        </Id>
+      </CdtrAcct>
+      <CdtrAgt>
+        <FinInstnId>
+          <BICFI>DEUTDEFFXXX</BICFI>
+        </FinInstnId>
+      </CdtrAgt>
+      <ChrgBr>SLEV</ChrgBr>
+      <CdtrSchmeId>
+        <Id>
+          <PrvtId>
+            <Othr>
+              <Id>DE67ZZZ00000123456</Id>
+              <SchmeNm>
+                <Prtry>SEPA</Prtry>
+              </SchmeNm>
+            </Othr>
+          </PrvtId>
+        </Id>
+      </CdtrSchmeId>
+      <DrctDbtTxInf>
+        <PmtId>
+          <EndToEndId>John Doe</EndToEndId>
+        </PmtId>
+        <InstdAmt Ccy="EUR">5.79</InstdAmt>
+        <DrctDbtTx>
+          <MndtRltdInf>
+            <MndtId>TEST-MANDATE-2</MndtId>
+            <DtOfSgntr>2022-04-10</DtOfSgntr>
+          </MndtRltdInf>
+        </DrctDbtTx>
+        <DbtrAgt>
+          <FinInstnId>
+            <Othr>
+              <Id>NOTPROVIDED</Id>
+            </Othr>
+          </FinInstnId>
+        </DbtrAgt>
+        <Dbtr>
+          <Nm>John Doe</Nm>
+          <PstlAdr>
+            <StrtNm>Lindenstrasse</StrtNm>
+            <BldgNb>22</BldgNb>
+            <PstCd>12345</PstCd>
+            <TwnNm>Musterstadt</TwnNm>
+            <Ctry>DE</Ctry>
+          </PstlAdr>
+        </Dbtr>
+        <DbtrAcct>
+          <Id>
+            <IBAN>DE59500105176472265933</IBAN>
+          </Id>
+        </DbtrAcct>
+      </DrctDbtTxInf>
+    </PmtInf>
+  </CstmrDrctDbtInitn>
+</Document>
