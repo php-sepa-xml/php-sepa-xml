@@ -240,6 +240,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
     {
         return [
             ['pain.008.001.02'],
+            ['pain.008.001.10'],
             ['pain.008.002.02'],
             ['pain.008.003.02']
         ];
