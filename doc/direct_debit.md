@@ -1,4 +1,15 @@
-## Sample Usage DirectDebit with Factory
+Direct Debit Payment Initiation
+===============================
+
+* [Sample Usage DirectDebit with Factory](#sample-usage-directdebit-with-factory)
+* [Sample Usage DirectDebit with Factory and Custom Header](#sample-usage-directdebit-with-factory-and-custom-header)
+* [Add an amendment to a transfer](#add-an-amendment-to-a-transfer)
+* [Add address information to transaction](#add-address-information-to-transaction)
+
+
+Sample Usage DirectDebit with Factory
+-------------------------------------
+
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\PaymentInformation;
@@ -38,7 +49,9 @@ $directDebit->addTransfer('firstPayment', array(
 $directDebit->asXML();
 ```
 
-## Sample Usage DirectDebit with Factory and Custom Header
+Sample Usage DirectDebit with Factory and Custom Header
+-------------------------------------------------------
+
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\PaymentInformation;
@@ -77,7 +90,8 @@ $directDebit->addTransfer('firstPayment', array(
 $directDebit->asXML();
 ```
 
-## Add an amendment to a transfer
+Add an amendment to a transfer
+------------------------------
 
 ```php
 // Add a Single Transaction to the named payment
@@ -94,3 +108,28 @@ $directDebit->addTransfer('firstPayment', array(
     'amendedDebtorAccount'    => true
 ));
 ```
+
+Add address information to transaction
+--------------------------------------
+
+If an account should be direct debitted, which belongs to a bank that is not a
+member of the European Economic Area (EEA), the address data of the account
+holder have to be added to the transaction.
+
+```php
+$directDebit->addTransfer('firstPayment', [
+    'amount'            => 1499,
+    'debtorIban'        => 'CH6089144731137988786',
+    'debtorBic'         => 'CRESCHZZXXX',
+    'debtorName'        => 'John Doe',
+    // ...
+    // and the relevant address data
+    'debtorCountry'     => 'CH',
+    'postCode'          => '8245',
+    'townName'          => 'Feuerthalen',
+    'streetName'        => 'Example Street',
+    'buildingNumber'    => '25',
+]);
+
+Currently the affected countries are Switzerland, Andorra, Monaco, San Marino,
+Vatican City and the United Kingdom (as of 05/23/2022).
