@@ -23,7 +23,6 @@
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\TransferFile\Facade\CustomerDirectDebitFacade;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
 
