@@ -164,6 +164,21 @@ class PaymentInformation
      */
     protected $dateFormat = 'Y-m-d';
 
+    /**
+     * @var string
+     */
+    protected $serviceLevelCode = "SEPA";
+
+    /**
+     * @var string|null
+     */
+    protected $chargeBearer = "SLEV";
+
+    /**
+     * @var bool
+     */
+    protected $showCurrency = true;
+
     public function __construct(string $id, string $originAccountIBAN, ?string $originAgentBIC, string $originName, string $originAccountCurrency = 'EUR')
     {
         $this->id = $id;
@@ -196,7 +211,6 @@ class PaymentInformation
     public function accept(DomBuilderInterface $domBuilder): void
     {
         $domBuilder->visitPaymentInformation($this);
-
         foreach ($this->getTransfers() as $transfer) {
             $transfer->accept($domBuilder);
         }
@@ -208,13 +222,7 @@ class PaymentInformation
     public function setPaymentMethod(string $method): void
     {
         $method = strtoupper($method);
-        if (!in_array($method, $this->validPaymentMethods)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid Payment Method: %s, must be one of %s',
-                $method,
-                implode(',', $this->validPaymentMethods)
-            ));
-        }
+        if (!in_array($method, $this->validPaymentMethods)) throw new InvalidArgumentException(sprintf('Invalid Payment Method: %s, must be one of %s', $method, implode(',', $this->validPaymentMethods)));
         $this->paymentMethod = $method;
     }
 
@@ -224,9 +232,7 @@ class PaymentInformation
     public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
-            throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
-        }
+        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         $this->localInstrumentCode = $localInstrumentCode;
     }
 
@@ -264,9 +270,7 @@ class PaymentInformation
     public function setInstructionPriority(string $instructionPriority): void
     {
         $instructionPriority = strtoupper($instructionPriority);
-        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
-            throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
-        }
+        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
         $this->instructionPriority = $instructionPriority;
     }
 
@@ -408,5 +412,46 @@ class PaymentInformation
     public function setDueDateFormat(string $format): void
     {
         $this->dateFormat = $format;
+    }
+
+    public function getServiceLevelCode(): string
+    {
+        return $this->serviceLevelCode;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setServiceLevelCode(string $code): void
+    {
+        $code = strtoupper($code);
+        if (!in_array($code, array('SEPA', 'NURG', 'URGP', 'SDVA'))) throw new InvalidArgumentException("Invalid Service Level Code: $code");
+        $this->serviceLevelCode = $code;
+    }
+
+    public function getChargeBearer(): ?string
+    {
+        return ($this->chargeBearer) ?: null;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setChargeBearer(string $chargeBearer = null): void
+    {
+        if (!$chargeBearer) return;
+        $chargeBearer = strtoupper($chargeBearer);
+        if (!in_array($chargeBearer, array('SLEV', 'DEBT', 'CRED', 'SHAR'))) throw new InvalidArgumentException("Invalid Charge Bearer: $chargeBearer");
+        $this->chargeBearer = $chargeBearer;
+    }
+
+    public function hideCurrency(): void
+    {
+        $this->showCurrency = false;
+    }
+
+    public function showCurrency(): void
+    {
+        $this->showCurrency = true;
     }
 }

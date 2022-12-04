@@ -75,7 +75,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $paymentTypeInformation->appendChild($instructionPriority);
         }
         $serviceLevel = $this->createElement('SvcLvl');
-        $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
+        $serviceLevel->appendChild($this->createElement('Cd', $paymentInformation->getServiceLevelCode()));
         $paymentTypeInformation->appendChild($serviceLevel);
         if ($paymentInformation->getCategoryPurposeCode()) {
             $categoryPurpose = $this->createElement('CtgyPurp');
@@ -93,6 +93,15 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
+
+
+        if ($paymentInformation->getOriginAccountCurrency() === 'GBP') {
+            $postalAddress = $debtor->appendChild($this->createElement('PstlAdr'));
+
+            // Generate country address node.
+            $postalAddress->appendChild($this->createElement('Ctry', 'GB'));
+        }
+
         $this->currentPayment->appendChild($debtor);
 
         if ($paymentInformation->getOriginBankPartyIdentification() !== null && $this->painFormat === 'pain.001.001.03') {
@@ -107,7 +116,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
         $debtorAccount->appendChild($id);
-        if ($paymentInformation->getOriginAccountCurrency()) {
+        if ($paymentInformation->getOriginAccountCurrency() && $paymentInformation->showCurrency()) {
             $debtorAccount->appendChild($this->createElement('Ccy', $paymentInformation->getOriginAccountCurrency()));
         }
         $this->currentPayment->appendChild($debtorAccount);
@@ -117,7 +126,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $debtorAgent->appendChild($financialInstitutionId);
         $this->currentPayment->appendChild($debtorAgent);
 
-        $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
+        if ($paymentInformation->getChargeBearer()) {
+            $this->currentPayment->appendChild($this->createElement('ChrgBr', $paymentInformation->getChargeBearer()));
+        }
+
         $this->currentTransfer->appendChild($this->currentPayment);
     }
 
@@ -250,16 +262,19 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $postalAddress = $this->createElement('PstlAdr');
 
-        // Gemerate country address node.
+        if (!empty($transactionInformation->getTownName())) {
+            $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+        }
+
+        // Generate country address node.
         if ((bool)$transactionInformation->getCountry()) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
         }
 
         // Ensure $postalAddressData is an array as getPostalAddress() returns either string or string[].
-        $postalAddressData = $transactionInformation->getPostalAddress();
-        if (!is_array($postalAddressData)) {
-            $postalAddressData = array($postalAddressData);
-        }
+        $postalAddressData = is_array($transactionInformation->getPostalAddress())
+            ? $transactionInformation->getPostalAddress()
+            : array($transactionInformation->getPostalAddress());
 
         // Generate nodes for each address line.
         foreach (array_filter($postalAddressData) as $postalAddressLine) {

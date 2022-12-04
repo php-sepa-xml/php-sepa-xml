@@ -68,4 +68,5 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
     }
+
 }
