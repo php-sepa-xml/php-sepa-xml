@@ -439,9 +439,8 @@ class PaymentInformation
      */
     public function setChargeBearer(string $chargeBearer = null): void
     {
-        if (!$chargeBearer) return;
         $chargeBearer = strtoupper($chargeBearer);
-        if (!in_array($chargeBearer, array('SLEV', 'DEBT', 'CRED', 'SHAR'))) throw new InvalidArgumentException("Invalid Charge Bearer: $chargeBearer");
+        if (!in_array($chargeBearer, array('SLEV', 'DEBT', 'CRED', 'SHAR', null))) throw new InvalidArgumentException("Invalid Charge Bearer: $chargeBearer");
         $this->chargeBearer = $chargeBearer;
     }
 

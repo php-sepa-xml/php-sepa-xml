@@ -94,14 +94,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
 
-
-        if ($paymentInformation->getOriginAccountCurrency() === 'GBP') {
-            $postalAddress = $debtor->appendChild($this->createElement('PstlAdr'));
-
-            // Generate country address node.
-            $postalAddress->appendChild($this->createElement('Ctry', 'GB'));
-        }
-
         $this->currentPayment->appendChild($debtor);
 
         if ($paymentInformation->getOriginBankPartyIdentification() !== null && $this->painFormat === 'pain.001.001.03') {
