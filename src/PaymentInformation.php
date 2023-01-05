@@ -439,7 +439,11 @@ class PaymentInformation
      */
     public function setChargeBearer(string $chargeBearer = null): void
     {
-        if (!$chargeBearer) return;
+        if (!$chargeBearer) {
+            $this->chargeBearer = null;
+            return;
+        }
+
         $chargeBearer = strtoupper($chargeBearer);
         if (!in_array($chargeBearer, array('SLEV', 'DEBT', 'CRED', 'SHAR'))) throw new InvalidArgumentException("Invalid Charge Bearer: $chargeBearer");
         $this->chargeBearer = $chargeBearer;
@@ -453,5 +457,10 @@ class PaymentInformation
     public function showCurrency(): void
     {
         $this->showCurrency = true;
+    }
+
+    public function isShowCurrency(): bool
+    {
+        return $this->showCurrency;
     }
 }

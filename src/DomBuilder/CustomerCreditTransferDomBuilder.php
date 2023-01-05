@@ -116,7 +116,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $paymentInformation->getOriginAccountIBAN()));
         $debtorAccount->appendChild($id);
-        if ($paymentInformation->getOriginAccountCurrency() && $paymentInformation->showCurrency()) {
+        if ($paymentInformation->getOriginAccountCurrency() && $paymentInformation->isShowCurrency()) {
             $debtorAccount->appendChild($this->createElement('Ccy', $paymentInformation->getOriginAccountCurrency()));
         }
         $this->currentPayment->appendChild($debtorAccount);
