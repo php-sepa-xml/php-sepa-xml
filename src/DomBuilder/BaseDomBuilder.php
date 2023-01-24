@@ -89,6 +89,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $this->doc->saveXML();
     }
 
+    public function toXml(string $filename,): int|false
+    {
+        return $this->doc->save($filename);
+    }
+
     /**
      * Format an integer as a monetary value.
      */
