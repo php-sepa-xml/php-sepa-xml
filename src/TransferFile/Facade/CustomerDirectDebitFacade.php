@@ -165,6 +165,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['debtorAdrLine'])) {
             $transfer->setPostalAddress($transferInformation['debtorAdrLine']);
         }
+        if (isset($transferInformation['debtorCustomId'])) {
+            $transfer->setCustomId($transferInformation['debtorCustomId']);
+        }
+
         $this->payments[$paymentName]->addTransfer($transfer);
 
         return $transfer;

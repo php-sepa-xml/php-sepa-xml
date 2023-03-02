@@ -160,6 +160,18 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $creditor = $this->createElement('Cdtr');
         $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
 
+        // Add debitorCustomId id specified
+        $otherId = $transactionInformation->getCustomId();
+        if($otherId != null && !empty($otherId)) {
+            $creditorId = $this->createElement('Id');
+            $creditorPrvtId = $this->createElement('PrvtId');
+            $creditorPrvtIdOther = $this->createElement('Othr');
+            $creditorPrvtIdOther->appendChild($this->createElement('Id', $otherId));
+            $creditorPrvtId->appendChild($creditorPrvtIdOther);
+            $creditorId->appendChild($creditorPrvtId);
+            $creditor->appendChild($creditorId);
+        }
+
         // Creditor address if needed and supported by schema.
         if (in_array($this->painFormat, array('pain.001.001.03'))) {
             $this->appendAddressToDomElement($creditor, $transactionInformation);
