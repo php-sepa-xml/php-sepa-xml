@@ -172,6 +172,18 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
 
+        // Add debitorCustomId id specified
+        $otherId = $transactionInformation->getCustomId();
+        if ($otherId != null && !empty($otherId)) {
+            $debtorId = $this->createElement('Id');
+            $debtorPrvtId = $this->createElement('PrvtId');
+            $debtorPrvtIdOther = $this->createElement('Othr');
+            $debtorPrvtIdOther->appendChild($this->createElement('Id', $otherId));
+            $debtorPrvtId->appendChild($debtorPrvtIdOther);
+            $debtorId->appendChild($debtorPrvtId);
+            $debtor->appendChild($debtorId);
+        }
+
         // Add address data to debtor node
         if (in_array($this->painFormat, array('pain.008.003.02', 'pain.008.001.02'))) {
             $postalAddress = $this->createElement('PstlAdr');

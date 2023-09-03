@@ -68,4 +68,52 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
     }
+
+
+    /**
+     * Test the XML generation of a direct debit transfer with Custom Debitor Id
+     * data for pain.008.001.02
+     */
+    public function testWithCustomDebitorId(): void
+    {
+        $groupHeader = new GroupHeader('TEST_DEBTOR_ID', 'Test Company Inc.');
+        $groupHeader->setInitiatingPartyId('DE67ZZZ00000123456');
+
+        $paymentInformation = new \Digitick\Sepa\PaymentInformation('RAND001', 'DE88500105173441451911', 'DEUTDEFFXXX', 'Test Company Inc.');
+        $paymentInformation->setCreditorId('DE67ZZZ00000123456');
+        $paymentInformation->setSequenceType('FRST');
+
+        $transferFile = new \Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile($groupHeader);
+        $transferFile->addPaymentInformation($paymentInformation);
+
+        $transactionInformation = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(1000, 'DE40500105174181777145', 'Max Musterman');
+        $transactionInformation->setMandateId('TEST-MANDATE-1');
+        $transactionInformation->setMandateSignDate(new \DateTime('2022-05-15'));
+        $transactionInformation->setCustomId('debitor-custom-id');
+
+        $builder = new CustomerDirectDebitTransferDomBuilder('pain.008.001.02');
+        $builder->visitTransferFile($transferFile);
+        $builder->visitGroupHeader($groupHeader);
+        $builder->visitPaymentInformation($paymentInformation);
+        $builder->visitTransferInformation($transactionInformation);
+
+        $xml = $builder->asXml();
+
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadXML($xml);
+
+        // Test xml schema validation
+
+        $validated = $doc->schemaValidate(__DIR__ . '/../../fixtures/pain.008.001.02.xsd');
+        $this->assertTrue($validated);
+
+        // Test contents
+
+        $xpath = new \DOMXPath($doc);
+        $xpath->registerNamespace('ns', 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.02');
+
+        $debitorCustomIdNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:Id/ns:PrvtId/ns:Othr/ns:Id')->item(0);
+
+        $this->assertSame('debitor-custom-id', $debitorCustomIdNode->textContent);
+    }
 }

@@ -148,6 +148,11 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
+     * @var string|null
+     */
+    protected $customId; // used for debitor or creditor
+
+    /**
      * @param int $amount amount in cents
      */
     public function __construct(int $amount, string $iban, string $name, ?string $identification = null)
@@ -371,5 +376,15 @@ class BaseTransferInformation implements TransferInformationInterface
     public function setPostalAddress($postalAddress): void
     {
         $this->postalAddress = $postalAddress;
+    }
+
+    public function setCustomId(string $customId): ?string
+    {
+        return $this->customId = $customId;
+    }
+
+    public function getCustomId(): ?string
+    {
+        return $this->customId;
     }
 }

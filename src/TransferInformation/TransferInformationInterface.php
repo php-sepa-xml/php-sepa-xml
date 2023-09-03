@@ -35,4 +35,6 @@ interface TransferInformationInterface
     public function getInstructionId(): ?string;
 
     public function getCreditorReferenceType(): ?string;
+
+    public function getCustomId(): ?string;
 }
