@@ -62,7 +62,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         $this->currentPayment->appendChild(
-            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+            $this->createElement('NbOfTxs', (string)$paymentInformation->getNumberOfTransactions())
         );
 
         $this->currentPayment->appendChild(

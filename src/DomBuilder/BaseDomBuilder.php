@@ -110,7 +110,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $groupHeader->getCreationDateTime()->format($groupHeader->getCreationDateTimeFormat())
         );
         $groupHeaderTag->appendChild($creationDateTime);
-        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', $groupHeader->getNumberOfTransactions()));
+        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', (string)$groupHeader->getNumberOfTransactions()));
         $groupHeaderTag->appendChild(
             $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
         );
