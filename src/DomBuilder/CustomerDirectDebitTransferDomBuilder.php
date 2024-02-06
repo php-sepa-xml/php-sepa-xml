@@ -143,6 +143,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $paymentId->appendChild(
             $this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification())
         );
+        if (!empty($transactionInformation->getInstructionId())) {
+            $paymentId->appendChild(
+                $this->createElement('InstrId', $transactionInformation->getInstructionId())
+            );
+        }
+
         $directDebitTransactionInformation->appendChild($paymentId);
 
         $instructedAmount = $this->createElement(

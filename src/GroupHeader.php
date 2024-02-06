@@ -96,7 +96,7 @@ class GroupHeader
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
-        $this->creationDateTime = new \DateTime();
+        $this->creationDateTime = (new \DateTime())->setTimezone(new \DateTimeZone('UTC'));
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
