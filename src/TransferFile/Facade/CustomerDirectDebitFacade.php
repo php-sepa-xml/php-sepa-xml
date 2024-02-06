@@ -133,6 +133,11 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
                 $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
             );
         }
+
+        if (isset($transferInformation['instructionId'])) {
+            $transfer->setInstructionId($transferInformation['instructionId']);
+        }
+
         if (isset($transferInformation['originalMandateId'])) {
             $transfer->setOriginalMandateId($transferInformation['originalMandateId']);
         }
@@ -142,7 +147,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['amendedDebtorAccount'])) {
             $transfer->setAmendedDebtorAccount((bool) $transferInformation['amendedDebtorAccount']);
         }
-        
+
         if (isset($transferInformation['postCode'])) {
             $transfer->setPostCode($transferInformation['postCode']);
         }
