@@ -184,6 +184,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'remittanceInformation' => 'Purpose of this direct debit',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
@@ -227,6 +228,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorReference' => 'RF81123453',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
