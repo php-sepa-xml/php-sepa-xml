@@ -83,7 +83,7 @@ class GroupHeader
     /**
      * @var string
      */
-    protected $creationDateTimeFormat = 'Y-m-d\TH:i:s\Z';
+    protected $creationDateTimeFormat = \DateTime::RFC3339;
 
     /**
      * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.
@@ -96,7 +96,7 @@ class GroupHeader
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
-        $this->creationDateTime = (new \DateTime())->setTimezone(new \DateTimeZone('UTC'));
+        $this->creationDateTime = new \DateTime();
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
