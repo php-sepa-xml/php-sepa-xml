@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class StringHelperTest extends TestCase
 {
     /**
-     * Tests german character translation
+     * Tests german characters' translation
      */
     public function testGermanCharacters(): void
     {
@@ -21,12 +21,12 @@ class StringHelperTest extends TestCase
     }
 
     /**
-     * Tests german character translation
+     * Tests some special characters' translation
      */
     public function testSpecialCharacters(): void
     {
-        $string = 'Az09#_:?,-(+.)';
+        $string = "Az09#_<&*:?,-/(+.)' ";
 
-        $this->assertEquals('Az09  :?,-(+.)', StringHelper::sanitizeString($string));
+        $this->assertEquals("Az09     :?,-/(+.)' ", StringHelper::sanitizeString($string));
     }
 }
