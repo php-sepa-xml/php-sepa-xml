@@ -62,14 +62,36 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
         $this->doc->formatOutput = true;
         $this->root = $this->doc->createElement('Document');
-        $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
+        $this->setXmlns($painFormat);
+
         $this->root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        if ($withSchemaLocation) {
-            $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
-        }
+        $this->setSchemaLocation($painFormat, $withSchemaLocation);
 
         $this->doc->appendChild($this->root);
+    }
+
+    private function setXmlns(string $painFormat): void
+    {
+        if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
+            $this->root->setAttribute('xmlns', sprintf('%s', $painFormat));
+        } else {
+            $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+        }
+    }
+
+    private function setSchemaLocation(string $painFormat, bool $withSchemaLocation=true): void
+    {
+        if ($withSchemaLocation) {
+            if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
+                $painFormat = substr($painFormat, strrpos($painFormat, '/')+1, (strrpos($painFormat, '.') -1) - strrpos($painFormat, '/'));
+
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+            } else {
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+            }
+	}
     }
 
     protected function createElement(string $name, ?string $value = null): \DOMElement
@@ -81,6 +103,18 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             return $elm;
         } else {
             return $this->doc->createElement($name);
+        }
+    }
+
+    public function removeElement(string $node): void
+    {
+        $nodes = $this->doc->getElementsByTagName($node);
+        $nodeToRemove = [];
+        foreach($nodes as $node) {
+            $nodeToRemove[] = $node;
+        }
+        foreach ($nodeToRemove as $node) {
+            $node->parentNode->removeChild($node);
         }
     }
 
@@ -191,5 +225,4 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
         return $remittanceInformation;
     }
-
 }
