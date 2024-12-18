@@ -44,7 +44,6 @@
         "bin-dir": "bin/"
     },
     "scripts": {
-
         "rector": "bin/rector process --clear-cache --no-diffs",
         "phpstan": "bin/phpstan analyse",
         "phpstan-cc": "bin/phpstan clear-result-cache",
