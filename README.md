@@ -50,6 +50,10 @@ Specific version, API stability
 * [handling Direct Debits](doc/direct_debit.md)
 * [handling Credit Transfers](doc/direct_credit.md)
 
+
+## Development
+* [Some Dev docs](doc/dev_setup.md)
+
 ## External Resources
 
 * [Official ISO20022 Website](https://www.iso20022.org/)
