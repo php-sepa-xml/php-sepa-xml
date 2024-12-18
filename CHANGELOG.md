@@ -1,9 +1,10 @@
 # Changelog
 
-## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/tree/HEAD...2.2.1)
+## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
+
 
 ## [2.2.1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.2.1)
-[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.0...2.2.1)
 
 **Closed issues:**
 - Add apostrophe to StringHelper.php as per the Extended Character Set [\#162](https://github.com/php-sepa-xml/php-sepa-xml/issues/162)
