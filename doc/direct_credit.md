@@ -1,6 +1,6 @@
 
 
-##Sample Usage CreditTransfer with Factory
+## Sample Usage CreditTransfer with Factory
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
@@ -14,10 +14,13 @@ $customerCredit->addPaymentInfo('firstPayment', array(
     'debtorName'              => 'My Company',
     'debtorAccountIBAN'       => 'FI1350001540000056',
     'debtorAgentBIC'          => 'PSSTFRPPMON',
+    // Add/Set batch booking option, you can pass boolean value as per your requirement, optional
+    'batchBooking'            => true, 
 ));
+
 // Add a Single Transaction to the named payment
 $customerCredit->addTransfer('firstPayment', array(
-    'amount'                  => '500',
+    'amount'                  => 500, // `amount` should be in cents
     'creditorIban'            => 'FI1350001540000056',
     'creditorBic'             => 'OKOYFIHH',
     'creditorName'            => 'Their Company',
@@ -27,14 +30,14 @@ $customerCredit->addTransfer('firstPayment', array(
 $customerCredit->asXML();
 ```
 
-##Extended Usage CreditTransfer
+## Extended Usage CreditTransfer
 ```php
 // Create the initiating information
 $groupHeader = new GroupHeader('SEPA File Identifier', 'Your Company Name');
 $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
 $transfer = new CustomerCreditTransferInformation(
-    '0.02', // Amount
+    2, // Amount
     'FI1350001540000056', //IBAN of creditor
     'Their Corp' //Name of Creditor
 );
