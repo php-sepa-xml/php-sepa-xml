@@ -1,7 +1,7 @@
 php-sepa-xml
 ============
 
-Master: [![Build Status](https://github.com/BorislavSabev/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/BorislavSabev/php-sepa-xml/actions/workflows/phpunit.yml)
+[![Build Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml)
 
 SEPA file generator for PHP.
 
