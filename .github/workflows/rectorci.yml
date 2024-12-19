@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           # Must be used to trigger workflow after push
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.RECTOR_ACCESS_TOKEN }}
 
       -
         uses: shivammathur/setup-php@v2
