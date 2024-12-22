@@ -250,6 +250,26 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $postalAddress = $this->createElement('PstlAdr');
 
+        //Generate Street Name address node.
+        if ((bool)$transactionInformation->getStreetName()) {
+            $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
+        }
+
+        //Generate Building number address node.
+        if ((bool)$transactionInformation->getBuildingNumber()) {
+            $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+        }
+
+        //Generate Post Code address node.
+        if ((bool)$transactionInformation->getPostCode()) {
+            $postalAddress->appendChild($this->createElement('PstCd', $transactionInformation->getPostCode()));
+        }
+
+        //Generate Town Name address node.
+        if ((bool)$transactionInformation->getTownName()) {
+            $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+        }
+
         // Gemerate country address node.
         if ((bool)$transactionInformation->getCountry()) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
@@ -259,11 +279,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $postalAddressData = $transactionInformation->getPostalAddress();
         if (!is_array($postalAddressData)) {
             $postalAddressData = array($postalAddressData);
-        }
-
-        // Generate nodes for each address line.
-        foreach (array_filter($postalAddressData) as $postalAddressLine) {
-            $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressLine));
         }
 
         $creditor->appendChild($postalAddress);
