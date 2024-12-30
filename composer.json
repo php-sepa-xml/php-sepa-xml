@@ -23,12 +23,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Digitick\\Sepa\\": "src/"
+            "FluorFR\\Sepa\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Digitick\\Sepa\\Tests\\": "tests/"
+            "FluorFR\\Sepa\\Tests\\": "tests/"
         }
     },
     "require": {
