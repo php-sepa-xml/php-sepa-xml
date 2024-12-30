@@ -1,5 +1,5 @@
 {
-    "name": "digitick/sepa-xml",
+    "name": "fluor/sepa-xml",
     "type": "library",
     "description": "Creates Single Euro Payments Area (SEPA) XML files for the Direct Debit and Credit Transfer operations.",
     "keywords": ["banking", "sepa", "xml"],
