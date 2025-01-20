@@ -26,7 +26,7 @@ class StringHelper
 {
     public static function sanitizeString(string $inputString): string
     {
-        $map = array(
+        $map = [
             // German
             'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss',
             // others
@@ -43,10 +43,10 @@ class StringHelper
             'ŝ' => 's', 'ș' => 's', 'š' => 's', 'ț' => 't',
             'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ū' => 'u', 'ý' => 'y', 'ÿ' => 'y',
             'Ð' => 'Dj','Ž' => 'Z', 'ž' => 'z',
-        );
+        ];
 
         $mapped = strtr($inputString, $map);
-        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-\/(+.) ]/', ' ', $mapped);
+        $sanitized = preg_replace('/[^A-Za-z0-9:?,\-\/(+.)\' ]/', ' ', $mapped);
 
         return $sanitized;
     }

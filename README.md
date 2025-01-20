@@ -1,7 +1,7 @@
 php-sepa-xml
 ============
 
-Master: [![Build Status](https://api.travis-ci.org/php-sepa-xml/php-sepa-xml.png?branch=master)](http://travis-ci.org/php-sepa-xml/php-sepa-xml)
+[![Build Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml)
 
 SEPA file generator for PHP.
 
@@ -18,6 +18,7 @@ Institutions and associations that should accept this format:
 * Deutsche Kreditwirtschaft
 * Fédération bancaire française
 * ING (tested on direct credit, use _pain.001.001.03_)
+* Commerzbank (tested on Credit Transfer, use _pain.001.001.03_)
 * Spain: CaixaBank
 * Spain: SantanderBank
 * Netherlands: direct-debit (pain.008.001.02) at RABO-bank (thanks @rodekker)
@@ -48,6 +49,10 @@ Specific version, API stability
 
 * [handling Direct Debits](doc/direct_debit.md)
 * [handling Credit Transfers](doc/direct_credit.md)
+
+
+## Development
+* [Some Dev docs](doc/dev_setup.md)
 
 ## External Resources
 

@@ -15,6 +15,10 @@
         {
             "name": "Sören Rohweder (monofone)",
             "email": "s.rohweder@blage.net"
+        },
+        {
+            "name": "Borislav Sabev (Borkata)",
+            "email": "contact@borkata.mailer.me"
         }
     ],
     "autoload": {
@@ -32,9 +36,30 @@
         "php": ">=7.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0 | ^9.0"
+        "phpunit/phpunit": "^8.0 | ^9.0",
+        "rector/rector": "^1.2",
+        "phpstan/phpstan": "^1.11"
     },
     "config": {
         "bin-dir": "bin/"
+    },
+    "scripts": {
+        "rector": "bin/rector process --clear-cache --no-diffs",
+        "phpstan": "bin/phpstan analyse",
+        "phpstan-cc": "bin/phpstan clear-result-cache",
+        "phpstan-dp": "bin/phpstan dump-parameters",
+        "php-codeQualityFull" : [
+            "@phpstan",
+            "@rector"
+        ],
+        "phpunit": "bin/phpunit"
+    },
+    "scripts-descriptions": {
+        "rector": "runs `bin/rector process --clear-cache --no-diffs`",
+        "phpstan": "runs `bin/phpstan analyse`",
+        "phpstan-cc": "runs `bin/phpstan clear-result-cache`",
+        "phpstan-dp": "runs `bin/phpstan dump-parameters`",
+        "php-codeQualityFull" : "run `phpstan` and then `rector`",
+        "phpunit" : "It's pretty obvious what this does, isn't it?"
     }
 }
