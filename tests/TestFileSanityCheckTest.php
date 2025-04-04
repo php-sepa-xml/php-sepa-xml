@@ -56,6 +56,7 @@ class TestFileSanityCheckTest extends TestCase
             array('pain.001.002.03'),
             array('pain.001.003.03'),
             array('pain.008.001.02'),
+            array('pain.008.001.10'),
             array('pain.008.002.02'),
             array('pain.008.003.02'),
         );
