@@ -140,9 +140,15 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $directDebitTransactionInformation = $this->createElement('DrctDbtTxInf');
 
         $paymentId = $this->createElement('PmtId');
+        if (!empty($transactionInformation->getInstructionId())) {
+            $paymentId->appendChild(
+                $this->createElement('InstrId', $transactionInformation->getInstructionId())
+            );
+        }
         $paymentId->appendChild(
             $this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification())
         );
+
         $directDebitTransactionInformation->appendChild($paymentId);
 
         $instructedAmount = $this->createElement(
@@ -271,8 +277,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         if ($groupHeader->getInitiatingPartyId() !== null && in_array($this->painFormat , array('pain.008.001.02','pain.008.003.02'))) {
             $newId = $this->createElement('Id');
             $orgId = $this->createElement('OrgId');
+            $schmeNm = $this->createElement('SchmeNm');
+            $schmeNm->appendChild($this->createElement('Prtry', 'SEPA'));
+
             $othr  = $this->createElement('Othr');
             $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $othr->appendChild($schmeNm);
 
             if ($groupHeader->getIssuer()) {
                 $othr->appendChild($this->createElement('Issr', $groupHeader->getIssuer()));

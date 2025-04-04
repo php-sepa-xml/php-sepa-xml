@@ -83,7 +83,7 @@ class GroupHeader
     /**
      * @var string
      */
-    protected $creationDateTimeFormat = 'Y-m-d\TH:i:s\Z';
+    protected $creationDateTimeFormat = \DateTime::RFC3339;
 
     /**
      * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.

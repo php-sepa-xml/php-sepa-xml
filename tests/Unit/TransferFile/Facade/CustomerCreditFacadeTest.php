@@ -38,7 +38,8 @@ class CustomerCreditFacadeTest extends TestCase
                 'creditorIban' => 'FI1350001540000056',
                 'creditorBic' => 'OKOYFIHH',
                 'creditorName' => 'Their Company',
-                'remittanceInformation' => 'Purpose of this credit'
+                'remittanceInformation' => 'Purpose of this credit',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
@@ -72,7 +73,8 @@ class CustomerCreditFacadeTest extends TestCase
                 'amount' => 500,
                 'creditorIban' => 'FI1350001540000056',
                 'creditorName' => 'Their Company',
-                'remittanceInformation' => 'Purpose of this credit'
+                'remittanceInformation' => 'Purpose of this credit',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
