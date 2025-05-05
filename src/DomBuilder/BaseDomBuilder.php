@@ -106,18 +106,6 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         }
     }
 
-    public function removeElement(string $node): void
-    {
-        $nodes = $this->doc->getElementsByTagName($node);
-        $nodeToRemove = [];
-        foreach($nodes as $node) {
-            $nodeToRemove[] = $node;
-        }
-        foreach ($nodeToRemove as $node) {
-            $node->parentNode->removeChild($node);
-        }
-    }
-
     public function asXml(): string
     {
         return $this->doc->saveXML();
