@@ -83,6 +83,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *             originalMandateId?: string
      *             originalDebtorIban?: string
      *             amendedDebtorAccount?: string
+     *             postCode?: string
+     *             townName?: string
+     *             streetName?: string
+     *             buildingNumber?: string
      *             debtorCountry?: string
      *             debtorAdrLine?: string
      *             } $transferInformation
@@ -129,6 +133,11 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
                 $this->payments[$paymentName]->getId() . count($this->payments[$paymentName]->getTransfers())
             );
         }
+
+        if (isset($transferInformation['instructionId'])) {
+            $transfer->setInstructionId($transferInformation['instructionId']);
+        }
+
         if (isset($transferInformation['originalMandateId'])) {
             $transfer->setOriginalMandateId($transferInformation['originalMandateId']);
         }
@@ -138,6 +147,23 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['amendedDebtorAccount'])) {
             $transfer->setAmendedDebtorAccount((bool) $transferInformation['amendedDebtorAccount']);
         }
+
+        if (isset($transferInformation['postCode'])) {
+            $transfer->setPostCode($transferInformation['postCode']);
+        }
+
+        if (isset($transferInformation['townName'])) {
+            $transfer->setTownName($transferInformation['townName']);
+        }
+
+        if (isset($transferInformation['streetName'])) {
+            $transfer->setStreetName($transferInformation['streetName']);
+        }
+
+        if (isset($transferInformation['buildingNumber'])) {
+            $transfer->setBuildingNumber($transferInformation['buildingNumber']);
+        }
+
         if (isset($transferInformation['debtorCountry'])) {
             $transfer->setCountry($transferInformation['debtorCountry']);
         }

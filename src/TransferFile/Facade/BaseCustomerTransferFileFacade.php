@@ -24,6 +24,7 @@ namespace Digitick\Sepa\TransferFile\Facade;
 
 use Digitick\Sepa\DomBuilder\BaseDomBuilder;
 use Digitick\Sepa\Exception\InvalidArgumentException;
+use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
 
 abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFacadeInterface
@@ -47,6 +48,14 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     {
         $this->transferFile = $transferFile;
         $this->domBuilder = $domBuilder;
+    }
+
+    /**
+     * Return the payment info with the name passed by $paymentName.
+     */
+    public function getPaymentInfo(string $paymentName): ?PaymentInformation
+    {
+        return $this->payments[$paymentName] ?? null;
     }
 
     public function asXML(): string

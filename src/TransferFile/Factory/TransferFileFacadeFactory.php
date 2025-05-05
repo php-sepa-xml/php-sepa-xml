@@ -45,11 +45,22 @@ class TransferFileFacadeFactory
         return self::createDirectDebitWithGroupHeader($groupHeader, $painFormat);
     }
 
+    /**
+     * @param GroupHeader $groupHeader
+     * @param string      $painFormat
+     * @return CustomerDirectDebitFacade
+     */
     public static function createDirectDebitWithGroupHeader(GroupHeader $groupHeader, string $painFormat = 'pain.008.002.02'): CustomerDirectDebitFacade
     {
         return new CustomerDirectDebitFacade(new CustomerDirectDebitTransferFile($groupHeader), new CustomerDirectDebitTransferDomBuilder($painFormat));
     }
 
+    /**
+     * @param string $uniqueMessageIdentification
+     * @param string $initiatingPartyName
+     * @param string $painFormat
+     * @return CustomerCreditFacade
+     */
     public static function createCustomerCredit(string $uniqueMessageIdentification, string $initiatingPartyName, string $painFormat = 'pain.001.002.03'): CustomerCreditFacade
     {
         $groupHeader = new GroupHeader($uniqueMessageIdentification, $initiatingPartyName);
@@ -57,8 +68,14 @@ class TransferFileFacadeFactory
         return self::createCustomerCreditWithGroupHeader($groupHeader, $painFormat);
     }
 
-    public static function createCustomerCreditWithGroupHeader(GroupHeader $groupHeader, string $painFormat = 'pain.001.002.03'): CustomerCreditFacade
+    /**
+     * @param GroupHeader $groupHeader
+     * @param string      $painFormat
+     * @param bool        $withSchemaLocation
+     * @return CustomerCreditFacade
+     */
+    public static function createCustomerCreditWithGroupHeader(GroupHeader $groupHeader, string $painFormat = 'pain.001.002.03', bool $withSchemaLocation = true): CustomerCreditFacade
     {
-        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat));
+        return new CustomerCreditFacade(new CustomerCreditTransferFile($groupHeader), new CustomerCreditTransferDomBuilder($painFormat, $withSchemaLocation));
     }
 }

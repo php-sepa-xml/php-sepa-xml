@@ -184,6 +184,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'remittanceInformation' => 'Purpose of this direct debit',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
@@ -227,6 +228,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorReference' => 'RF81123453',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'instructionId' => 'Instruction Identification',
             )
         );
 
@@ -241,5 +243,47 @@ class CustomerDirectDebitFacadeTest extends TestCase
             array('pain.008.002.02'),
             array('pain.008.003.02')
         );
+    }
+
+    public function testAddTransferWithAddress(): void
+    {
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+
+        // create a payment, it's possible to create multiple payments,
+        // "firstPayment" is the identifier for the transactions
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'My Company',
+            'creditorAccountIBAN' => 'DE78500105172337771347',
+            'creditorAgentBIC' => 'WELADE3LXXX',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+
+        // Add a Single Transaction to the named payment
+        $directDebit->addTransfer('firstPayment', [
+            'amount'                => 1499,
+            'debtorIban'            => 'CH6089144731137988786',
+            'debtorBic'             => 'CRESCHZZXXX',
+            'debtorName'            => 'John Doe',
+            'debtorMandate'         => 'AB12345',
+            'debtorMandateSignDate' => '2022-05-23',
+            'remittanceInformation' => 'Purpose of this direct debit',
+            'debtorCountry'         => 'CH',
+            'postCode'              => '8245',
+            'townName'              => 'Feuerthalen',
+            'streetName'            => 'Example Street',
+            'buildingNumber'        => '25',
+        ]);
+
+        // Test action
+        $payment = $directDebit->getPaymentInfo('firstPayment');
+        $transfer = $payment->getTransfers()[0];
+
+        $this->assertSame('CH', $transfer->getCountry());
+        $this->assertSame('8245', $transfer->getPostCode());
+        $this->assertSame('Feuerthalen', $transfer->getTownName());
+        $this->assertSame('Example Street', $transfer->getStreetName());
+        $this->assertSame('25', $transfer->getBuildingNumber());
     }
 }
