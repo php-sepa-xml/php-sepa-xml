@@ -111,6 +111,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $this->doc->saveXML();
     }
 
+    public function getDoc(): \DomDocument
+    {
+        return $this->doc;
+    }
+
     /**
      * Format an integer as a monetary value.
      */
