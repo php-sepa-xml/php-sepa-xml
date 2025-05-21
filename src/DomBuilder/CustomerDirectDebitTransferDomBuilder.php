@@ -277,8 +277,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         if ($groupHeader->getInitiatingPartyId() !== null && in_array($this->painFormat , array('pain.008.001.02','pain.008.003.02'))) {
             $newId = $this->createElement('Id');
             $orgId = $this->createElement('OrgId');
+            $schmeNm = $this->createElement('SchmeNm');
+            $schmeNm->appendChild($this->createElement('Prtry', 'SEPA'));
+
             $othr  = $this->createElement('Othr');
             $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
+            $othr->appendChild($schmeNm);
 
             if ($groupHeader->getIssuer()) {
                 $othr->appendChild($this->createElement('Issr', $groupHeader->getIssuer()));
