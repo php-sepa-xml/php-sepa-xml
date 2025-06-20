@@ -77,18 +77,19 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
+
+        if ($paymentInformation->getLocalInstrumentCode()) {
+            $localInstrument = $this->createElement('LclInstrm');
+            $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
+            $paymentTypeInformation->appendChild($localInstrument);
+        }
+
         if ($paymentInformation->getCategoryPurposeCode()) {
             $categoryPurpose = $this->createElement('CtgyPurp');
             $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
             $paymentTypeInformation->appendChild($categoryPurpose);
         }
         $this->currentPayment->appendChild($paymentTypeInformation);
-
-        if ($paymentInformation->getLocalInstrumentCode()) {
-            $localInstrument = $this->createElement('LclInstr');
-            $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
-            $this->currentPayment->appendChild($localInstrument);
-        }
 
         $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
         $debtor = $this->createElement('Dbtr');
@@ -249,6 +250,22 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         $postalAddress = $this->createElement('PstlAdr');
+
+        if (!empty($transactionInformation->getStreetName())) {
+            $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
+        }
+
+        if (!empty($transactionInformation->getBuildingNumber())) {
+            $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+        }
+
+        if (!empty($transactionInformation->getPostCode())) {
+            $postalAddress->appendChild($this->createElement('PstCd', $transactionInformation->getPostCode()));
+        }
+
+        if (!empty($transactionInformation->getTownName())) {
+            $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+        }
 
         // Gemerate country address node.
         if ((bool)$transactionInformation->getCountry()) {
