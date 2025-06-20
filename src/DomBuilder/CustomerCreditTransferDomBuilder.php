@@ -78,9 +78,15 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
 
-        if ($paymentInformation->getLocalInstrumentCode()) {
+        if ($paymentInformation->getLocalInstrumentCode() || $paymentInformation->getLocalInstrumentProprietary()) {
             $localInstrument = $this->createElement('LclInstrm');
-            $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
+            if ($paymentInformation->getLocalInstrumentCode()) {
+                $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
+            }
+
+            if ($paymentInformation->getLocalInstrumentProprietary()) {
+                $localInstrument->appendChild($this->createElement('Prtry', $paymentInformation->getLocalInstrumentProprietary()));
+            }
             $paymentTypeInformation->appendChild($localInstrument);
         }
 

@@ -104,6 +104,11 @@ class PaymentInformation
     protected $localInstrumentCode;
 
     /**
+     * @var string|null Local service proprietary code.
+     */
+    protected $localInstrumentProprietary;
+
+    /**
      * Date of payment execution
      *
      * @var \DateTime
@@ -224,10 +229,18 @@ class PaymentInformation
     public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1', 'CBI'))) {
+        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
+    }
+
+    /**
+     * @param string $localInstrumentProprietary
+     */
+    public function setLocalInstrumentProprietary(string $localInstrumentProprietary): void
+    {
+        $this->localInstrumentProprietary = $localInstrumentProprietary;
     }
 
     /**
@@ -363,6 +376,11 @@ class PaymentInformation
     public function getLocalInstrumentCode(): ?string
     {
         return $this->localInstrumentCode;
+    }
+
+    public function getLocalInstrumentProprietary(): ?string
+    {
+        return $this->localInstrumentProprietary;
     }
 
     public function getNumberOfTransactions(): int
