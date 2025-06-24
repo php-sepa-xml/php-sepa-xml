@@ -202,6 +202,16 @@ class BaseTransferInformation implements TransferInformationInterface
         return $this->instructionId;
     }
 
+    public function setCategoryPurposeCode(string $categoryPurposeCode): void
+    {
+        $this->categoryPurposeCode = $categoryPurposeCode;
+    }
+
+    public function getCategoryPurposeCode(): ?string
+    {
+        return $this->categoryPurposeCode;
+    }
+
     public function getIban(): string
     {
         return $this->iban;

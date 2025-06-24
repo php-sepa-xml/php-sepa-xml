@@ -144,6 +144,16 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 
+        if ($transactionInformation->getCategoryPurposeCode()) {
+            $PmtTpInf = $this->createElement('PmtTpInf');
+
+            $CtgyPurp = $this->createElement('CtgyPurp');
+            $CtgyPurp->appendChild($this->createElement('Cd', $transactionInformation->getCategoryPurposeCode()));
+            $PmtTpInf->appendChild($CtgyPurp);
+            
+            $CdtTrfTxInf->appendChild($PmtTpInf);
+        }
+
         // Amount 2.42
         $amount = $this->createElement('Amt');
         $instructedAmount = $this->createElement(
