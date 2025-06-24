@@ -60,6 +60,11 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $instructionId;
 
     /**
+     * @var string|null
+     */
+    protected $categoryPurposeCode;
+
+    /**
      * @var string
      */
     protected $EndToEndIdentification;
