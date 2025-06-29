@@ -179,12 +179,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
 
         // Add address data to debtor node
-        if (in_array($this->painFormat, array('pain.008.003.02', 'pain.008.001.02'))) {
+        if (in_array($this->painFormat, ['pain.008.003.02', 'pain.008.001.02', 'pain.008.001.08'])) {
             $postalAddress = $this->createElement('PstlAdr');
 
             // Th elements street number, building number, post code and town name
             // are not supported by 'pain.008.003.02'.
-            if (in_array($this->painFormat, ['pain.008.001.02'])) {
+            if (in_array($this->painFormat, ['pain.008.001.02', 'pain.008.001.08'])) {
                 if (!empty($transactionInformation->getStreetName())) {
                     $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
                 }
