@@ -184,6 +184,10 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'remittanceInformation' => 'Purpose of this direct debit',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'streetName' => 'Some Street',
+                'buildingNumber' => '5',
+                'postCode' => '01001',
+                'townName' => 'Dresden',
                 'instructionId' => 'Instruction Identification',
             )
         );
@@ -191,7 +195,6 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->dom->loadXML($directDebit->asXML());
         $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/../../../fixtures/' . $schema . '.xsd'));
     }
-
 
     /**
      * Test creation of file via Factory and Facade
@@ -228,6 +231,10 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorReference' => 'RF81123453',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'streetName' => 'Some Street',
+                'buildingNumber' => '5',
+                'postCode' => '01001',
+                'townName' => 'Dresden',
                 'instructionId' => 'Instruction Identification',
             )
         );
@@ -238,16 +245,20 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     public function provideSchema(): iterable
     {
-        return array(
-            array('pain.008.001.02'),
-            array('pain.008.002.02'),
-            array('pain.008.003.02')
-        );
+        return [
+            ['pain.008.001.02'],
+            ['pain.008.002.02'],
+            ['pain.008.003.02'],
+            ['pain.008.001.08']
+        ];
     }
 
-    public function testAddTransferWithAddress(): void
+    /**
+     * @dataProvider provideSchemaWithFullAddresses
+     */
+    public function testAddTransferWithAddress(string $painFormat): void
     {
-        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $painFormat);
 
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
@@ -285,5 +296,30 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertSame('Feuerthalen', $transfer->getTownName());
         $this->assertSame('Example Street', $transfer->getStreetName());
         $this->assertSame('25', $transfer->getBuildingNumber());
+
+        $this->dom->loadXML($directDebit->asXML());
+
+        $itemValue = function (string $node): ?string {
+            if ($item = $this->dom->getElementsByTagName($node)->item(0)) {
+                return $item->textContent;
+            }
+
+            return null;
+        };
+
+        self::assertNull($itemValue('AdrLine'), 'expected <AdrLine> do not exist');
+        self::assertSame('25', $itemValue('BldgNb'), 'expected <BldgNb>25</BldgNb>');
+        self::assertSame('8245', $itemValue('PstCd'), 'expected <PstCd>8245</PstCd>');
+        self::assertSame('CH', $itemValue('Ctry'), 'expected <Ctry>CH</Ctry>');
+        self::assertSame('Example Street', $itemValue('StrtNm'), 'expected <StrtNm>Example Street</StrtNm>');
+        self::assertSame('Feuerthalen', $itemValue('TwnNm'), 'expected <TwnNm>Feuerthalen</TwnNm>');
+    }
+
+    public function provideSchemaWithFullAddresses(): iterable
+    {
+        return [
+            'pain.008.001.02' => ['pain.008.001.02'],
+            'pain.008.001.08' => ['pain.008.001.08']
+        ];
     }
 }

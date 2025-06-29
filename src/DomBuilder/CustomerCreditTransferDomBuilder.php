@@ -90,7 +90,15 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $this->currentPayment->appendChild($localInstrument);
         }
 
-        $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
+        if ('pain.001.001.09' === $this->painFormat) {
+            $requestExecutionDate = $this->createElement('ReqdExctnDt');
+            $requestExecutionDate->appendChild($this->createElement('Dt', $paymentInformation->getDueDate()));
+        } else {
+            $requestExecutionDate = $this->createElement('ReqdExctnDt', $paymentInformation->getDueDate());
+        }
+
+        $this->currentPayment->appendChild($requestExecutionDate);
+
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
         $this->currentPayment->appendChild($debtor);
@@ -151,7 +159,12 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         if ($transactionInformation->getBic()) {
             $creditorAgent = $this->createElement('CdtrAgt');
             $financialInstitution = $this->createElement('FinInstnId');
-            $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
+
+            $financialInstitution->appendChild($this->createElement(
+                'pain.001.001.09' === $this->painFormat ? 'BICFI' : 'BIC',
+                $transactionInformation->getBic()
+            ));
+
             $creditorAgent->appendChild($financialInstitution);
             $CdtTrfTxInf->appendChild($creditorAgent);
         }
