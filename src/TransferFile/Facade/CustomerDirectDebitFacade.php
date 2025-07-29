@@ -73,7 +73,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 
     /**
      * @param string $paymentName
-     * @param array{`
+     * @param array{
      *     amount: int,
      *     debtorIban: string,
      *     debtorName: string,
