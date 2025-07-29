@@ -25,6 +25,7 @@ use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\Exception\InvalidTransferTypeException;
 use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\PaymentInformation;
 
 interface TransferFileInterface
 {
@@ -33,7 +34,7 @@ interface TransferFileInterface
     public function getGroupHeader(): GroupHeader;
 
     /**
-     * Validate the transferfile
+     * Validate the transfer file
      *
      * @throws InvalidTransferFileConfiguration
      * @throws InvalidTransferTypeException
@@ -41,4 +42,6 @@ interface TransferFileInterface
     public function validate(): void;
 
     public function accept(DomBuilderInterface $domBuilder): void;
+
+    public function addPaymentInformation(PaymentInformation $paymentInformation): void;
 }

@@ -372,4 +372,13 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         $this->postalAddress = $postalAddress;
     }
+
+    /**
+     * Wrapper for the getCreditorName() and getDebitorName()
+     * @return string
+     */
+    public function getCreditorOrDebitorName(): string
+    {
+        return $this->name;
+    }
 }

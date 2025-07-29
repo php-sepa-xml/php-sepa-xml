@@ -42,7 +42,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     /**
      * @var array
      */
-    protected $payments = array();
+    protected $payments = [];
 
     public function __construct(TransferFileInterface $transferFile, BaseDomBuilder $domBuilder)
     {
@@ -69,8 +69,9 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     }
 
     /**
-     * @param array{dueDate: string|\DateTime} $paymentInformation
-     *
+     * @param array $paymentInformation
+     * @param string $default
+     * @return \DateTime
      * @throws InvalidArgumentException if the dueDate is not valid
      */
     public function createDueDateFromPaymentInformation(array $paymentInformation, string $default = 'now'): \DateTime

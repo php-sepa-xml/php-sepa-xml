@@ -26,6 +26,6 @@ class CustomerCreditTransferInformation extends BaseTransferInformation
 {
     public function getCreditorName(): string
     {
-        return $this->name;
+        return $this->getCreditorOrDebitorName();
     }
 }

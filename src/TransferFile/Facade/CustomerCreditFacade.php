@@ -14,16 +14,18 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 {
 
     /**
-     * @param array{
-     *             id: string,
-     *             debtorName: string,
-     *             debtorAccountIBAN: string,
-     *             debtorAgentBIC?: string,
-     *             dueDate?: string|\DateTime,
-     *             batchBooking?: bool
-     *             } $paymentInformation
-     *
+     * @param string $paymentName
+     * @param array $paymentInformation.
+     * @struct $paymentInformation {
+     *    @type string $id
+     *    @type string $debtorName
+     *    @type string $debtorAccountIBAN
+     *    @type string $debtorAgentBIC
+     *    @type string|\DateTime $dueDate
+     *    @type bool $batchBooking
+     *  }
      * @throws InvalidArgumentException
+     * @return PaymentInformation
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
@@ -31,18 +33,14 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
 
-        $originAgentBic = (isset ($paymentInformation['debtorAgentBIC'])) ? $paymentInformation['debtorAgentBIC'] : NULL;
+        $originAgentBic = $paymentInformation['debtorAgentBIC'] ?? null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['debtorAccountIBAN'],
             $originAgentBic,
             $paymentInformation['debtorName']
         );
-
-        if (isset($paymentInformation['batchBooking'])) {
-            $payment->setBatchBooking($paymentInformation['batchBooking']);
-        }
-
+        $payment->setBatchBooking($paymentInformation['batchBooking'] ?? false);
         $payment->setDueDate($this->createDueDateFromPaymentInformation($paymentInformation));
 
         $this->payments[$paymentName] = $payment;
@@ -51,19 +49,19 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
-     * @param array{
-     *             amount: int,
-     *             creditorIban: string,
-     *             creditorName: string,
-     *             creditorBic?: string,
-     *             creditorReference?: string,
-     *             remittanceInformation: string,
-     *             endToEndId?: string,
-     *             instructionId?: string
-     *             } $transferInformation
-     *
+     * @param string $paymentName
+     * @param array $transferInformation
+     * @struct $transferInformation {
+     *    @type int $amount
+     *    @type string $creditorIban
+     *    @type string $creditorName
+     *    @type string $creditorBic
+     *    @type string $creditorReference?
+     *    @type string $remittanceInformation
+     *    @type string $endToEndId
+     *    @type string $instructionId
+     * }
      * @throws InvalidArgumentException
-     *
      * @return CustomerCreditTransferInformation
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface

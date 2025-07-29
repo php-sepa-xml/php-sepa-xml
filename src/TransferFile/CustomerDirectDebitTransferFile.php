@@ -31,7 +31,7 @@ class CustomerDirectDebitTransferFile extends BaseTransferFile
 {
     public function addPaymentInformation(PaymentInformation $paymentInformation): void
     {
-        $paymentInformation->setValidPaymentMethods(array('DD'));
+        $paymentInformation->setValidPaymentMethods(['DD']);
         $paymentInformation->setPaymentMethod('DD');
         parent::addPaymentInformation($paymentInformation);
     }

@@ -37,6 +37,10 @@ class TransferFileFacadeFactory
      *                                            Part of the duplication check (unique daily reference).
      *                                            The first 8 or 11 characters of <Msgld> must match the BIC of the
      *                                            Instructing Agent. The rest of the field can be freely defined.
+     * @param string $initiatingPartyName
+     * @param string $painFormat
+     * @return CustomerDirectDebitFacade
+     * @throws \DOMException
      */
     public static function createDirectDebit(string $uniqueMessageIdentification, string $initiatingPartyName, string $painFormat = 'pain.008.002.02'): CustomerDirectDebitFacade
     {
@@ -47,8 +51,9 @@ class TransferFileFacadeFactory
 
     /**
      * @param GroupHeader $groupHeader
-     * @param string      $painFormat
+     * @param string $painFormat
      * @return CustomerDirectDebitFacade
+     * @throws \DOMException
      */
     public static function createDirectDebitWithGroupHeader(GroupHeader $groupHeader, string $painFormat = 'pain.008.002.02'): CustomerDirectDebitFacade
     {
@@ -60,6 +65,7 @@ class TransferFileFacadeFactory
      * @param string $initiatingPartyName
      * @param string $painFormat
      * @return CustomerCreditFacade
+     * @throws \DOMException
      */
     public static function createCustomerCredit(string $uniqueMessageIdentification, string $initiatingPartyName, string $painFormat = 'pain.001.002.03'): CustomerCreditFacade
     {
@@ -70,9 +76,10 @@ class TransferFileFacadeFactory
 
     /**
      * @param GroupHeader $groupHeader
-     * @param string      $painFormat
-     * @param bool        $withSchemaLocation
+     * @param string $painFormat
+     * @param bool $withSchemaLocation
      * @return CustomerCreditFacade
+     * @throws \DOMException
      */
     public static function createCustomerCreditWithGroupHeader(GroupHeader $groupHeader, string $painFormat = 'pain.001.002.03', bool $withSchemaLocation = true): CustomerCreditFacade
     {
