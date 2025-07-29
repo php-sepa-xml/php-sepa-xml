@@ -32,5 +32,5 @@ jobs:
     - name: Install dependencies
       run: composer install --no-progress --ansi
 
-    - name: Run test suite
+    - name: Run phpunit
       run: composer run-script phpunit

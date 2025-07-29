@@ -14,7 +14,7 @@ return RectorConfig::configure()
     ])
     // uncomment to reach your current PHP version
     ->withSets([
-        SetList::PHP_72,
-        LevelSetList::UP_TO_PHP_72
+        SetList::PHP_82,
+        LevelSetList::UP_TO_PHP_82
     ])
     ->withTypeCoverageLevel(0);
