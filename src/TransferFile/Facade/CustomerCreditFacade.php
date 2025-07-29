@@ -31,18 +31,14 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
 
-        $originAgentBic = (isset ($paymentInformation['debtorAgentBIC'])) ? $paymentInformation['debtorAgentBIC'] : NULL;
+        $originAgentBic = $paymentInformation['debtorAgentBIC'] ?? null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['debtorAccountIBAN'],
             $originAgentBic,
             $paymentInformation['debtorName']
         );
-
-        if (isset($paymentInformation['batchBooking'])) {
-            $payment->setBatchBooking($paymentInformation['batchBooking']);
-        }
-
+        $payment->setBatchBooking($paymentInformation['batchBooking'] ?? false);
         $payment->setDueDate($this->createDueDateFromPaymentInformation($paymentInformation));
 
         $this->payments[$paymentName] = $payment;

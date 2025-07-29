@@ -42,7 +42,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     /**
      * @var array
      */
-    protected $payments = array();
+    protected $payments = [];
 
     public function __construct(TransferFileInterface $transferFile, BaseDomBuilder $domBuilder)
     {

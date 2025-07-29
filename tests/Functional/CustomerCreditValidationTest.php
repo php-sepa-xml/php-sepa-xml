@@ -78,7 +78,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -275,7 +275,7 @@ class CustomerCreditValidationTest extends TestCase
 
         // $addressLines could be string instead of array. Ensure array for easier testing.
         if (!is_array($addressLines)) {
-            $addressLines = array($addressLines);
+            $addressLines = [$addressLines];
         }
 
         // check that all address lines do (not) exist and match the expected inputs.
@@ -412,7 +412,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -449,7 +449,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -483,7 +483,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setCreditorReference('RF81123453');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -514,20 +514,20 @@ class CustomerCreditValidationTest extends TestCase
 
     public function provideSchema(): iterable
     {
-        return array(
-            array("pain.001.001.03"),
-            array("pain.001.002.03"),
-            array("pain.001.003.03")
-        );
+        return [
+            ["pain.001.001.03"],
+            ["pain.001.002.03"],
+            ["pain.001.003.03"]
+        ];
     }
 
     public function provideAddressTests(): iterable
     {
-        return array(
-            array(array('CH', array('Teststreet 1', '21345 Somewhere'))),
-            array(array('DE', array('Teststreet 2'))),
-            array(array('NL', '21456 Rightthere')),
-            array(array('NL', array())),
-        );
+        return [
+            [['CH', ['Teststreet 1', '21345 Somewhere']]],
+            [['DE', ['Teststreet 2']]],
+            [['NL', '21456 Rightthere']],
+            [['NL', []]],
+        ];
     }
 }

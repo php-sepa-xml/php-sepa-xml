@@ -233,11 +233,11 @@ class CustomerDirectDebitValidationTest extends TestCase
 
     public function provideSchema(): iterable
     {
-        return array(
-            array('pain.008.001.02'),
-            array('pain.008.002.02'),
-            array('pain.008.003.02')
-        );
+        return [
+            ['pain.008.001.02'],
+            ['pain.008.002.02'],
+            ['pain.008.003.02']
+        ];
     }
 
     /**
@@ -283,22 +283,22 @@ class CustomerDirectDebitValidationTest extends TestCase
 
     public function scenarios(): iterable
     {
-        $scenarios = array();
-        foreach (array('pain.008.001.02','pain.008.002.02','pain.008.003.02') as $pain) {
-            $scenarios[] = array(
-                array(
+        $scenarios = [];
+        foreach (['pain.008.001.02','pain.008.002.02','pain.008.003.02'] as $pain) {
+            $scenarios[] = [
+                [
                     'pain' => $pain,
                     'batchBooking' => true,
                     'originAgentBic' => 'NOLADKIE'
-                )
-            );
-            $scenarios[] = array(
-                array(
+                ]
+            ];
+            $scenarios[] = [
+                [
                     'pain' => $pain,
                     'batchBooking' => false,
                     'originAgentBic' => ''
-                )
-            );
+                ]
+            ];
         }
 
         return $scenarios;

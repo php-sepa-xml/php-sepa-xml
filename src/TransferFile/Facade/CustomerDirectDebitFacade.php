@@ -49,7 +49,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
-        $creditorAgentBIC = (isset ($paymentInformation['creditorAgentBIC'])) ? $paymentInformation['creditorAgentBIC'] : null;
+        $creditorAgentBIC = $paymentInformation['creditorAgentBIC'] ?? null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['creditorAccountIBAN'],

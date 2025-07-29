@@ -161,7 +161,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
 
         // Creditor address if needed and supported by schema.
-        if (in_array($this->painFormat, array('pain.001.001.03'))) {
+        if (in_array($this->painFormat, ['pain.001.001.03'])) {
             $this->appendAddressToDomElement($creditor, $transactionInformation);
         }
 
@@ -258,7 +258,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // Ensure $postalAddressData is an array as getPostalAddress() returns either string or string[].
         $postalAddressData = $transactionInformation->getPostalAddress();
         if (!is_array($postalAddressData)) {
-            $postalAddressData = array($postalAddressData);
+            $postalAddressData = [$postalAddressData];
         }
 
         // Generate nodes for each address line.

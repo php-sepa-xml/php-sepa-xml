@@ -43,7 +43,7 @@ class DomBuilderFactoryTest extends TestCase
         $sepaFile->addPaymentInformation($paymentInformation);
 
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
-        $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
+        $this->assertInstanceOf(\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder::class, $domBuilder);
     }
 
     public function testCreateReturnsCustomerDebitDomBuilderForCustomerDebitTransfer(): void
@@ -60,6 +60,6 @@ class DomBuilderFactoryTest extends TestCase
         $sepaFile->addPaymentInformation($paymentInformation);
 
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
-        $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder', $domBuilder);
+        $this->assertInstanceOf(\Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder::class, $domBuilder);
     }
 }

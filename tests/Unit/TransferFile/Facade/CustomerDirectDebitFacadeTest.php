@@ -52,7 +52,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         // "firstPayment" is the identifier for the transactions
         $directDebit->addPaymentInfo(
             'firstPayment',
-            array(
+            [
                 'id' => 'firstPayment',
                 'creditorName' => 'My Company',
                 'creditorAccountIBAN' => 'FI1350001540000056',
@@ -60,12 +60,12 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'seqType' => PaymentInformation::S_ONEOFF,
                 'creditorId' => 'DE21WVM1234567890',
                 'localInstrumentCode' => 'B2B',
-            )
+            ]
         );
         // Add a Single Transaction to the named payment
         $directDebit->addTransfer(
             'firstPayment',
-            array(
+            [
                 'amount' => $amount,
                 'debtorIban' => 'FI1350001540000056',
                 'debtorBic' => 'OKOYFIHH',
@@ -73,7 +73,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'debtorMandate' => 'AB12345',
                 'debtorMandateSignDate' => '13.10.2012',
                 'remittanceInformation' => 'Purpose of this direct debit'
-            )
+            ]
         );
         // Retrieve the resulting XML
         $xml = $directDebit->asXML();
@@ -161,20 +161,20 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
         $paymentInformation = $directDebit->addPaymentInfo(
             'firstPayment',
-            array(
+            [
                 'id' => 'firstPayment',
                 'creditorName' => 'My Company',
                 'creditorAccountIBAN' => 'FI1350001540000056',
                 'creditorAgentBIC' => 'PSSTFRPPMON',
                 'seqType' => PaymentInformation::S_ONEOFF,
                 'creditorId' => 'DE21WVM1234567890'
-            )
+            ]
         );
         $paymentInformation->setBatchBooking(true);
 
         $directDebit->addTransfer(
             'firstPayment',
-            array(
+            [
                 'amount' => 500,
                 'debtorIban' => 'FI1350001540000056',
                 'debtorBic' => 'OKOYFIHH',
@@ -185,7 +185,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
                 'instructionId' => 'Instruction Identification',
-            )
+            ]
         );
 
         $this->dom->loadXML($directDebit->asXML());
@@ -207,19 +207,19 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
         $paymentInformation = $directDebit->addPaymentInfo(
             'firstPayment',
-            array(
+            [
                 'id' => 'firstPayment',
                 'creditorName' => 'My Company',
                 'creditorAccountIBAN' => 'FI1350001540000056',
                 'seqType' => PaymentInformation::S_ONEOFF,
                 'creditorId' => 'DE21WVM1234567890'
-            )
+            ]
         );
         $paymentInformation->setBatchBooking(true);
 
         $directDebit->addTransfer(
             'firstPayment',
-            array(
+            [
                 'amount' => 500,
                 'debtorIban' => 'FI1350001540000056',
                 'debtorName' => 'Their Company',
@@ -229,7 +229,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
                 'instructionId' => 'Instruction Identification',
-            )
+            ]
         );
 
         $this->dom->loadXML($directDebit->asXML());
@@ -238,11 +238,11 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     public function provideSchema(): iterable
     {
-        return array(
-            array('pain.008.001.02'),
-            array('pain.008.002.02'),
-            array('pain.008.003.02')
-        );
+        return [
+            ['pain.008.001.02'],
+            ['pain.008.002.02'],
+            ['pain.008.003.02']
+        ];
     }
 
     public function testAddTransferWithAddress(): void
