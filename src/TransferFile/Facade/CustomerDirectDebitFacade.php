@@ -31,22 +31,19 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
     /**
      * @param string $paymentName
-     * @param array $paymentInformation
-     *
-     * @struct $paymentInformation {
-     *    @type string $id
-     *    @type string $creditorName
-     *    @type string $creditorAccountIBAN
-     *    @type string $creditorAgentBIC
-     *    @type string $seqType
-     *    @type string $creditorId
-     *    @type string $localInstrumentCode
-     *    @type boolean $batchBooking
-     *    @type string|\DateTime $dueDate
-     * }
-     *
-     * @throws InvalidArgumentException
+     * @param array{
+     *     id: string,
+     *     creditorName: string,
+     *     creditorAccountIBAN: string,
+     *     creditorAgentBIC?: string,
+     *     seqType: string,
+     *     creditorId: string,
+     *     localInstrumentCode?: string,
+     *     batchBooking?: bool,
+     *     dueDate?: string|\DateTime
+     * } $paymentInformation
      * @return PaymentInformation
+     * @throws InvalidArgumentException
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
@@ -76,29 +73,29 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 
     /**
      * @param string $paymentName
-     * @param array $transferInformation
-     *
-     * @struct $transferInformation {
-     *    @type string $amount
-     *    @type string $debtorIban
-     *    @type string $debtorBic
-     *    @type string $debtorMandate
-     *    @type string|\DateTime $debtorMandateSignDate
-     *    @type string $remittanceInformation
-     *    @type string $creditorReference
-     *    @type string $endToEndId
-     *    @type string $originalMandateId
-     *    @type string $originalDebtorIban
-     *    @type string $amendedDebtorAccount
-     *    @type string $postCode
-     *    @type string $townName
-     *    @type string $streetName
-     *    @type string $buildingNumber
-     *    @type string $debtorCountry
-     *    @type string $debtorAdrLine
-     * }
-     * @throws InvalidArgumentException
+     * @param array{`
+     *     amount: int,
+     *     debtorIban: string,
+     *     debtorName: string,
+     *     debtorBic?: string,
+     *     debtorMandate: string,
+     *     debtorMandateSignDate: string|\DateTime,
+     *     remittanceInformation: string,
+     *     creditorReference?: string,
+     *     endToEndId?: string,
+     *     originalMandateId?: string,
+     *     originalDebtorIban?: string,
+     *     amendedDebtorAccount?: string,
+     *     postCode?: string,
+     *     townName?: string,
+     *     streetName?: string,
+     *     buildingNumber?: string,
+     *     debtorCountry?: string,
+     *     debtorAdrLine?: string,
+     *     instructionId?: string
+     * } $transferInformation
      * @return CustomerDirectDebitTransferInformation
+     * @throws InvalidArgumentException
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
