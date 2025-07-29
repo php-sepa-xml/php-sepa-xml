@@ -31,7 +31,7 @@ class CustomerCreditTransferFile extends BaseTransferFile
 {
     public function addPaymentInformation(PaymentInformation $paymentInformation): void
     {
-        $paymentInformation->setValidPaymentMethods(array('CHK', 'TRF', 'TRA'));
+        $paymentInformation->setValidPaymentMethods(array('TRF'));
         $paymentInformation->setPaymentMethod('TRF');
         parent::addPaymentInformation($paymentInformation);
     }
