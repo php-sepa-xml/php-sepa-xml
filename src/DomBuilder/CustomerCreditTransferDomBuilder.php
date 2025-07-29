@@ -34,7 +34,7 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
 
-    function __construct(string $painFormat = 'pain.001.002.03', $withSchemaLocation = true)
+    function __construct(string $painFormat = 'pain.001.002.03', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
     }
@@ -62,7 +62,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         $this->currentPayment->appendChild(
-            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+            $this->createElement('NbOfTxs', (string) $paymentInformation->getNumberOfTransactions())
         );
 
         $this->currentPayment->appendChild(
@@ -126,7 +126,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      */
     public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
-        /** @var $transactionInformation  CustomerCreditTransferInformation */
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
 
         // Payment ID 2.28
@@ -158,7 +157,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');
-        $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
+        $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorOrDebitorName()));
 
         // Creditor address if needed and supported by schema.
         if (in_array($this->painFormat, ['pain.001.001.03'])) {

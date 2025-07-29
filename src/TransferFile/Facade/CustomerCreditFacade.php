@@ -14,16 +14,18 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 {
 
     /**
-     * @param array{
-     *             id: string,
-     *             debtorName: string,
-     *             debtorAccountIBAN: string,
-     *             debtorAgentBIC?: string,
-     *             dueDate?: string|\DateTime,
-     *             batchBooking?: bool
-     *             } $paymentInformation
-     *
+     * @param string $paymentName
+     * @param array $paymentInformation.
+     * @struct $paymentInformation {
+     *    @type string $id
+     *    @type string $debtorName
+     *    @type string $debtorAccountIBAN
+     *    @type string $debtorAgentBIC
+     *    @type string|\DateTime $dueDate
+     *    @type bool $batchBooking
+     *  }
      * @throws InvalidArgumentException
+     * @return PaymentInformation
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
@@ -47,19 +49,19 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
-     * @param array{
-     *             amount: int,
-     *             creditorIban: string,
-     *             creditorName: string,
-     *             creditorBic?: string,
-     *             creditorReference?: string,
-     *             remittanceInformation: string,
-     *             endToEndId?: string,
-     *             instructionId?: string
-     *             } $transferInformation
-     *
+     * @param string $paymentName
+     * @param array $transferInformation
+     * @struct $transferInformation {
+     *    @type int $amount
+     *    @type string $creditorIban
+     *    @type string $creditorName
+     *    @type string $creditorBic
+     *    @type string $creditorReference?
+     *    @type string $remittanceInformation
+     *    @type string $endToEndId
+     *    @type string $instructionId
+     * }
      * @throws InvalidArgumentException
-     *
      * @return CustomerCreditTransferInformation
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface

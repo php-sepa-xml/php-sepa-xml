@@ -31,7 +31,7 @@ use Digitick\Sepa\GroupHeader;
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
 
-    public function __construct(string $painFormat = 'pain.008.002.02', $withSchemaLocation = true)
+    public function __construct(string $painFormat = 'pain.008.002.02', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
     }
@@ -59,7 +59,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         }
 
         $this->currentPayment->appendChild(
-            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+            $this->createElement('NbOfTxs', (string) $paymentInformation->getNumberOfTransactions())
         );
 
         $this->currentPayment->appendChild(
@@ -136,7 +136,6 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             ));
         }
 
-        /** @var  $transactionInformation CustomerDirectDebitTransferInformation */
         $directDebitTransactionInformation = $this->createElement('DrctDbtTxInf');
 
         $paymentId = $this->createElement('PmtId');
