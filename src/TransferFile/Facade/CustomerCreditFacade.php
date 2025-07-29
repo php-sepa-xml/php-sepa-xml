@@ -15,15 +15,14 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 
     /**
      * @param string $paymentName
-     * @param array $paymentInformation.
-     * @struct $paymentInformation {
-     *    @type string $id
-     *    @type string $debtorName
-     *    @type string $debtorAccountIBAN
-     *    @type string $debtorAgentBIC
-     *    @type string|\DateTime $dueDate
-     *    @type bool $batchBooking
-     *  }
+     * @param array{
+     *     id: int,
+     *     debtorName: string,
+     *     debtorAccountIBAN: string,
+     *     debtorAgentBIC?: string,
+     *     dueDate?: string|\DateTime,
+     *     batchBooking?: bool
+     * } $paymentInformation
      * @throws InvalidArgumentException
      * @return PaymentInformation
      */
@@ -50,19 +49,19 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 
     /**
      * @param string $paymentName
-     * @param array $transferInformation
-     * @struct $transferInformation {
-     *    @type int $amount
-     *    @type string $creditorIban
-     *    @type string $creditorName
-     *    @type string $creditorBic
-     *    @type string $creditorReference?
-     *    @type string $remittanceInformation
-     *    @type string $endToEndId
-     *    @type string $instructionId
-     * }
-     * @throws InvalidArgumentException
+     * @param array{
+     *     amount: int,
+     *     creditorIban: string,
+     *     creditorName: string,
+     *     creditorBic?: string,
+     *     creditorReference?: string,
+     *     creditorReferenceType?: string,
+     *     remittanceInformation: string,
+     *     endToEndId?: string,
+     *     instructionId?: string
+     * } $transferInformation
      * @return CustomerCreditTransferInformation
+     * @throws InvalidArgumentException
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {

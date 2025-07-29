@@ -69,7 +69,9 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     }
 
     /**
-     * @param array $paymentInformation
+     * @param array{
+     *     dueDate?: string|\DateTime
+     * } $paymentInformation
      * @param string $default
      * @return \DateTime
      * @throws InvalidArgumentException if the dueDate is not valid
