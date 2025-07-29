@@ -231,7 +231,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
     }
 
-    public function provideSchema(): iterable
+    public static function provideSchema(): iterable
     {
         return [
             ['pain.008.001.02'],
@@ -281,7 +281,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function scenarios(): iterable
+    public static function scenarios(): iterable
     {
         $scenarios = [];
         foreach (['pain.008.001.02','pain.008.002.02','pain.008.003.02'] as $pain) {
