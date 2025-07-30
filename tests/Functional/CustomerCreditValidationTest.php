@@ -512,7 +512,7 @@ class CustomerCreditValidationTest extends TestCase
 
     }
 
-    public function provideSchema(): iterable
+    public static function provideSchema(): iterable
     {
         return [
             ["pain.001.001.03"],
@@ -521,7 +521,7 @@ class CustomerCreditValidationTest extends TestCase
         ];
     }
 
-    public function provideAddressTests(): iterable
+    public static function provideAddressTests(): iterable
     {
         return [
             [['CH', ['Teststreet 1', '21345 Somewhere']]],

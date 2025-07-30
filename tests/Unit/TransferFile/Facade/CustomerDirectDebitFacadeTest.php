@@ -236,7 +236,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/../../../fixtures/' . $schema . '.xsd'));
     }
 
-    public function provideSchema(): iterable
+    public static function provideSchema(): iterable
     {
         return [
             ['pain.008.001.02'],

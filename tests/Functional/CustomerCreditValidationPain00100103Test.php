@@ -100,7 +100,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function scenarios(): iterable
+    public static function scenarios(): iterable
     {
         return [
             [
