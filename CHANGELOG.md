@@ -3,12 +3,9 @@
 ## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
 - Convert all interfaces using DateTime to use DateTimeInterface
 - Switch from using DateTime instances internally to DateTimeImmutable instances
-
 - Fixed PHPUnit config file
 - Fixed PHPUnit deprecations
 - Small changes in PHPUnit Fixtures
-
-
 - Updated the GH actions
 -- Run phpstan, phpunit on PR against master 
 -- Prepare to automatically run `rector`, check for changes and commit them
