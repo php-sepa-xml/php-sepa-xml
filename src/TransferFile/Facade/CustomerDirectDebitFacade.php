@@ -22,6 +22,9 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use Exception;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
@@ -40,7 +43,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     creditorId: string,
      *     localInstrumentCode?: string,
      *     batchBooking?: bool,
-     *     dueDate?: string|\DateTime
+     *     dueDate?: string|DateTimeInterface
      * } $paymentInformation
      * @return PaymentInformation
      * @throws InvalidArgumentException
@@ -79,7 +82,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     debtorName: string,
      *     debtorBic?: string,
      *     debtorMandate: string,
-     *     debtorMandateSignDate: string|\DateTime,
+     *     debtorMandateSignDate: string|DateTimeInterface,
      *     remittanceInformation: string,
      *     creditorReference?: string,
      *     endToEndId?: string,
@@ -96,6 +99,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      * } $transferInformation
      * @return CustomerDirectDebitTransferInformation
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
@@ -116,10 +120,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
 
         $transfer->setMandateId($transferInformation['debtorMandate']);
-        if ($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
+        if ($transferInformation['debtorMandateSignDate'] instanceof DateTimeInterface) {
             $transfer->setMandateSignDate($transferInformation['debtorMandateSignDate']);
         } else {
-            $transfer->setMandateSignDate(new \DateTime($transferInformation['debtorMandateSignDate']));
+            $transfer->setMandateSignDate(new DateTimeImmutable($transferInformation['debtorMandateSignDate']));
         }
 
         if (isset($transferInformation['creditorReference'])) {
