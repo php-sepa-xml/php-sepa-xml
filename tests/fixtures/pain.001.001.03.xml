@@ -4,8 +4,8 @@
 		<GrpHdr>
 			<MsgId>message-id-001</MsgId>
 			<CreDtTm>2010-09-28T14:07:00</CreDtTm>
-			<NbOfTxs>1</NbOfTxs>
-			<CtrlSum>10.1</CtrlSum>
+			<NbOfTxs>2</NbOfTxs>
+			<CtrlSum>30.3</CtrlSum>
 			<InitgPty>
 				<Nm>Bedrijfsnaam</Nm>
 				<Id>

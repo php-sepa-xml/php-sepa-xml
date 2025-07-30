@@ -82,7 +82,7 @@ class CustomerCreditFacadeTest extends TestCase
         $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
     }
 
-    public function schemaProvider(): iterable
+    public static function schemaProvider(): iterable
     {
         return [
             ["pain.001.001.03"],
@@ -91,7 +91,7 @@ class CustomerCreditFacadeTest extends TestCase
         ];
     }
 
-    public function schemaProviderEmptyBic(): iterable
+    public static function schemaProviderEmptyBic(): iterable
     {
         return [
             ["pain.001.001.03"],

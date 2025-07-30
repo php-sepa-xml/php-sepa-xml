@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
 
+- Fixed PHPUnit config file
+- Fixed PHPUnit deprecations
+- Small changes in PHPUnit Fixtures
 
 ## [2.2.1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.2.1)
 [Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.0...2.2.1)
