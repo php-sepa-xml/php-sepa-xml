@@ -125,6 +125,6 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 
     public function getDebitorName(): string
     {
-        return $this->name;
+        return $this->getCreditorOrDebitorName();
     }
 }

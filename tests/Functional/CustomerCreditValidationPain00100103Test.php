@@ -84,7 +84,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         if (isset($scenario['batchBooking'])) {
             $payment->setBatchBooking($scenario['batchBooking']);
         }
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -100,21 +100,21 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function scenarios(): iterable
+    public static function scenarios(): iterable
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'batchBooking' => true,
                     'bic' => 'OKOYFIHH'
-                )
-            ),
-            array(
-                array(
+                ]
+            ],
+            [
+                [
                     'batchBooking' => false,
                     'bic' => ''
-                )
-            ),
-        );
+                ]
+            ],
+        ];
     }
 }

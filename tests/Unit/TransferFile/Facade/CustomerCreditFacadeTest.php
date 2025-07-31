@@ -22,25 +22,25 @@ class CustomerCreditFacadeTest extends TestCase
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(
             'firstPayment',
-            array(
+            [
                 'id' => 'firstPayment',
                 'debtorName' => 'My Company',
                 'debtorAccountIBAN' => 'FI1350001540000056',
                 'debtorAgentBIC' => 'PSSTFRPPMON'
-            )
+            ]
         );
         $paymentInformation->setBatchBooking(true);
 
         $credit->addTransfer(
             'firstPayment',
-            array(
+            [
                 'amount' => 500,
                 'creditorIban' => 'FI1350001540000056',
                 'creditorBic' => 'OKOYFIHH',
                 'creditorName' => 'Their Company',
                 'remittanceInformation' => 'Purpose of this credit',
                 'instructionId' => 'Instruction Identification',
-            )
+            ]
         );
 
         $dom->loadXML($credit->asXML());
@@ -59,30 +59,30 @@ class CustomerCreditFacadeTest extends TestCase
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(
             'firstPayment',
-            array(
+            [
                 'id' => 'firstPayment',
                 'debtorName' => 'My Company',
                 'debtorAccountIBAN' => 'FI1350001540000056'
-            )
+            ]
         );
         $paymentInformation->setBatchBooking(true);
 
         $credit->addTransfer(
             'firstPayment',
-            array(
+            [
                 'amount' => 500,
                 'creditorIban' => 'FI1350001540000056',
                 'creditorName' => 'Their Company',
                 'remittanceInformation' => 'Purpose of this credit',
                 'instructionId' => 'Instruction Identification',
-            )
+            ]
         );
 
         $dom->loadXML($credit->asXML());
         $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
     }
 
-    public function schemaProvider(): iterable
+    public static function schemaProvider(): iterable
     {
         return [
             ["pain.001.001.03"],
@@ -92,7 +92,7 @@ class CustomerCreditFacadeTest extends TestCase
         ];
     }
 
-    public function schemaProviderEmptyBic(): iterable
+    public static function schemaProviderEmptyBic(): iterable
     {
         return [
             ["pain.001.001.03"],

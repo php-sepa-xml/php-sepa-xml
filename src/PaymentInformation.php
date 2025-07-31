@@ -128,14 +128,14 @@ class PaymentInformation
     /**
      * @var TransferInformationInterface[]
      */
-    protected $transfers = array();
+    protected $transfers = [];
 
     /**
      * Valid Payment Methods set by the TransferFile
      *
      * @var string[]
      */
-    protected $validPaymentMethods = array();
+    protected $validPaymentMethods = [];
 
     /**
      * @var string|null
@@ -224,7 +224,7 @@ class PaymentInformation
     public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
+        if (!in_array($localInstrumentCode, ['B2B', 'CORE', 'COR1'])) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
@@ -264,7 +264,7 @@ class PaymentInformation
     public function setInstructionPriority(string $instructionPriority): void
     {
         $instructionPriority = strtoupper($instructionPriority);
-        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
+        if (!in_array($instructionPriority, ['NORM', 'HIGH'])) {
             throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
         }
         $this->instructionPriority = $instructionPriority;

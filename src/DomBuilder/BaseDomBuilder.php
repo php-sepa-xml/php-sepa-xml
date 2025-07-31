@@ -55,6 +55,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
      * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
+     * @throws \DOMException
      */
     public function __construct(string $painFormat, bool $withSchemaLocation = true)
     {
@@ -110,7 +111,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $groupHeader->getCreationDateTime()->format($groupHeader->getCreationDateTimeFormat())
         );
         $groupHeaderTag->appendChild($creationDateTime);
-        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', $groupHeader->getNumberOfTransactions()));
+        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', (string) $groupHeader->getNumberOfTransactions()));
         $groupHeaderTag->appendChild(
             $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
         );

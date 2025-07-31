@@ -2,7 +2,7 @@ name: PHPStan
 
 on:
   pull_request:
-    branches: [ "testing" ]
+    branches: [ "master" ]
 
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --no-progress  --ansi
+      run: composer install --no-progress --ansi
 
     - name: Run phpstan
       run: composer run-script phpstan
