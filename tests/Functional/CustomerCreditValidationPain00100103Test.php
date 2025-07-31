@@ -76,6 +76,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         if ($scenario['bic'] !== '') {
             $transfer->setBic($scenario['bic']);
         }
+        $transfer->setPostCode('SALA');
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
