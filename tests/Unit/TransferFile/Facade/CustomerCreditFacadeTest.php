@@ -86,6 +86,7 @@ class CustomerCreditFacadeTest extends TestCase
     {
         return [
             ["pain.001.001.03"],
+            ["pain.001.001.09"],
             ["pain.001.002.03"],
             ["pain.001.003.03"]
         ];
@@ -95,7 +96,8 @@ class CustomerCreditFacadeTest extends TestCase
     {
         return [
             ["pain.001.001.03"],
-            ["pain.001.003.03"]
+            ["pain.001.003.03"],
+            ["pain.001.001.09"],
         ];
     }
 }
