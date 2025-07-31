@@ -70,6 +70,13 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $currency = 'EUR';
 
     /**
+     * Purpose code for the transaction.
+     *
+     * @var string|null
+     */
+    protected $purposeCode;
+
+    /**
      * Purpose of this transaction
      *
      * @var string|null
@@ -235,6 +242,16 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getCreditorReferenceType(): ?string
     {
         return $this->creditorReferenceType;
+    }
+
+    public function setPurposeCode(string $purposeCode): void
+    {
+        $this->purposeCode = $purposeCode;
+    }
+
+    public function getPurposeCode(): ?string
+    {
+        return $this->purposeCode;
     }
 
     public function setRemittanceInformation(string $remittanceInformation): void
