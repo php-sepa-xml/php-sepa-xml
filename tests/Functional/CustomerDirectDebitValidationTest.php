@@ -235,6 +235,7 @@ class CustomerDirectDebitValidationTest extends TestCase
     {
         return [
             ['pain.008.001.02'],
+            ['pain.008.001.10'],
             ['pain.008.002.02'],
             ['pain.008.003.02']
         ];
@@ -284,7 +285,7 @@ class CustomerDirectDebitValidationTest extends TestCase
     public static function scenarios(): iterable
     {
         $scenarios = [];
-        foreach (['pain.008.001.02','pain.008.002.02','pain.008.003.02'] as $pain) {
+        foreach (['pain.008.001.02', 'pain.008.001.10', 'pain.008.002.02', 'pain.008.003.02'] as $pain) {
             $scenarios[] = [
                 [
                     'pain' => $pain,
