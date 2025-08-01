@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -99,6 +100,12 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
+
+        $xpathDoc = new \DOMXPath($this->dom);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+
+        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
+        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
     public static function scenarios(): iterable
