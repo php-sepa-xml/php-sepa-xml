@@ -12,13 +12,19 @@ License: GNU Lesser General Public License v3.0
 The versions of the standard followed are:
 * For Credit Transfers:
   * pain.001.001.03
+  * pain.001.001.09 (PR in review)
+  * pain.001.001.12 (planned)
   * pain.001.002.03
   * pain.001.003.03
 * For Direct Debits:
   * pain.008.001.02
+  * pain.008.001.08 (PR in review)
   * pain.008.001.10
+  * pain.008.001.11 (planned)
   * pain.008.002.02
   * pain.008.003.02
+
+We do not claim 100% support of those formats but the files produced by this library are validated agains the official XSDs and they pass the validation. I you're missing a field please submit a PR.
 
 Institutions that should accept these formats:
 * Any bank that is part of the SEPA network and works with the ISO20022 standard
