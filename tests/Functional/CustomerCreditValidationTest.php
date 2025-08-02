@@ -546,13 +546,8 @@ class CustomerCreditValidationTest extends TestCase
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
-        if ($schema === 'pain.001.001.03') {
-            $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
-            $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
-        } else {
-            $purposeCode = $xpathDoc->query('//sepa:Purp');
-            $this->assertEquals(0, $purposeCode->length, 'Purp should not be present in schema ' . $schema);
-        }
+        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
+        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
     public static function provideSchema(): iterable

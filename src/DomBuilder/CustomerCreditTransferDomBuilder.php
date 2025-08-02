@@ -174,7 +174,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $CdtTrfTxInf->appendChild($creditorAccount);
         
         // Purpose code (Optional)
-        if (in_array($this->painFormat, ['pain.001.001.03']) && strlen((string)$transactionInformation->getPurposeCode()) > 0)
+        if (strlen((string)$transactionInformation->getPurposeCode()) > 0)
         {
             $purposeCode = $this->createElement('Purp');
             $purposeCode->appendChild($this->createElement('Cd', $transactionInformation->getPurposeCode()));
