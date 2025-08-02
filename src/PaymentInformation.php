@@ -22,6 +22,8 @@
 
 namespace Digitick\Sepa;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
@@ -106,7 +108,7 @@ class PaymentInformation
     /**
      * Date of payment execution
      *
-     * @var \DateTime
+     * @var DateTimeInterface
      */
     protected $dueDate;
 
@@ -155,7 +157,7 @@ class PaymentInformation
     protected $batchBooking;
 
     /**
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $mandateSignDate;
 
@@ -171,7 +173,7 @@ class PaymentInformation
         $this->originAgentBIC = $originAgentBIC;
         $this->originName = StringHelper::sanitizeString($originName);
         $this->originAccountCurrency = $originAccountCurrency;
-        $this->dueDate = new \DateTime();
+        $this->dueDate = new DateTimeImmutable();
     }
 
 
@@ -248,7 +250,7 @@ class PaymentInformation
         return $this->categoryPurposeCode;
     }
 
-    public function setDueDate(\DateTime $dueDate): void
+    public function setDueDate(DateTimeInterface $dueDate): void
     {
         $this->dueDate = $dueDate;
     }
@@ -275,12 +277,12 @@ class PaymentInformation
         return $this->instructionPriority;
     }
 
-    public function setMandateSignDate(\DateTime $mandateSignDate): void
+    public function setMandateSignDate(DateTimeInterface $mandateSignDate): void
     {
         $this->mandateSignDate = $mandateSignDate;
     }
 
-    public function getMandateSignDate(): ?\DateTime
+    public function getMandateSignDate(): ?DateTimeInterface
     {
         return $this->mandateSignDate;
     }

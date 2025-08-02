@@ -2,6 +2,7 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use DateTimeInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -20,7 +21,7 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
      *     debtorName: string,
      *     debtorAccountIBAN: string,
      *     debtorAgentBIC?: string,
-     *     dueDate?: string|\DateTime,
+     *     dueDate?: string|DateTimeInterface,
      *     batchBooking?: bool
      * } $paymentInformation
      * @throws InvalidArgumentException
