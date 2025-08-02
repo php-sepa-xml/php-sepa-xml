@@ -106,6 +106,11 @@ class PaymentInformation
     protected $localInstrumentCode;
 
     /**
+     * @var string|null Local service proprietary code.
+     */
+    protected $localInstrumentProprietary;
+
+    /**
      * Date of payment execution
      *
      * @var DateTimeInterface
@@ -230,6 +235,14 @@ class PaymentInformation
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
+    }
+
+    /**
+     * @param string $localInstrumentProprietary
+     */
+    public function setLocalInstrumentProprietary(string $localInstrumentProprietary): void
+    {
+        $this->localInstrumentProprietary = $localInstrumentProprietary;
     }
 
     /**
@@ -365,6 +378,11 @@ class PaymentInformation
     public function getLocalInstrumentCode(): ?string
     {
         return $this->localInstrumentCode;
+    }
+
+    public function getLocalInstrumentProprietary(): ?string
+    {
+        return $this->localInstrumentProprietary;
     }
 
     public function getNumberOfTransactions(): int

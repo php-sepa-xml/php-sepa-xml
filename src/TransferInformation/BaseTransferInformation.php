@@ -60,6 +60,11 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $instructionId;
 
     /**
+     * @var string|null
+     */
+    protected $categoryPurposeCode;
+
+    /**
      * @var string
      */
     protected $EndToEndIdentification;
@@ -200,6 +205,16 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getInstructionId(): ?string
     {
         return $this->instructionId;
+    }
+
+    public function setCategoryPurposeCode(string $categoryPurposeCode): void
+    {
+        $this->categoryPurposeCode = $categoryPurposeCode;
+    }
+
+    public function getCategoryPurposeCode(): ?string
+    {
+        return $this->categoryPurposeCode;
     }
 
     public function getIban(): string
