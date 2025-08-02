@@ -375,7 +375,7 @@ class CustomerCreditValidationTest extends TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
@@ -427,7 +427,7 @@ class CustomerCreditValidationTest extends TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         $testNode = $xpathDoc->query('//sepa:CreDtTm');
         $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
@@ -499,7 +499,7 @@ class CustomerCreditValidationTest extends TestCase
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         $testNode = $xpathDoc->query('//sepa:Ustrd');
         $this->assertEquals(0, $testNode->length, 'RmtInf should not contain Ustrd when Strd is present.');
@@ -509,7 +509,45 @@ class CustomerCreditValidationTest extends TestCase
 
         $testNode = $xpathDoc->query('//sepa:Strd/sepa:CdtrRefInf/sepa:Ref');
         $this->assertEquals('RF81123453', $testNode->item(0)->textContent);
+    }
 
+    /**
+     * Test a transfer file with one payment and one transaction with purpose code.
+     *
+     * @dataProvider provideSchema
+     */
+    public function testSinglePaymentSingleTransactionWithPurposeCode(string $schema): void
+    {
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setPurposeCode('SALA');
+        $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
+
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(['TRANSFER']);
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $this->dom->loadXML($xml);
+
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $this->assertTrue($validated);
+
+        $xpathDoc = new \DOMXPath($this->dom);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
+        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
     public static function provideSchema(): iterable
