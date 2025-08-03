@@ -58,6 +58,7 @@ class TestFileSanityCheckTest extends TestCase
             'pain.001.003.03' => ['pain.001.003.03'],
             'pain.008.001.02' => ['pain.008.001.02'],
             'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.002.02' => ['pain.008.002.02'],
             'pain.008.003.02' => ['pain.008.003.02'],
         ];

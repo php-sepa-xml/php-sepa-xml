@@ -22,6 +22,8 @@
 
 namespace Digitick\Sepa;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Util\StringHelper;
 
@@ -76,14 +78,14 @@ class GroupHeader
     protected $initiatingPartyName;
 
     /**
-     * @var \DateTime
+     * @var DateTimeInterface
      */
     protected $creationDateTime;
 
     /**
      * @var string
      */
-    protected $creationDateTimeFormat = \DateTime::RFC3339;
+    protected $creationDateTimeFormat = DateTimeInterface::RFC3339;
 
     /**
      * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.
@@ -96,7 +98,7 @@ class GroupHeader
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
         $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
-        $this->creationDateTime = new \DateTime();
+        $this->creationDateTime = new DateTimeImmutable();
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
@@ -184,7 +186,7 @@ class GroupHeader
         return $this->numberOfTransactions;
     }
 
-    public function getCreationDateTime(): \DateTime
+    public function getCreationDateTime(): DateTimeInterface
     {
         return $this->creationDateTime;
     }

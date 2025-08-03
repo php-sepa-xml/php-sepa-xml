@@ -53,7 +53,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     protected $painFormat;
 
     /**
-     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
+     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02', 'pain.008.001.10'
      * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      * @throws \DOMException
      */
@@ -136,7 +136,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);
             $finInstitution->appendChild($other);
-        } elseif (in_array($this->painFormat, ['pain.001.001.09', 'pain.008.001.08'])) {
+        } elseif (in_array($this->painFormat, ['pain.001.001.09', 'pain.008.001.08', 'pain.008.001.10'])) {
             $finInstitution->appendChild($this->createElement('BICFI', $bic));
         } else {
             $finInstitution->appendChild($this->createElement('BIC', $bic));
