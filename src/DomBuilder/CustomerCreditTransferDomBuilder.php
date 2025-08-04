@@ -172,6 +172,14 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id->appendChild($this->createElement('IBAN', $transactionInformation->getIban()));
         $creditorAccount->appendChild($id);
         $CdtTrfTxInf->appendChild($creditorAccount);
+        
+        // Purpose code (Optional)
+        if (strlen((string)$transactionInformation->getPurposeCode()) > 0)
+        {
+            $purposeCode = $this->createElement('Purp');
+            $purposeCode->appendChild($this->createElement('Cd', $transactionInformation->getPurposeCode()));
+            $CdtTrfTxInf->appendChild($purposeCode);
+        }
 
         // remittance 2.98 2.99
         if (strlen((string)$transactionInformation->getCreditorReference()) > 0)

@@ -46,6 +46,8 @@ interface TransferInformationInterface
 
     public function getIban(): string;
 
+    public function getPurposeCode(): ?string;
+
     public function getRemittanceInformation(): ?string;
 
     public function getCreditorOrDebitorName(): string;
