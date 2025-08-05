@@ -61,7 +61,9 @@ class SanitizerTest extends TestCase
     {
         $string = "Az09#_<&*:?,-/(+.)' ";
 
-        Sanitizer::setSanitizer(fn(string $value): string => strtoupper($value));
+        Sanitizer::setSanitizer(function (string $value): string {
+            return strtoupper($value);
+        });
 
         $this->assertEquals("AZ09#_<&*:?,-/(+.)' ", Sanitizer::sanitize($string));
     }
@@ -73,7 +75,9 @@ class SanitizerTest extends TestCase
     {
         $string = "ÄÖÜäöüß";
 
-        Sanitizer::setSanitizer(fn(string $value): string => strtoupper($value));
+        Sanitizer::setSanitizer(function (string $value): string {
+            return strtoupper($value);
+        });
         Sanitizer::resetSanitizer();
 
         $this->assertEquals("AeOeUeaeoeuess", Sanitizer::sanitize($string));

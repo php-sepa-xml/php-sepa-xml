@@ -58,7 +58,9 @@ class Sanitizer
      */
     public static function disableSanitizer(): void
     {
-        self::$callback = fn(string $value): string => $value;
+        self::$callback = function (string $value): string {
+            return $value;
+        };
     }
 
     /**

@@ -11,7 +11,9 @@ Note: XML entities (like `<`, `>`, `&`, etc.) will still be escaped separately. 
 use SepaXml\Util\Sanitizer;
 
 // Change the global sanitizer to a custom implementation
-Sanitizer::setSanitizer(fn(string $value): string => strtoupper($value));
+Sanitizer::setSanitizer(function (string $value): string {
+    return strtoupper($value);
+});
 ```
 
 ### Example: Disable Sanitization
