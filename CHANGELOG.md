@@ -1,7 +1,11 @@
 # Changelog
 
 ## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
-- Added support for pain.008.001.10
+- Added support for `Purpose Code` to Customer Credit Transfers (`CdtTrfTxInf->Purp`) when using `pain.001.xxx.nn`
+- Added support for `pain.008.001.10`
+- Added an `asDom()` method in the DomBuilder allowing to get the built DomDocument object for further manipulation
+- Added a `Sanitizer` class with the capability to replace the default sanitization logic or fully disable it. Check [the docs](doc/string_sanitization.md) for more info
+
 - Convert all interfaces using DateTime to use DateTimeInterface
 - Switch from using DateTime instances internally to DateTimeImmutable instances
 - Fixed PHPUnit config file
