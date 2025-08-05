@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "15:00"
+    open-pull-requests-limit: 10
+    target-branch: master
+    commit-message:
+      prefix: "DPs: "
+      prefix-development: "DPs-dev: "
+      include: "scope"
+    labels:
+      - "dependabot"
+    reviewers:
+      - "BorislavSabev"
+    assignees:
+      - "BorislavSabev"
