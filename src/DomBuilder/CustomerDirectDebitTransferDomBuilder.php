@@ -181,7 +181,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         if (in_array($this->painFormat, ['pain.008.003.02', 'pain.008.001.02', 'pain.008.001.08', 'pain.008.001.10'])) {
             $postalAddress = $this->createElement('PstlAdr');
 
-            // Th elements street number, building number, post code and town name
+            // The elements street number, building number, post code and town name
             // are not supported by 'pain.008.003.02'.
             if (in_array($this->painFormat, ['pain.008.001.02', 'pain.008.001.08', 'pain.008.001.10'])) {
                 if (!empty($transactionInformation->getStreetName())) {
