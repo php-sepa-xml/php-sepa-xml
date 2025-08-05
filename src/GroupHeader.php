@@ -25,7 +25,7 @@ namespace Digitick\Sepa;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class GroupHeader
 {
@@ -97,7 +97,7 @@ class GroupHeader
     {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
-        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
+        $this->initiatingPartyName = Sanitizer::sanitize($initiatingPartyName);
         $this->creationDateTime = new DateTimeImmutable();
     }
 
@@ -128,7 +128,7 @@ class GroupHeader
 
     public function setInitiatingPartyIdentificationScheme(string $scheme): void
     {
-        $this->initiatingPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+        $this->initiatingPartyIdentificationScheme = Sanitizer::sanitize($scheme);
     }
 
     public function getInitiatingPartyIdentificationScheme(): ?string
@@ -148,7 +148,7 @@ class GroupHeader
 
     public function setInitiatingPartyName(string $initiatingPartyName): void
     {
-        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
+        $this->initiatingPartyName = Sanitizer::sanitize($initiatingPartyName);
     }
 
     public function getInitiatingPartyName(): string

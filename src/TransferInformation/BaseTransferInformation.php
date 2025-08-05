@@ -24,7 +24,7 @@ namespace Digitick\Sepa\TransferInformation;
 
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class BaseTransferInformation implements TransferInformationInterface
 {
@@ -165,8 +165,8 @@ class BaseTransferInformation implements TransferInformationInterface
 
         $this->transferAmount = $amount;
         $this->iban = $iban;
-        $this->name = StringHelper::sanitizeString($name);
-        $this->EndToEndIdentification = StringHelper::sanitizeString($identification);
+        $this->name = Sanitizer::sanitize($name);
+        $this->EndToEndIdentification = Sanitizer::sanitize($identification);
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
@@ -191,7 +191,7 @@ class BaseTransferInformation implements TransferInformationInterface
 
     public function setEndToEndIdentification(string $EndToEndIdentification): void
     {
-        $this->EndToEndIdentification = StringHelper::sanitizeString($EndToEndIdentification);
+        $this->EndToEndIdentification = Sanitizer::sanitize($EndToEndIdentification);
     }
 
     public function getEndToEndIdentification(): string
@@ -226,7 +226,7 @@ class BaseTransferInformation implements TransferInformationInterface
 
     public function setCreditorReference(string $creditorReference): void
     {
-        $this->creditorReference = StringHelper::sanitizeString($creditorReference);
+        $this->creditorReference = Sanitizer::sanitize($creditorReference);
     }
 
     public function getCreditorReference(): ?string
@@ -236,7 +236,7 @@ class BaseTransferInformation implements TransferInformationInterface
 
     public function setCreditorReferenceType(string $creditorReferenceType): void
     {
-        $this->creditorReferenceType = StringHelper::sanitizeString($creditorReferenceType);
+        $this->creditorReferenceType = Sanitizer::sanitize($creditorReferenceType);
     }
 
     public function getCreditorReferenceType(): ?string
@@ -256,7 +256,7 @@ class BaseTransferInformation implements TransferInformationInterface
 
     public function setRemittanceInformation(string $remittanceInformation): void
     {
-        $this->remittanceInformation = StringHelper::sanitizeString($remittanceInformation);
+        $this->remittanceInformation = Sanitizer::sanitize($remittanceInformation);
     }
 
     public function getRemittanceInformation(): ?string
@@ -296,7 +296,7 @@ class BaseTransferInformation implements TransferInformationInterface
         if (null === $townName) {
             $this->townName = null;
         } else {
-            $this->townName = StringHelper::sanitizeString($townName);
+            $this->townName = Sanitizer::sanitize($townName);
         }
     }
 
@@ -320,7 +320,7 @@ class BaseTransferInformation implements TransferInformationInterface
         if (null === $postCode) {
             $this->postCode = null;
         } else {
-            $this->postCode = StringHelper::sanitizeString($postCode);
+            $this->postCode = Sanitizer::sanitize($postCode);
         }
     }
 
@@ -344,7 +344,7 @@ class BaseTransferInformation implements TransferInformationInterface
         if (null === $streetName) {
             $this->streetName = null;
         } else {
-            $this->streetName = StringHelper::sanitizeString($streetName);
+            $this->streetName = Sanitizer::sanitize($streetName);
         }
     }
 
@@ -370,7 +370,7 @@ class BaseTransferInformation implements TransferInformationInterface
         if (null === $buildingNumber) {
             $this->buildingNumber = null;
         } else {
-            $this->buildingNumber = StringHelper::sanitizeString($buildingNumber);
+            $this->buildingNumber = Sanitizer::sanitize($buildingNumber);
         }
     }
 
