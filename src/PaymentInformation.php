@@ -27,7 +27,7 @@ use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class PaymentInformation
 {
@@ -171,7 +171,7 @@ class PaymentInformation
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
         $this->originAgentBIC = $originAgentBIC;
-        $this->originName = StringHelper::sanitizeString($originName);
+        $this->originName = Sanitizer::sanitize($originName);
         $this->originAccountCurrency = $originAccountCurrency;
         $this->dueDate = new DateTimeImmutable();
     }
@@ -289,7 +289,7 @@ class PaymentInformation
 
     public function setOriginName(string $originName): void
     {
-        $this->originName = StringHelper::sanitizeString($originName);
+        $this->originName = Sanitizer::sanitize($originName);
     }
 
     public function getOriginName(): string
@@ -299,7 +299,7 @@ class PaymentInformation
 
     public function setOriginBankPartyIdentification(string $id): void
     {
-        $this->originBankPartyIdentification = StringHelper::sanitizeString($id);
+        $this->originBankPartyIdentification = Sanitizer::sanitize($id);
     }
 
     public function getOriginBankPartyIdentification(): ?string
@@ -309,7 +309,7 @@ class PaymentInformation
 
     public function setOriginBankPartyIdentificationScheme(string $scheme): void
     {
-        $this->originBankPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+        $this->originBankPartyIdentificationScheme = Sanitizer::sanitize($scheme);
     }
 
     public function getOriginBankPartyIdentificationScheme(): ?string
@@ -379,7 +379,7 @@ class PaymentInformation
 
     public function setCreditorId(string $creditorSchemeId): void
     {
-        $this->creditorId = StringHelper::sanitizeString($creditorSchemeId);
+        $this->creditorId = Sanitizer::sanitize($creditorSchemeId);
     }
 
     public function getCreditorId(): ?string
