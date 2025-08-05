@@ -23,7 +23,7 @@
 namespace Digitick\Sepa\TransferInformation;
 
 use DateTimeInterface;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 {
@@ -96,7 +96,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 
     public function setOriginalMandateId(string $originalMandateId): void
     {
-        $this->originalMandateId = StringHelper::sanitizeString($originalMandateId);
+        $this->originalMandateId = Sanitizer::sanitize($originalMandateId);
     }
 
     public function getOriginalMandateId(): ?string
@@ -106,7 +106,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 
     public function setMandateId(string $mandateId): void
     {
-        $this->mandateId = StringHelper::sanitizeString($mandateId);
+        $this->mandateId = Sanitizer::sanitize($mandateId);
     }
 
     public function getMandateId(): ?string
