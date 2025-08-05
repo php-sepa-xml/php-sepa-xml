@@ -63,7 +63,7 @@ $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 // Or if you want to use the format 'pain.001.001.03' instead
 // $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
 
-//or if you hqve a custom url for the format to use,
+//or if you use a custom url for the format to use,
 // $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd'); //Credit Suisse case
 
 $domBuilder->asXml();

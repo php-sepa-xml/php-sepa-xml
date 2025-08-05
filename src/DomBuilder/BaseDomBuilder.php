@@ -111,7 +111,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $this->doc->saveXML();
     }
 
-    public function getDoc(): \DomDocument
+    public function asDoc(): \DomDocument
     {
         return $this->doc;
     }
