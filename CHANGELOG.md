@@ -5,6 +5,7 @@
 - Added support for `pain.008.001.10`
 - Added an `asDom()` method in the DomBuilder allowing to get the built DomDocument object for further manipulation
 - Added a `Sanitizer` class with the capability to replace the default sanitization logic or fully disable it. Check [the docs](doc/string_sanitization.md) for more info
+- Added Dependabot support
 
 - Convert all interfaces using DateTime to use DateTimeInterface
 - Switch from using DateTime instances internally to DateTimeImmutable instances
