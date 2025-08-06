@@ -163,7 +163,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);
             $finInstitution->appendChild($other);
-        } elseif ($this->painFormat === 'pain.008.001.10') {
+        } elseif (in_array($this->painFormat, ['pain.001.001.09', 'pain.008.001.08', 'pain.008.001.10'])) {
             $finInstitution->appendChild($this->createElement('BICFI', $bic));
         } else {
             $finInstitution->appendChild($this->createElement('BIC', $bic));

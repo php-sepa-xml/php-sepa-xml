@@ -52,13 +52,15 @@ class TestFileSanityCheckTest extends TestCase
     public static function painProvider(): iterable
     {
         return [
-            ['pain.001.001.03'],
-            ['pain.001.002.03'],
-            ['pain.001.003.03'],
-            ['pain.008.001.02'],
-            ['pain.008.001.10'],
-            ['pain.008.002.02'],
-            ['pain.008.003.02'],
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.002.03' => ['pain.001.002.03'],
+            'pain.001.003.03' => ['pain.001.003.03'],
+            'pain.008.001.02' => ['pain.008.001.02'],
+            'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.10' => ['pain.008.001.10'],
+            'pain.008.002.02' => ['pain.008.002.02'],
+            'pain.008.003.02' => ['pain.008.003.02'],
         ];
     }
 }
