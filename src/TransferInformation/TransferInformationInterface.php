@@ -36,6 +36,8 @@ interface TransferInformationInterface
 
     public function getCreditorReferenceType(): ?string;
 
+    public function getCategoryPurposeCode(): ?string;
+  
     public function getCreditorReference(): ?string;
 
     public function getCurrency(): string;
