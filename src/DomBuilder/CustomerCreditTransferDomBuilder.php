@@ -34,7 +34,7 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
 
-    function __construct(string $painFormat = 'pain.001.002.03', $withSchemaLocation = true)
+    function __construct(string $painFormat = 'pain.001.002.03', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
     }
@@ -62,7 +62,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         $this->currentPayment->appendChild(
-            $this->createElement('NbOfTxs', $paymentInformation->getNumberOfTransactions())
+            $this->createElement('NbOfTxs', (string) $paymentInformation->getNumberOfTransactions())
         );
 
         $this->currentPayment->appendChild(
@@ -131,7 +131,6 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      */
     public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
-        /** @var $transactionInformation  CustomerCreditTransferInformation */
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
 
         // Payment ID 2.28
@@ -173,10 +172,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');
-        $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorName()));
+        $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorOrDebitorName()));
 
         // Creditor address if needed and supported by schema.
-        if (in_array($this->painFormat, array('pain.001.001.03'))) {
+        if (in_array($this->painFormat, ['pain.001.001.03'])) {
             $this->appendAddressToDomElement($creditor, $transactionInformation);
         }
 
@@ -188,6 +187,14 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id->appendChild($this->createElement('IBAN', $transactionInformation->getIban()));
         $creditorAccount->appendChild($id);
         $CdtTrfTxInf->appendChild($creditorAccount);
+        
+        // Purpose code (Optional)
+        if (strlen((string)$transactionInformation->getPurposeCode()) > 0)
+        {
+            $purposeCode = $this->createElement('Purp');
+            $purposeCode->appendChild($this->createElement('Cd', $transactionInformation->getPurposeCode()));
+            $CdtTrfTxInf->appendChild($purposeCode);
+        }
 
         // remittance 2.98 2.99
         if (strlen((string)$transactionInformation->getCreditorReference()) > 0)
@@ -289,7 +296,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         // Ensure $postalAddressData is an array as getPostalAddress() returns either string or string[].
         $postalAddressData = $transactionInformation->getPostalAddress();
         if (!is_array($postalAddressData)) {
-            $postalAddressData = array($postalAddressData);
+            $postalAddressData = [$postalAddressData];
         }
 
         // Generate nodes for each address line.

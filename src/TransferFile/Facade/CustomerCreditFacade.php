@@ -2,6 +2,7 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use DateTimeInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -14,16 +15,17 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 {
 
     /**
+     * @param string $paymentName
      * @param array{
-     *             id: string,
-     *             debtorName: string,
-     *             debtorAccountIBAN: string,
-     *             debtorAgentBIC?: string,
-     *             dueDate?: string|\DateTime,
-     *             batchBooking?: bool
-     *             } $paymentInformation
-     *
+     *     id: int,
+     *     debtorName: string,
+     *     debtorAccountIBAN: string,
+     *     debtorAgentBIC?: string,
+     *     dueDate?: string|DateTimeInterface,
+     *     batchBooking?: bool
+     * } $paymentInformation
      * @throws InvalidArgumentException
+     * @return PaymentInformation
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
@@ -31,18 +33,14 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
 
-        $originAgentBic = (isset ($paymentInformation['debtorAgentBIC'])) ? $paymentInformation['debtorAgentBIC'] : NULL;
+        $originAgentBic = $paymentInformation['debtorAgentBIC'] ?? null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['debtorAccountIBAN'],
             $originAgentBic,
             $paymentInformation['debtorName']
         );
-
-        if (isset($paymentInformation['batchBooking'])) {
-            $payment->setBatchBooking($paymentInformation['batchBooking']);
-        }
-
+        $payment->setBatchBooking($paymentInformation['batchBooking'] ?? false);
         $payment->setDueDate($this->createDueDateFromPaymentInformation($paymentInformation));
 
         $this->payments[$paymentName] = $payment;
@@ -51,20 +49,20 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
+     * @param string $paymentName
      * @param array{
-     *             amount: int,
-     *             creditorIban: string,
-     *             creditorName: string,
-     *             creditorBic?: string,
-     *             creditorReference?: string,
-     *             remittanceInformation: string,
-     *             endToEndId?: string,
-     *             instructionId?: string
-     *             } $transferInformation
-     *
-     * @throws InvalidArgumentException
-     *
+     *     amount: int,
+     *     creditorIban: string,
+     *     creditorName: string,
+     *     creditorBic?: string,
+     *     creditorReference?: string,
+     *     creditorReferenceType?: string,
+     *     remittanceInformation: string,
+     *     endToEndId?: string,
+     *     instructionId?: string
+     * } $transferInformation
      * @return CustomerCreditTransferInformation
+     * @throws InvalidArgumentException
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {

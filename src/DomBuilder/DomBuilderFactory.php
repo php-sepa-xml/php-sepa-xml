@@ -30,15 +30,15 @@ class DomBuilderFactory
     /**
      * @throws InvalidArgumentException
      **/
-    public static function createDomBuilder(TransferFileInterface $transferFile, string $painFormat = '', $withSchemaLocation = true): DomBuilderInterface
+    public static function createDomBuilder(TransferFileInterface $transferFile, string $painFormat = '', bool $withSchemaLocation = true): DomBuilderInterface
     {
         $transferFileClass = get_class($transferFile);
         switch ($transferFileClass) {
-            case 'Digitick\Sepa\TransferFile\CustomerCreditTransferFile':
+            case \Digitick\Sepa\TransferFile\CustomerCreditTransferFile::class:
                 $domBuilder = $painFormat ? new CustomerCreditTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerCreditTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;
-            case 'Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile':
+            case \Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile::class:
                 $domBuilder = $painFormat ? new CustomerDirectDebitTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerDirectDebitTransferDomBuilder();
                 $transferFile->accept($domBuilder);
                 break;

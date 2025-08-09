@@ -5,6 +5,7 @@
 			<MsgId>Message-ID</MsgId>
 			<CreDtTm>2010-11-21T09:30:47.000Z</CreDtTm>
 			<NbOfTxs>2</NbOfTxs>
+			<CtrlSum>6655.86</CtrlSum>
 			<InitgPty>
 				<Nm>Initiator Name</Nm>
 			</InitgPty>

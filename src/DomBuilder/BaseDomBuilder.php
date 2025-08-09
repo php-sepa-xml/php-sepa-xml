@@ -53,8 +53,9 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     protected $painFormat;
 
     /**
-     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02'
+     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02', 'pain.008.001.10'
      * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
+     * @throws \DOMException
      */
     public function __construct(string $painFormat, bool $withSchemaLocation = true)
     {
@@ -62,14 +63,36 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->doc = new \DOMDocument('1.0', 'UTF-8');
         $this->doc->formatOutput = true;
         $this->root = $this->doc->createElement('Document');
-        $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
+        $this->setXmlns($painFormat);
+
         $this->root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        if ($withSchemaLocation) {
-            $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
-        }
+        $this->setSchemaLocation($painFormat, $withSchemaLocation);
 
         $this->doc->appendChild($this->root);
+    }
+
+    private function setXmlns(string $painFormat): void
+    {
+        if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
+            $this->root->setAttribute('xmlns', sprintf('%s', $painFormat));
+        } else {
+            $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+        }
+    }
+
+    private function setSchemaLocation(string $painFormat, bool $withSchemaLocation=true): void
+    {
+        if ($withSchemaLocation) {
+            if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
+                $painFormat = substr($painFormat, strrpos($painFormat, '/')+1, (strrpos($painFormat, '.') -1) - strrpos($painFormat, '/'));
+
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+            } else {
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+            }
+	}
     }
 
     protected function createElement(string $name, ?string $value = null): \DOMElement
@@ -87,6 +110,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     public function asXml(): string
     {
         return $this->doc->saveXML();
+    }
+
+    public function asDoc(): \DomDocument
+    {
+        return $this->doc;
     }
 
     /**
@@ -110,7 +138,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $groupHeader->getCreationDateTime()->format($groupHeader->getCreationDateTimeFormat())
         );
         $groupHeaderTag->appendChild($creationDateTime);
-        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', $groupHeader->getNumberOfTransactions()));
+        $groupHeaderTag->appendChild($this->createElement('NbOfTxs', (string) $groupHeader->getNumberOfTransactions()));
         $groupHeaderTag->appendChild(
             $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
         );
@@ -135,6 +163,8 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);
             $finInstitution->appendChild($other);
+        } elseif ($this->painFormat === 'pain.008.001.10') {
+            $finInstitution->appendChild($this->createElement('BICFI', $bic));
         } else {
             $finInstitution->appendChild($this->createElement('BIC', $bic));
         }
@@ -191,5 +221,4 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
         return $remittanceInformation;
     }
-
 }

@@ -81,7 +81,7 @@ $directDebit->addTransfer('firstPayment', array(
     'debtorIban'            => 'FI1350001540000056',
     'debtorBic'             => 'OKOYFIHH',
     'debtorName'            => 'Their Company',
-    'debtorMandate'         =>  'AB12345',
+    'debtorMandate'         => 'AB12345',
     'debtorMandateSignDate' => '13.10.2012',
     'remittanceInformation' => 'Purpose of this direct debit',
     'endToEndId'            => 'Invoice-No X' // optional, if you want to provide additional structured info

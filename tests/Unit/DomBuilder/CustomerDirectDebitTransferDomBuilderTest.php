@@ -68,4 +68,51 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
     }
+
+    /**
+     * Test the XML generation of a direct debit transfer with BIC
+     * for pain.008.001.10
+     */
+    public function testWithBicfiForPain00800110(): void
+    {
+        $groupHeader = new GroupHeader('TEST_DEBTOR_BIC', 'Test Company Inc.');
+        $groupHeader->setInitiatingPartyId('DE67ZZZ00000123456');
+
+        $paymentInformation = new \Digitick\Sepa\PaymentInformation('RAND001', 'DE88500105173441451911', 'DEUTDEFFXXX', 'Test Company Inc.');
+        $paymentInformation->setCreditorId('DE67ZZZ00000123456');
+        $paymentInformation->setSequenceType('FRST');
+
+        $transferFile = new \Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile($groupHeader);
+        $transferFile->addPaymentInformation($paymentInformation);
+
+        $transactionInformation = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(1000, 'DE40500105174181777145', 'Max Musterman');
+        $transactionInformation->setMandateId('TEST-MANDATE-1');
+        $transactionInformation->setMandateSignDate(new \DateTime('2022-05-15'));
+        $transactionInformation->setBic('INGDDEFFXXX');
+
+        $builder = new CustomerDirectDebitTransferDomBuilder('pain.008.001.10');
+        $builder->visitTransferFile($transferFile);
+        $builder->visitGroupHeader($groupHeader);
+        $builder->visitPaymentInformation($paymentInformation);
+        $builder->visitTransferInformation($transactionInformation);
+
+        $xml = $builder->asXml();
+
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadXML($xml);
+
+        // Test xml schema validation
+
+        $validated = $doc->schemaValidate(__DIR__ . '/../../fixtures/pain.008.001.10.xsd');
+        $this->assertTrue($validated);
+
+        // Test contents
+
+        $xpath = new \DOMXPath($doc);
+        $xpath->registerNamespace('ns', 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.10');
+
+        $finInstnIdNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId')->item(0);
+
+        $this->assertSame('INGDDEFFXXX', $xpath->evaluate('./ns:BICFI', $finInstnIdNode)->item(0)->textContent);
+    }
 }

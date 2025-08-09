@@ -22,10 +22,12 @@
 
 namespace Digitick\Sepa;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class PaymentInformation
 {
@@ -111,7 +113,7 @@ class PaymentInformation
     /**
      * Date of payment execution
      *
-     * @var \DateTime
+     * @var DateTimeInterface
      */
     protected $dueDate;
 
@@ -133,14 +135,14 @@ class PaymentInformation
     /**
      * @var TransferInformationInterface[]
      */
-    protected $transfers = array();
+    protected $transfers = [];
 
     /**
      * Valid Payment Methods set by the TransferFile
      *
      * @var string[]
      */
-    protected $validPaymentMethods = array();
+    protected $validPaymentMethods = [];
 
     /**
      * @var string|null
@@ -160,7 +162,7 @@ class PaymentInformation
     protected $batchBooking;
 
     /**
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $mandateSignDate;
 
@@ -174,9 +176,9 @@ class PaymentInformation
         $this->id = $id;
         $this->originAccountIBAN = $originAccountIBAN;
         $this->originAgentBIC = $originAgentBIC;
-        $this->originName = StringHelper::sanitizeString($originName);
+        $this->originName = Sanitizer::sanitize($originName);
         $this->originAccountCurrency = $originAccountCurrency;
-        $this->dueDate = new \DateTime();
+        $this->dueDate = new DateTimeImmutable();
     }
 
 
@@ -229,7 +231,7 @@ class PaymentInformation
     public function setLocalInstrumentCode(string $localInstrumentCode): void
     {
         $localInstrumentCode = strtoupper($localInstrumentCode);
-        if (!in_array($localInstrumentCode, array('B2B', 'CORE', 'COR1'))) {
+        if (!in_array($localInstrumentCode, ['B2B', 'CORE', 'COR1'])) {
             throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
         }
         $this->localInstrumentCode = $localInstrumentCode;
@@ -261,7 +263,7 @@ class PaymentInformation
         return $this->categoryPurposeCode;
     }
 
-    public function setDueDate(\DateTime $dueDate): void
+    public function setDueDate(DateTimeInterface $dueDate): void
     {
         $this->dueDate = $dueDate;
     }
@@ -277,7 +279,7 @@ class PaymentInformation
     public function setInstructionPriority(string $instructionPriority): void
     {
         $instructionPriority = strtoupper($instructionPriority);
-        if (!in_array($instructionPriority, array('NORM', 'HIGH'))) {
+        if (!in_array($instructionPriority, ['NORM', 'HIGH'])) {
             throw new InvalidArgumentException("Invalid Instruction Priority: $instructionPriority");
         }
         $this->instructionPriority = $instructionPriority;
@@ -288,19 +290,19 @@ class PaymentInformation
         return $this->instructionPriority;
     }
 
-    public function setMandateSignDate(\DateTime $mandateSignDate): void
+    public function setMandateSignDate(DateTimeInterface $mandateSignDate): void
     {
         $this->mandateSignDate = $mandateSignDate;
     }
 
-    public function getMandateSignDate(): ?\DateTime
+    public function getMandateSignDate(): ?DateTimeInterface
     {
         return $this->mandateSignDate;
     }
 
     public function setOriginName(string $originName): void
     {
-        $this->originName = StringHelper::sanitizeString($originName);
+        $this->originName = Sanitizer::sanitize($originName);
     }
 
     public function getOriginName(): string
@@ -310,7 +312,7 @@ class PaymentInformation
 
     public function setOriginBankPartyIdentification(string $id): void
     {
-        $this->originBankPartyIdentification = StringHelper::sanitizeString($id);
+        $this->originBankPartyIdentification = Sanitizer::sanitize($id);
     }
 
     public function getOriginBankPartyIdentification(): ?string
@@ -320,7 +322,7 @@ class PaymentInformation
 
     public function setOriginBankPartyIdentificationScheme(string $scheme): void
     {
-        $this->originBankPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+        $this->originBankPartyIdentificationScheme = Sanitizer::sanitize($scheme);
     }
 
     public function getOriginBankPartyIdentificationScheme(): ?string
@@ -395,7 +397,7 @@ class PaymentInformation
 
     public function setCreditorId(string $creditorSchemeId): void
     {
-        $this->creditorId = StringHelper::sanitizeString($creditorSchemeId);
+        $this->creditorId = Sanitizer::sanitize($creditorSchemeId);
     }
 
     public function getCreditorId(): ?string

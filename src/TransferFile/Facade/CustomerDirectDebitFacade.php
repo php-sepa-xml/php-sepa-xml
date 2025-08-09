@@ -22,6 +22,9 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use Exception;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
@@ -30,18 +33,19 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
     /**
+     * @param string $paymentName
      * @param array{
-     *             id: string,
-     *             creditorName: string,
-     *             creditorAccountIBAN: string,
-     *             creditorAgentBIC?: string,
-     *             seqType: string,
-     *             creditorId: string,
-     *             localInstrumentCode?: string,
-     *             batchBooking?: bool,
-     *             dueDate?: string|\DateTime
-     *             } $paymentInformation
-     *
+     *     id: string,
+     *     creditorName: string,
+     *     creditorAccountIBAN: string,
+     *     creditorAgentBIC?: string,
+     *     seqType: string,
+     *     creditorId: string,
+     *     localInstrumentCode?: string,
+     *     batchBooking?: bool,
+     *     dueDate?: string|DateTimeInterface
+     * } $paymentInformation
+     * @return PaymentInformation
      * @throws InvalidArgumentException
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
@@ -49,7 +53,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
-        $creditorAgentBIC = (isset ($paymentInformation['creditorAgentBIC'])) ? $paymentInformation['creditorAgentBIC'] : null;
+        $creditorAgentBIC = $paymentInformation['creditorAgentBIC'] ?? null;
         $payment = new PaymentInformation(
             $paymentInformation['id'],
             $paymentInformation['creditorAccountIBAN'],
@@ -71,29 +75,31 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
     }
 
     /**
+     * @param string $paymentName
      * @param array{
-     *             amount: int,
-     *             debtorIban: string,
-     *             debtorBic?: string,
-     *             debtorMandate: string,
-     *             debtorMandateSignDate: string|\DateTime,
-     *             remittanceInformation: string,
-     *             creditorReference?: string,
-     *             endToEndId?: string,
-     *             originalMandateId?: string
-     *             originalDebtorIban?: string
-     *             amendedDebtorAccount?: string
-     *             postCode?: string
-     *             townName?: string
-     *             streetName?: string
-     *             buildingNumber?: string
-     *             debtorCountry?: string
-     *             debtorAdrLine?: string
-     *             } $transferInformation
-     *
+     *     amount: int,
+     *     debtorIban: string,
+     *     debtorName: string,
+     *     debtorBic?: string,
+     *     debtorMandate: string,
+     *     debtorMandateSignDate: string|DateTimeInterface,
+     *     remittanceInformation: string,
+     *     creditorReference?: string,
+     *     endToEndId?: string,
+     *     originalMandateId?: string,
+     *     originalDebtorIban?: string,
+     *     amendedDebtorAccount?: string,
+     *     postCode?: string,
+     *     townName?: string,
+     *     streetName?: string,
+     *     buildingNumber?: string,
+     *     debtorCountry?: string,
+     *     debtorAdrLine?: string,
+     *     instructionId?: string
+     * } $transferInformation
      * @return CustomerDirectDebitTransferInformation
-     *
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
@@ -114,10 +120,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
 
         $transfer->setMandateId($transferInformation['debtorMandate']);
-        if ($transferInformation['debtorMandateSignDate'] instanceof \DateTime) {
+        if ($transferInformation['debtorMandateSignDate'] instanceof DateTimeInterface) {
             $transfer->setMandateSignDate($transferInformation['debtorMandateSignDate']);
         } else {
-            $transfer->setMandateSignDate(new \DateTime($transferInformation['debtorMandateSignDate']));
+            $transfer->setMandateSignDate(new DateTimeImmutable($transferInformation['debtorMandateSignDate']));
         }
 
         if (isset($transferInformation['creditorReference'])) {

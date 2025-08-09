@@ -37,4 +37,28 @@ interface TransferInformationInterface
     public function getCreditorReferenceType(): ?string;
 
     public function getCategoryPurposeCode(): ?string;
+  
+    public function getCreditorReference(): ?string;
+
+    public function getCurrency(): string;
+
+    public function getCountry(): ?string;
+
+    public function getBic(): ?string;
+
+    public function getIban(): string;
+
+    public function getPurposeCode(): ?string;
+
+    public function getRemittanceInformation(): ?string;
+
+    public function getCreditorOrDebitorName(): string;
+
+    public function getTownName(): ?string;
+
+    public function getStreetName(): ?string;
+
+    public function getBuildingNumber(): ?string;
+
+    public function getPostCode(): ?string;
 }

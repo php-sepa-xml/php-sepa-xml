@@ -49,15 +49,16 @@ class TestFileSanityCheckTest extends TestCase
         $this->assertTrue($validated);
     }
 
-    public function painProvider(): iterable
+    public static function painProvider(): iterable
     {
-        return array(
-            array('pain.001.001.03'),
-            array('pain.001.002.03'),
-            array('pain.001.003.03'),
-            array('pain.008.001.02'),
-            array('pain.008.002.02'),
-            array('pain.008.003.02'),
-        );
+        return [
+            ['pain.001.001.03'],
+            ['pain.001.002.03'],
+            ['pain.001.003.03'],
+            ['pain.008.001.02'],
+            ['pain.008.001.10'],
+            ['pain.008.002.02'],
+            ['pain.008.003.02'],
+        ];
     }
 }

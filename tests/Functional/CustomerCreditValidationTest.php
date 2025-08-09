@@ -78,7 +78,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -275,7 +275,7 @@ class CustomerCreditValidationTest extends TestCase
 
         // $addressLines could be string instead of array. Ensure array for easier testing.
         if (!is_array($addressLines)) {
-            $addressLines = array($addressLines);
+            $addressLines = [$addressLines];
         }
 
         // check that all address lines do (not) exist and match the expected inputs.
@@ -375,7 +375,7 @@ class CustomerCreditValidationTest extends TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
         $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
@@ -412,7 +412,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -427,7 +427,7 @@ class CustomerCreditValidationTest extends TestCase
         $doc->loadXML($xml);
 
         $xpathDoc = new \DOMXPath($doc);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         $testNode = $xpathDoc->query('//sepa:CreDtTm');
         $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
@@ -449,7 +449,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setInstructionId(uniqid());
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -483,7 +483,7 @@ class CustomerCreditValidationTest extends TestCase
         $transfer->setCreditorReference('RF81123453');
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -499,7 +499,7 @@ class CustomerCreditValidationTest extends TestCase
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
-        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         $testNode = $xpathDoc->query('//sepa:Ustrd');
         $this->assertEquals(0, $testNode->length, 'RmtInf should not contain Ustrd when Strd is present.');
@@ -509,25 +509,63 @@ class CustomerCreditValidationTest extends TestCase
 
         $testNode = $xpathDoc->query('//sepa:Strd/sepa:CdtrRefInf/sepa:Ref');
         $this->assertEquals('RF81123453', $testNode->item(0)->textContent);
-
     }
 
-    public function provideSchema(): iterable
+    /**
+     * Test a transfer file with one payment and one transaction with purpose code.
+     *
+     * @dataProvider provideSchema
+     */
+    public function testSinglePaymentSingleTransactionWithPurposeCode(string $schema): void
     {
-        return array(
-            array("pain.001.001.03"),
-            array("pain.001.002.03"),
-            array("pain.001.003.03")
-        );
+        $groupHeader = new GroupHeader('transferID', 'Me');
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
+
+        $transfer = new CustomerCreditTransferInformation(2, 'FI1350001540000056', 'Their Corp');
+        $transfer->setBic('OKOYFIHH');
+        $transfer->setPurposeCode('SALA');
+        $transfer->setRemittanceInformation('Transaction Description');
+        $transfer->setEndToEndIdentification(uniqid());
+        $transfer->setInstructionId(uniqid());
+
+        $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
+        $payment->setValidPaymentMethods(['TRANSFER']);
+        $payment->setPaymentMethod('TRANSFER');
+        $payment->setCategoryPurposeCode('SALA');
+        $payment->addTransfer($transfer);
+
+        $sepaFile->addPaymentInformation($payment);
+
+        $domBuilder = new CustomerCreditTransferDomBuilder($schema);
+        $sepaFile->accept($domBuilder);
+        $xml = $domBuilder->asXml();
+        $this->dom->loadXML($xml);
+
+        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $this->assertTrue($validated);
+
+        $xpathDoc = new \DOMXPath($this->dom);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
+        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
+        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
-    public function provideAddressTests(): iterable
+    public static function provideSchema(): iterable
     {
-        return array(
-            array(array('CH', array('Teststreet 1', '21345 Somewhere'))),
-            array(array('DE', array('Teststreet 2'))),
-            array(array('NL', '21456 Rightthere')),
-            array(array('NL', array())),
-        );
+        return [
+            ["pain.001.001.03"],
+            ["pain.001.002.03"],
+            ["pain.001.003.03"]
+        ];
+    }
+
+    public static function provideAddressTests(): iterable
+    {
+        return [
+            [['CH', ['Teststreet 1', '21345 Somewhere']]],
+            [['DE', ['Teststreet 2']]],
+            [['NL', '21456 Rightthere']],
+            [['NL', []]],
+        ];
     }
 }

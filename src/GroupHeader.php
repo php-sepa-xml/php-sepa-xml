@@ -22,8 +22,10 @@
 
 namespace Digitick\Sepa;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
-use Digitick\Sepa\Util\StringHelper;
+use Digitick\Sepa\Util\Sanitizer;
 
 class GroupHeader
 {
@@ -76,14 +78,14 @@ class GroupHeader
     protected $initiatingPartyName;
 
     /**
-     * @var \DateTime
+     * @var DateTimeInterface
      */
     protected $creationDateTime;
 
     /**
      * @var string
      */
-    protected $creationDateTimeFormat = \DateTime::RFC3339;
+    protected $creationDateTimeFormat = DateTimeInterface::RFC3339;
 
     /**
      * @param string $messageIdentification Maximum length: 35. Reference Number of the bulk.
@@ -95,8 +97,8 @@ class GroupHeader
     {
         $this->messageIdentification = $messageIdentification;
         $this->isTest = $isTest;
-        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
-        $this->creationDateTime = new \DateTime();
+        $this->initiatingPartyName = Sanitizer::sanitize($initiatingPartyName);
+        $this->creationDateTime = new DateTimeImmutable();
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
@@ -126,7 +128,7 @@ class GroupHeader
 
     public function setInitiatingPartyIdentificationScheme(string $scheme): void
     {
-        $this->initiatingPartyIdentificationScheme = StringHelper::sanitizeString($scheme);
+        $this->initiatingPartyIdentificationScheme = Sanitizer::sanitize($scheme);
     }
 
     public function getInitiatingPartyIdentificationScheme(): ?string
@@ -146,7 +148,7 @@ class GroupHeader
 
     public function setInitiatingPartyName(string $initiatingPartyName): void
     {
-        $this->initiatingPartyName = StringHelper::sanitizeString($initiatingPartyName);
+        $this->initiatingPartyName = Sanitizer::sanitize($initiatingPartyName);
     }
 
     public function getInitiatingPartyName(): string
@@ -184,7 +186,7 @@ class GroupHeader
         return $this->numberOfTransactions;
     }
 
-    public function getCreationDateTime(): \DateTime
+    public function getCreationDateTime(): DateTimeInterface
     {
         return $this->creationDateTime;
     }

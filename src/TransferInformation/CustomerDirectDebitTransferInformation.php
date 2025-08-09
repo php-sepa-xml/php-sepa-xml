@@ -22,7 +22,8 @@
 
 namespace Digitick\Sepa\TransferInformation;
 
-use Digitick\Sepa\Util\StringHelper;
+use DateTimeInterface;
+use Digitick\Sepa\Util\Sanitizer;
 
 class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 {
@@ -32,12 +33,12 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
     protected $mandateId;
 
     /**
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $mandateSignDate;
 
     /**
-     * @var \DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $finalCollectionDate;
 
@@ -73,12 +74,12 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
         $this->amendedDebtorAccount = $status;
     }
 
-    public function setFinalCollectionDate(\DateTime $finalCollectionDate): void
+    public function setFinalCollectionDate(DateTimeInterface $finalCollectionDate): void
     {
         $this->finalCollectionDate = $finalCollectionDate;
     }
 
-    public function getFinalCollectionDate(): ?\DateTime
+    public function getFinalCollectionDate(): ?DateTimeInterface
     {
         return $this->finalCollectionDate;
     }
@@ -95,7 +96,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 
     public function setOriginalMandateId(string $originalMandateId): void
     {
-        $this->originalMandateId = StringHelper::sanitizeString($originalMandateId);
+        $this->originalMandateId = Sanitizer::sanitize($originalMandateId);
     }
 
     public function getOriginalMandateId(): ?string
@@ -105,7 +106,7 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
 
     public function setMandateId(string $mandateId): void
     {
-        $this->mandateId = StringHelper::sanitizeString($mandateId);
+        $this->mandateId = Sanitizer::sanitize($mandateId);
     }
 
     public function getMandateId(): ?string
@@ -113,18 +114,18 @@ class CustomerDirectDebitTransferInformation extends BaseTransferInformation
         return $this->mandateId;
     }
 
-    public function setMandateSignDate(\DateTime $mandateSignDate): void
+    public function setMandateSignDate(DateTimeInterface $mandateSignDate): void
     {
         $this->mandateSignDate = $mandateSignDate;
     }
 
-    public function getMandateSignDate(): ?\DateTime
+    public function getMandateSignDate(): ?DateTimeInterface
     {
         return $this->mandateSignDate;
     }
 
     public function getDebitorName(): string
     {
-        return $this->name;
+        return $this->getCreditorOrDebitorName();
     }
 }

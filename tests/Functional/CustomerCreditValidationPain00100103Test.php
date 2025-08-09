@@ -76,6 +76,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         if ($scenario['bic'] !== '') {
             $transfer->setBic($scenario['bic']);
         }
+        $transfer->setPurposeCode('SALA');
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
@@ -84,7 +85,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         if (isset($scenario['batchBooking'])) {
             $payment->setBatchBooking($scenario['batchBooking']);
         }
-        $payment->setValidPaymentMethods(array('TRANSFER'));
+        $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
@@ -98,23 +99,29 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
+
+        $xpathDoc = new \DOMXPath($this->dom);
+        $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+
+        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
+        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
-    public function scenarios(): iterable
+    public static function scenarios(): iterable
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'batchBooking' => true,
                     'bic' => 'OKOYFIHH'
-                )
-            ),
-            array(
-                array(
+                ]
+            ],
+            [
+                [
                     'batchBooking' => false,
                     'bic' => ''
-                )
-            ),
-        );
+                ]
+            ],
+        ];
     }
 }
