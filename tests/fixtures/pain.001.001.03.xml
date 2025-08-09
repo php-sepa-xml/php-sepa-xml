@@ -168,5 +168,76 @@
 				</RmtInf>
 			</CdtTrfTxInf>
 		</PmtInf>
+		<PmtInf>
+			<PmtInfId>maximaal gevuld</PmtInfId>
+			<PmtMtd>TRF</PmtMtd>
+			<NbOfTxs>1</NbOfTxs>
+			<CtrlSum>6567.00</CtrlSum>
+			<PmtTpInf>
+				<InstrPrty>NORM</InstrPrty>
+				<SvcLvl>
+					<Cd>SEPA</Cd>
+				</SvcLvl>
+				<LclInstrm>
+					<Prtry>CBI</Prtry>
+				</LclInstrm>
+				<CtgyPurp>
+					<Cd>SUPP</Cd>
+				</CtgyPurp>
+			</PmtTpInf>
+			<ReqdExctnDt>2009-11-01</ReqdExctnDt>
+			<Dbtr>
+				<Nm>Naam</Nm>
+				<PstlAdr>
+					<Ctry>NL</Ctry>
+					<AdrLine>Debtor straat 1</AdrLine>
+					<AdrLine>9999 XX Plaats debtor</AdrLine>
+				</PstlAdr>
+			</Dbtr>
+			<DbtrAcct>
+				<Id>
+					<IBAN>NL44RABO0123456789</IBAN>
+				</Id>
+				<Ccy>EUR</Ccy>
+			</DbtrAcct>
+			<DbtrAgt>
+				<FinInstnId>
+					<BIC>RABONL2U</BIC>
+				</FinInstnId>
+			</DbtrAgt>
+			<ChrgBr>SLEV</ChrgBr>
+			<CdtTrfTxInf>
+				<PmtId>
+					<EndToEndId>37250</EndToEndId>
+				</PmtId>
+				<PmtTpInf>
+					<CtgyPurp>
+						<Cd>SUPP</Cd>
+					</CtgyPurp>
+				</PmtTpInf>
+				<Amt>
+					<InstdAmt Ccy="EUR">6567.00</InstdAmt>
+				</Amt>
+				<Cdtr>
+					<Nm>Naam creditor</Nm>
+					<PstlAdr>
+						<StrtNm>Straat creditor 1</StrtNm>
+						<PstCd>9999</PstCd>
+						<TwnNm>XX Plaats creditor</TwnNm>
+						<Ctry>NL</Ctry>
+						<AdrLine>Straat creditor 1</AdrLine>
+						<AdrLine>9999 XX Plaats creditor</AdrLine>
+					</PstlAdr>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<IBAN>NL90ABNA0111111111</IBAN>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Invoice 152 from 2009-11-01</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+		</PmtInf>
 	</CstmrCdtTrfInitn>
 </Document>

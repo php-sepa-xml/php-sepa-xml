@@ -80,6 +80,13 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
+        $transfer->setCategoryPurposeCode('SUPP');
+
+        $transfer->setStreetName('Straat creditor 1');
+        $transfer->setPostCode('9999');
+        $transfer->setTownName('XX Plaats creditor');
+        $transfer->setCountry('NL');
+        $transfer->setPostalAddress(['Straat creditor 1', '9999 XX Plaats creditor']);
 
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
         if (isset($scenario['batchBooking'])) {
@@ -87,6 +94,11 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         }
         $payment->setValidPaymentMethods(['TRANSFER']);
         $payment->setPaymentMethod('TRANSFER');
+        if (isset($scenario['localInstrumentProprietary'])) {
+            $payment->setLocalInstrumentProprietary($scenario['localInstrumentProprietary']);
+        } elseif (isset($scenario['localInstrumentCode'])) {
+            $payment->setLocalInstrumentCode($scenario['localInstrumentCode']);
+        }
         $payment->setCategoryPurposeCode('SALA');
         $payment->addTransfer($transfer);
 
@@ -105,6 +117,33 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
         $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
         $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
+
+        $ctgyPurp = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:CtgyPurp/sepa:Cd');
+        $this->assertEquals('SUPP', $ctgyPurp->item(0)->textContent);
+
+        if (isset($scenario['localInstrumentProprietary'])) {
+            $localInstrumentProprietary = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
+            $this->assertEquals($scenario['localInstrumentProprietary'], $localInstrumentProprietary->item(0)->textContent);
+        } elseif (isset($scenario['localInstrumentCode'])) {
+            $localInstrumentCode = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd');
+            $this->assertEquals($scenario['localInstrumentCode'], $localInstrumentCode->item(0)->textContent);
+        }
+
+        $strtNm = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:StrtNm');
+        $this->assertEquals('Straat creditor 1', $strtNm->item(0)->textContent);
+        
+        $pstCd = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:PstCd');
+        $this->assertEquals('9999', $pstCd->item(0)->textContent);
+        
+        $twnNm = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:TwnNm');
+        $this->assertEquals('XX Plaats creditor', $twnNm->item(0)->textContent);
+        
+        $ctry = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
+        $this->assertEquals('NL', $ctry->item(0)->textContent);
+        
+        $adrLine = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine');
+        $this->assertEquals('Straat creditor 1', $adrLine->item(0)->textContent);
+        $this->assertEquals('9999 XX Plaats creditor', $adrLine->item(1)->textContent);
     }
 
     public static function scenarios(): iterable
@@ -113,13 +152,15 @@ class CustomerCreditValidationPain00100103Test extends TestCase
             [
                 [
                     'batchBooking' => true,
-                    'bic' => 'OKOYFIHH'
+                    'bic' => 'OKOYFIHH',
+                    'localInstrumentProprietary' => 'CBI'
                 ]
             ],
             [
                 [
                     'batchBooking' => false,
-                    'bic' => ''
+                    'bic' => '',
+                    'localInstrumentCode' => 'CORE'
                 ]
             ],
         ];
