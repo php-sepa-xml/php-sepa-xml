@@ -82,9 +82,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $localInstrument = $this->createElement('LclInstrm');
             if ($paymentInformation->getLocalInstrumentCode()) {
                 $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
-            }
-
-            if ($paymentInformation->getLocalInstrumentProprietary()) {
+            } else if ($paymentInformation->getLocalInstrumentProprietary()) {
                 $localInstrument->appendChild($this->createElement('Prtry', $paymentInformation->getLocalInstrumentProprietary()));
             }
             $paymentTypeInformation->appendChild($localInstrument);
@@ -284,7 +282,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         // Gemerate country address node.
-        if ((bool)$transactionInformation->getCountry()) {
+        if (!empty($transactionInformation->getCountry())) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
         }
 
