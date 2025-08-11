@@ -34,8 +34,14 @@ interface TransferInformationInterface
 
     public function getInstructionId(): ?string;
 
+    public function getLocalInstrumentProprietary(): ?string;
+    
+    public function getLocalInstrumentCode(): ?string;
+
     public function getCreditorReferenceType(): ?string;
 
+    public function getCategoryPurposeCode(): ?string;
+  
     public function getCreditorReference(): ?string;
 
     public function getCurrency(): string;

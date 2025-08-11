@@ -77,18 +77,23 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $serviceLevel = $this->createElement('SvcLvl');
         $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
         $paymentTypeInformation->appendChild($serviceLevel);
+
+        if ($paymentInformation->getLocalInstrumentCode() || $paymentInformation->getLocalInstrumentProprietary()) {
+            $localInstrument = $this->createElement('LclInstrm');
+            if ($paymentInformation->getLocalInstrumentCode()) {
+                $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
+            } else if ($paymentInformation->getLocalInstrumentProprietary()) {
+                $localInstrument->appendChild($this->createElement('Prtry', $paymentInformation->getLocalInstrumentProprietary()));
+            }
+            $paymentTypeInformation->appendChild($localInstrument);
+        }
+
         if ($paymentInformation->getCategoryPurposeCode()) {
             $categoryPurpose = $this->createElement('CtgyPurp');
             $categoryPurpose->appendChild($this->createElement('Cd', $paymentInformation->getCategoryPurposeCode()));
             $paymentTypeInformation->appendChild($categoryPurpose);
         }
         $this->currentPayment->appendChild($paymentTypeInformation);
-
-        if ($paymentInformation->getLocalInstrumentCode()) {
-            $localInstrument = $this->createElement('LclInstr');
-            $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
-            $this->currentPayment->appendChild($localInstrument);
-        }
 
         $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
         $debtor = $this->createElement('Dbtr');
@@ -135,6 +140,30 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
+
+        $PmtTpInf = $this->createElement('PmtTpInf');
+
+        $SvcLvl = $this->createElement('SvcLvl');
+        $SvcLvl->appendChild($this->createElement('Cd', 'SEPA'));
+        $PmtTpInf->appendChild($SvcLvl);
+
+        if ($transactionInformation->getLocalInstrumentCode() || $transactionInformation->getLocalInstrumentProprietary()) {
+            $localInstrument = $this->createElement('LclInstrm');
+            if ($transactionInformation->getLocalInstrumentCode()) {
+                $localInstrument->appendChild($this->createElement('Cd', $transactionInformation->getLocalInstrumentCode()));
+            } else if ($transactionInformation->getLocalInstrumentProprietary()) {
+                $localInstrument->appendChild($this->createElement('Prtry', $transactionInformation->getLocalInstrumentProprietary()));
+            }
+            $PmtTpInf->appendChild($localInstrument);
+        }
+
+        if ($transactionInformation->getCategoryPurposeCode()) {
+            $CtgyPurp = $this->createElement('CtgyPurp');
+            $CtgyPurp->appendChild($this->createElement('Cd', $transactionInformation->getCategoryPurposeCode()));
+            $PmtTpInf->appendChild($CtgyPurp);
+        }
+
+        $CdtTrfTxInf->appendChild($PmtTpInf);
 
         // Amount 2.42
         $amount = $this->createElement('Amt');
@@ -257,8 +286,24 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $postalAddress = $this->createElement('PstlAdr');
 
+        if (!empty($transactionInformation->getStreetName())) {
+            $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
+        }
+
+        if (!empty($transactionInformation->getBuildingNumber())) {
+            $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+        }
+
+        if (!empty($transactionInformation->getPostCode())) {
+            $postalAddress->appendChild($this->createElement('PstCd', $transactionInformation->getPostCode()));
+        }
+
+        if (!empty($transactionInformation->getTownName())) {
+            $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+        }
+
         // Gemerate country address node.
-        if ((bool)$transactionInformation->getCountry()) {
+        if (!empty($transactionInformation->getCountry())) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
         }
 
