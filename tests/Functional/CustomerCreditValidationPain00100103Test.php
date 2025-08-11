@@ -80,6 +80,11 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
+        if (isset($scenario['transactionLocalInstrumentProprietary'])) {
+            $transfer->setLocalInstrumentProprietary($scenario['transactionLocalInstrumentProprietary']);
+        } elseif (isset($scenario['transactionLocalInstrumentCode'])) {
+            $transfer->setLocalInstrumentCode($scenario['transactionLocalInstrumentCode']);
+        }
         $transfer->setCategoryPurposeCode('SUPP');
 
         $transfer->setStreetName('Straat creditor 1');
@@ -121,6 +126,14 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $ctgyPurp = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:CtgyPurp/sepa:Cd');
         $this->assertEquals('SUPP', $ctgyPurp->item(0)->textContent);
 
+        if (isset($scenario['transactionLocalInstrumentProprietary'])) {
+            $transactionLocalInstrumentProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
+            $this->assertEquals($scenario['transactionLocalInstrumentProprietary'], $transactionLocalInstrumentProprietary->item(0)->textContent);
+        } elseif (isset($scenario['transactionLocalInstrumentCode'])) {
+            $transactionLocalInstrumentCode = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd');
+            $this->assertEquals($scenario['transactionLocalInstrumentCode'], $transactionLocalInstrumentCode->item(0)->textContent);
+        }
+
         if (isset($scenario['localInstrumentProprietary'])) {
             $localInstrumentProprietary = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
             $this->assertEquals($scenario['localInstrumentProprietary'], $localInstrumentProprietary->item(0)->textContent);
@@ -153,6 +166,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
                 [
                     'batchBooking' => true,
                     'bic' => 'OKOYFIHH',
+                    'transactionLocalInstrumentProprietary' => 'CBIX',
                     'localInstrumentProprietary' => 'CBI'
                 ]
             ],
@@ -160,6 +174,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
                 [
                     'batchBooking' => false,
                     'bic' => '',
+                    'transactionLocalInstrumentCode' => 'B2B',
                     'localInstrumentCode' => 'CORE'
                 ]
             ],

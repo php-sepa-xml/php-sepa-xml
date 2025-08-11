@@ -141,15 +141,29 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
         $CdtTrfTxInf->appendChild($PmtId);
 
-        if ($transactionInformation->getCategoryPurposeCode()) {
-            $PmtTpInf = $this->createElement('PmtTpInf');
+        $PmtTpInf = $this->createElement('PmtTpInf');
 
+        $SvcLvl = $this->createElement('SvcLvl');
+        $SvcLvl->appendChild($this->createElement('Cd', 'SEPA'));
+        $PmtTpInf->appendChild($SvcLvl);
+
+        if ($transactionInformation->getLocalInstrumentCode() || $transactionInformation->getLocalInstrumentProprietary()) {
+            $localInstrument = $this->createElement('LclInstrm');
+            if ($transactionInformation->getLocalInstrumentCode()) {
+                $localInstrument->appendChild($this->createElement('Cd', $transactionInformation->getLocalInstrumentCode()));
+            } else if ($transactionInformation->getLocalInstrumentProprietary()) {
+                $localInstrument->appendChild($this->createElement('Prtry', $transactionInformation->getLocalInstrumentProprietary()));
+            }
+            $PmtTpInf->appendChild($localInstrument);
+        }
+
+        if ($transactionInformation->getCategoryPurposeCode()) {
             $CtgyPurp = $this->createElement('CtgyPurp');
             $CtgyPurp->appendChild($this->createElement('Cd', $transactionInformation->getCategoryPurposeCode()));
             $PmtTpInf->appendChild($CtgyPurp);
-            
-            $CdtTrfTxInf->appendChild($PmtTpInf);
         }
+
+        $CdtTrfTxInf->appendChild($PmtTpInf);
 
         // Amount 2.42
         $amount = $this->createElement('Amt');

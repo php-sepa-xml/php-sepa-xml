@@ -60,6 +60,16 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $instructionId;
 
     /**
+     * @var string|null Local service proprietary code.
+     */
+    protected $localInstrumentProprietary;
+
+    /**
+     * @var string|null Local service instrument code.
+     */
+    protected $localInstrumentCode;
+
+    /**
      * @var string|null
      */
     protected $categoryPurposeCode;
@@ -212,6 +222,36 @@ class BaseTransferInformation implements TransferInformationInterface
     public function getInstructionId(): ?string
     {
         return $this->instructionId;
+    }
+
+    /**
+     * @param string $localInstrumentProprietary
+     */
+    public function setLocalInstrumentProprietary(string $localInstrumentProprietary): void
+    {
+        $this->localInstrumentProprietary = $localInstrumentProprietary;
+    }
+
+    public function getLocalInstrumentProprietary(): ?string
+    {
+        return $this->localInstrumentProprietary;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function setLocalInstrumentCode(string $localInstrumentCode): void
+    {
+        $localInstrumentCode = strtoupper($localInstrumentCode);
+        if (!in_array($localInstrumentCode, ['B2B', 'CORE', 'COR1'])) {
+            throw new InvalidArgumentException("Invalid Local Instrument Code: $localInstrumentCode");
+        }
+        $this->localInstrumentCode = $localInstrumentCode;
+    }
+
+    public function getLocalInstrumentCode(): ?string
+    {
+        return $this->localInstrumentCode;
     }
 
     public function setCategoryPurposeCode(string $categoryPurposeCode): void
