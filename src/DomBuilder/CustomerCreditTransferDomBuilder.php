@@ -90,12 +90,23 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $this->currentPayment->appendChild($localInstrument);
         }
 
-        $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
+        if ($this->painFormat === 'pain.001.001.09') {
+            if ($paymentInformation->getDueDateTime()) {
+                $dueDate = $this->createElement('DtTm', $paymentInformation->getDueDateTime());
+            } else {
+                $dueDate = $this->createElement('Dt', $paymentInformation->getDueDate());
+            }
+            $requestedExecutionDate = $this->createElement('ReqdExctnDt');
+            $requestedExecutionDate->appendChild($dueDate);
+            $this->currentPayment->appendChild($requestedExecutionDate);
+        } else {
+            $this->currentPayment->appendChild($this->createElement('ReqdExctnDt', $paymentInformation->getDueDate()));
+        }
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
         $this->currentPayment->appendChild($debtor);
 
-        if ($paymentInformation->getOriginBankPartyIdentification() !== null && $this->painFormat === 'pain.001.001.03') {
+        if ($paymentInformation->getOriginBankPartyIdentification() !== null && in_array($this->painFormat, ['pain.001.001.03', 'pain.001.001.09'])) {
             $organizationId = $this->getOrganizationIdentificationElement(
                 $paymentInformation->getOriginBankPartyIdentification(),
                 $paymentInformation->getOriginBankPartyIdentificationScheme());
@@ -150,7 +161,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         if ($transactionInformation->getBic()) {
             $creditorAgent = $this->createElement('CdtrAgt');
             $financialInstitution = $this->createElement('FinInstnId');
-            $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
+            if ($this->painFormat == 'pain.001.001.09') {
+                $financialInstitution->appendChild($this->createElement('BICFI', $transactionInformation->getBic()));
+            } else {
+                $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
+            }
             $creditorAgent->appendChild($financialInstitution);
             $CdtTrfTxInf->appendChild($creditorAgent);
         }
@@ -160,11 +175,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $creditor->appendChild($this->createElement('Nm', $transactionInformation->getCreditorOrDebitorName()));
 
         // Creditor address if needed and supported by schema.
-        if (in_array($this->painFormat, ['pain.001.001.03'])) {
+        if (in_array($this->painFormat, ['pain.001.001.03', 'pain.001.001.09'])) {
             $this->appendAddressToDomElement($creditor, $transactionInformation);
         }
 
-        $CdtTrfTxInf->appendChild($creditor);
+		$CdtTrfTxInf->appendChild($creditor);
 
         // CreditorAccount 2.80
         $creditorAccount = $this->createElement('CdtrAcct');
@@ -195,13 +210,13 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     }
 
     /**
-     * Add the specific OrgId element for the format 'pain.001.001.03'
+     * Add the specific OrgId element for the format 'pain.001.001.03' AND 'pain.001.001.09'
      */
     public function visitGroupHeader(GroupHeader $groupHeader): void
     {
         parent::visitGroupHeader($groupHeader);
 
-        if ($groupHeader->getInitiatingPartyId() !== null && $this->painFormat === 'pain.001.001.03') {
+        if ($groupHeader->getInitiatingPartyId() !== null && in_array($this->painFormat, ['pain.001.001.03', 'pain.001.001.09'])) {
             $organizationId = $this->getOrganizationIdentificationElement(
                 $groupHeader->getInitiatingPartyId(),
                 $groupHeader->getInitiatingPartyIdentificationScheme(),
@@ -257,8 +272,49 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
         $postalAddress = $this->createElement('PstlAdr');
 
-        // Gemerate country address node.
-        if ((bool)$transactionInformation->getCountry()) {
+        if ($transactionInformation->getAddressType()) {
+            $postalAddress->appendChild($this->createElement('AdrTp', $transactionInformation->getAddressType()));
+        }
+        if ($transactionInformation->getDepartment()) {
+            $postalAddress->appendChild($this->createElement('Dept', $transactionInformation->getDepartment()));
+        }
+        if ($transactionInformation->getSubDepartment()) {
+            $postalAddress->appendChild($this->createElement('SubDept', $transactionInformation->getSubDepartment()));
+        }
+        if ($transactionInformation->getStreetName()) {
+            $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
+        }
+        if ($transactionInformation->getBuildingNumber()) {
+            $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+        }
+        if ($transactionInformation->getBuildingName()) {
+            $postalAddress->appendChild($this->createElement('BldgNm', $transactionInformation->getBuildingName()));
+        }
+        if ($transactionInformation->getFloor()) {
+            $postalAddress->appendChild($this->createElement('Flr', $transactionInformation->getFloor()));
+        }
+        if ($transactionInformation->getPostBox()) {
+            $postalAddress->appendChild($this->createElement('PstBx', $transactionInformation->getPostBox()));
+        }
+        if ($transactionInformation->getRoom()) {
+            $postalAddress->appendChild($this->createElement('Room', $transactionInformation->getRoom()));
+        }
+        if ($transactionInformation->getPostCode()) {
+            $postalAddress->appendChild($this->createElement('PstCd', $transactionInformation->getPostCode()));
+        }
+        if ($transactionInformation->getTownName()) {
+            $postalAddress->appendChild($this->createElement('TwnNm', $transactionInformation->getTownName()));
+        }
+        if ($transactionInformation->getTownLocationName()) {
+            $postalAddress->appendChild($this->createElement('TwnLctnNm', $transactionInformation->getTownLocationName()));
+        }
+        if ($transactionInformation->getDistrictName()) {
+            $postalAddress->appendChild($this->createElement('DstrctNm', $transactionInformation->getDistrictName()));
+        }
+        if ($transactionInformation->getCountrySubDivision()) {
+            $postalAddress->appendChild($this->createElement('CtrySubDvsn', $transactionInformation->getCountrySubDivision()));
+        }
+        if ($transactionInformation->getCountry()) {
             $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
         }
 

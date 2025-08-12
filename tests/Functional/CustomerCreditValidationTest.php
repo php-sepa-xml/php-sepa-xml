@@ -208,19 +208,25 @@ class CustomerCreditValidationTest extends TestCase
 
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
-
-        // Date is correctly coded
-        $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
-        $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+        if ($schema === 'pain.001.001.09') {
+            $executionDate = $xpathDoc->query('//sepa:Dt');
+            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+            //Originating BIC
+            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BICFI');
+            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+        } else {
+            $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
+            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+            //Originating BIC
+            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
+            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+        }
         //Payment method is set
         $paymentMethod = $xpathDoc->query('//sepa:PmtMtd');
         $this->assertEquals('TRF', $paymentMethod->item(0)->textContent);
         //Originating IBAN
         $originIban = $xpathDoc->query('//sepa:DbtrAcct/sepa:Id/sepa:IBAN');
         $this->assertEquals('FR1420041010050500013M02606', $originIban->item(0)->textContent);
-        //Originating BIC
-        $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
-        $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
         //Originating Name
         $originName = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
         $this->assertEquals('My Corp', $originName->item(0)->textContent);
@@ -554,6 +560,7 @@ class CustomerCreditValidationTest extends TestCase
     {
         return [
             ["pain.001.001.03"],
+            ["pain.001.001.09"],
             ["pain.001.002.03"],
             ["pain.001.003.03"]
         ];

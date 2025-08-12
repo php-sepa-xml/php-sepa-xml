@@ -155,6 +155,94 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
+     * Type of address.
+     *
+     * @var string|null
+     */
+    protected string|null $addressType = null;
+
+    /**
+     * Name of the department.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $department = null;
+
+    /**
+     * Name of the sub department.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $subDepartment = null;
+
+    /**
+     * Name of the building.
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $buildingName = null;
+
+    /**
+     * Floor of the building.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $floor = null;
+
+    /**
+     * Code of the post box.
+     *
+     * Maximum allowed length is 16 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $postBox = null;
+
+    /**
+     * Name or number of the room.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $room = null;
+
+    /**
+     * Name of the towns' location.
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $townLocationName = null;
+
+    /**
+     * Name of the district.
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $districtName = null;
+
+    /**
+     * Name of the country's subdivision.
+     *
+     * Maximum allowed length is 35 characters.
+     *
+     * @var string|null
+     */
+    protected string|null $countrySubDivision = null;
+
+    /**
      * @param int $amount amount in cents
      */
     public function __construct(int $amount, string $iban, string $name, ?string $identification = null)
@@ -272,6 +360,210 @@ class BaseTransferInformation implements TransferInformationInterface
     public function setCountry(string $country): void
     {
         $this->country = $country;
+    }
+
+    /*
+     *  postal address elements
+     */
+
+    /**
+     * @return string|null
+     */
+    public function getAddressType(): ?string
+    {
+        return $this->addressType;
+    }
+
+    /**
+     * @param string|null $addressType
+     */
+    public function setAddressType(?string $addressType): void
+    {
+        if (null === $addressType) {
+            $this->department = null;
+        } else {
+            $this->department = StringHelper::sanitizeString($addressType);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDepartment(): ?string
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param string|null $department
+     */
+    public function setDepartment(?string $department): void
+    {
+        if (null === $department) {
+            $this->department = null;
+        } else {
+            $this->department = StringHelper::sanitizeString($department);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSubDepartment(): ?string
+    {
+        return $this->subDepartment;
+    }
+
+    /**
+     * @param string|null $subDepartment
+     */
+    public function setSubDepartment(?string $subDepartment): void
+    {
+        if (null === $subDepartment) {
+            $this->subDepartment = null;
+        } else {
+            $this->subDepartment = StringHelper::sanitizeString($subDepartment);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBuildingName(): ?string
+    {
+        return $this->buildingName;
+    }
+
+    /**
+     * @param string|null $buildingName
+     */
+    public function setBuildingName(?string $buildingName): void
+    {
+        if (null === $buildingName) {
+            $this->buildingName = null;
+        } else {
+            $this->buildingName = StringHelper::sanitizeString($buildingName);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFloor(): ?string
+    {
+        return $this->floor;
+    }
+
+    /**
+     * @param string|null $floor
+     */
+    public function setFloor(?string $floor): void
+    {
+        if (null === $floor) {
+            $this->floor = null;
+        } else {
+            $this->floor = StringHelper::sanitizeString($floor);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPostBox(): ?string
+    {
+        return $this->postBox;
+    }
+
+    /**
+     * @param string|null $postBox
+     */
+    public function setPostBox(?string $postBox): void
+    {
+        if (null === $postBox) {
+            $this->postBox = null;
+        } else {
+            $this->postBox = StringHelper::sanitizeString($postBox);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRoom(): ?string
+    {
+        return $this->room;
+    }
+
+    /**
+     * @param string|null $room
+     */
+    public function setRoom(?string $room): void
+    {
+        if (null === $room) {
+            $this->room = null;
+        } else {
+            $this->room = StringHelper::sanitizeString($room);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTownLocationName(): ?string
+    {
+        return $this->townLocationName;
+    }
+
+    /**
+     * @param string|null $townLocationName
+     */
+    public function setTownLocationName(?string $townLocationName): void
+    {
+        if (null === $townLocationName) {
+            $this->townLocationName = null;
+        } else {
+            $this->townLocationName = StringHelper::sanitizeString($townLocationName);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDistrictName(): ?string
+    {
+        return $this->districtName;
+    }
+
+    /**
+     * @param string|null $districtName
+     */
+    public function setDistrictName(?string $districtName): void
+    {
+        if (null === $districtName) {
+            $this->districtName = null;
+        } else {
+            $this->districtName = StringHelper::sanitizeString($districtName);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCountrySubDivision(): ?string
+    {
+        return $this->countrySubDivision;
+    }
+
+    /**
+     * @param string|null $countrySubDivision
+     */
+    public function setCountrySubDivision(?string $countrySubDivision): void
+    {
+        if (null === $countrySubDivision) {
+            $this->countrySubDivision = null;
+        } else {
+            $this->countrySubDivision = StringHelper::sanitizeString($countrySubDivision);
+        }
     }
 
     /**
