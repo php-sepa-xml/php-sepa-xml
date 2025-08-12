@@ -113,6 +113,13 @@ class PaymentInformation
     protected $dueDate;
 
     /**
+     * DateTime of payment execution
+     *
+     * @var ?DateTimeInterface
+     */
+    protected ?DateTimeInterface $dueDateTime;
+
+    /**
      * @var string|null Instruction priority.
      */
     protected $instructionPriority;
@@ -166,6 +173,11 @@ class PaymentInformation
      */
     protected $dateFormat = 'Y-m-d';
 
+    /**
+     * @var string
+     */
+    protected string $dateTimeFormat = 'Y-m-d\TH:i:s';
+
     public function __construct(string $id, string $originAccountIBAN, ?string $originAgentBIC, string $originName, string $originAccountCurrency = 'EUR')
     {
         $this->id = $id;
@@ -173,6 +185,7 @@ class PaymentInformation
         $this->originAgentBIC = $originAgentBIC;
         $this->originName = Sanitizer::sanitize($originName);
         $this->originAccountCurrency = $originAccountCurrency;
+        $this->dueDateTime = null;
         $this->dueDate = new DateTimeImmutable();
     }
 
@@ -258,6 +271,16 @@ class PaymentInformation
     public function getDueDate(): string
     {
         return $this->dueDate->format($this->dateFormat);
+    }
+
+    public function setDueDateTime(\DateTime $dueDateTime): void
+    {
+        $this->dueDateTime = $dueDateTime;
+    }
+
+    public function getDueDateTime(): ?string
+    {
+        return $this->dueDateTime?->format($this->dateTimeFormat);
     }
 
     /**

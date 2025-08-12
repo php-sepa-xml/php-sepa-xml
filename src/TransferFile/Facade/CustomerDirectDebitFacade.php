@@ -173,9 +173,51 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($transferInformation['debtorCountry'])) {
             $transfer->setCountry($transferInformation['debtorCountry']);
         }
+
         if (isset($transferInformation['debtorAdrLine'])) {
             $transfer->setPostalAddress($transferInformation['debtorAdrLine']);
         }
+
+        if (isset($transferInformation['buildingName'])) {
+            $transfer->setBuildingName($transferInformation['buildingName']);
+        }
+
+        if (isset($transferInformation['addressType'])) {
+            $transfer->setAddressType($transferInformation['addressType']);
+        }
+
+        if (isset($transferInformation['department'])) {
+            $transfer->setDepartment($transferInformation['department']);
+        }
+
+        if (isset($transferInformation['subDepartment'])) {
+            $transfer->setSubDepartment($transferInformation['subDepartment']);
+        }
+
+        if (isset($transferInformation['floor'])) {
+            $transfer->setFloor($transferInformation['floor']);
+        }
+
+        if (isset($transferInformation['postBox'])) {
+            $transfer->setPostBox($transferInformation['postBox']);
+        }
+
+        if (isset($transferInformation['room'])) {
+            $transfer->setRoom($transferInformation['room']);
+        }
+
+        if (isset($transferInformation['townLocationName'])) {
+            $transfer->setTownLocationName($transferInformation['townLocationName']);
+        }
+
+        if (isset($transferInformation['districtName'])) {
+            $transfer->setDistrictName($transferInformation['districtName']);
+        }
+
+        if (isset($transferInformation['countrySubDivision'])) {
+            $transfer->setCountrySubDivision($transferInformation['countrySubDivision']);
+        }
+
         $this->payments[$paymentName]->addTransfer($transfer);
 
         return $transfer;
