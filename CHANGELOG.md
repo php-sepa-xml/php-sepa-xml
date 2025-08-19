@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
+### Added
 - Added `MessageFormat` class that eases checking the exact format version used
 - Added support for `pain.001.001.09`, `pain.001.001.10`, `pain.001.001.12`
 - Added retrofitted support for `pain.001.001.04`,`pain.001.001.05`, `pain.001.001.06`, `pain.001.001.07`, `pain.001.001.08` (Provided as "should work")
@@ -15,25 +16,30 @@
 - Added `localInstrumentProprietary` support in SCTs
 - Added `setCategoryPurposeCode()` & `getCategoryPurposeCode()` to be able to pass the payment category in TransferInformation
 - Added Dependabot support
-- Added phpfaker/faker as a dev dependency. We are going to migrate all tests to use Faker data in the future.  
-- Fixed XML file placement order for `LocalInstrumentCode`
+- Added phpfaker/faker as a dev dependency. We are going to migrate all tests to use Faker data in the future.
+
+### Changed
 - Changed the default format to `pain.001.001.09` for CreditTransfers (was `pain.001.002.03`) and `pain.008.001.09` for DirectDebits (was `pain.008.002.02`)
-- Changed the way we check which element should exist in what standards' version  
+- Changed the way we check which element should exist in what standards' version
+- Updated most test cases to run against all supported pain format versions
+
+### Fixed
+- Fixed XML file placement order for `LocalInstrumentCode`
 - Converted all interfaces using DateTime to use DateTimeInterface
 - Switched from using DateTime instances internally to DateTimeImmutable instances
 - Fixed PHPUnit config file
 - Fixed PHPUnit deprecations
 - Small changes in PHPUnit Fixtures
 - Updated GitHub actions
--- Run phpstan, phpunit on PR against master 
--- Prepare to automatically run `rector`, check for changes and commit them
+  -- Run phpstan, phpunit on PR against master
+  -- Prepare to automatically run `rector`, check for changes and commit them
 - Updated all dependencies to their latest versions
--- Updated rector/rector and phpstan/phpstan to version 2.x 
--- Updated phpunit/phpunit to version 10.x 
-- Ran rector/rector manually and integrated the changes 
+  -- Updated rector/rector and phpstan/phpstan to version 2.x
+  -- Updated phpunit/phpunit to version 10.x
+- Ran rector/rector manually and integrated the changes
 - Fixed all PHPStan errors up to level 4
 
-Special thanks to our new contributors  @mkszepp & @larsiinger for their submissions!
+Special thanks to our new contributors  @mkszepp, @larsiinger & @fidelodz for their submissions!
 
 ## [2.2.1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.2.1)
 [Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.0...2.2.1)
