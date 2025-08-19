@@ -10,6 +10,7 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 
+use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitTransferDomBuilderTest extends TestCase
@@ -17,9 +18,12 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
     /**
      * Test the XML generation of a direct debit transfer with structured address
      * data for pain.008.001.02
+     * @dataProvider painProvider
      */
-    public function testWithAddress(): void
+    public function testWithAddress(string $painFormat): void
     {
+        $messageFormat = new MessageFormat($painFormat);
+
         $groupHeader = new GroupHeader('TEST_DEBTOR_ADRESS', 'Test Company Inc.');
         $groupHeader->setInitiatingPartyId('DE67ZZZ00000123456');
 
@@ -38,35 +42,51 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $transactionInformation->setTownName('Frankfurt am Main');
         $transactionInformation->setStreetName('Wilhelm-Epstein-Str.');
         $transactionInformation->setBuildingNumber('14');
+        $transactionInformation->setFloorNumber('12');
 
-        $builder = new CustomerDirectDebitTransferDomBuilder('pain.008.001.02');
+        $builder = new CustomerDirectDebitTransferDomBuilder($painFormat);
         $builder->visitTransferFile($transferFile);
         $builder->visitGroupHeader($groupHeader);
         $builder->visitPaymentInformation($paymentInformation);
         $builder->visitTransferInformation($transactionInformation);
 
-        $xml = $builder->asXml();
-
         $doc = new \DOMDocument('1.0', 'UTF-8');
-        $doc->loadXML($xml);
+        $doc->loadXML($builder->asXml());
 
         // Test xml schema validation
-
-        $validated = $doc->schemaValidate(__DIR__ . '/../../fixtures/pain.008.001.02.xsd');
+        $validated = $doc->schemaValidate(XSD_DIR . $painFormat .'.xsd');
         $this->assertTrue($validated);
 
         // Test contents
-
         $xpath = new \DOMXPath($doc);
-        $xpath->registerNamespace('ns', 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.02');
-
+        $xpath->registerNamespace('ns', "urn:iso:std:iso:20022:tech:xsd:{$painFormat}");
         $postalAddressNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr')->item(0);
 
+        $this->assertNull($xpath->evaluate('./ns:AdrLine', $postalAddressNode)->item(0));
         $this->assertSame('DE', $xpath->evaluate('./ns:Ctry', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('60431', $xpath->evaluate('./ns:PstCd', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('Frankfurt am Main', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
+        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8 ) {
+            $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
+        }
+    }
+
+    public static function painProvider(): iterable
+    {
+        return [
+            'pain.008.001.02' => ['pain.008.001.02'],
+            'pain.008.001.03' => ['pain.008.001.03'],
+            'pain.008.001.04' => ['pain.008.001.04'],
+            'pain.008.001.05' => ['pain.008.001.05'],
+            'pain.008.001.06' => ['pain.008.001.06'],
+            'pain.008.001.07' => ['pain.008.001.07'],
+            'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.09' => ['pain.008.001.09'],
+            'pain.008.001.10' => ['pain.008.001.10'],
+            'pain.008.001.11' => ['pain.008.001.11'],
+        ];
     }
 
     /**
@@ -96,14 +116,11 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $builder->visitPaymentInformation($paymentInformation);
         $builder->visitTransferInformation($transactionInformation);
 
-        $xml = $builder->asXml();
-
         $doc = new \DOMDocument('1.0', 'UTF-8');
-        $doc->loadXML($xml);
+        $doc->loadXML($builder->asXml());
 
         // Test xml schema validation
-
-        $validated = $doc->schemaValidate(__DIR__ . '/../../fixtures/pain.008.001.10.xsd');
+        $validated = $doc->schemaValidate(XSD_DIR . 'pain.008.001.10.xsd');
         $this->assertTrue($validated);
 
         // Test contents

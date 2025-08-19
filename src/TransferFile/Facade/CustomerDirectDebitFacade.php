@@ -93,6 +93,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     townName?: string,
      *     streetName?: string,
      *     buildingNumber?: string,
+     *     floorNumber?: string,
      *     debtorCountry?: string,
      *     debtorAdrLine?: string,
      *     instructionId?: string
@@ -168,6 +169,10 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 
         if (isset($transferInformation['buildingNumber'])) {
             $transfer->setBuildingNumber($transferInformation['buildingNumber']);
+        }
+
+        if (isset($transferInformation['floorNumber'])) {
+            $transfer->setFloorNumber($transferInformation['floorNumber']);
         }
 
         if (isset($transferInformation['debtorCountry'])) {

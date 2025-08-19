@@ -31,7 +31,7 @@ use Digitick\Sepa\GroupHeader;
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
 
-    public function __construct(string $painFormat = 'pain.008.002.02', bool $withSchemaLocation = true)
+    public function __construct(string $painFormat = 'pain.008.001.09', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
     }
@@ -67,7 +67,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         );
 
         $paymentTypeInformation = $this->createElement('PmtTpInf');
-        if ($paymentInformation->getInstructionPriority() && in_array($this->painFormat, ['pain.008.001.02', 'pain.008.001.10'])) {
+        if ($paymentInformation->getInstructionPriority()
+            && $this->messageFormat->isDirectDebit()
+            && $this->messageFormat->getVariant() == 1
+        ) {
             $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
             $paymentTypeInformation->appendChild($instructionPriority);
         }
@@ -147,6 +150,9 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $paymentId->appendChild(
             $this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification())
         );
+        if ($this->messageFormat->isDirectDebit() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 8) {
+            $paymentId->appendChild($this->createElement('UETR', $transactionInformation->getUUID()));
+        }
 
         $directDebitTransactionInformation->appendChild($paymentId);
 
@@ -178,18 +184,24 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
 
         // Add address data to debtor node
-        if (in_array($this->painFormat, ['pain.008.003.02', 'pain.008.001.02', 'pain.008.001.10'])) {
+        if ($this->messageFormat->isDirectDebit() && $this->messageFormat->getVersion() >= 2) {
             $postalAddress = $this->createElement('PstlAdr');
 
-            // Th elements street number, building number, post code and town name
-            // are not supported by 'pain.008.003.02'.
-            if (in_array($this->painFormat, ['pain.008.001.02', 'pain.008.001.10'])) {
+            // Variants 2 and 3 only support Country and AddressLine
+            if (!in_array($this->messageFormat->getVariant(), [2,3])) {
                 if (!empty($transactionInformation->getStreetName())) {
                     $postalAddress->appendChild($this->createElement('StrtNm', $transactionInformation->getStreetName()));
                 }
 
                 if (!empty($transactionInformation->getBuildingNumber())) {
                     $postalAddress->appendChild($this->createElement('BldgNb', $transactionInformation->getBuildingNumber()));
+                }
+
+                if (!empty($transactionInformation->getFloorNumber())
+                    && $this->messageFormat->getVariant() == 1
+                    && $this->messageFormat->getVersion() >= 8
+                ) {
+                    $postalAddress->appendChild($this->createElement('Flr', $transactionInformation->getFloorNumber()));
                 }
 
                 if (!empty($transactionInformation->getPostCode())) {
@@ -201,10 +213,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
                 }
             }
 
-            if ((bool)$transactionInformation->getCountry()) {
+            if (!empty($transactionInformation->getCountry())) {
                 $postalAddress->appendChild($this->createElement('Ctry', $transactionInformation->getCountry()));
             }
-            if ((bool)$transactionInformation->getPostalAddress()) {
+            if (!empty($transactionInformation->getPostalAddress())) {
                 $postalAddressData = $transactionInformation->getPostalAddress();
                 if (is_array($postalAddressData)) {
                     foreach($postalAddressData as $postalAddressLine) {
@@ -267,13 +279,13 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
     }
 
     /**
-     * Add the specific OrgId element for the format 'pain.008.001.02'
+     * Add the specific OrgId element for the format 'pain.008.001.vv'
      */
     public function visitGroupHeader(GroupHeader $groupHeader): void
     {
         parent::visitGroupHeader($groupHeader);
 
-        if ($groupHeader->getInitiatingPartyId() !== null && in_array($this->painFormat , ['pain.008.001.02', 'pain.008.001.10', 'pain.008.003.02'])) {
+        if ($groupHeader->getInitiatingPartyId() !== null && $this->messageFormat->isDirectDebit()) {
             $newId = $this->createElement('Id');
             $orgId = $this->createElement('OrgId');
             $schmeNm = $this->createElement('SchmeNm');

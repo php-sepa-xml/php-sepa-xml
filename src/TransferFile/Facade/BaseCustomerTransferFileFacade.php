@@ -22,6 +22,7 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
+use \DOMDocument;
 use Exception;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -69,6 +70,16 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
         $this->transferFile->accept($this->domBuilder);
 
         return $this->domBuilder->asXml();
+    }
+
+    public function asDOC(): DOMDocument
+    {
+        foreach ($this->payments as $payment) {
+            $this->transferFile->addPaymentInformation($payment);
+        }
+        $this->transferFile->accept($this->domBuilder);
+
+        return $this->domBuilder->asDoc();
     }
 
     /**

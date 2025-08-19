@@ -24,6 +24,7 @@ namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitFacadeTest extends TestCase
@@ -40,13 +41,13 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = __DIR__ . "/../../../fixtures/pain.008.002.02.xsd";
+        $this->schema = XSD_DIR . 'pain.008.002.02.xsd';
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
-    protected function createDirectDebitXpathObject(int $amount): \DOMXPath
+    protected function createDirectDebitXpathObject(int $amount, string $schema): \DOMXPath
     {
-        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $schema);
 
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
@@ -80,60 +81,17 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $doc = new \DOMDocument();
         $doc->loadXML($xml);
         $directDebitXpath = new \DOMXPath($doc);
-        $directDebitXpath->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.008.002.02');
+        $directDebitXpath->registerNamespace('sepa', "urn:iso:std:iso:20022:tech:xsd:{$schema}");
 
         return $directDebitXpath;
     }
 
-    public function testValidSumIsCalculatedCorrectly(): void
+    /**
+     * @dataProvider provideSchema
+     */
+    public function testValidSumIsCalculatedCorrectly(string $schema): void
     {
-        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
-        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
-
-        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'PaymentInformation ControlSum should be 19.99'
-        );
-        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'DirectDebitTransferInformation InstructedAmount should be 19.99'
-        );
-    }
-
-    public function testFloatSumIsCalculatedCorrectly(): void
-    {
-        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
-        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
-
-        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'PaymentInformation ControlSum should be 19.99'
-        );
-        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
-        $this->assertEquals(
-            '19.99',
-            $controlSum->item(0)->textContent,
-            'DirectDebitTransferInformation InstructedAmount should be 19.99'
-        );
-    }
-
-    public function testFloatSumIsCalculatedCorrectlyWithNonEnglishLocale(): void
-    {
-        $result = setlocale(LC_ALL, 'es_ES.UTF-8', 'es_ES@UTF-8', 'spanish');
-
-        if ($result == false) {
-            $this->markTestSkipped('spanish locale is not available');
-        }
-
-        $directDebitXpath = $this->createDirectDebitXpathObject(1999);
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
         $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
         $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
 
@@ -152,8 +110,59 @@ class CustomerDirectDebitFacadeTest extends TestCase
     }
 
     /**
-     * Test creation of file via Factory and Facade
-     *
+     * @dataProvider provideSchema
+     */
+    public function testFloatSumIsCalculatedCorrectly(string $schema): void
+    {
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
+        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
+        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
+
+        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'PaymentInformation ControlSum should be 19.99'
+        );
+        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'DirectDebitTransferInformation InstructedAmount should be 19.99'
+        );
+    }
+
+    /**
+     * @dataProvider provideSchema
+     */
+    public function testFloatSumIsCalculatedCorrectlyWithNonEnglishLocale(string $schema): void
+    {
+        $result = setlocale(LC_ALL, 'es_ES.UTF-8', 'es_ES@UTF-8', 'spanish');
+
+        if ($result == false) {
+            $this->markTestSkipped('spanish locale is not available');
+        }
+
+        $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
+        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
+        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
+
+        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'PaymentInformation ControlSum should be 19.99'
+        );
+        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
+        $this->assertEquals(
+            '19.99',
+            $controlSum->item(0)->textContent,
+            'DirectDebitTransferInformation InstructedAmount should be 19.99'
+        );
+    }
+
+    /**
+     * Test creation of file via Factory and Facade against the supported XSDs
      * @dataProvider provideSchema
      */
     public function testValidFileCreationWithFacade(string $schema): void
@@ -184,12 +193,17 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'remittanceInformation' => 'Purpose of this direct debit',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'streetName' => 'Some Street',
+                'buildingNumber' => '5',
+                'postCode' => '01001',
+                'townName' => 'Dresden',
+                'floorNumber' => '12',
                 'instructionId' => 'Instruction Identification',
             ]
         );
 
         $this->dom->loadXML($directDebit->asXML());
-        $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/../../../fixtures/' . $schema . '.xsd'));
+        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
 
@@ -228,27 +242,43 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorReference' => 'RF81123453',
                 'debtorCountry' => 'DE',
                 'debtorAdrLine' => 'Some Address',
+                'streetName' => 'Some Street',
+                'buildingNumber' => '5',
+                'postCode' => '01001',
+                'townName' => 'Dresden',
+                'floorNumber' => '12',
                 'instructionId' => 'Instruction Identification',
             ]
         );
 
         $this->dom->loadXML($directDebit->asXML());
-        $this->assertTrue($this->dom->schemaValidate(__DIR__ . '/../../../fixtures/' . $schema . '.xsd'));
+        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
     public static function provideSchema(): iterable
     {
         return [
-            ['pain.008.001.02'],
-            ['pain.008.001.10'],
-            ['pain.008.002.02'],
-            ['pain.008.003.02']
+            'pain.008.001.02' => ['pain.008.001.02'],
+            'pain.008.001.04' => ['pain.008.001.04'],
+            'pain.008.001.05' => ['pain.008.001.05'],
+            'pain.008.001.06' => ['pain.008.001.06'],
+            'pain.008.001.07' => ['pain.008.001.07'],
+            'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.09' => ['pain.008.001.09'],
+            'pain.008.001.10' => ['pain.008.001.10'],
+            'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.002.02' => ['pain.008.002.02'],
+            'pain.008.003.02' => ['pain.008.003.02']
         ];
     }
 
-    public function testAddTransferWithAddress(): void
+    /**
+     * @dataProvider provideSchemaWithFullAddresses
+     */
+    public function testAddTransferWithAddress(string $painFormat): void
     {
-        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me');
+        $messageFormat = new MessageFormat($painFormat);
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $painFormat);
 
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
@@ -275,16 +305,49 @@ class CustomerDirectDebitFacadeTest extends TestCase
             'townName'              => 'Feuerthalen',
             'streetName'            => 'Example Street',
             'buildingNumber'        => '25',
+            'floorNumber'           => '12'
         ]);
 
-        // Test action
-        $payment = $directDebit->getPaymentInfo('firstPayment');
-        $transfer = $payment->getTransfers()[0];
+        // Test the Transfer Object:
+        $transfer = $directDebit->getPaymentInfo('firstPayment')->getTransfers()[0];
 
         $this->assertSame('CH', $transfer->getCountry());
         $this->assertSame('8245', $transfer->getPostCode());
         $this->assertSame('Feuerthalen', $transfer->getTownName());
         $this->assertSame('Example Street', $transfer->getStreetName());
         $this->assertSame('25', $transfer->getBuildingNumber());
+        $this->assertSame('12', $transfer->getFloorNumber());
+
+        // Test the generated XML
+        $this->dom->loadXML($directDebit->asXML());
+
+        $xpath = new \DOMXPath($this->dom);
+        $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+        $postalAddressNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr')->item(0);
+
+        $this->assertNull($xpath->evaluate('./ns:AdrLine', $postalAddressNode)->item(0));
+        $this->assertSame('CH', $xpath->evaluate('./ns:Ctry', $postalAddressNode)->item(0)->textContent);
+        $this->assertSame('8245', $xpath->evaluate('./ns:PstCd', $postalAddressNode)->item(0)->textContent);
+        $this->assertSame('Feuerthalen', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
+        $this->assertSame('Example Street', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
+        $this->assertSame('25', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
+        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8 ) {
+            $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
+        }
+    }
+
+    public static function provideSchemaWithFullAddresses(): iterable
+    {
+        return [
+            'pain.008.001.03' => ['pain.008.001.03'],
+            'pain.008.001.04' => ['pain.008.001.04'],
+            'pain.008.001.05' => ['pain.008.001.05'],
+            'pain.008.001.06' => ['pain.008.001.06'],
+            'pain.008.001.07' => ['pain.008.001.07'],
+            'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.09' => ['pain.008.001.09'],
+            'pain.008.001.10' => ['pain.008.001.10'],
+            'pain.008.001.11' => ['pain.008.001.11'],
+        ];
     }
 }

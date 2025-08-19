@@ -4,6 +4,7 @@
     "description": "Creates Single Euro Payments Area (SEPA) XML files for the Direct Debit and Credit Transfer operations.",
     "keywords": ["banking", "sepa", "xml"],
     "license": "LGPL-3.0-or-later",
+    "version": "2.3.0",
     "authors": [
         {
             "name": "Ianaré Sévi"
@@ -33,12 +34,15 @@
     },
     "require": {
         "ext-dom": "*",
-        "php": ">=7.2"
+        "php": ">=7.2",
+        "ramsey/uuid": "4.2.*"
     },
     "require-dev": {
+        "ext-xml": "*",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^2.0",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.0",
+        "fakerphp/faker": "^1.24"
     },
     "config": {
         "bin-dir": "bin/"

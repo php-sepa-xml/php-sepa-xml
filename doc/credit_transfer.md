@@ -1,6 +1,7 @@
 
 
 ## Sample Usage CreditTransfer with Factory
+
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
@@ -60,11 +61,13 @@ $sepaFile->addPaymentInformation($payment);
 // Attach a dombuilder to the sepaFile to create the XML output
 $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 
-// Or if you want to use the format 'pain.001.001.03' instead
-// $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
+// Or if you want to use the format 'pain.001.001.03' instead:
+$domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
 
-//or if you use a custom url for the format to use,
-// $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd'); //Credit Suisse case
-
-$domBuilder->asXml();
+//or if you use a custom url for the format to use:
+$domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
+$doc = $domBuilder->asDoc();
+// Now modify the `xmlns` and `xsi:schemaLocation` attributes
+// ...
+$doc->asXml();
 ```

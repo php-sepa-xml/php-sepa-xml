@@ -44,7 +44,7 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
+        $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
     /**
@@ -79,23 +79,39 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
+        $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
     public static function schemaProvider(): iterable
     {
         return [
-            ["pain.001.001.03"],
-            ["pain.001.002.03"],
-            ["pain.001.003.03"]
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.04' => ['pain.001.001.04'],
+            'pain.001.001.05' => ['pain.001.001.05'],
+            'pain.001.001.06' => ['pain.001.001.06'],
+            'pain.001.001.07' => ['pain.001.001.07'],
+            'pain.001.001.08' => ['pain.001.001.08'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.12' => ['pain.001.001.12'],
+            'pain.001.002.03' => ['pain.001.002.03'],
+            'pain.001.003.03' => ['pain.001.003.03']
         ];
     }
 
     public static function schemaProviderEmptyBic(): iterable
     {
         return [
-            ["pain.001.001.03"],
-            ["pain.001.003.03"]
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.04' => ['pain.001.001.04'],
+            'pain.001.001.05' => ['pain.001.001.05'],
+            'pain.001.001.06' => ['pain.001.001.06'],
+            'pain.001.001.07' => ['pain.001.001.07'],
+            'pain.001.001.08' => ['pain.001.001.08'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.11' => ['pain.001.001.12'],
+            'pain.001.003.03' => ['pain.001.003.03']
         ];
     }
 }

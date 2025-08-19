@@ -75,14 +75,14 @@ abstract class BaseTransferFile implements TransferFileInterface
     }
 
     /**
-     * Update the group header with transaction informations collected by paymentinformation
+     * Update the group header with transaction information collected by PaymentInformation
      *
      * @throws InvalidTransferFileConfiguration
      */
     public function validate(): void
     {
         if (count($this->paymentInformations) === 0) {
-            throw new InvalidTransferFileConfiguration('No paymentinformations available, add paymentInformation via addPaymentInformation()');
+            throw new InvalidTransferFileConfiguration('No PaymentInformation available, add a PaymentInformation via addPaymentInformation()');
         }
     }
 }
