@@ -1,20 +1,23 @@
 # Changelog
 
-## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...HEAD)
+## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.0...HEAD)
+
+## [2.3.0](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.3.0)
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...2.3.0)
 ### Added
-- Added `MessageFormat` class that eases checking the exact format version used
 - Added support for `pain.001.001.09`, `pain.001.001.10`, `pain.001.001.12`
 - Added retrofitted support for `pain.001.001.04`,`pain.001.001.05`, `pain.001.001.06`, `pain.001.001.07`, `pain.001.001.08` (Provided as "should work")
 - Added support for `pain.008.001.09`, `pain.008.001.10`, `pain.008.001.11`
 - Added retrofitted support for `pain.008.001.03`, `pain.008.001.04`,`pain.008.001.05`, `pain.008.001.06`, `pain.008.001.07`, `pain.008.001.08` (Provided as "should work")
+- Added `MessageFormat` class that eases checking the exact format version used
 - Added support for `Purpose Code` to Customer Credit Transfers (`CdtTrfTxInf->Purp`) when using `pain.001.xxx.nn`
-- Added an `asDom()` method in the DomBuilder allowing to get the built DomDocument object for further manipulation
-- Added a `Sanitizer` class with the capability to replace the default sanitization logic or fully disable it. Check [the docs](doc/string_sanitization.md) for more info
 - Added `Flr` (floor) in Customer addresses for DirectDebit & CreditTransfer (standards' version support varies)
 - Added `StrtNm`, `BldgNb`, `PstCd` and `TwnNm` in Customer addresses for CreditTransfer (standards' version support varies)
 - Added `UETR` (UUIDv4) in the PaymentIdentification. The UUID is automatically generated or can be set externally. A getter and a setter are available.
 - Added `localInstrumentProprietary` support in SCTs
 - Added `setCategoryPurposeCode()` & `getCategoryPurposeCode()` to be able to pass the payment category in TransferInformation
+- Added an `asDom()` method in the DomBuilder allowing to get the built DomDocument object for further manipulation
+- Added a `Sanitizer` class with the capability to replace the default sanitization logic or fully disable it. Check [the docs](doc/string_sanitization.md) for more info
 - Added Dependabot support
 - Added phpfaker/faker as a dev dependency. We are going to migrate all tests to use Faker data in the future.
 
