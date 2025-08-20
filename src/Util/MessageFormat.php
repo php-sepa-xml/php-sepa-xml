@@ -48,7 +48,7 @@ class MessageFormat
         'pain.008.003.02'
     ];
 
-    private static $defaultMessageFormats = [
+    public static $defaultMessageFormats = [
         'SCT' =>  'pain.001.001.09',
         'SDD' => 'pain.008.001.09'
     ];
@@ -110,11 +110,6 @@ class MessageFormat
         }
 
         return in_array($messageName, self::getSupportedMessageFormats());
-    }
-
-    public static function getDefaultMessageFormats(): array
-    {
-        return self::$defaultMessageFormats;
     }
 
     /**

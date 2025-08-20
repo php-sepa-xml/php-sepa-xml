@@ -2,6 +2,7 @@
 
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
+use \DomDocument;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -17,8 +18,6 @@ class CustomerCreditFacadeTest extends TestCase
      */
     public function testValidFileCreationWithFacade(string $schema): void
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(
             'firstPayment',
@@ -43,8 +42,15 @@ class CustomerCreditFacadeTest extends TestCase
             ]
         );
 
-        $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
+        $xml = $credit->asXML();
+
+        $this->assertIsString($xml);
+        $this->assertInstanceOf(DomDocument::class, $credit->asDOC());
+
+        $domDoc = new DOMDocument('1.0', 'UTF-8');
+        $domDoc->loadXML($xml);
+        $this->assertTrue($domDoc->schemaValidate(XSD_DIR . $schema . '.xsd'));
+
     }
 
     /**
@@ -54,7 +60,7 @@ class CustomerCreditFacadeTest extends TestCase
      */
     public function testValidFileCreationWithFacadeWithoutDebtorBic(string $schema): void
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
 
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(

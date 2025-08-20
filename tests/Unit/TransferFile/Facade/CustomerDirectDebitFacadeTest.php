@@ -78,9 +78,10 @@ class CustomerDirectDebitFacadeTest extends TestCase
         );
         // Retrieve the resulting XML
         $xml = $directDebit->asXML();
-        $doc = new \DOMDocument();
-        $doc->loadXML($xml);
-        $directDebitXpath = new \DOMXPath($doc);
+
+        $domDoc = new \DOMDocument('1.0', 'UTF-8');
+        $domDoc->loadXML($xml);
+        $directDebitXpath = new \DOMXPath($domDoc);
         $directDebitXpath->registerNamespace('sepa', "urn:iso:std:iso:20022:tech:xsd:{$schema}");
 
         return $directDebitXpath;

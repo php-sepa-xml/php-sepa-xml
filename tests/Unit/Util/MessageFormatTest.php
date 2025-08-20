@@ -54,6 +54,7 @@ class MessageFormatTest extends TestCase
         $this->assertTrue($messageFormatInst->isDirectDebit());
         $this->assertFalse($messageFormatInst->isCreditTransfer());
         $this->assertTrue($messageFormatInst->isSupported());
+        $this->assertTrue($messageFormatInst->isSupported('pain.008.001.10'));
 
         $messageFormatInst = new MessageFormat('camt.054.001.02');
         $this->assertFalse($messageFormatInst->isSupported());

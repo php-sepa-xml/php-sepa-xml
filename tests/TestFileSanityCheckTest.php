@@ -52,7 +52,7 @@ class TestFileSanityCheckTest extends TestCase
      * @return void
      * @throws InvalidArgumentException
      */
-    public function testGenerateDirectDebitSanityFiles(string $painFormat): void
+    public function testGenerateDirectDebitFiles(string $painFormat): void
     {
         $companyName = 'OurCorp';
         $originAccIban = 'BG87200500001234567890';
@@ -98,14 +98,8 @@ class TestFileSanityCheckTest extends TestCase
         $paymentInfo->addTransfer($transfer);
         $sepaFile->addPaymentInformation($paymentInfo);
 
-        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
-        $filePath = XML_DIR.$painFormat.'.xml';
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-        file_put_contents($filePath, $domBuilder->asXml());
-
         /* Validate the generated XML against it's XSD: */
+        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
         $this->dom->loadXML($domBuilder->asXml());
         $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $painFormat . '.xsd'));
     }
@@ -117,7 +111,7 @@ class TestFileSanityCheckTest extends TestCase
      * @return void
      * @throws InvalidArgumentException
      */
-    public function testGenerateCreditTransferSanityFiles(string $painFormat): void
+    public function testGenerateCreditTransferFiles(string $painFormat): void
     {
         $companyName = 'OurCorp';
         $originAccIban = 'BG87200500001234567890';
@@ -159,14 +153,8 @@ class TestFileSanityCheckTest extends TestCase
         $paymentInfo->addTransfer($transfer);
         $sepaFile->addPaymentInformation($paymentInfo);
 
-        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
-        $filePath = XML_DIR.$painFormat.'.xml';
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-        file_put_contents($filePath, $domBuilder->asXml());
-
         /* Validate the generated XML against it's XSD: */
+        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
         $this->dom->loadXML($domBuilder->asXml());
         $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $painFormat . '.xsd'));
     }
