@@ -34,7 +34,7 @@
     "require": {
         "ext-dom": "*",
         "php": ">=7.2",
-        "ramsey/uuid": "4.2.*"
+        "ramsey/uuid": "^4.2.3"
     },
     "require-dev": {
         "ext-xml": "*",
