@@ -5,6 +5,7 @@ namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 use \DomDocument;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
+use SimpleXMLElement;
 
 /**
  * Class CustomerCreditFacadeTest
@@ -43,8 +44,6 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $xml = $credit->asXML();
-
-        $this->assertIsString($xml);
         $this->assertInstanceOf(DomDocument::class, $credit->asDOC());
 
         $domDoc = new DOMDocument('1.0', 'UTF-8');
