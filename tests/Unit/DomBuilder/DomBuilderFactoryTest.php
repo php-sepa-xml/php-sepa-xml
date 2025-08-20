@@ -62,21 +62,4 @@ class DomBuilderFactoryTest extends TestCase
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
         $this->assertInstanceOf(\Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder::class, $domBuilder);
     }
-
-    public function testCreateReturnsCustomerCreditDomBuilderForCustomerCreditTransferWithCustomXSd(): void
-    {
-        $groupHeader = new GroupHeader('123456788', 'Initiating Company');
-        $paymentInformation = new PaymentInformation('12345', 'DE2112345678910111213141516', 'NOLANDEKI', 'Origin Company');
-        $sepaFile = new CustomerCreditTransferFile($groupHeader);
-        $transfer = new CustomerCreditTransferInformation(20, 'DE21098765432010203040506', 'Creditor Name');
-        $paymentInformation->addTransfer($transfer);
-        $sepaFile->addPaymentInformation($paymentInformation);
-
-        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.XSD', false);
-        $this->assertInstanceOf('\Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder', $domBuilder);
-        $doc = $domBuilder->asDoc();
-        $this->assertInstanceOf(\DOMDocument::class, $doc);
-
-        $this->assertEquals('http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.XSD', $doc->documentElement->getAttribute('xmlns'));                               
-    }
 }

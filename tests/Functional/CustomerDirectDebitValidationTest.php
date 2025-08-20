@@ -53,8 +53,8 @@ class CustomerDirectDebitValidationTest extends TestCase
      */
     public function testSanity(string $schema): void
     {
-        $this->dom->load(__DIR__ . '/../fixtures/' . $schema . '.xml');
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $this->dom->load(XML_DIR . $schema . '.xml');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -88,7 +88,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -122,7 +122,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
@@ -234,10 +234,18 @@ class CustomerDirectDebitValidationTest extends TestCase
     public static function provideSchema(): iterable
     {
         return [
-            ['pain.008.001.02'],
-            ['pain.008.001.10'],
-            ['pain.008.002.02'],
-            ['pain.008.003.02']
+            'pain.008.001.02' => ['pain.008.001.02'],
+            'pain.008.001.03' => ['pain.008.001.03'],
+            'pain.008.001.04' => ['pain.008.001.04'],
+            'pain.008.001.05' => ['pain.008.001.05'],
+            'pain.008.001.06' => ['pain.008.001.06'],
+            'pain.008.001.07' => ['pain.008.001.07'],
+            'pain.008.001.08' => ['pain.008.001.08'],
+            'pain.008.001.09' => ['pain.008.001.09'],
+            'pain.008.001.10' => ['pain.008.001.10'],
+            'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.002.02' => ['pain.008.002.02'],
+            'pain.008.003.02' => ['pain.008.003.02']
         ];
     }
 
@@ -278,7 +286,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $scenario['pain'] . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $scenario['pain'] . '.xsd');
         $this->assertTrue($validated);
     }
 

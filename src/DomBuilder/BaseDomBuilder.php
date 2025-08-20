@@ -22,80 +22,73 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
+use \DOMElement;
+use \DOMDocument;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Digitick\Sepa\Util\MessageFormat;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
-    /**
-     * @var \DOMDocument
-     */
+    /** @var DOMDocument $doc */
     protected $doc;
 
-    /**
-     * @var \DOMElement
-     */
+    /** @var DOMElement $root */
     protected $root;
 
-    /**
-     * @var \DOMElement|null
-     */
+    /** @var DOMElement|null $currentTransfer */
     protected $currentTransfer;
 
-    /**
-     * @var \DOMELement|null
-     */
+    /** @var DOMELement|null $currentPayment */
     protected $currentPayment;
 
-    /**
-     * @var string
-     */
-    protected $painFormat;
+    /** @var null|MessageFormat $messageFormat */
+    protected $messageFormat = null;
 
     /**
-     * @param string $painFormat Supported format: 'pain.001.002.03', 'pain.001.001.03', 'pain.008.002.02', 'pain.008.001.02', 'pain.008.001.10'
+     * @param string $painFormat
      * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      * @throws \DOMException
      */
     public function __construct(string $painFormat, bool $withSchemaLocation = true)
     {
-        $this->painFormat = $painFormat;
-        $this->doc = new \DOMDocument('1.0', 'UTF-8');
+        $this->messageFormat = new MessageFormat($painFormat);
+        $this->doc = new DOMDocument('1.0', 'UTF-8');
         $this->doc->formatOutput = true;
         $this->root = $this->doc->createElement('Document');
 
-        $this->setXmlns($painFormat);
+        $this->setXmlns($this->messageFormat->getMessageName());
 
         $this->root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        $this->setSchemaLocation($painFormat, $withSchemaLocation);
+        $this->setSchemaLocation($this->messageFormat->getMessageName(), $withSchemaLocation);
 
         $this->doc->appendChild($this->root);
     }
 
-    private function setXmlns(string $painFormat): void
+    private function setXmlns(string $messageName): void
     {
-        if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
-            $this->root->setAttribute('xmlns', sprintf('%s', $painFormat));
+        if (filter_var($messageName, FILTER_VALIDATE_URL)) {
+            $this->root->setAttribute('xmlns', sprintf('%s', $messageName));
         } else {
-            $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+            $this->root->setAttribute('xmlns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $messageName));
         }
     }
 
-    private function setSchemaLocation(string $painFormat, bool $withSchemaLocation=true): void
+    private function setSchemaLocation(string $messageName, bool $withSchemaLocation=true): void
     {
         if ($withSchemaLocation) {
-            if (filter_var($painFormat, FILTER_VALIDATE_URL)) {
-                $painFormat = substr($painFormat, strrpos($painFormat, '/')+1, (strrpos($painFormat, '.') -1) - strrpos($painFormat, '/'));
+            if (filter_var($messageName, FILTER_VALIDATE_URL)) {
+                $messageName = substr($messageName, strrpos($messageName, '/')+1, (strrpos($messageName, '.') -1) - strrpos($messageName, '/'));
 
-                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$messageName $messageName.xsd");
             } else {
-                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$painFormat $painFormat.xsd");
+                $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$messageName $messageName.xsd");
             }
-	}
+	    }
     }
 
-    protected function createElement(string $name, ?string $value = null): \DOMElement
+    protected function createElement(string $name, ?string $value = null): DOMElement
     {
         if ($value !== null) {
             $elm = $this->doc->createElement($name);
@@ -112,7 +105,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $this->doc->saveXML();
     }
 
-    public function asDoc(): \DomDocument
+    public function asDoc(): DomDocument
     {
         return $this->doc;
     }
@@ -154,7 +147,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $this->currentTransfer->appendChild($groupHeaderTag);
     }
 
-    protected function getFinancialInstitutionElement(?string $bic): \DOMElement
+    protected function getFinancialInstitutionElement(?string $bic): DOMElement
     {
         $finInstitution = $this->createElement('FinInstnId');
 
@@ -163,7 +156,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);
             $finInstitution->appendChild($other);
-        } elseif ($this->painFormat === 'pain.008.001.10') {
+        } elseif (
+            ($this->messageFormat->isDirectDebit() && $this->messageFormat->getVariant() == '1' && $this->messageFormat->getVersion() >= 3)
+            ||
+            ($this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == '1' && $this->messageFormat->getVersion() >= 4)
+        ) {
             $finInstitution->appendChild($this->createElement('BICFI', $bic));
         } else {
             $finInstitution->appendChild($this->createElement('BIC', $bic));
@@ -172,7 +169,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $finInstitution;
     }
 
-    public function getIbanElement(string $iban): \DOMElement
+    public function getIbanElement(string $iban): DOMElement
     {
         $id = $this->createElement('Id');
         $id->appendChild($this->createElement('IBAN', $iban));
@@ -183,7 +180,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with un-structured message.
      */
-    public function getRemittenceElement(string $message): \DOMElement
+    public function getRemittenceElement(string $message): DOMElement
     {
         $remittanceInformation = $this->createElement('RmtInf');
         $remittanceInformation->appendChild($this->createElement('Ustrd', $message));
@@ -194,7 +191,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /**
      * Create remittance element with structured creditor reference.
      */
-    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation): \DOMElement
+    public function getStructuredRemittanceElement(TransferInformationInterface $transactionInformation): DOMElement
     {
         $creditorReference = $transactionInformation->getCreditorReference();
         $remittanceInformation = $this->createElement('RmtInf');

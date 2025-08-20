@@ -2,8 +2,10 @@
 
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
+use \DomDocument;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
+use SimpleXMLElement;
 
 /**
  * Class CustomerCreditFacadeTest
@@ -17,8 +19,6 @@ class CustomerCreditFacadeTest extends TestCase
      */
     public function testValidFileCreationWithFacade(string $schema): void
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(
             'firstPayment',
@@ -43,8 +43,13 @@ class CustomerCreditFacadeTest extends TestCase
             ]
         );
 
-        $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
+        $xml = $credit->asXML();
+        $this->assertInstanceOf(DomDocument::class, $credit->asDOC());
+
+        $domDoc = new DOMDocument('1.0', 'UTF-8');
+        $domDoc->loadXML($xml);
+        $this->assertTrue($domDoc->schemaValidate(XSD_DIR . $schema . '.xsd'));
+
     }
 
     /**
@@ -54,7 +59,7 @@ class CustomerCreditFacadeTest extends TestCase
      */
     public function testValidFileCreationWithFacadeWithoutDebtorBic(string $schema): void
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
 
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', $schema);
         $paymentInformation = $credit->addPaymentInfo(
@@ -79,23 +84,39 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(__DIR__ . "/../../../fixtures/" . $schema . ".xsd"));
+        $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
     public static function schemaProvider(): iterable
     {
         return [
-            ["pain.001.001.03"],
-            ["pain.001.002.03"],
-            ["pain.001.003.03"]
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.04' => ['pain.001.001.04'],
+            'pain.001.001.05' => ['pain.001.001.05'],
+            'pain.001.001.06' => ['pain.001.001.06'],
+            'pain.001.001.07' => ['pain.001.001.07'],
+            'pain.001.001.08' => ['pain.001.001.08'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.12' => ['pain.001.001.12'],
+            'pain.001.002.03' => ['pain.001.002.03'],
+            'pain.001.003.03' => ['pain.001.003.03']
         ];
     }
 
     public static function schemaProviderEmptyBic(): iterable
     {
         return [
-            ["pain.001.001.03"],
-            ["pain.001.003.03"]
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.04' => ['pain.001.001.04'],
+            'pain.001.001.05' => ['pain.001.001.05'],
+            'pain.001.001.06' => ['pain.001.001.06'],
+            'pain.001.001.07' => ['pain.001.001.07'],
+            'pain.001.001.08' => ['pain.001.001.08'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.11' => ['pain.001.001.12'],
+            'pain.001.003.03' => ['pain.001.003.03']
         ];
     }
 }

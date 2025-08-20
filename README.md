@@ -12,22 +12,32 @@ License: GNU Lesser General Public License v3.0
 The versions of the [ISO20022 standard](https://www.iso20022.org/) supported are:
 * For Credit Transfers:
   * pain.001.001.03
-  * pain.001.001.09 (PR in review)
-  * pain.001.001.11 (in progress)
-  * pain.001.001.12 (in progress)
+  * pain.001.001.04
+  * pain.001.001.05
+  * pain.001.001.06
+  * pain.001.001.07
+  * pain.001.001.08
+  * pain.001.001.09 (The minimum version recommended)
+  * pain.001.001.11
+  * pain.001.001.12
   * Credit Transfer [Variants](https://www.iso20022.org/catalogue-messages/additional-content-messages/variants):
     * pain.001.002.03 (STPCreditTransferInitiationV03)
     * pain.001.003.03 (EUSTPCreditTransferInitiationV03)
 * For Direct Debits:
   * pain.008.001.02
-  * pain.008.001.08 (PR in review)
+  * pain.008.001.03
+  * pain.008.001.04
+  * pain.008.001.05
+  * pain.008.001.06
+  * pain.008.001.07
+  * pain.008.001.08 (The minimum version recommended)
   * pain.008.001.10
-  * pain.008.001.11 (in progress)
+  * pain.008.001.11
   * Direct Debit [Variants](https://www.iso20022.org/catalogue-messages/additional-content-messages/variants):
     * pain.008.002.02
     * pain.008.003.02
 
-We do not claim 100% support of those formats but the files produced by this library are validated agains the official XSDs and they pass the validation. I you're missing a field or two please submit a PR.
+We do not claim 100% support of those formats but the files produced by this library are validated against the official XSDs and they pass the validation. I you're missing a field or two please submit a PR.
 The library accepts a custom ISO20022 format so in theory you can use any of the versions in between the ones on the officially supported list.
 
 Institutions that should accept these formats:
@@ -59,7 +69,7 @@ In the near future we may switch to `php-sepa-xml/php-sepa-xml` as that is alrea
 ## Documentation
 Check out our docs at:
 * [handling Direct Debits](doc/direct_debit.md)
-* [handling Credit Transfers](doc/direct_credit.md)
+* [handling Credit Transfers](doc/credit_transfer.md)
 * [handling string sanitization](doc/string_sanitization.md)
 
 ### ISO20022 Message Names

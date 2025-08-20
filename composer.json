@@ -33,12 +33,15 @@
     },
     "require": {
         "ext-dom": "*",
-        "php": ">=7.2"
+        "php": ">=7.2",
+        "ramsey/uuid": "4.2.*"
     },
     "require-dev": {
+        "ext-xml": "*",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^2.0",
-        "phpstan/phpstan": "^2.0"
+        "phpstan/phpstan": "^2.0",
+        "fakerphp/faker": "^1.24"
     },
     "config": {
         "bin-dir": "bin/"

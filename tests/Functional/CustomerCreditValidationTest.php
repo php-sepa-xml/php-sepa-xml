@@ -28,6 +28,7 @@ use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,8 +56,8 @@ class CustomerCreditValidationTest extends TestCase
      */
     public function testSanity(string $schema): void
     {
-        $this->dom->load(__DIR__ . '/../fixtures/' . $schema . '.xml');
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $this->dom->load(XML_DIR . $schema . '.xml');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
 
         $this->assertTrue($validated);
     }
@@ -90,7 +91,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -122,7 +123,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -187,6 +188,8 @@ class CustomerCreditValidationTest extends TestCase
      */
     public function testPaymentMetaData(string $schema): void
     {
+        $messageFormat = new MessageFormat($schema);
+
         $groupHeader = new GroupHeader('transferID', 'Me');
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
         $payment = new PaymentInformation('Payment Info ID', 'FR1420041010050500013M02606', 'PSSTFRPPMON', 'My Corp');
@@ -210,8 +213,14 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         // Date is correctly coded
-        $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
-        $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+        if ($messageFormat->isCreditTransfer() && $messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
+            $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt/sepa:Dt');
+            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+        } else {
+            $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
+            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+        }
+
         //Payment method is set
         $paymentMethod = $xpathDoc->query('//sepa:PmtMtd');
         $this->assertEquals('TRF', $paymentMethod->item(0)->textContent);
@@ -219,8 +228,14 @@ class CustomerCreditValidationTest extends TestCase
         $originIban = $xpathDoc->query('//sepa:DbtrAcct/sepa:Id/sepa:IBAN');
         $this->assertEquals('FR1420041010050500013M02606', $originIban->item(0)->textContent);
         //Originating BIC
-        $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
-        $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+        if ($messageFormat->isCreditTransfer() && $messageFormat->getVariant() == '1' && $messageFormat->getVersion() >= 4) {
+            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BICFI');
+            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+        } else {
+            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
+            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+        }
+
         //Originating Name
         $originName = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
         $this->assertEquals('My Corp', $originName->item(0)->textContent);
@@ -332,7 +347,7 @@ class CustomerCreditValidationTest extends TestCase
 
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
@@ -461,7 +476,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
     }
 
@@ -495,7 +510,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
@@ -541,7 +556,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(__DIR__ . '/../fixtures/' . $schema . '.xsd');
+        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
         $this->assertTrue($validated);
 
         $xpathDoc = new \DOMXPath($this->dom);
@@ -553,12 +568,21 @@ class CustomerCreditValidationTest extends TestCase
     public static function provideSchema(): iterable
     {
         return [
-            ["pain.001.001.03"],
-            ["pain.001.002.03"],
-            ["pain.001.003.03"]
+            'pain.001.001.03' => ['pain.001.001.03'],
+            'pain.001.001.04' => ['pain.001.001.04'],
+            'pain.001.001.05' => ['pain.001.001.05'],
+            'pain.001.001.06' => ['pain.001.001.06'],
+            'pain.001.001.07' => ['pain.001.001.07'],
+            'pain.001.001.08' => ['pain.001.001.08'],
+            'pain.001.001.09' => ['pain.001.001.09'],
+            'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.12' => ['pain.001.001.12'],
+            'pain.001.002.03' => ['pain.001.002.03'],
+            'pain.001.003.03' => ['pain.001.003.03']
         ];
     }
 
+    //@TODO: Add more address fields, test with and without address line
     public static function provideAddressTests(): iterable
     {
         return [

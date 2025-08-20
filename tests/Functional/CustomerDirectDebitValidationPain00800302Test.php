@@ -44,7 +44,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = __DIR__ . "/../fixtures/pain.008.003.02.xsd";
+        $this->schema = XSD_DIR.'pain.008.003.02.xsd';
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -53,7 +53,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
      */
     public function testSanity(): void
     {
-        $this->dom->load(__DIR__ . '/../fixtures/pain.008.003.02.xml');
+        $this->dom->load(XML_DIR . 'pain.008.003.02.xml');
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
     }
