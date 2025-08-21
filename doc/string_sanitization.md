@@ -1,7 +1,5 @@
 ## Custom String Sanitization
-
 By default, this package sanitizes strings using an internal helper method — `StringHelper::sanitizeString()` — to ensure safe and valid output for SEPA XML.
-
 If the default sanitization doesn't suit your needs, you can override it globally using the `Sanitizer::setSanitizer()` method.
 
 Note: XML entities (like `<`, `>`, `&`, etc.) will still be escaped separately. This customization affects **pre-processing** before XML generation.

@@ -10,3 +10,10 @@ Type `composer run` to get into the interactive console and try them out.
 ## Contributing
 Contributions are really welcome. But it saves time for both sides when at least the `phpunit` and `phpstan` runs do not fail.
 We will not accept newly added fields/features without full test coverage in the PR.
+
+So please, before committing, always run:
+```php
+composer run phpunit
+composer run phpstan
+composer run rector
+```
