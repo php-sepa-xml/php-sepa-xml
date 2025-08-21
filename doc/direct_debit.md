@@ -1,7 +1,7 @@
 Direct Debit Payment Initiation
 ===============================
 
-* [Sample usage of DirectDebit File](sample-usage-of-directdebit-file)
+* [Sample usage of DirectDebit File](#sample-usage-of-directdebit-file)
 * [Sample Usage DirectDebit with Factory](#sample-usage-directdebit-with-factory)
 * [Sample Usage DirectDebit with Factory and Custom Header](#sample-usage-directdebit-with-factory-and-custom-header)
 * [Add an amendment to a transfer](#add-an-amendment-to-a-transfer)
