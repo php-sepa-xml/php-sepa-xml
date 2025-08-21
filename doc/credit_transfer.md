@@ -1,8 +1,8 @@
 Credit Transfer Payment Initiation
 ===============================
 
-* [Direct usage of CreditTransfer File](direct-usage-of-credittransfer-file)
-* [Sample usage of CreditTransfer File with Facade Factory](sample-usage-of-credittransfer-file-with-facade-factory)
+* [Direct usage of CreditTransfer File](#direct-usage-of-credittransfer-file)
+* [Sample usage of CreditTransfer File with Facade Factory](#sample-usage-of-credittransfer-file-with-facade-factory)
 
 
 Direct usage of CreditTransfer File
