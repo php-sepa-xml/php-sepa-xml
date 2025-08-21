@@ -246,7 +246,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     }
 
     /**
-     * Add the specific OrgId element for the format 'pain.001.001.03'
+     * Add the specific OrgId element for the format 'pain.001.001.xx'
      */
     public function visitGroupHeader(GroupHeader $groupHeader): void
     {
