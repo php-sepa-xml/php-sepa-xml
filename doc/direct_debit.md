@@ -2,7 +2,7 @@ Direct Debit Payment Initiation
 ===============================
 
 * [Sample usage of DirectDebit File](#sample-usage-of-directdebit-file)
-* [Sample Usage DirectDebit with Factory](#sample-usage-directdebit-with-factory)
+* [Sample Usage DirectDebit with Factory](#sample-usage-of-directdebit-with-facade-factory)
 * [Sample Usage DirectDebit with Factory and Custom Header](#sample-usage-directdebit-with-factory-and-custom-header)
 * [Add an amendment to a transfer](#add-an-amendment-to-a-transfer)
 * [Add address information to transaction](#add-address-information-to-transaction)
@@ -39,7 +39,6 @@ The variable names are used to describe what should be contained within them.
     $transfer->setMandateId($mandateId);
     $transfer->setMandateSignDate(new DateTime());
     $transfer->setFinalCollectionDate(new DateTimeImmutable());
-    $transfer->setPurposeCode('SALA');
 
     $transfer->setCountry('BG');
     $transfer->setPostCode('1000');

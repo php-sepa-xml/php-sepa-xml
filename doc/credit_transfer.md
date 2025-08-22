@@ -34,6 +34,7 @@ The variable names are used to describe what should be contained within them.
     $transfer->setBic($clientAccBic);
     $transfer->setCreditorReference('CdtrRefInf-Ref');
     $transfer->setCreditorReferenceType('CdtrRefInf-Tp-Issr');
+    $transfer->setPurposeCode('SALA');
 
     $transfer->setCountry('BG');
     $transfer->setPostCode('1000');
