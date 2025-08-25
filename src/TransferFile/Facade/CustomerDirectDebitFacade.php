@@ -95,7 +95,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     buildingNumber?: string,
      *     floorNumber?: string,
      *     debtorCountry?: string,
-     *     debtorAdrLine?: string,
+     *     debtorAdrLine?: string|string[],
      *     instructionId?: string
      * } $transferInformation
      * @return CustomerDirectDebitTransferInformation
