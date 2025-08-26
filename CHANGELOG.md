@@ -1,6 +1,19 @@
 # Changelog
 
-## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.0...HEAD)
+## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.2...HEAD)
+
+## [2.3.2](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.3.2)
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.1...2.3.2)
+## Changed
+* Update docs by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/203
+* Fix purpose code usage example by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/204
+* Allow id in $paymentInformation to be a string by @derrabus in https://github.com/php-sepa-xml/php-sepa-xml/pull/205
+* Allow debtorAdrLine in `$transferInformation` to be an array by @derrabus in https://github.com/php-sepa-xml/php-sepa-xml/pull/206
+
+## [2.3.1](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.3.1)
+[Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.0...2.3.1)
+### Fixed
+- HotFix ramsey/uuid version constraint definition which was preventing v2.3.0 from installing on platforms with php >= 8.1 as explained in #200
 
 ## [2.3.0](https://github.com/php-sepa-xml/php-sepa-xml/tree/2.3.0)
 [Full Changelog](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.2.1...2.3.0)
