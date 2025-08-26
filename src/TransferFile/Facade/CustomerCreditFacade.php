@@ -17,7 +17,7 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
     /**
      * @param string $paymentName
      * @param array{
-     *     id: int,
+     *     id: string,
      *     debtorName: string,
      *     debtorAccountIBAN: string,
      *     debtorAgentBIC?: string,
