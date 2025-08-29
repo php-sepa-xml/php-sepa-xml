@@ -24,7 +24,11 @@ nb-configuration.xml
 project.properties
 project.xml
 Session.vim
+
+# Dev tools
 bin/
 /vendor/
 composer.lock
 .phpunit.result.cache
+phpstan.neon
+.php-cs-fixer.php
