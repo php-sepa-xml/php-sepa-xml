@@ -77,9 +77,12 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $instructionPriority = $this->createElement('InstrPrty', $paymentInformation->getInstructionPriority());
             $paymentTypeInformation->appendChild($instructionPriority);
         }
-        $serviceLevel = $this->createElement('SvcLvl');
-        $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
-        $paymentTypeInformation->appendChild($serviceLevel);
+
+        if ($this->messageFormat->getMessageName() !== '001.001.03') {
+            $serviceLevel = $this->createElement('SvcLvl');
+            $serviceLevel->appendChild($this->createElement('Cd', 'SEPA'));
+            $paymentTypeInformation->appendChild($serviceLevel);
+        }
 
         if ($paymentInformation->getLocalInstrumentCode() || $paymentInformation->getLocalInstrumentProprietary()) {
             $localInstrument = $this->createElement('LclInstrm');
