@@ -31,7 +31,6 @@ use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use PHPUnit\Framework\TestCase;
 
 class TestFileSanityCheckTest extends TestCase
 {
@@ -101,7 +100,7 @@ class TestFileSanityCheckTest extends TestCase
         /* Validate the generated XML against it's XSD: */
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
         $this->dom->loadXML($domBuilder->asXml());
-        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $painFormat . '.xsd'));
+        $this->assertValidSchema($this->dom, $painFormat);
     }
 
     /**
@@ -156,7 +155,7 @@ class TestFileSanityCheckTest extends TestCase
         /* Validate the generated XML against it's XSD: */
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat);
         $this->dom->loadXML($domBuilder->asXml());
-        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $painFormat . '.xsd'));
+        $this->assertValidSchema($this->dom, $painFormat);
     }
 
     /**
@@ -167,7 +166,7 @@ class TestFileSanityCheckTest extends TestCase
     public function testSanityFiles(string $pain): void
     {
         $this->dom->load(XML_DIR . $pain . '.xml');
-        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $pain . '.xsd'));
+        $this->assertValidSchema($this->dom, $pain);
     }
 
     public static function schemaVersionProvider(): iterable

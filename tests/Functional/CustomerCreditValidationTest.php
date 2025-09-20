@@ -26,10 +26,10 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\Util\MessageFormat;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Various schema validation tests.
@@ -57,9 +57,7 @@ class CustomerCreditValidationTest extends TestCase
     public function testSanity(string $schema): void
     {
         $this->dom->load(XML_DIR . $schema . '.xml');
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -91,8 +89,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -123,8 +120,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -347,8 +343,7 @@ class CustomerCreditValidationTest extends TestCase
 
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
@@ -476,8 +471,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -510,8 +504,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
@@ -556,8 +549,7 @@ class CustomerCreditValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);

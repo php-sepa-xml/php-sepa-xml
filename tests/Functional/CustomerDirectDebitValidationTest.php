@@ -26,9 +26,9 @@ use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationTest extends TestCase
 {
@@ -54,8 +54,7 @@ class CustomerDirectDebitValidationTest extends TestCase
     public function testSanity(string $schema): void
     {
         $this->dom->load(XML_DIR . $schema . '.xml');
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -88,8 +87,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     /**
@@ -122,8 +120,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $schema . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $schema);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
@@ -286,8 +283,7 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate(XSD_DIR . $scenario['pain'] . '.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $scenario['pain']);
     }
 
     public static function scenarios(): iterable

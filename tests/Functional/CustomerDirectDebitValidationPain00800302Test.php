@@ -26,9 +26,9 @@ use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationPain00800302Test extends TestCase
 {
@@ -44,7 +44,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = XSD_DIR.'pain.008.003.02.xsd';
+        $this->schema = 'pain.008.003.02';
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -54,8 +54,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
     public function testSanity(): void
     {
         $this->dom->load(XML_DIR . 'pain.008.003.02.xml');
-        $validated = $this->dom->schemaValidate($this->schema);
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $this->schema);
     }
 
     /**
@@ -100,8 +99,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine');
         $this->assertEquals('Postal Address', $testNode->item(0)->textContent);
 
-        $validated = $this->dom->schemaValidate($this->schema);
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $this->schema);
     }
 
     /**
@@ -144,8 +142,7 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $this->assertEquals('Postal Address 1', $testNode->item(0)->textContent);
         $this->assertEquals('Postal Address 2', $testNode->item(1)->textContent);
 
-        $validated = $this->dom->schemaValidate($this->schema);
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $this->schema);
     }
 
     public function testValidationFailureSeqType(): void

@@ -9,9 +9,8 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
-
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\Util\MessageFormat;
-use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 {
@@ -54,8 +53,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $doc->loadXML($builder->asXml());
 
         // Test xml schema validation
-        $validated = $doc->schemaValidate(XSD_DIR . $painFormat .'.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($doc, $painFormat);
 
         // Test contents
         $xpath = new \DOMXPath($doc);
@@ -120,8 +118,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $doc->loadXML($builder->asXml());
 
         // Test xml schema validation
-        $validated = $doc->schemaValidate(XSD_DIR . 'pain.008.001.10.xsd');
-        $this->assertTrue($validated);
+        $this->assertValidSchema($doc, 'pain.008.001.10');
 
         // Test contents
 

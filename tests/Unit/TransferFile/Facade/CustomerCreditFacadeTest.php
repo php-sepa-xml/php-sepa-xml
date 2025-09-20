@@ -2,10 +2,9 @@
 
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
+use Digitick\Sepa\Tests\TestCase;
 use \DomDocument;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
-use PHPUnit\Framework\TestCase;
-use SimpleXMLElement;
 
 /**
  * Class CustomerCreditFacadeTest
@@ -48,7 +47,7 @@ class CustomerCreditFacadeTest extends TestCase
 
         $domDoc = new DOMDocument('1.0', 'UTF-8');
         $domDoc->loadXML($xml);
-        $this->assertTrue($domDoc->schemaValidate(XSD_DIR . $schema . '.xsd'));
+        $this->assertValidSchema($domDoc, $schema);
 
     }
 
@@ -84,7 +83,7 @@ class CustomerCreditFacadeTest extends TestCase
         );
 
         $dom->loadXML($credit->asXML());
-        $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
+        $this->assertValidSchema($dom, $schema);
     }
 
     public static function schemaProvider(): iterable

@@ -23,9 +23,9 @@
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\Util\MessageFormat;
-use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitFacadeTest extends TestCase
 {
@@ -41,7 +41,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = XSD_DIR . 'pain.008.002.02.xsd';
+        $this->schema = 'pain.008.002.02';
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -204,7 +204,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         );
 
         $this->dom->loadXML($directDebit->asXML());
-        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
+        $this->assertValidSchema($this->dom, $schema);
     }
 
 
@@ -253,7 +253,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         );
 
         $this->dom->loadXML($directDebit->asXML());
-        $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
+        $this->assertValidSchema($this->dom, $schema);
     }
 
     public static function provideSchema(): iterable

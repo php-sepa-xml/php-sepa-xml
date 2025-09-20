@@ -25,9 +25,9 @@ namespace Digitick\Sepa\Tests\Functional;
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\TestCase;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Various schema validation tests.
@@ -46,7 +46,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->schema = XSD_DIR . 'pain.001.001.03.xsd';
+        $this->schema = 'pain.001.001.03';
         $this->dom = new \DOMDocument('1.0', 'UTF-8');
     }
 
@@ -56,7 +56,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
     public function testSanity(): void
     {
         $this->dom->load(XML_DIR . 'pain.001.001.03.xml');
-        $this->assertTrue($this->dom->schemaValidate($this->schema));
+        $this->assertValidSchema($this->dom, $this->schema);
     }
 
     /**
@@ -113,8 +113,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $xml = $domBuilder->asXml();
         $this->dom->loadXML($xml);
 
-        $validated = $this->dom->schemaValidate($this->schema);
-        $this->assertTrue($validated);
+        $this->assertValidSchema($this->dom, $this->schema);
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
