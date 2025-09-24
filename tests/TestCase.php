@@ -29,7 +29,12 @@ abstract class TestCase extends PHPUnitTestCase
     final public static function assertValidSchema(\DOMDocument $dom, $schema): void
     {
         $lastErrorMessage = '';
-        $valid = $dom->schemaValidate(__DIR__.'/fixtures/xsd/' . $schema . '.xsd');
+        $schemaFile = __DIR__.'/fixtures/xsd/' . $schema . '.xsd';
+        if (!\file_exists($schemaFile)) {
+            throw new \UnexpectedValueException('Schema file does not exist: ' . $schemaFile);
+        }
+
+        $valid = $dom->schemaValidate($schemaFile);
 
         if (!$valid) {
             $lastError = \libxml_get_last_error() ?: null;
