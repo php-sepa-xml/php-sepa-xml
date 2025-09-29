@@ -132,6 +132,9 @@ class CustomerCreditValidationPain00100103Test extends TestCase
             $this->assertEquals($scenario['transactionLocalInstrumentCode'], $transactionLocalInstrumentCode->item(0)->textContent);
         }
 
+        $noServiceLevel = (int)$xpathDoc->evaluate('count(//sepa:PmtInf/sepa:PmtTpInf/sepa:SvcLvl)');
+        $this->assertSame(0, $noServiceLevel);
+
         if (isset($scenario['localInstrumentProprietary'])) {
             $localInstrumentProprietary = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
             $this->assertEquals($scenario['localInstrumentProprietary'], $localInstrumentProprietary->item(0)->textContent);
