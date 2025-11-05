@@ -51,6 +51,8 @@ Institutions that are confirmed to accept these formats:
 * Spain: CaixaBank
 * Spain: SantanderBank
 * Netherlands: direct-debit (pain.008.001.02) at RABO-bank (thanks @rodekker)
+* Austria: Raiffeisen Bank direct-debit (pain.008.001.08) 2025-10-29
+* Austria: Voklsbank direct-debit (pain.008.001.08) 2025-10-29
 
 Always verify generated files with your bank before using in production! If you encounter an institution that does accept this library's generated files please notify us to add it to the list or send a PR!
 
