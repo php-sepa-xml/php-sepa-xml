@@ -81,7 +81,7 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $EndToEndIdentification;
 
     /**
-     * @var string $UUID
+     * @var ?string $UUID
      */
     protected $UUID;
 
@@ -193,7 +193,6 @@ class BaseTransferInformation implements TransferInformationInterface
         $this->iban = $iban;
         $this->name = Sanitizer::sanitize($name);
         $this->setEndToEndIdentification($identification);
-        $this->setUUID(Uuid::uuid4()->toString());
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
@@ -226,12 +225,12 @@ class BaseTransferInformation implements TransferInformationInterface
         return $this->EndToEndIdentification;
     }
 
-    public function setUUID(string $UUID): void
+    public function setUUID(?string $UUID): void
     {
         $this->UUID = $UUID;
     }
 
-    public function getUUID(): string
+    public function getUUID(): ?string
     {
         return $this->UUID;
     }

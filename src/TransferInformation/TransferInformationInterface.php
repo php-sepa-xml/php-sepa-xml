@@ -32,7 +32,7 @@ interface TransferInformationInterface
 
     public function getEndToEndIdentification(): string;
 
-    public function getUUID(): string;
+    public function getUUID(): ?string;
 
     public function getInstructionId(): ?string;
 
