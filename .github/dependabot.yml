@@ -15,8 +15,6 @@ updates:
       include: "scope"
     labels:
       - "dependabot"
-    reviewers:
-      - "BorislavSabev"
     assignees:
       - "BorislavSabev"
 

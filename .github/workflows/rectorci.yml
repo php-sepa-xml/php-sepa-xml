@@ -1,5 +1,5 @@
 # Checks code with Rector and auto-commits any fixes
-name: RectorCI
+name: CIRector
 
 on:
   pull_request:
