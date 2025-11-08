@@ -43,11 +43,6 @@
           <EndToEndId>SomethingUnique</EndToEndId>
           <UETR>013dd86e-ad2b-4ac8-ae98-3dd4b483fa8b</UETR>
         </PmtId>
-        <PmtTpInf>
-          <SvcLvl>
-            <Cd>SEPA</Cd>
-          </SvcLvl>
-        </PmtTpInf>
         <Amt>
           <InstdAmt Ccy="EUR">12.34</InstdAmt>
         </Amt>
