@@ -57,7 +57,8 @@
             "@phpstan",
             "@rector"
         ],
-        "phpunit": "bin/phpunit"
+        "phpunit": "bin/phpunit",
+        "phpcsfixer": "bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes --sequential"
     },
     "scripts-descriptions": {
         "rector": "runs `bin/rector process --clear-cache --no-diffs`",
@@ -65,6 +66,7 @@
         "phpstan-cc": "runs `bin/phpstan clear-result-cache`",
         "phpstan-dp": "runs `bin/phpstan dump-parameters`",
         "php-codeQualityFull" : "run `phpstan` and then `rector`",
-        "phpunit" : "It's pretty obvious what this does, isn't it?"
+        "phpunit" : "It's pretty obvious what this does, isn't it?",
+        "phpcsfixer" : "runs `php-cs-fixer` with the provided config file"
     }
 }
