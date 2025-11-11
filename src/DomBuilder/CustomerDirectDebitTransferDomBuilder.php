@@ -150,7 +150,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $paymentId->appendChild(
             $this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification())
         );
-        if ($this->messageFormat->isDirectDebit() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 8) {
+        if ($transactionInformation->getUUID() && $this->messageFormat->isDirectDebit() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 8) {
             $paymentId->appendChild($this->createElement('UETR', $transactionInformation->getUUID()));
         }
 

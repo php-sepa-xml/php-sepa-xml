@@ -156,34 +156,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $PmtId->appendChild($this->createElement('InstrId', $transactionInformation->getInstructionId()));
         }
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
-        if ($this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 9) {
+        if ($transactionInformation->getUUID() && $this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 9) {
             $PmtId->appendChild($this->createElement('UETR', $transactionInformation->getUUID()));
         }
         $CdtTrfTxInf->appendChild($PmtId);
-
-
-        $PmtTpInf = $this->createElement('PmtTpInf');
-
-        $SvcLvl = $this->createElement('SvcLvl');
-        $SvcLvl->appendChild($this->createElement('Cd', 'SEPA'));
-        $PmtTpInf->appendChild($SvcLvl);
-
-        if ($transactionInformation->getLocalInstrumentCode() || $transactionInformation->getLocalInstrumentProprietary()) {
-            $localInstrument = $this->createElement('LclInstrm');
-            if ($transactionInformation->getLocalInstrumentCode()) {
-                $localInstrument->appendChild($this->createElement('Cd', $transactionInformation->getLocalInstrumentCode()));
-            } else if ($transactionInformation->getLocalInstrumentProprietary()) {
-                $localInstrument->appendChild($this->createElement('Prtry', $transactionInformation->getLocalInstrumentProprietary()));
-            }
-            $PmtTpInf->appendChild($localInstrument);
-        }
-
-        if ($transactionInformation->getCategoryPurposeCode()) {
-            $CtgyPurp = $this->createElement('CtgyPurp');
-            $CtgyPurp->appendChild($this->createElement('Cd', $transactionInformation->getCategoryPurposeCode()));
-            $PmtTpInf->appendChild($CtgyPurp);
-        }
-        $CdtTrfTxInf->appendChild($PmtTpInf);
 
         // Amount 2.42
         $amount = $this->createElement('Amt');
@@ -196,17 +172,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $CdtTrfTxInf->appendChild($amount);
 
         //Creditor Agent 2.77
-        if ($transactionInformation->getBic()) {
-            $creditorAgent = $this->createElement('CdtrAgt');
-            $financialInstitution = $this->createElement('FinInstnId');
-            if ($this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == '1' && $this->messageFormat->getVersion() >= 4) {
-                $financialInstitution->appendChild($this->createElement('BICFI', $transactionInformation->getBic()));
-            } else {
-                $financialInstitution->appendChild($this->createElement('BIC', $transactionInformation->getBic()));
-            }
-            $creditorAgent->appendChild($financialInstitution);
-            $CdtTrfTxInf->appendChild($creditorAgent);
-        }
+        $creditorAgent = $this->createElement('CdtrAgt');
+        $creditorAgent->appendChild($this->getFinancialInstitutionElement($transactionInformation->getBic()));
+        $CdtTrfTxInf->appendChild($creditorAgent);
+
 
         // Creditor 2.79
         $creditor = $this->createElement('Cdtr');

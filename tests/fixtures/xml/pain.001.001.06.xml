@@ -40,11 +40,6 @@
         <PmtId>
           <EndToEndId>SomethingUnique</EndToEndId>
         </PmtId>
-        <PmtTpInf>
-          <SvcLvl>
-            <Cd>SEPA</Cd>
-          </SvcLvl>
-        </PmtTpInf>
         <Amt>
           <InstdAmt Ccy="EUR">12.34</InstdAmt>
         </Amt>

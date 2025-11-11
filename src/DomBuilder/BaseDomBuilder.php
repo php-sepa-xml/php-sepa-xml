@@ -152,6 +152,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         $finInstitution = $this->createElement('FinInstnId');
 
         if ($bic === null) {
+            /*
+             * Use alternative identifier when BIC is not available
+             * Per ISO 20022: <Othr> can be used for alternative identification.
+             * We use this to circumvent some banks' strict BIC validation.
+             */
             $other = $this->createElement('Othr');
             $id = $this->createElement('Id', 'NOTPROVIDED');
             $other->appendChild($id);
