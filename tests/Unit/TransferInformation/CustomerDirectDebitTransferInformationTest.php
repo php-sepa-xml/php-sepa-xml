@@ -37,11 +37,10 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
         $this->assertEquals('Their Corp', $information->getEndToEndIdentification());
     }
 
-    public function testHasUniqueIdentifier(): void
+    public function testUniqueIdentifierNullByDefault(): void
     {
         $information = new CustomerDirectDebitTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
-        $this->assertNotEmpty($information->getUUID());
-        $this->assertTrue(Uuid::isValid($information->getUUID()));
+        $this->assertNull($information->getUUID());
     }
 
     public function testCustomUniqueIdentifier(): void

@@ -156,7 +156,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $PmtId->appendChild($this->createElement('InstrId', $transactionInformation->getInstructionId()));
         }
         $PmtId->appendChild($this->createElement('EndToEndId', $transactionInformation->getEndToEndIdentification()));
-        if ($this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 9) {
+        if ($transactionInformation->getUUID() && $this->messageFormat->isCreditTransfer() && $this->messageFormat->getVariant() == 1 && $this->messageFormat->getVersion() >= 9) {
             $PmtId->appendChild($this->createElement('UETR', $transactionInformation->getUUID()));
         }
         $CdtTrfTxInf->appendChild($PmtId);
