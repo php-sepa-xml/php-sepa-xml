@@ -166,6 +166,15 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $postalAddress;
 
     /**
+     * Name of the Debtor Reference Party.
+     *
+     * Maximum allowed length is 70 characters.
+     *
+     * @var string|null
+     */
+    protected $ultimateDebtorName;
+
+    /**
      * @param int $amount amount in cents
      */
     public function __construct(int $amount, string $iban, string $name, ?string $identification = null)
@@ -415,6 +424,24 @@ class BaseTransferInformation implements TransferInformationInterface
     public function setPostalAddress($postalAddress): void
     {
         $this->postalAddress = $postalAddress;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getUltimateDebtorName()
+    {
+        return $this->ultimateDebtorName;
+    }
+
+    /**
+     * @param string|string[] $name
+     */
+    public function setUltimateDebtorName($name): void
+    {
+        $this->ultimateDebtorName = Sanitizer::sanitize($name);
     }
 
     /**

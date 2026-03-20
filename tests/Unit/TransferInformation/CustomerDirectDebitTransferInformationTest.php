@@ -62,6 +62,14 @@ class CustomerDirectDebitTransferInformationTest extends TestCase
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
 
+    public function testUltimateDebtor(): void
+    {
+        $information = new CustomerDirectDebitTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
+        $this->assertNull($information->getUltimateDebtorName());
+        $information->setUltimateDebtorName('Test Name');
+        $this->assertEquals('Test Name', $information->getUltimateDebtorName());
+    }
+
     public function testHasAmendmentReturnsTrueForAmendments(): void
     {
         $transferInformation = new CustomerDirectDebitTransferInformation(
