@@ -59,7 +59,15 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
      *     creditorReferenceType?: string,
      *     remittanceInformation: string,
      *     endToEndId?: string,
-     *     instructionId?: string
+     *     instructionId?: string,
+     *     postCode?: string,
+     *     townName?: string,
+     *     streetName?: string,
+     *     debtorAdrLine?: string,
+     *     buildingNumber?: string,
+     *     floorNumber?: string,
+     *     debtorCountry?: string,
+     *     debtorAdrLine?: string,
      * } $transferInformation
      * @return CustomerCreditTransferInformation
      * @throws InvalidArgumentException
@@ -105,9 +113,35 @@ class CustomerCreditFacade extends BaseCustomerTransferFileFacade
             $transfer->setInstructionId($transferInformation['instructionId']);
         }
 
+        if (isset($transferInformation['postCode'])) {
+            $transfer->setPostCode($transferInformation['postCode']);
+        }
+
+        if (isset($transferInformation['townName'])) {
+            $transfer->setTownName($transferInformation['townName']);
+        }
+
+        if (isset($transferInformation['streetName'])) {
+            $transfer->setStreetName($transferInformation['streetName']);
+        }
+
+        if (isset($transferInformation['buildingNumber'])) {
+            $transfer->setBuildingNumber($transferInformation['buildingNumber']);
+        }
+
+        if (isset($transferInformation['floorNumber'])) {
+            $transfer->setFloorNumber($transferInformation['floorNumber']);
+        }
+
+        if (isset($transferInformation['debtorCountry'])) {
+            $transfer->setCountry($transferInformation['debtorCountry']);
+        }
+        if (isset($transferInformation['debtorAdrLine'])) {
+            $transfer->setPostalAddress($transferInformation['debtorAdrLine']);
+        }
+
         $this->payments[$paymentName]->addTransfer($transfer);
 
         return $transfer;
     }
-
 }
