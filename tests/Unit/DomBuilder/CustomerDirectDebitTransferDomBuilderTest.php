@@ -43,6 +43,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $transactionInformation->setStreetName('Wilhelm-Epstein-Str.');
         $transactionInformation->setBuildingNumber('14');
         $transactionInformation->setFloorNumber('12');
+        $transactionInformation->setUltimateDebtorName('Maximilian Musterman');
 
         $builder = new CustomerDirectDebitTransferDomBuilder($painFormat);
         $builder->visitTransferFile($transferFile);
@@ -71,6 +72,10 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8 ) {
             $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
         }
+
+        // Check Ultimate Debtor name
+        $transactionInfoNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf')->item(0);
+        $this->assertSame('Maximilian Musterman', $xpath->evaluate('./ns:UltmtDbtr/ns:Nm', $transactionInfoNode)->item(0)->textContent);
     }
 
     public static function painProvider(): iterable

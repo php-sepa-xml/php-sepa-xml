@@ -237,6 +237,13 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $debtorAccount->appendChild($this->getIbanElement($transactionInformation->getIban()));
         $directDebitTransactionInformation->appendChild($debtorAccount);
 
+        if ($transactionInformation->getUltimateDebtorName()) {
+            $ultimateDebtor = $this->createElement('UltmtDbtr');
+            $nameElement = $this->createElement('Nm', $transactionInformation->getUltimateDebtorName());
+            $ultimateDebtor->appendChild($nameElement);
+            $directDebitTransactionInformation->appendChild($ultimateDebtor);
+        }
+
         if (strlen((string)$transactionInformation->getCreditorReference()) > 0)
         {
             $directDebitTransactionInformation->appendChild(
