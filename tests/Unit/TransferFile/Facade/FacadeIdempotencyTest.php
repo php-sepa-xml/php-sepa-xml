@@ -144,6 +144,123 @@ class FacadeIdempotencyTest extends TestCase
         $this->assertSame(1, $xpath->query('//sepa:PmtInf')->length);
     }
 
+    public function testCustomerCreditAddPaymentInfoAfterRenderThrows(): void
+    {
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', 'pain.001.001.09');
+        $credit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'debtorName' => 'My Company',
+            'debtorAccountIBAN' => 'FI1350001540000056',
+            'debtorAgentBIC' => 'PSSTFRPPMON',
+        ]);
+        $credit->addTransfer('firstPayment', [
+            'amount' => 500,
+            'creditorIban' => 'FI1350001540000056',
+            'creditorName' => 'Their Company',
+            'remittanceInformation' => 'x',
+        ]);
+        $credit->asXML();
+
+        $this->expectException(\LogicException::class);
+        $credit->addPaymentInfo('secondPayment', [
+            'id' => 'secondPayment',
+            'debtorName' => 'My Company',
+            'debtorAccountIBAN' => 'FI1350001540000056',
+        ]);
+    }
+
+    public function testCustomerCreditAddTransferAfterRenderThrows(): void
+    {
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', 'pain.001.001.09');
+        $credit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'debtorName' => 'My Company',
+            'debtorAccountIBAN' => 'FI1350001540000056',
+            'debtorAgentBIC' => 'PSSTFRPPMON',
+        ]);
+        $credit->addTransfer('firstPayment', [
+            'amount' => 500,
+            'creditorIban' => 'FI1350001540000056',
+            'creditorName' => 'Their Company',
+            'remittanceInformation' => 'x',
+        ]);
+        $credit->asXML();
+
+        $this->expectException(\LogicException::class);
+        $credit->addTransfer('firstPayment', [
+            'amount' => 100,
+            'creditorIban' => 'FI1350001540000056',
+            'creditorName' => 'Their Company',
+            'remittanceInformation' => 'x',
+        ]);
+    }
+
+    public function testDirectDebitAddPaymentInfoAfterRenderThrows(): void
+    {
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', 'pain.008.001.02');
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'My Company',
+            'creditorAccountIBAN' => 'FI1350001540000056',
+            'creditorAgentBIC' => 'PSSTFRPPMON',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+        $directDebit->addTransfer('firstPayment', [
+            'amount' => 500,
+            'debtorIban' => 'FI1350001540000056',
+            'debtorBic' => 'OKOYFIHH',
+            'debtorName' => 'Their Company',
+            'debtorMandate' => 'AB12345',
+            'debtorMandateSignDate' => '13.10.2012',
+            'remittanceInformation' => 'x',
+        ]);
+        $directDebit->asXML();
+
+        $this->expectException(\LogicException::class);
+        $directDebit->addPaymentInfo('secondPayment', [
+            'id' => 'secondPayment',
+            'creditorName' => 'My Company',
+            'creditorAccountIBAN' => 'FI1350001540000056',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+    }
+
+    public function testDirectDebitAddTransferAfterRenderThrows(): void
+    {
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', 'pain.008.001.02');
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'My Company',
+            'creditorAccountIBAN' => 'FI1350001540000056',
+            'creditorAgentBIC' => 'PSSTFRPPMON',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+        $directDebit->addTransfer('firstPayment', [
+            'amount' => 500,
+            'debtorIban' => 'FI1350001540000056',
+            'debtorBic' => 'OKOYFIHH',
+            'debtorName' => 'Their Company',
+            'debtorMandate' => 'AB12345',
+            'debtorMandateSignDate' => '13.10.2012',
+            'remittanceInformation' => 'x',
+        ]);
+        $directDebit->asXML();
+
+        $this->expectException(\LogicException::class);
+        $directDebit->addTransfer('firstPayment', [
+            'amount' => 100,
+            'debtorIban' => 'FI1350001540000056',
+            'debtorBic' => 'OKOYFIHH',
+            'debtorName' => 'Their Company',
+            'debtorMandate' => 'AB12345',
+            'debtorMandateSignDate' => '13.10.2012',
+            'remittanceInformation' => 'x',
+        ]);
+    }
+
     private function xpath(string $xml, string $painFormat): \DOMXPath
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');

@@ -90,6 +90,23 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     }
 
     /**
+     * Guard used by subclasses to refuse mutation after the document has
+     * been rendered. Otherwise the new payments/transfers would be silently
+     * ignored by the cached XML.
+     *
+     * @throws \LogicException when asXML() or asDOC() has already been called.
+     */
+    protected function ensureNotFinalized(): void
+    {
+        if ($this->rendered) {
+            throw new \LogicException(
+                'Cannot modify a facade after asXML() or asDOC() has been called; '
+                . 'create a new facade instead.'
+            );
+        }
+    }
+
+    /**
      * Flush queued payments into the transfer file, walk it with the
      * DomBuilder, and cache the result. Safe to call repeatedly — only the
      * first invocation performs work.
