@@ -62,6 +62,24 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
         return $this->payments[$paymentName] ?? null;
     }
 
+    /**
+     * Suppress <CtrlSum> inside <GrpHdr>. Required by the German DK
+     * pain.001.001.03 profile.
+     */
+    public function setOmitGroupHeaderControlSum(bool $omit): void
+    {
+        $this->domBuilder->setOmitGroupHeaderControlSum($omit);
+    }
+
+    /**
+     * Omit the <CdtrAgt>/<DbtrAgt> wrapper altogether when the corresponding
+     * BIC is missing, instead of emitting <Othr><Id>NOTPROVIDED</Id></Othr>.
+     */
+    public function setOmitAgentElementIfBicMissing(bool $omit): void
+    {
+        $this->domBuilder->setOmitAgentElementIfBicMissing($omit);
+    }
+
     public function asXML(): string
     {
         foreach ($this->payments as $payment) {
