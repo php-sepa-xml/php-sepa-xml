@@ -118,4 +118,37 @@ class CustomerCreditFacadeTest extends TestCase
             'pain.001.001.11' => ['pain.001.001.12']
         ];
     }
+
+    public function testAddPaymentInfoThrowsWhenNameAlreadyExists(): void
+    {
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', 'pain.001.001.09');
+        $credit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'debtorName' => 'Me',
+            'debtorAccountIBAN' => 'FI1350001540000056',
+            'debtorAgentBIC' => 'PSSTFRPPMON',
+        ]);
+
+        $this->expectException(\Digitick\Sepa\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment with the name firstPayment already exists');
+        $credit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'debtorName' => 'Me',
+            'debtorAccountIBAN' => 'FI1350001540000056',
+        ]);
+    }
+
+    public function testAddTransferThrowsWhenPaymentDoesNotExist(): void
+    {
+        $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', 'pain.001.001.09');
+
+        $this->expectException(\Digitick\Sepa\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment with the name missing does not exists');
+        $credit->addTransfer('missing', [
+            'amount' => 500,
+            'creditorIban' => 'FI1350001540000056',
+            'creditorName' => 'Their Company',
+            'remittanceInformation' => 'x',
+        ]);
+    }
 }
