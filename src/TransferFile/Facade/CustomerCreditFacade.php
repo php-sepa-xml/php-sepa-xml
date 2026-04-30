@@ -13,7 +13,6 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
  */
 class CustomerCreditFacade extends BaseCustomerTransferFileFacade
 {
-
     /**
      * @param string $paymentName
      * @param array{

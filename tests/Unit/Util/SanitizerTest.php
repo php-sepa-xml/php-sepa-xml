@@ -29,7 +29,7 @@ class SanitizerTest extends TestCase
 
         $this->assertEquals("Az09     :?,-/(+.)' ", Sanitizer::sanitize($string));
     }
-    
+
     /**
      * Tests german characters' translation with disabled sanitizer.
      */

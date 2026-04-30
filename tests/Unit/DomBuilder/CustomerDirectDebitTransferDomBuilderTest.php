@@ -9,7 +9,6 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
-
 use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
@@ -69,7 +68,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame('Frankfurt am Main', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
-        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8 ) {
+        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
             $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
         }
 
@@ -234,7 +233,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $transferFile->addPaymentInformation($payment);
 
         $transfer = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(
-            100, 'DE40500105174181777145', 'Bob'
+            100,
+            'DE40500105174181777145',
+            'Bob'
         );
         $transfer->setBic('DEUTDEFF');
         $transfer->setMandateId('M1');
@@ -279,7 +280,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
     public static function sddStpVariantProvider(): iterable
     {
         return [
-            'pain.008.002.02 (STP)'    => ['pain.008.002.02'],
+            'pain.008.002.02 (STP)' => ['pain.008.002.02'],
             'pain.008.003.02 (EU STP)' => ['pain.008.003.02'],
         ];
     }
@@ -313,7 +314,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $transferFile->addPaymentInformation($payment);
 
         $transfer = new \Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation(
-            100, 'DE40500105174181777145', 'Bob'
+            100,
+            'DE40500105174181777145',
+            'Bob'
         );
         $transfer->setBic('DEUTDEFF');
         $transfer->setMandateId('M1');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -24,8 +25,6 @@ namespace Digitick\Sepa\TransferInformation;
 
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Util\Sanitizer;
-use InvalidArgumentException;
-use Ramsey\Uuid\Uuid;
 
 class BaseTransferInformation implements TransferInformationInterface
 {
@@ -66,7 +65,7 @@ class BaseTransferInformation implements TransferInformationInterface
     protected $EndToEndIdentification;
 
     /**
-     * @var ?string $UUID
+     * @var ?string
      */
     protected $UUID;
 
@@ -425,8 +424,6 @@ class BaseTransferInformation implements TransferInformationInterface
     {
         $this->postalAddress = $postalAddress;
     }
-
-
 
     /**
      * @return string|null

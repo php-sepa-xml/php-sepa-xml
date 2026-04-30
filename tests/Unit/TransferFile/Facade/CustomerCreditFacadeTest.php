@@ -2,10 +2,9 @@
 
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
-use \DomDocument;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use DomDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleXMLElement;
 
 /**
  * Class CustomerCreditFacadeTest
@@ -26,7 +25,7 @@ class CustomerCreditFacadeTest extends TestCase
                 'id' => 'firstPayment',
                 'debtorName' => 'My Company',
                 'debtorAccountIBAN' => 'FI1350001540000056',
-                'debtorAgentBIC' => 'PSSTFRPPMON'
+                'debtorAgentBIC' => 'PSSTFRPPMON',
             ]
         );
         $paymentInformation->setBatchBooking(true);
@@ -67,7 +66,7 @@ class CustomerCreditFacadeTest extends TestCase
             [
                 'id' => 'firstPayment',
                 'debtorName' => 'My Company',
-                'debtorAccountIBAN' => 'FI1350001540000056'
+                'debtorAccountIBAN' => 'FI1350001540000056',
             ]
         );
         $paymentInformation->setBatchBooking(true);
@@ -100,7 +99,7 @@ class CustomerCreditFacadeTest extends TestCase
             'pain.001.001.10' => ['pain.001.001.10'],
             'pain.001.001.12' => ['pain.001.001.12'],
             'pain.001.002.03' => ['pain.001.002.03'],
-            'pain.001.003.03' => ['pain.001.003.03']
+            'pain.001.003.03' => ['pain.001.003.03'],
         ];
     }
 
@@ -115,7 +114,7 @@ class CustomerCreditFacadeTest extends TestCase
             'pain.001.001.08' => ['pain.001.001.08'],
             'pain.001.001.09' => ['pain.001.001.09'],
             'pain.001.001.10' => ['pain.001.001.10'],
-            'pain.001.001.11' => ['pain.001.001.12']
+            'pain.001.001.11' => ['pain.001.001.12'],
         ];
     }
 

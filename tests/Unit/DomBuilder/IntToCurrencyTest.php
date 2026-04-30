@@ -30,13 +30,13 @@ class IntToCurrencyTest extends TestCase
     public static function amountProvider(): iterable
     {
         return [
-            'zero'            => [0, '0.00'],
-            'one cent'        => [1, '0.01'],
-            'ten cents'       => [10, '0.10'],
-            'ninety-nine'     => [99, '0.99'],
-            'one euro'        => [100, '1.00'],
-            'typical'         => [12345, '123.45'],
-            'thousand euros'  => [100000, '1000.00'],
+            'zero' => [0, '0.00'],
+            'one cent' => [1, '0.01'],
+            'ten cents' => [10, '0.10'],
+            'ninety-nine' => [99, '0.99'],
+            'one euro' => [100, '1.00'],
+            'typical' => [12345, '123.45'],
+            'thousand euros' => [100000, '1000.00'],
             'max SEPA amount' => [99999999999, '999999999.99'],
         ];
     }
@@ -68,14 +68,14 @@ class IntToCurrencyTest extends TestCase
     {
         return [
             'Spanish' => ['Spanish', ['es_ES.UTF-8', 'es_ES@UTF-8', 'spanish']],
-            'French'  => ['French',  ['fr_FR.UTF-8', 'fr_FR@UTF-8', 'french']],
-            'German'  => ['German',  ['de_DE.UTF-8', 'de_DE@UTF-8', 'german']],
+            'French' => ['French',  ['fr_FR.UTF-8', 'fr_FR@UTF-8', 'french']],
+            'German' => ['German',  ['de_DE.UTF-8', 'de_DE@UTF-8', 'german']],
         ];
     }
 
     private function formatter(): object
     {
-        return new class('pain.001.001.09') extends CustomerCreditTransferDomBuilder {
+        return new class ('pain.001.001.09') extends CustomerCreditTransferDomBuilder {
             public function publicIntToCurrency(int $amount): string
             {
                 return $this->intToCurrency($amount);

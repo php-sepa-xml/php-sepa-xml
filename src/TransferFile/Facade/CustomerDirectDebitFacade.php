@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -22,13 +23,13 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
-use Exception;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Exception;
 
 class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 {
