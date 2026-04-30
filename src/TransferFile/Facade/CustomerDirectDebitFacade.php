@@ -50,6 +50,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation
     {
+        $this->ensureNotFinalized();
         if (isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf('Payment with the name %s already exists', $paymentName));
         }
@@ -105,6 +106,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface
     {
+        $this->ensureNotFinalized();
         if (!isset($this->payments[$paymentName])) {
             throw new InvalidArgumentException(sprintf(
                 'Payment with the name %s does not exists, create one first with addPaymentInfo',

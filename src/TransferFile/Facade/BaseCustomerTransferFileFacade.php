@@ -48,6 +48,19 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
      */
     protected $payments = [];
 
+    /**
+     * @var bool Whether the document has been rendered. Guards against
+     *           re-flushing payments into the transfer file (which would
+     *           double the NbOfTxs / CtrlSum counters on GroupHeader and
+     *           duplicate <PmtInf> nodes in the DOM).
+     */
+    private $rendered = false;
+
+    /**
+     * @var string|null Cached XML produced by the first render.
+     */
+    private $renderedXml;
+
     public function __construct(TransferFileInterface $transferFile, BaseDomBuilder $domBuilder)
     {
         $this->transferFile = $transferFile;
@@ -64,22 +77,52 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
 
     public function asXML(): string
     {
-        foreach ($this->payments as $payment) {
-            $this->transferFile->addPaymentInformation($payment);
-        }
-        $this->transferFile->accept($this->domBuilder);
+        $this->finalize();
 
-        return $this->domBuilder->asXml();
+        return $this->renderedXml;
     }
 
     public function asDOC(): DOMDocument
     {
+        $this->finalize();
+
+        return $this->domBuilder->asDoc();
+    }
+
+    /**
+     * Guard used by subclasses to refuse mutation after the document has
+     * been rendered. Otherwise the new payments/transfers would be silently
+     * ignored by the cached XML.
+     *
+     * @throws \LogicException when asXML() or asDOC() has already been called.
+     */
+    protected function ensureNotFinalized(): void
+    {
+        if ($this->rendered) {
+            throw new \LogicException(
+                'Cannot modify a facade after asXML() or asDOC() has been called; '
+                . 'create a new facade instead.'
+            );
+        }
+    }
+
+    /**
+     * Flush queued payments into the transfer file, walk it with the
+     * DomBuilder, and cache the result. Safe to call repeatedly — only the
+     * first invocation performs work.
+     */
+    private function finalize(): void
+    {
+        if ($this->rendered) {
+            return;
+        }
+
         foreach ($this->payments as $payment) {
             $this->transferFile->addPaymentInformation($payment);
         }
         $this->transferFile->accept($this->domBuilder);
-
-        return $this->domBuilder->asDoc();
+        $this->renderedXml = $this->domBuilder->asXml();
+        $this->rendered = true;
     }
 
     /**
