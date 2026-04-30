@@ -287,6 +287,50 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:PmtTpInf/ns:InstrPrty')->length);
     }
 
+    public function testBatchBookingNullSuppressesBtchBookgElement(): void
+    {
+        $builder = new CustomerCreditTransferDomBuilder('pain.001.001.09');
+        $groupHeader = new GroupHeader('MSG', 'Init');
+        $transferFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = $this->newValidPayment();
+        $transferFile->addPaymentInformation($payment);
+        $payment->addTransfer(new CustomerCreditTransferInformation(100, 'DE12345', 'Bob'));
+
+        $this->assertNull($payment->getBatchBooking());
+
+        $transferFile->accept($builder);
+        $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
+
+        $this->assertSame(
+            0,
+            $xpath->query('//ns:PmtInf/ns:BtchBookg')->length,
+            '<BtchBookg> must be omitted when BatchBooking is null; emitting it would change semantics for callers relying on bank-side defaulting'
+        );
+    }
+
+    public function testBatchBookingFalseEmitsExplicitFalse(): void
+    {
+        $builder = new CustomerCreditTransferDomBuilder('pain.001.001.09');
+        $groupHeader = new GroupHeader('MSG', 'Init');
+        $transferFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = $this->newValidPayment();
+        $payment->setBatchBooking(false);
+        $transferFile->addPaymentInformation($payment);
+        $payment->addTransfer(new CustomerCreditTransferInformation(100, 'DE12345', 'Bob'));
+
+        $transferFile->accept($builder);
+        $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
+
+        $node = $xpath->query('//ns:PmtInf/ns:BtchBookg')->item(0);
+
+        $this->assertNotNull($node, '<BtchBookg> must be emitted when BatchBooking is explicitly set');
+        $this->assertSame(
+            'false',
+            $node->textContent,
+            'BatchBooking(false) must serialise as the literal string "false", not "0" or empty'
+        );
+    }
+
     public static function painProvider(): iterable
     {
         return [

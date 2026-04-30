@@ -130,6 +130,16 @@ class PaymentInformationTest extends TestCase
         ];
     }
 
+    public function testGetBatchBookingNullByDefault(): void
+    {
+        $pi = new PaymentInformation('1', 'DE12', 'BIC', 'Jon Doe');
+
+        $this->assertNull(
+            $pi->getBatchBooking(),
+            'BatchBooking must default to null so DomBuilder can suppress <BtchBookg> entirely; defaulting to false would silently change emitted XML for every existing caller'
+        );
+    }
+
     public function testAddTransferAccumulatesNumberOfTransactionsAndControlSum(): void
     {
         $pi = new PaymentInformation('1', 'DE12', 'BIC', 'Jon Doe');

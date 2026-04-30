@@ -3,11 +3,17 @@
 namespace Digitick\Sepa\Tests\Unit\TransferInformation;
 
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
+use Digitick\Sepa\Util\Sanitizer;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 class CustomerCreditTransferInformationTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        Sanitizer::resetSanitizer();
+    }
+
     /**
      * Tests whether the EndToEndId equals the name if no other identifier was supplied
      */
@@ -51,5 +57,33 @@ class CustomerCreditTransferInformationTest extends TestCase
         );
 
         $this->assertEquals(19, $transfer->getTransferAmount());
+    }
+
+    public function testSetRemittanceInformationRunsSanitizer(): void
+    {
+        Sanitizer::setSanitizer(static fn (string $value): string => strtoupper($value));
+
+        $transfer = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
+        $transfer->setRemittanceInformation('invoice 42');
+
+        $this->assertSame(
+            'INVOICE 42',
+            $transfer->getRemittanceInformation(),
+            'setRemittanceInformation must route through Sanitizer::sanitize() so the global sanitization strategy applies uniformly'
+        );
+    }
+
+    public function testSetCreditorReferenceRunsSanitizer(): void
+    {
+        Sanitizer::setSanitizer(static fn (string $value): string => strtoupper($value));
+
+        $transfer = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
+        $transfer->setCreditorReference('rf18-539007547034');
+
+        $this->assertSame(
+            'RF18-539007547034',
+            $transfer->getCreditorReference(),
+            'setCreditorReference must route through Sanitizer::sanitize() so the global sanitization strategy applies uniformly'
+        );
     }
 }

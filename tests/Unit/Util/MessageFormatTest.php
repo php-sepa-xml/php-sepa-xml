@@ -128,6 +128,41 @@ class MessageFormatTest extends TestCase
     }
 
     /**
+     * Pins current (permissive) constructor behaviour: a regex-valid name that is
+     * not on the supported-formats whitelist is accepted silently. `isSupported()`
+     * is the only signal that the name is unknown — the constructor never calls it.
+     *
+     * If a future change enforces the whitelist in the constructor, this test will
+     * fail and force an explicit decision (deprecation, throw, or opt-in flag)
+     * rather than silently breaking downstream callers. See IMPROVEMENTS.md #1.
+     *
+     * @dataProvider unsupportedButRegexValidProvider
+     */
+    public function testConstructorAcceptsRegexValidUnsupportedFormat(string $messageName): void
+    {
+        $messageFormat = new MessageFormat($messageName);
+
+        $this->assertSame($messageName, $messageFormat->getMessageName());
+        $this->assertFalse(
+            $messageFormat->isSupported(),
+            sprintf('%s should not be on the whitelist but constructor accepted it', $messageName)
+        );
+    }
+
+    /**
+     * @return iterable<string, array{0: string}>
+     */
+    public static function unsupportedButRegexValidProvider(): iterable
+    {
+        return [
+            'unknown SCT version' => ['pain.001.001.99'],
+            'unknown SDD version' => ['pain.008.001.99'],
+            'unknown variant'     => ['pain.001.099.03'],
+            'non-pain message'    => ['camt.054.001.02'],
+        ];
+    }
+
+    /**
      * Only wrong messageNames here
      * @return iterable
      */
