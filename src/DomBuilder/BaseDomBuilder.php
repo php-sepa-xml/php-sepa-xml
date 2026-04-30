@@ -50,14 +50,14 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      * German DK pain.001.001.03 profile, which forbids CtrlSum at the
      * group-header level.
      */
-    private bool $omitGroupHeaderControlSum = false;
+    private $omitGroupHeaderControlSum = false;
 
     /**
      * When true, the <CdtrAgt>/<DbtrAgt> wrapper is omitted entirely when
      * the corresponding BIC is missing, instead of emitting the
      * <Othr><Id>NOTPROVIDED</Id></Othr> fallback.
      */
-    private bool $omitAgentElementIfBicMissing = false;
+    private $omitAgentElementIfBicMissing = false;
 
     /**
      * @param string $painFormat
