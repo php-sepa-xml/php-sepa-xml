@@ -157,8 +157,8 @@ class MessageFormatTest extends TestCase
         return [
             'unknown SCT version' => ['pain.001.001.99'],
             'unknown SDD version' => ['pain.008.001.99'],
-            'unknown variant'     => ['pain.001.099.03'],
-            'non-pain message'    => ['camt.054.001.02'],
+            'unknown variant' => ['pain.001.099.03'],
+            'non-pain message' => ['camt.054.001.02'],
         ];
     }
 
