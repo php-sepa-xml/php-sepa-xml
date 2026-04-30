@@ -97,6 +97,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     floorNumber?: string,
      *     debtorCountry?: string,
      *     debtorAdrLine?: string|string[],
+     *     ultimateDebtorName?: string,
      *     instructionId?: string
      * } $transferInformation
      * @return CustomerDirectDebitTransferInformation
@@ -182,6 +183,9 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         }
         if (isset($transferInformation['debtorAdrLine'])) {
             $transfer->setPostalAddress($transferInformation['debtorAdrLine']);
+        }
+        if (isset($transferInformation['ultimateDebtorName'])) {
+            $transfer->setUltimateDebtorName($transferInformation['ultimateDebtorName']);
         }
         $this->payments[$paymentName]->addTransfer($transfer);
 

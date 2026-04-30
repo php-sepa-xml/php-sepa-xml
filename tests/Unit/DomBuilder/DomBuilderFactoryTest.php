@@ -62,4 +62,14 @@ class DomBuilderFactoryTest extends TestCase
         $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
         $this->assertInstanceOf(\Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder::class, $domBuilder);
     }
+
+    public function testCreateThrowsForUnknownTransferFileImplementation(): void
+    {
+        $unknown = new class (new GroupHeader('MSG', 'Init')) extends \Digitick\Sepa\TransferFile\BaseTransferFile {
+        };
+
+        $this->expectException(\Digitick\Sepa\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is not a valid Transferfile');
+        DomBuilderFactory::createDomBuilder($unknown);
+    }
 }
