@@ -46,6 +46,20 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     protected $messageFormat = null;
 
     /**
+     * When true, <CtrlSum> is suppressed inside <GrpHdr>. Required by the
+     * German DK pain.001.001.03 profile, which forbids CtrlSum at the
+     * group-header level.
+     */
+    private $omitGroupHeaderControlSum = false;
+
+    /**
+     * When true, the <CdtrAgt>/<DbtrAgt> wrapper is omitted entirely when
+     * the corresponding BIC is missing, instead of emitting the
+     * <Othr><Id>NOTPROVIDED</Id></Othr> fallback.
+     */
+    private $omitAgentElementIfBicMissing = false;
+
+    /**
      * @param string $painFormat
      * @param bool $withSchemaLocation define if xsi:schemaLocation attribute is added to root
      * @throws \DOMException
@@ -105,6 +119,26 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         return $this->doc->saveXML();
     }
 
+    public function setOmitGroupHeaderControlSum(bool $omit): void
+    {
+        $this->omitGroupHeaderControlSum = $omit;
+    }
+
+    public function setOmitAgentElementIfBicMissing(bool $omit): void
+    {
+        $this->omitAgentElementIfBicMissing = $omit;
+    }
+
+    /**
+     * True when the caller (visitPaymentInformation / visitTransferInformation)
+     * should skip the <CdtrAgt>/<DbtrAgt> wrapper altogether for a missing BIC
+     * — as opposed to emitting the NOTPROVIDED fallback.
+     */
+    protected function shouldOmitAgentElementFor(?string $bic): bool
+    {
+        return $bic === null && $this->omitAgentElementIfBicMissing;
+    }
+
     public function asDoc(): DomDocument
     {
         return $this->doc;
@@ -132,9 +166,11 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         );
         $groupHeaderTag->appendChild($creationDateTime);
         $groupHeaderTag->appendChild($this->createElement('NbOfTxs', (string) $groupHeader->getNumberOfTransactions()));
-        $groupHeaderTag->appendChild(
-            $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
-        );
+        if (!$this->omitGroupHeaderControlSum) {
+            $groupHeaderTag->appendChild(
+                $this->createElement('CtrlSum', $this->intToCurrency($groupHeader->getControlSumCents()))
+            );
+        }
 
         $initiatingParty = $this->createElement('InitgPty');
         $initiatingPartyName = $this->createElement('Nm', $groupHeader->getInitiatingPartyName());
