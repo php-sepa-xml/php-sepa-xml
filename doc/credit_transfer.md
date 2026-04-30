@@ -88,3 +88,20 @@ $customerCredit->addTransfer('firstPayment', array(
 // Retrieve the resulting XML
 $customerCredit->asXML();
 ```
+
+Additional Features
+--------------------------------------
+- `BaseDomBuilder::setOmitGroupHeaderControlSum(bool)` — suppresses       `<CtrlSum>` inside `<GrpHdr>`. Required by the German DK pain.001.001.03 profile, which forbids CtrlSum at group-header level.
+- `BaseDomBuilder::setOmitAgentElementIfBicMissing(bool)` — omits the whole `<CdtrAgt>`/`<DbtrAgt>` wrapper when the corresponding BIC is missing, instead of emitting `<Othr><Id>NOTPROVIDED</Id></Othr>`. Applied at all four agent-element call sites (SCT and SDD, payment and transfer levels).
+- Passthrough methods on `BaseCustomerTransferFileFacade` so facade users can set both flags without reaching into the builder.
+Both flags default to `false`; existing callers are unaffected. To use set the flags on the facade instance before adding transfers:
+- 
+```php
+use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+
+// Returns a CustomerCreditFacade
+$customerCredit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me');
+
+$customerCredit->setOmitAgentElementIfBicMissing(true);
+$customerCredit->setOmitAgentElementIfBicMissing(true);
+```
