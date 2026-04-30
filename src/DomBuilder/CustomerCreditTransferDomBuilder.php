@@ -135,10 +135,12 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
         $this->currentPayment->appendChild($debtorAccount);
 
-        $debtorAgent = $this->createElement('DbtrAgt');
-        $financialInstitutionId = $this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC());
-        $debtorAgent->appendChild($financialInstitutionId);
-        $this->currentPayment->appendChild($debtorAgent);
+        $originBic = $paymentInformation->getOriginAgentBIC();
+        if (!$this->shouldOmitAgentElementFor($originBic)) {
+            $debtorAgent = $this->createElement('DbtrAgt');
+            $debtorAgent->appendChild($this->getFinancialInstitutionElement($originBic));
+            $this->currentPayment->appendChild($debtorAgent);
+        }
 
         $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
         $this->currentTransfer->appendChild($this->currentPayment);
@@ -173,9 +175,12 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $CdtTrfTxInf->appendChild($amount);
 
         //Creditor Agent 2.77
-        $creditorAgent = $this->createElement('CdtrAgt');
-        $creditorAgent->appendChild($this->getFinancialInstitutionElement($transactionInformation->getBic()));
-        $CdtTrfTxInf->appendChild($creditorAgent);
+        $creditorBic = $transactionInformation->getBic();
+        if (!$this->shouldOmitAgentElementFor($creditorBic)) {
+            $creditorAgent = $this->createElement('CdtrAgt');
+            $creditorAgent->appendChild($this->getFinancialInstitutionElement($creditorBic));
+            $CdtTrfTxInf->appendChild($creditorAgent);
+        }
 
 
         // Creditor 2.79

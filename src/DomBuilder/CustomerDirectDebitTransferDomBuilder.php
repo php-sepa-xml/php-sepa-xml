@@ -100,9 +100,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($creditorAccount);
 
         // <CdtrAgt>
-        $creditorAgent = $this->createElement('CdtrAgt');
-        $creditorAgent->appendChild($this->getFinancialInstitutionElement($paymentInformation->getOriginAgentBIC()));
-        $this->currentPayment->appendChild($creditorAgent);
+        $originBic = $paymentInformation->getOriginAgentBIC();
+        if (!$this->shouldOmitAgentElementFor($originBic)) {
+            $creditorAgent = $this->createElement('CdtrAgt');
+            $creditorAgent->appendChild($this->getFinancialInstitutionElement($originBic));
+            $this->currentPayment->appendChild($creditorAgent);
+        }
 
         $this->currentPayment->appendChild($this->createElement('ChrgBr', 'SLEV'));
 
@@ -176,9 +179,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
         // TODO add the possibility to add CreditorSchemeId on transfer level
 
-        $debtorAgent = $this->createElement('DbtrAgt');
-        $debtorAgent->appendChild($this->getFinancialInstitutionElement($transactionInformation->getBic()));
-        $directDebitTransactionInformation->appendChild($debtorAgent);
+        $debtorBic = $transactionInformation->getBic();
+        if (!$this->shouldOmitAgentElementFor($debtorBic)) {
+            $debtorAgent = $this->createElement('DbtrAgt');
+            $debtorAgent->appendChild($this->getFinancialInstitutionElement($debtorBic));
+            $directDebitTransactionInformation->appendChild($debtorAgent);
+        }
 
         $debtor = $this->createElement('Dbtr');
         $debtor->appendChild($this->createElement('Nm', $transactionInformation->getDebitorName()));
