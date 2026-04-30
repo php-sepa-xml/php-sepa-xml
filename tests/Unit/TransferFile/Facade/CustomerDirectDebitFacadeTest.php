@@ -351,4 +351,43 @@ class CustomerDirectDebitFacadeTest extends TestCase
             'pain.008.001.11' => ['pain.008.001.11'],
         ];
     }
+
+    public function testAddPaymentInfoThrowsWhenNameAlreadyExists(): void
+    {
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', 'pain.008.001.02');
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'Me',
+            'creditorAccountIBAN' => 'FI1350001540000056',
+            'creditorAgentBIC' => 'PSSTFRPPMON',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+
+        $this->expectException(\Digitick\Sepa\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment with the name firstPayment already exists');
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'Me',
+            'creditorAccountIBAN' => 'FI1350001540000056',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+        ]);
+    }
+
+    public function testAddTransferThrowsWhenPaymentDoesNotExist(): void
+    {
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', 'pain.008.001.02');
+
+        $this->expectException(\Digitick\Sepa\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment with the name missing does not exists');
+        $directDebit->addTransfer('missing', [
+            'amount' => 500,
+            'debtorIban' => 'FI1350001540000056',
+            'debtorName' => 'Their Company',
+            'debtorMandate' => 'M1',
+            'debtorMandateSignDate' => '2022-05-15',
+            'remittanceInformation' => 'x',
+        ]);
+    }
 }

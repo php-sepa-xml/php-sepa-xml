@@ -39,6 +39,7 @@
     "require-dev": {
         "ext-xml": "*",
         "ext-libxml": "*",
+        "ext-simplexml": "*",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^2.0",
         "phpstan/phpstan": "^2.0",

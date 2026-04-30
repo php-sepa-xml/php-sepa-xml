@@ -4,9 +4,9 @@
 The versions of this library that are currently supported with security updates are:
 
 | Version | Supported          |
-| ------- | ------------------ |
-|   2.x   | :white_check_mark: |
-| < 2.0   | :x:                |
+|---------|--------------------|
+| 3.x     | :white_check_mark: |
+| < 3.0   | :x:                |
 
 ## Reporting a Vulnerability
 We will try to react to any vulnerability report in a reasonable time according to its criticallity and severity. 
