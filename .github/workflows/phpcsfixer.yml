@@ -1,12 +1,9 @@
 name: PHPCsFixer
 
-# Temporarily disable this workfow
-on: []
-
-#on:
-#  push:
-#    paths:
-#      - '**.php'
+on:
+  push:
+    paths:
+      - '**.php'
 
 permissions:
   contents: write
