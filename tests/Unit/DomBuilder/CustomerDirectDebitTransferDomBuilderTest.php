@@ -139,7 +139,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testAmendedDebtorAccountEmitsSmndaOrgnlDbtrAcct(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer) {
+        $xpath = $this->renderWithAmendments(function ($transfer): void {
             $transfer->setAmendedDebtorAccount(true);
         });
 
@@ -162,7 +162,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testOriginalMandateIdEmitsOrgnlMndtId(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer) {
+        $xpath = $this->renderWithAmendments(function ($transfer): void {
             $transfer->setOriginalMandateId('OLD-MANDATE-42');
         });
 
@@ -185,7 +185,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
     {
         // The builder emits the SMNDA sentinel when either amendedDebtorAccount
         // or originalDebtorIban is set — verify the latter path.
-        $xpath = $this->renderWithAmendments(function ($transfer) {
+        $xpath = $this->renderWithAmendments(function ($transfer): void {
             $transfer->setOriginalDebtorIban('DE11520513735120710131');
         });
 
@@ -199,7 +199,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testBothAmendmentsEmitBothNodes(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer) {
+        $xpath = $this->renderWithAmendments(function ($transfer): void {
             $transfer->setAmendedDebtorAccount(true);
             $transfer->setOriginalMandateId('OLD-MANDATE-42');
         });
@@ -287,7 +287,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testNoAmendmentsSuppressesAmdmntInd(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer) {
+        $xpath = $this->renderWithAmendments(function ($transfer): void {
             // deliberately set no amendments
         });
 
