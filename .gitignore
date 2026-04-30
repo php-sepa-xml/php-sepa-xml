@@ -32,3 +32,4 @@ composer.lock
 .phpunit.result.cache
 phpstan.neon
 .php-cs-fixer.php
+.php-cs-fixer.cache
