@@ -10,4 +10,4 @@ The versions of this library that are currently supported with security updates 
 
 ## Reporting a Vulnerability
 We will try to react to any vulnerability report in a reasonable time according to its criticallity and severity. 
-Please report any vulnerabilities as a [github issu](https://github.com/php-sepa-xml/php-sepa-xml/issues).
+Please report any vulnerabilities as a [github issuе](https://github.com/php-sepa-xml/php-sepa-xml/issues).
