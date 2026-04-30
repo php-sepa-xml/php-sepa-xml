@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -22,9 +23,9 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
+use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
-use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
@@ -33,8 +34,7 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
  */
 class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 {
-
-    function __construct(string $painFormat = 'pain.001.001.09', bool $withSchemaLocation = true)
+    public function __construct(string $painFormat = 'pain.001.001.09', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
     }
@@ -85,7 +85,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
             $localInstrument = $this->createElement('LclInstrm');
             if ($paymentInformation->getLocalInstrumentCode()) {
                 $localInstrument->appendChild($this->createElement('Cd', $paymentInformation->getLocalInstrumentCode()));
-            } else if ($paymentInformation->getLocalInstrumentProprietary()) {
+            } elseif ($paymentInformation->getLocalInstrumentProprietary()) {
                 $localInstrument->appendChild($this->createElement('Prtry', $paymentInformation->getLocalInstrumentProprietary()));
             }
             $paymentTypeInformation->appendChild($localInstrument);
@@ -120,7 +120,8 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         ) {
             $organizationId = $this->getOrganizationIdentificationElement(
                 $paymentInformation->getOriginBankPartyIdentification(),
-                $paymentInformation->getOriginBankPartyIdentificationScheme());
+                $paymentInformation->getOriginBankPartyIdentificationScheme()
+            );
 
             $debtor->appendChild($organizationId);
         }
@@ -192,18 +193,16 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         $id->appendChild($this->createElement('IBAN', $transactionInformation->getIban()));
         $creditorAccount->appendChild($id);
         $CdtTrfTxInf->appendChild($creditorAccount);
-        
+
         // Purpose code (Optional)
-        if (strlen((string)$transactionInformation->getPurposeCode()) > 0)
-        {
+        if (strlen((string)$transactionInformation->getPurposeCode()) > 0) {
             $purposeCode = $this->createElement('Purp');
             $purposeCode->appendChild($this->createElement('Cd', $transactionInformation->getPurposeCode()));
             $CdtTrfTxInf->appendChild($purposeCode);
         }
 
         // remittance 2.98 2.99
-        if (strlen((string)$transactionInformation->getCreditorReference()) > 0)
-        {
+        if (strlen((string)$transactionInformation->getCreditorReference()) > 0) {
             $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation);
             $CdtTrfTxInf->appendChild($remittanceInformation);
         } elseif (strlen((string)$transactionInformation->getRemittanceInformation()) > 0) {
@@ -251,7 +250,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
     {
         $newId = $this->createElement('Id');
         $orgId = $this->createElement('OrgId');
-        $othr  = $this->createElement('Othr');
+        $othr = $this->createElement('Othr');
         $othr->appendChild($this->createElement('Id', $id));
 
         if ($issr) {

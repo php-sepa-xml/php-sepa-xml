@@ -263,7 +263,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     public static function stpVariantProvider(): iterable
     {
         return [
-            'pain.001.002.03 (STP)'    => ['pain.001.002.03'],
+            'pain.001.002.03 (STP)' => ['pain.001.002.03'],
             'pain.001.003.03 (EU STP)' => ['pain.001.003.03'],
         ];
     }
@@ -343,6 +343,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadXML($builder->asXml());
+
         return $doc;
     }
 
@@ -350,6 +351,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     {
         $xp = new \DOMXPath($doc);
         $xp->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
         return $xp;
     }
 }

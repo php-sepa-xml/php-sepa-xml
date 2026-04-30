@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -22,27 +23,27 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
-use \DOMElement;
-use \DOMDocument;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 use Digitick\Sepa\Util\MessageFormat;
+use DOMDocument;
+use DOMElement;
 
 abstract class BaseDomBuilder implements DomBuilderInterface
 {
-    /** @var DOMDocument $doc */
+    /** @var DOMDocument */
     protected $doc;
 
-    /** @var DOMElement $root */
+    /** @var DOMElement */
     protected $root;
 
-    /** @var DOMElement|null $currentTransfer */
+    /** @var DOMElement|null */
     protected $currentTransfer;
 
-    /** @var DOMELement|null $currentPayment */
+    /** @var DOMELement|null */
     protected $currentPayment;
 
-    /** @var null|MessageFormat $messageFormat */
+    /** @var null|MessageFormat */
     protected $messageFormat = null;
 
     /**
@@ -75,17 +76,17 @@ abstract class BaseDomBuilder implements DomBuilderInterface
         }
     }
 
-    private function setSchemaLocation(string $messageName, bool $withSchemaLocation=true): void
+    private function setSchemaLocation(string $messageName, bool $withSchemaLocation = true): void
     {
         if ($withSchemaLocation) {
             if (filter_var($messageName, FILTER_VALIDATE_URL)) {
-                $messageName = substr($messageName, strrpos($messageName, '/')+1, (strrpos($messageName, '.') -1) - strrpos($messageName, '/'));
+                $messageName = substr($messageName, strrpos($messageName, '/') + 1, (strrpos($messageName, '.') - 1) - strrpos($messageName, '/'));
 
                 $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$messageName $messageName.xsd");
             } else {
                 $this->root->setAttribute('xsi:schemaLocation', "urn:iso:std:iso:20022:tech:xsd:$messageName $messageName.xsd");
             }
-	    }
+        }
     }
 
     protected function createElement(string $name, ?string $value = null): DOMElement

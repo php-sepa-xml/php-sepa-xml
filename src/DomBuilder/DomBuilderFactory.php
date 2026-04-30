@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -37,10 +38,12 @@ class DomBuilderFactory
             case \Digitick\Sepa\TransferFile\CustomerCreditTransferFile::class:
                 $domBuilder = $painFormat ? new CustomerCreditTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerCreditTransferDomBuilder();
                 $transferFile->accept($domBuilder);
+
                 break;
             case \Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile::class:
                 $domBuilder = $painFormat ? new CustomerDirectDebitTransferDomBuilder($painFormat, $withSchemaLocation) : new CustomerDirectDebitTransferDomBuilder();
                 $transferFile->accept($domBuilder);
+
                 break;
             default:
                 throw new InvalidArgumentException('The given object is not a valid Transferfile: ' . $transferFileClass);

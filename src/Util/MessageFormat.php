@@ -7,15 +7,15 @@ use InvalidArgumentException;
 class MessageFormat
 {
     public const VALIDATION_REG_EXP = '/^[a-z]{4}\.[0-9]{3}\.[0-9]{3}\.[0-9]{2}$/i';
-    /** @var string $messageName */
+    /** @var string */
     private $messageName;
-    /** @var string $type */
+    /** @var string */
     private $type;
-    /** @var int $subType */
+    /** @var int */
     private $subType;
-    /** @var int $variant */
+    /** @var int */
     private $variant;
-    /** @var int $version */
+    /** @var int */
     private $version;
 
     private static $supportedMessageFormats = [
@@ -45,12 +45,12 @@ class MessageFormat
         'pain.008.001.11',
         /* Variants: */
         'pain.008.002.02',
-        'pain.008.003.02'
+        'pain.008.003.02',
     ];
 
     public static $defaultMessageFormats = [
-        'SCT' =>  'pain.001.001.09',
-        'SDD' => 'pain.008.001.09'
+        'SCT' => 'pain.001.001.09',
+        'SDD' => 'pain.008.001.09',
     ];
 
     public function __construct(string $messageName)
@@ -124,7 +124,7 @@ class MessageFormat
         $this->messageName = $messageName;
 
         $msgNm = explode(".", $messageName);
-        $this->type    = (string) preg_replace('/[^a-z]+/i', '', $msgNm[0]);
+        $this->type = (string) preg_replace('/[^a-z]+/i', '', $msgNm[0]);
         $this->subType = self::filterToInt($msgNm[1]);
         $this->variant = self::filterToInt($msgNm[2]);
         $this->version = self::filterToInt($msgNm[3]);

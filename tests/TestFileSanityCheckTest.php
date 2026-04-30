@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *

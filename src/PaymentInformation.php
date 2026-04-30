@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -34,22 +35,22 @@ class PaymentInformation
     /**
      * The first drawn from several recurring debits
      */
-    const S_FIRST = 'FRST';
+    public const S_FIRST = 'FRST';
 
     /**
      * A recurring direct debit in a number of direct debits
      */
-    const S_RECURRING = 'RCUR';
+    public const S_RECURRING = 'RCUR';
 
     /**
      * A one time non-recurring debit
      */
-    const S_ONEOFF = 'OOFF';
+    public const S_ONEOFF = 'OOFF';
 
     /**
      * The last direct debit in a series of recurring debits
      */
-    const S_FINAL = 'FNAL';
+    public const S_FINAL = 'FNAL';
 
     /**
      * @var string Unambiguously identify the payment.
@@ -180,7 +181,6 @@ class PaymentInformation
         $this->originAccountCurrency = $originAccountCurrency;
         $this->dueDate = new DateTimeImmutable();
     }
-
 
     public function addTransfer(TransferInformationInterface $transfer): void
     {
