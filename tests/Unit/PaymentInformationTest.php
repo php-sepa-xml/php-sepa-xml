@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Date: 01.09.17
  * copyright 2017 blage.net Sören Rohweder
@@ -71,9 +72,9 @@ class PaymentInformationTest extends TestCase
     public static function invalidLocalInstrumentCodeProvider(): iterable
     {
         return [
-            'empty'       => [''],
-            'unknown'     => ['XYZ'],
-            'typo'        => ['CORE1'],
+            'empty' => [''],
+            'unknown' => ['XYZ'],
+            'typo' => ['CORE1'],
             'close-match' => ['B2C'],
         ];
     }
@@ -92,10 +93,10 @@ class PaymentInformationTest extends TestCase
     public static function validLocalInstrumentCodeProvider(): iterable
     {
         return [
-            'B2B'        => ['B2B', 'B2B'],
-            'CORE'       => ['CORE', 'CORE'],
-            'COR1'       => ['COR1', 'COR1'],
-            'lower b2b'  => ['b2b', 'B2B'],
+            'B2B' => ['B2B', 'B2B'],
+            'CORE' => ['CORE', 'CORE'],
+            'COR1' => ['COR1', 'COR1'],
+            'lower b2b' => ['b2b', 'B2B'],
             'lower core' => ['core', 'CORE'],
         ];
     }
@@ -122,11 +123,21 @@ class PaymentInformationTest extends TestCase
     public static function validInstructionPriorityProvider(): iterable
     {
         return [
-            'NORM'       => ['NORM', 'NORM'],
-            'HIGH'       => ['HIGH', 'HIGH'],
+            'NORM' => ['NORM', 'NORM'],
+            'HIGH' => ['HIGH', 'HIGH'],
             'lower norm' => ['norm', 'NORM'],
             'lower high' => ['high', 'HIGH'],
         ];
+    }
+
+    public function testGetBatchBookingNullByDefault(): void
+    {
+        $pi = new PaymentInformation('1', 'DE12', 'BIC', 'Jon Doe');
+
+        $this->assertNull(
+            $pi->getBatchBooking(),
+            'BatchBooking must default to null so DomBuilder can suppress <BtchBookg> entirely; defaulting to false would silently change emitted XML for every existing caller'
+        );
     }
 
     public function testAddTransferAccumulatesNumberOfTransactionsAndControlSum(): void

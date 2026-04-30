@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -73,7 +74,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'debtorName' => 'Their Company',
                 'debtorMandate' => 'AB12345',
                 'debtorMandateSignDate' => '13.10.2012',
-                'remittanceInformation' => 'Purpose of this direct debit'
+                'remittanceInformation' => 'Purpose of this direct debit',
             ]
         );
         // Retrieve the resulting XML
@@ -177,7 +178,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorAccountIBAN' => 'FI1350001540000056',
                 'creditorAgentBIC' => 'PSSTFRPPMON',
                 'seqType' => PaymentInformation::S_ONEOFF,
-                'creditorId' => 'DE21WVM1234567890'
+                'creditorId' => 'DE21WVM1234567890',
             ]
         );
         $paymentInformation->setBatchBooking(true);
@@ -207,7 +208,6 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
-
     /**
      * Test creation of file via Factory and Facade
      *
@@ -227,7 +227,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
                 'creditorName' => 'My Company',
                 'creditorAccountIBAN' => 'FI1350001540000056',
                 'seqType' => PaymentInformation::S_ONEOFF,
-                'creditorId' => 'DE21WVM1234567890'
+                'creditorId' => 'DE21WVM1234567890',
             ]
         );
         $paymentInformation->setBatchBooking(true);
@@ -269,7 +269,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
             'pain.008.002.02' => ['pain.008.002.02'],
-            'pain.008.003.02' => ['pain.008.003.02']
+            'pain.008.003.02' => ['pain.008.003.02'],
         ];
     }
 
@@ -294,19 +294,19 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
         // Add a Single Transaction to the named payment
         $directDebit->addTransfer('firstPayment', [
-            'amount'                => 1499,
-            'debtorIban'            => 'CH6089144731137988786',
-            'debtorBic'             => 'CRESCHZZXXX',
-            'debtorName'            => 'John Doe',
-            'debtorMandate'         => 'AB12345',
+            'amount' => 1499,
+            'debtorIban' => 'CH6089144731137988786',
+            'debtorBic' => 'CRESCHZZXXX',
+            'debtorName' => 'John Doe',
+            'debtorMandate' => 'AB12345',
             'debtorMandateSignDate' => '2022-05-23',
             'remittanceInformation' => 'Purpose of this direct debit',
-            'debtorCountry'         => 'CH',
-            'postCode'              => '8245',
-            'townName'              => 'Feuerthalen',
-            'streetName'            => 'Example Street',
-            'buildingNumber'        => '25',
-            'floorNumber'           => '12'
+            'debtorCountry' => 'CH',
+            'postCode' => '8245',
+            'townName' => 'Feuerthalen',
+            'streetName' => 'Example Street',
+            'buildingNumber' => '25',
+            'floorNumber' => '12',
         ]);
 
         // Test the Transfer Object:
@@ -332,7 +332,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertSame('Feuerthalen', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('Example Street', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
         $this->assertSame('25', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
-        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8 ) {
+        if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
             $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
         }
     }

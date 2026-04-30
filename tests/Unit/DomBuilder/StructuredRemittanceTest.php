@@ -35,7 +35,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSCTEmitsScorStructuredRemittanceWithoutIssuer(): void
     {
-        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t) {
+        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t): void {
             $t->setCreditorReference('RF81123453');
         });
 
@@ -57,7 +57,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSCTEmitsScorStructuredRemittanceWithIssuer(): void
     {
-        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t) {
+        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t): void {
             $t->setCreditorReference('RF81123453');
             $t->setCreditorReferenceType('ISO-11649');
         });
@@ -70,7 +70,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSCTUnstructuredRemittanceDoesNotEmitStrd(): void
     {
-        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t) {
+        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t): void {
             $t->setRemittanceInformation('Invoice 42');
         });
 
@@ -85,7 +85,7 @@ class StructuredRemittanceTest extends TestCase
     {
         // The DomBuilder prefers the structured path when a creditorReference
         // is set, even if remittanceInformation is also populated.
-        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t) {
+        $xpath = $this->sctXpath(function (CustomerCreditTransferInformation $t): void {
             $t->setCreditorReference('RF81123453');
             $t->setRemittanceInformation('Should be ignored');
         });
@@ -96,7 +96,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSDDEmitsScorStructuredRemittanceWithoutIssuer(): void
     {
-        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t) {
+        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t): void {
             $t->setCreditorReference('RF81123453');
         });
 
@@ -116,7 +116,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSDDEmitsScorStructuredRemittanceWithIssuer(): void
     {
-        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t) {
+        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t): void {
             $t->setCreditorReference('RF81123453');
             $t->setCreditorReferenceType('ISO-11649');
         });
@@ -129,7 +129,7 @@ class StructuredRemittanceTest extends TestCase
 
     public function testSDDUnstructuredRemittanceDoesNotEmitStrd(): void
     {
-        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t) {
+        $xpath = $this->sddXpath(function (CustomerDirectDebitTransferInformation $t): void {
             $t->setRemittanceInformation('Invoice 42');
         });
 
@@ -188,6 +188,7 @@ class StructuredRemittanceTest extends TestCase
         $doc->loadXML($xml);
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
         return $xpath;
     }
 }

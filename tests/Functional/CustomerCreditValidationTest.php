@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -578,7 +579,7 @@ class CustomerCreditValidationTest extends TestCase
             'pain.001.001.10' => ['pain.001.001.10'],
             'pain.001.001.12' => ['pain.001.001.12'],
             'pain.001.002.03' => ['pain.001.002.03'],
-            'pain.001.003.03' => ['pain.001.003.03']
+            'pain.001.003.03' => ['pain.001.003.03'],
         ];
     }
 

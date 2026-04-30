@@ -263,7 +263,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     public static function stpVariantProvider(): iterable
     {
         return [
-            'pain.001.002.03 (STP)'    => ['pain.001.002.03'],
+            'pain.001.002.03 (STP)' => ['pain.001.002.03'],
             'pain.001.003.03 (EU STP)' => ['pain.001.003.03'],
         ];
     }
@@ -285,6 +285,50 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $xpath = $this->xpath($this->asDoc($builder), 'pain.001.002.03');
 
         $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:PmtTpInf/ns:InstrPrty')->length);
+    }
+
+    public function testBatchBookingNullSuppressesBtchBookgElement(): void
+    {
+        $builder = new CustomerCreditTransferDomBuilder('pain.001.001.09');
+        $groupHeader = new GroupHeader('MSG', 'Init');
+        $transferFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = $this->newValidPayment();
+        $transferFile->addPaymentInformation($payment);
+        $payment->addTransfer(new CustomerCreditTransferInformation(100, 'DE12345', 'Bob'));
+
+        $this->assertNull($payment->getBatchBooking());
+
+        $transferFile->accept($builder);
+        $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
+
+        $this->assertSame(
+            0,
+            $xpath->query('//ns:PmtInf/ns:BtchBookg')->length,
+            '<BtchBookg> must be omitted when BatchBooking is null; emitting it would change semantics for callers relying on bank-side defaulting'
+        );
+    }
+
+    public function testBatchBookingFalseEmitsExplicitFalse(): void
+    {
+        $builder = new CustomerCreditTransferDomBuilder('pain.001.001.09');
+        $groupHeader = new GroupHeader('MSG', 'Init');
+        $transferFile = new CustomerCreditTransferFile($groupHeader);
+        $payment = $this->newValidPayment();
+        $payment->setBatchBooking(false);
+        $transferFile->addPaymentInformation($payment);
+        $payment->addTransfer(new CustomerCreditTransferInformation(100, 'DE12345', 'Bob'));
+
+        $transferFile->accept($builder);
+        $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
+
+        $node = $xpath->query('//ns:PmtInf/ns:BtchBookg')->item(0);
+
+        $this->assertNotNull($node, '<BtchBookg> must be emitted when BatchBooking is explicitly set');
+        $this->assertSame(
+            'false',
+            $node->textContent,
+            'BatchBooking(false) must serialise as the literal string "false", not "0" or empty'
+        );
     }
 
     public static function painProvider(): iterable
@@ -343,6 +387,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadXML($builder->asXml());
+
         return $doc;
     }
 
@@ -350,6 +395,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
     {
         $xp = new \DOMXPath($doc);
         $xp->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
         return $xp;
     }
 }

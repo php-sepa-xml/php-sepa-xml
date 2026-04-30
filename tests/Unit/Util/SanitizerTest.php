@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
  */
 class SanitizerTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        Sanitizer::resetSanitizer();
+    }
+
     /**
      * Tests german characters' translation with default sanitizer.
      */
@@ -29,7 +34,7 @@ class SanitizerTest extends TestCase
 
         $this->assertEquals("Az09     :?,-/(+.)' ", Sanitizer::sanitize($string));
     }
-    
+
     /**
      * Tests german characters' translation with disabled sanitizer.
      */
@@ -81,5 +86,31 @@ class SanitizerTest extends TestCase
         Sanitizer::resetSanitizer();
 
         $this->assertEquals("AeOeUeaeoeuess", Sanitizer::sanitize($string));
+    }
+
+    /**
+     * Sanitizer holds process-global mutable state (`self::$callback`). Without a
+     * tearDown that resets it, a custom callback set by one test leaks into every
+     * subsequent test in the suite — order-dependent failures that are painful to
+     * diagnose. See IMPROVEMENTS.md #8.
+     *
+     * This test asserts the default sanitizer is in effect at the start of the
+     * test, so it only passes when tearDown actually resets state.
+     */
+    public function testCustomSanitizerDoesNotLeakAcrossTests(): void
+    {
+        Sanitizer::setSanitizer(function (string $value): string {
+            return strtoupper($value);
+        });
+
+        $this->assertSame('LEAK', Sanitizer::sanitize('leak'));
+
+        $this->tearDown();
+
+        $this->assertSame(
+            'AeOeUeaeoeuess',
+            Sanitizer::sanitize('ÄÖÜäöüß'),
+            'tearDown must restore the default sanitizer to prevent state leakage between tests'
+        );
     }
 }

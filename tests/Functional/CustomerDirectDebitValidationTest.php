@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -32,7 +33,6 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationTest extends TestCase
 {
-
     /**
      * @var \DOMDocument
      */
@@ -248,7 +248,7 @@ class CustomerDirectDebitValidationTest extends TestCase
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
             'pain.008.002.02' => ['pain.008.002.02'],
-            'pain.008.003.02' => ['pain.008.003.02']
+            'pain.008.003.02' => ['pain.008.003.02'],
         ];
     }
 
@@ -301,15 +301,15 @@ class CustomerDirectDebitValidationTest extends TestCase
                 [
                     'pain' => $pain,
                     'batchBooking' => true,
-                    'originAgentBic' => 'NOLADKIE'
-                ]
+                    'originAgentBic' => 'NOLADKIE',
+                ],
             ];
             $scenarios[] = [
                 [
                     'pain' => $pain,
                     'batchBooking' => false,
-                    'originAgentBic' => ''
-                ]
+                    'originAgentBic' => '',
+                ],
             ];
         }
 

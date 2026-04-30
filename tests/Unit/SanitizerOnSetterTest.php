@@ -51,16 +51,16 @@ class SanitizerOnSetterTest extends TestCase
     public static function baseTransferInformationSetters(): iterable
     {
         return [
-            'setName'                    => ['setName', 'getName', 'Jörg', 'Joerg'],
-            'setEndToEndIdentification'  => ['setEndToEndIdentification', 'getEndToEndIdentification', 'Müller-E2E', 'Mueller-E2E'],
-            'setCreditorReference'       => ['setCreditorReference', 'getCreditorReference', 'RFä42', 'RFae42'],
-            'setCreditorReferenceType'   => ['setCreditorReferenceType', 'getCreditorReferenceType', 'ISO&11649', 'ISO 11649'],
-            'setRemittanceInformation'   => ['setRemittanceInformation', 'getRemittanceInformation', 'Rechnung Nr. ä42', 'Rechnung Nr. ae42'],
-            'setTownName'                => ['setTownName', 'getTownName', 'München', 'Muenchen'],
-            'setPostCode'                => ['setPostCode', 'getPostCode', '12345ä', '12345ae'],
-            'setStreetName'              => ['setStreetName', 'getStreetName', 'Hauptstraße 1', 'Hauptstrasse 1'],
-            'setBuildingNumber'          => ['setBuildingNumber', 'getBuildingNumber', '14ä', '14ae'],
-            'setFloorNumber'             => ['setFloorNumber', 'getFloorNumber', '3ö', '3oe'],
+            'setName' => ['setName', 'getName', 'Jörg', 'Joerg'],
+            'setEndToEndIdentification' => ['setEndToEndIdentification', 'getEndToEndIdentification', 'Müller-E2E', 'Mueller-E2E'],
+            'setCreditorReference' => ['setCreditorReference', 'getCreditorReference', 'RFä42', 'RFae42'],
+            'setCreditorReferenceType' => ['setCreditorReferenceType', 'getCreditorReferenceType', 'ISO&11649', 'ISO 11649'],
+            'setRemittanceInformation' => ['setRemittanceInformation', 'getRemittanceInformation', 'Rechnung Nr. ä42', 'Rechnung Nr. ae42'],
+            'setTownName' => ['setTownName', 'getTownName', 'München', 'Muenchen'],
+            'setPostCode' => ['setPostCode', 'getPostCode', '12345ä', '12345ae'],
+            'setStreetName' => ['setStreetName', 'getStreetName', 'Hauptstraße 1', 'Hauptstrasse 1'],
+            'setBuildingNumber' => ['setBuildingNumber', 'getBuildingNumber', '14ä', '14ae'],
+            'setFloorNumber' => ['setFloorNumber', 'getFloorNumber', '3ö', '3oe'],
             'combined transliterate+strip' => ['setName', 'getName', 'Jörg & Händel', 'Joerg   Haendel'],
         ];
     }
@@ -83,7 +83,7 @@ class SanitizerOnSetterTest extends TestCase
     public static function customerDirectDebitTransferInformationSetters(): iterable
     {
         return [
-            'setMandateId'         => ['setMandateId', 'getMandateId', 'MANDä-1', 'MANDae-1'],
+            'setMandateId' => ['setMandateId', 'getMandateId', 'MANDä-1', 'MANDae-1'],
             'setOriginalMandateId' => ['setOriginalMandateId', 'getOriginalMandateId', 'OLDMä-42', 'OLDMae-42'],
         ];
     }
@@ -106,9 +106,9 @@ class SanitizerOnSetterTest extends TestCase
     public static function paymentInformationSetters(): iterable
     {
         return [
-            'setCreditorId'                          => ['setCreditorId', 'getCreditorId', 'DE67ZZZä00000123456', 'DE67ZZZae00000123456'],
-            'setOriginName'                          => ['setOriginName', 'getOriginName', 'Jörg GmbH', 'Joerg GmbH'],
-            'setOriginBankPartyIdentification'       => ['setOriginBankPartyIdentification', 'getOriginBankPartyIdentification', 'BNKä-1', 'BNKae-1'],
+            'setCreditorId' => ['setCreditorId', 'getCreditorId', 'DE67ZZZä00000123456', 'DE67ZZZae00000123456'],
+            'setOriginName' => ['setOriginName', 'getOriginName', 'Jörg GmbH', 'Joerg GmbH'],
+            'setOriginBankPartyIdentification' => ['setOriginBankPartyIdentification', 'getOriginBankPartyIdentification', 'BNKä-1', 'BNKae-1'],
             'setOriginBankPartyIdentificationScheme' => ['setOriginBankPartyIdentificationScheme', 'getOriginBankPartyIdentificationScheme', 'BNK&', 'BNK '],
         ];
     }

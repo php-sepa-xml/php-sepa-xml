@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -22,15 +23,14 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
-use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
-use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
-use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
+use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 {
-
     public function __construct(string $painFormat = 'pain.008.001.09', bool $withSchemaLocation = true)
     {
         parent::__construct($painFormat, $withSchemaLocation);
@@ -225,7 +225,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             if (!empty($transactionInformation->getPostalAddress())) {
                 $postalAddressData = $transactionInformation->getPostalAddress();
                 if (is_array($postalAddressData)) {
-                    foreach($postalAddressData as $postalAddressLine) {
+                    foreach ($postalAddressData as $postalAddressLine) {
                         $postalAddress->appendChild($this->createElement('AdrLine', $postalAddressLine));
                     }
                 } else {
@@ -250,8 +250,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $directDebitTransactionInformation->appendChild($ultimateDebtor);
         }
 
-        if (strlen((string)$transactionInformation->getCreditorReference()) > 0)
-        {
+        if (strlen((string)$transactionInformation->getCreditorReference()) > 0) {
             $directDebitTransactionInformation->appendChild(
                 $this->getStructuredRemittanceElement($transactionInformation)
             );
@@ -304,7 +303,7 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $schmeNm = $this->createElement('SchmeNm');
             $schmeNm->appendChild($this->createElement('Prtry', 'SEPA'));
 
-            $othr  = $this->createElement('Othr');
+            $othr = $this->createElement('Othr');
             $othr->appendChild($this->createElement('Id', $groupHeader->getInitiatingPartyId()));
             $othr->appendChild($schmeNm);
 

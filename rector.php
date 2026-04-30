@@ -10,11 +10,11 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-        __DIR__ . '/rector.php'
+        __DIR__ . '/rector.php',
     ])
     // uncomment to reach your current PHP version
     ->withSets([
         SetList::PHP_72,
-        LevelSetList::UP_TO_PHP_72
+        LevelSetList::UP_TO_PHP_72,
     ])
     ->withTypeCoverageLevel(0);

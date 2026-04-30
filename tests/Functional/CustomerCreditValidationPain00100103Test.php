@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -148,15 +149,15 @@ class CustomerCreditValidationPain00100103Test extends TestCase
                 [
                     'batchBooking' => true,
                     'bic' => 'OKOYFIHH',
-                    'localInstrumentProprietary' => 'CBI'
-                ]
+                    'localInstrumentProprietary' => 'CBI',
+                ],
             ],
             [
                 [
                     'batchBooking' => false,
                     'bic' => '',
-                    'localInstrumentCode' => 'CORE'
-                ]
+                    'localInstrumentCode' => 'CORE',
+                ],
             ],
         ];
     }

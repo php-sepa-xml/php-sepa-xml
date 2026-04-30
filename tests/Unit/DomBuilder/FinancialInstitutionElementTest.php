@@ -188,6 +188,7 @@ class FinancialInstitutionElementTest extends TestCase
         $doc->loadXML($xml);
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
         return $xpath;
     }
 }

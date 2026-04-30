@@ -38,7 +38,7 @@ class DkComplianceTest extends TestCase
 
     public function testGroupHeaderCtrlSumPresentByDefault(): void
     {
-        $xpath = $this->renderSct(function ($builder) {
+        $xpath = $this->renderSct(function ($builder): void {
             // no flag
         });
 
@@ -47,7 +47,7 @@ class DkComplianceTest extends TestCase
 
     public function testSctOmitsGrpHdrCtrlSumWhenFlagSet(): void
     {
-        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder) {
+        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder): void {
             $builder->setOmitGroupHeaderControlSum(true);
         });
 
@@ -58,7 +58,7 @@ class DkComplianceTest extends TestCase
 
     public function testSddOmitsGrpHdrCtrlSumWhenFlagSet(): void
     {
-        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder) {
+        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder): void {
             $builder->setOmitGroupHeaderControlSum(true);
         });
 
@@ -70,7 +70,7 @@ class DkComplianceTest extends TestCase
 
     public function testSctOmitsCdtrAgtAtTransactionLevelWhenBicMissingAndFlagSet(): void
     {
-        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder) {
+        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder): void {
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ null);
 
@@ -79,7 +79,7 @@ class DkComplianceTest extends TestCase
 
     public function testSctOmitsDbtrAgtAtPaymentLevelWhenBicMissingAndFlagSet(): void
     {
-        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder) {
+        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder): void {
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ null);
 
@@ -88,7 +88,7 @@ class DkComplianceTest extends TestCase
 
     public function testSctPreservesAgentElementsWhenBicPresentAndFlagSet(): void
     {
-        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder) {
+        $xpath = $this->renderSct(function (CustomerCreditTransferDomBuilder $builder): void {
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ 'DEUTDEFF');
 
@@ -100,7 +100,7 @@ class DkComplianceTest extends TestCase
     public function testSctEmitsNotProvidedWhenBicMissingAndFlagNotSet(): void
     {
         // Defaults must not change: existing NOTPROVIDED behaviour stays.
-        $xpath = $this->renderSct(function ($builder) {
+        $xpath = $this->renderSct(function ($builder): void {
             // no flag
         }, /* transferBic */ null);
 
@@ -113,7 +113,7 @@ class DkComplianceTest extends TestCase
 
     public function testSddOmitsDbtrAgtAtTransactionLevelWhenBicMissingAndFlagSet(): void
     {
-        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder) {
+        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder): void {
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ null);
 
@@ -122,7 +122,7 @@ class DkComplianceTest extends TestCase
 
     public function testSddOmitsCdtrAgtAtPaymentLevelWhenBicMissingAndFlagSet(): void
     {
-        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder) {
+        $xpath = $this->renderSdd(function (CustomerDirectDebitTransferDomBuilder $builder): void {
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ null);
 
@@ -282,6 +282,7 @@ class DkComplianceTest extends TestCase
         $doc->loadXML($xml);
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
+
         return $xpath;
     }
 }

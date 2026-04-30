@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SEPA file generator.
  *
@@ -22,14 +23,14 @@
 
 namespace Digitick\Sepa\TransferFile\Facade;
 
-use \DOMDocument;
-use Exception;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\BaseDomBuilder;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
+use DOMDocument;
+use Exception;
 
 abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFacadeInterface
 {
