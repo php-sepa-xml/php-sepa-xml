@@ -32,8 +32,7 @@ jobs:
       - name: Run Rector
         run: bin/rector --ansi
 
-      -
-        # commit only to core contributors who have repository access
+      - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: '[rector] Rector fixes'
