@@ -15,7 +15,7 @@ jobs:
     steps:
       -
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           # Must be used to trigger workflow after push
           token: ${{ secrets.RECTOR_ACCESS_TOKEN }}
