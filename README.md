@@ -1,8 +1,7 @@
 php-sepa-xml
 ============
 
-[![GitHub Latest Stable Version](https://img.shields.io/github/v/release/php-sepa-xml/php-sepa-xml?label=stable)](https://github.com/php-sepa-xml/php-sepa-xml/releases/latest)
-[![Packagist Stable Version](https://img.shields.io/packagist/v/digitick/sepa-xml)](https://packagist.org/packages/digitick/sepa-xml)
+[![Latest Stable Version](https://img.shields.io/github/v/release/php-sepa-xml/php-sepa-xml?label=stable)](https://github.com/php-sepa-xml/php-sepa-xml/releases/latest)
 [![Tests Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml)
 [![Static Analisys Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpstan.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpstan.yml/badge.svg)
 
