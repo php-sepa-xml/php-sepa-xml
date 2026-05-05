@@ -1,7 +1,10 @@
 php-sepa-xml
 ============
 
-[![Build Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml)
+[![Tests Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpunit.yml)
+[![Static Analisys Status](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpstan.yml/badge.svg)](https://github.com/php-sepa-xml/php-sepa-xml/actions/workflows/phpstan.yml/badge.svg)
+
+
 
 SEPA / ISO20022 file generator for PHP.
 
