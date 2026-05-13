@@ -143,7 +143,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         if (isset($scenario['transactionServiceLevelCode'])) {
             $transactionServiceLevelCodeProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:SvcLvl/sepa:Cd');
             $this->assertEquals($scenario['transactionServiceLevelCode'], $transactionServiceLevelCodeProprietary->item(0)->textContent);
-        } else if (!isset($scenario['transactionCategoryPurposeCode']) && !isset($scenario['transactionLocalInstrumentProprietary']) && !isset($scenario['transactionLocalInstrumentCode'])) {
+        } elseif (!isset($scenario['transactionCategoryPurposeCode']) && !isset($scenario['transactionLocalInstrumentProprietary']) && !isset($scenario['transactionLocalInstrumentCode'])) {
             $transactionServiceProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf');
             $this->assertSame(0, $transactionServiceProprietary->length);
         }

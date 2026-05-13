@@ -177,7 +177,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
                 $localInstrument = $this->createElement('LclInstrm');
                 if ($transactionInformation->getLocalInstrumentCode()) {
                     $localInstrument->appendChild($this->createElement('Cd', $transactionInformation->getLocalInstrumentCode()));
-                } else if ($transactionInformation->getLocalInstrumentProprietary()) {
+                } elseif ($transactionInformation->getLocalInstrumentProprietary()) {
                     $localInstrument->appendChild($this->createElement('Prtry', $transactionInformation->getLocalInstrumentProprietary()));
                 }
                 $PmtTpInf->appendChild($localInstrument);
