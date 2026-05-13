@@ -80,7 +80,17 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $transfer->setRemittanceInformation('Transaction Description');
         $transfer->setEndToEndIdentification(uniqid());
         $transfer->setInstructionId(uniqid());
-
+        if (isset($scenario['transactionLocalInstrumentProprietary'])) {
+            $transfer->setLocalInstrumentProprietary($scenario['transactionLocalInstrumentProprietary']);
+        } elseif (isset($scenario['transactionLocalInstrumentCode'])) {
+            $transfer->setLocalInstrumentCode($scenario['transactionLocalInstrumentCode']);
+        }
+        if (isset($scenario['transactionServiceLevelCode'])) {
+            $transfer->setServiceLevelCode($scenario['transactionServiceLevelCode']);
+        }
+        if (isset($scenario['transactionCategoryPurposeCode'])) {
+            $transfer->setCategoryPurposeCode($scenario['transactionCategoryPurposeCode']);
+        }
         $transfer->setStreetName('Straat creditor 1');
         $transfer->setPostCode('9999');
         $transfer->setTownName('XX Plaats creditor');
@@ -116,6 +126,27 @@ class CustomerCreditValidationPain00100103Test extends TestCase
 
         $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
         $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
+
+        if (isset($scenario['transactionCategoryPurposeCode'])) {
+            $ctgyPurp = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:CtgyPurp/sepa:Cd');
+            $this->assertEquals('SUPP', $ctgyPurp->item(0)->textContent);
+        }
+
+        if (isset($scenario['transactionLocalInstrumentProprietary'])) {
+            $transactionLocalInstrumentProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
+            $this->assertEquals($scenario['transactionLocalInstrumentProprietary'], $transactionLocalInstrumentProprietary->item(0)->textContent);
+        } elseif (isset($scenario['transactionLocalInstrumentCode'])) {
+            $transactionLocalInstrumentCode = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd');
+            $this->assertEquals($scenario['transactionLocalInstrumentCode'], $transactionLocalInstrumentCode->item(0)->textContent);
+        }
+
+        if (isset($scenario['transactionServiceLevelCode'])) {
+            $transactionServiceLevelCodeProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:SvcLvl/sepa:Cd');
+            $this->assertEquals($scenario['transactionServiceLevelCode'], $transactionServiceLevelCodeProprietary->item(0)->textContent);
+        } elseif (!isset($scenario['transactionCategoryPurposeCode']) && !isset($scenario['transactionLocalInstrumentProprietary']) && !isset($scenario['transactionLocalInstrumentCode'])) {
+            $transactionServiceProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf');
+            $this->assertSame(0, $transactionServiceProprietary->length);
+        }
 
         if (isset($scenario['localInstrumentProprietary'])) {
             $localInstrumentProprietary = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
@@ -154,9 +185,30 @@ class CustomerCreditValidationPain00100103Test extends TestCase
             ],
             [
                 [
+                    'batchBooking' => true,
+                    'bic' => 'OKOYFIHH',
+                    'transactionCategoryPurposeCode' => 'SUPP',
+                    'transactionLocalInstrumentProprietary' => 'CBIX',
+                    'localInstrumentProprietary' => 'CBI',
+                ],
+            ],
+            [
+                [
                     'batchBooking' => false,
                     'bic' => '',
+                    'transactionCategoryPurposeCode' => 'SUPP',
+                    'transactionLocalInstrumentCode' => 'B2B',
                     'localInstrumentCode' => 'CORE',
+                ],
+            ],
+            [
+                [
+                    'batchBooking' => false,
+                    'bic' => '',
+                    'transactionCategoryPurposeCode' => 'SUPP',
+                    'transactionLocalInstrumentCode' => 'B2B',
+                    'localInstrumentCode' => 'CORE',
+                    'transactionServiceLevelCode' => 'SEPA',
                 ],
             ],
         ];
