@@ -1,12 +1,15 @@
-Direct Debit Payment Initiation
-===============================
+---
+title: "Direct Debit Payment Initiation"
+description: "Generate pain.008.* SEPA Direct Debit files via the facade or via direct object construction."
+---
+
+# Direct Debit Payment Initiation
 
 * [Sample usage of DirectDebit File](#sample-usage-of-directdebit-file)
 * [Sample Usage DirectDebit with Factory](#sample-usage-of-directdebit-with-facade-factory)
 
 
-Sample usage of DirectDebit File
--------------------------------------
+## Sample usage of DirectDebit File
 The following example creates a DirectDebit file, adds a PaymentInformation Object and a single transaction to it.  
 The variable names are used to describe what should be contained within them.
 
@@ -57,8 +60,7 @@ The variable names are used to describe what should be contained within them.
     $domBuilder->asDoc();
 ```
 
-Sample Usage of DirectDebit with Facade Factory
--------------------------------------
+## Sample Usage of DirectDebit with Facade Factory
 The library also provides facades to achieve the same thing. In this example we let the facade create the GroupHeader for us:
 
 ```php

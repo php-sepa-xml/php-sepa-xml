@@ -1,3 +1,8 @@
+---
+title: "Amendments"
+description: "Mark a direct debit mandate as amended and supply the original mandate references."
+---
+
 # Amendments
 
 Add an amendment to a transfer by passing the amendment fields when calling

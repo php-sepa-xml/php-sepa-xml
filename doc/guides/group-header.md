@@ -1,3 +1,8 @@
+---
+title: "Group Header"
+description: "Customise the message-level GroupHeader: identifiers, party metadata, and the test indicator."
+---
+
 # Group Header
 
 The `GroupHeader` controls the file-level metadata: `MsgId`, `CreDtTm`,

@@ -1,3 +1,8 @@
+---
+title: "Output and validation"
+description: "asXML / asDOC / DomBuilder output methods, what validate() checks, and external XSD validation."
+---
+
 # Output and validation
 
 Four serialisation entry points, one validation pass. This page is the reference for which one to call and when validation fires.

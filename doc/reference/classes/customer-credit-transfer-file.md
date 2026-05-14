@@ -1,3 +1,8 @@
+---
+title: "CustomerCreditTransferFile"
+description: "Public surface of the pain.001.* root container class."
+---
+
 # CustomerCreditTransferFile
 
 **Namespace:** `Digitick\Sepa\TransferFile\CustomerCreditTransferFile`

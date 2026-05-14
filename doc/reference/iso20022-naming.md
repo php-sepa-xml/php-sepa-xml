@@ -1,3 +1,8 @@
+---
+title: "ISO 20022 Message Names"
+description: "The four-part ISO 20022 message naming convention explained with an example."
+---
+
 # ISO 20022 Message Names
 
 ISO 20022 messages follow a four-part naming convention:

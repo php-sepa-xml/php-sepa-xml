@@ -1,3 +1,8 @@
+---
+title: "DomBuilder (BaseDomBuilder, concrete subclasses, DomBuilderFactory)"
+description: "Public surface of the DomBuilder family — the visitor that walks a TransferFile and emits XML."
+---
+
 # DomBuilder (`BaseDomBuilder`, concrete subclasses, `DomBuilderFactory`)
 
 **Namespace:** `Digitick\Sepa\DomBuilder\*`

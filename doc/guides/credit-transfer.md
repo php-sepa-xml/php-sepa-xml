@@ -1,12 +1,15 @@
-Credit Transfer Payment Initiation
-===============================
+---
+title: "Credit Transfer Payment Initiation"
+description: "Generate pain.001.* SEPA Credit Transfer files via the facade or via direct object construction."
+---
+
+# Credit Transfer Payment Initiation
 
 * [Direct usage of CreditTransfer File](#direct-usage-of-credittransfer-file)
 * [Sample usage of CreditTransfer File with Facade Factory](#sample-usage-of-credittransfer-file-with-facade-factory)
 
 
-Direct usage of CreditTransfer File
--------------------------------------
+## Direct usage of CreditTransfer File
 The following example creates a CreditTransfer file, adds a PaymentInformation Object and a single transaction to it.  
 The variable names are used to describe what should be contained within them.
 
@@ -56,8 +59,7 @@ The variable names are used to describe what should be contained within them.
 ```
 
 
-Sample usage of CreditTransfer File with Facade Factory
--------------------------------------
+## Sample usage of CreditTransfer File with Facade Factory
 
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;

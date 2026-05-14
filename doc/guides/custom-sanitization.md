@@ -1,10 +1,15 @@
-## Custom String Sanitization
+---
+title: "Custom String Sanitization"
+description: "Override or disable the default string sanitiser applied before XML output."
+---
+
+# Custom String Sanitization
 By default, this package sanitizes strings using an internal helper method — `StringHelper::sanitizeString()` — to ensure safe and valid output for SEPA XML.
 If the default sanitization doesn't suit your needs, you can override it globally using the `Sanitizer::setSanitizer()` method.
 
 Note: XML entities (like `<`, `>`, `&`, etc.) will still be escaped separately. This customization affects **pre-processing** before XML generation.
 
-### Example: Custom Sanitization
+## Example: Custom Sanitization
 ```php
 use Digitick\Sepa\Util\Sanitizer;
 
@@ -14,7 +19,7 @@ Sanitizer::setSanitizer(function (string $value): string {
 });
 ```
 
-### Example: Disable Sanitization
+## Example: Disable Sanitization
 ```php
 use Digitick\Sepa\Util\Sanitizer;
 
@@ -22,7 +27,7 @@ use Digitick\Sepa\Util\Sanitizer;
 Sanitizer::disableSanitizer();
 ```
 
-### Reset Sanitization
+## Reset Sanitization
 ```php
 use Digitick\Sepa\Util\Sanitizer;
 

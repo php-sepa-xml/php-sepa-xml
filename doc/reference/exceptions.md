@@ -1,3 +1,8 @@
+---
+title: "Exceptions"
+description: "Catalogue of library exception classes, what they extend, and where they are thrown."
+---
+
 # Exceptions
 
 All library exceptions live under `Digitick\Sepa\Exception`. They extend the namespaced base `Digitick\Sepa\Exception\Exception`, which in turn extends PHP's `\Exception`. A small number of code paths also throw the PHP built-ins `\LogicException` and `\InvalidArgumentException` — those are listed at the end.

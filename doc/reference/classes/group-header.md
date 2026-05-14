@@ -1,3 +1,8 @@
+---
+title: "GroupHeader"
+description: "Public surface of Digitick\\Sepa\\GroupHeader — constructor and key methods."
+---
+
 # GroupHeader
 
 **Namespace:** `Digitick\Sepa\GroupHeader`

@@ -1,3 +1,8 @@
+---
+title: "Getting Started"
+description: "Install the library and generate your first credit transfer and direct debit XML in under five minutes."
+---
+
 # Getting Started
 
 This page gets you from `composer require` to a valid SEPA XML file in under five minutes. Assumes PHP 7.2+ and familiarity with the SEPA / ISO 20022 message shape — if you need the message-name primer, see [ISO 20022 naming](reference/iso20022-naming.md).

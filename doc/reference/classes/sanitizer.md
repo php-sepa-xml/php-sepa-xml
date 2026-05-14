@@ -1,3 +1,8 @@
+---
+title: "Sanitizer"
+description: "Public surface of Digitick\\Sepa\\Util\\Sanitizer — install, swap, or disable the string sanitiser."
+---
+
 # Sanitizer
 
 **Namespace:** `Digitick\Sepa\Util\Sanitizer`

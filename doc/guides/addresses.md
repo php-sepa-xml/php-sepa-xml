@@ -1,3 +1,8 @@
+---
+title: "Addresses"
+description: "Emit structured postal addresses for credit and direct debit transfers, including non-EEA debtors."
+---
+
 # Addresses
 
 If the debtor account belongs to a bank that is not a member of the European

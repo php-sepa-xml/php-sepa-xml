@@ -1,3 +1,8 @@
+---
+title: "CustomerDirectDebitTransferInformation"
+description: "Public surface of the per-transfer direct-debit line class, including mandate and amendment setters."
+---
+
 # CustomerDirectDebitTransferInformation
 
 **Namespace:** `Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation`

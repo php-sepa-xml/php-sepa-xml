@@ -1,3 +1,8 @@
+---
+title: "Facades (CustomerCreditFacade, CustomerDirectDebitFacade, TransferFileFacadeFactory)"
+description: "Public surface of the facade trio — factory methods and supported array keys for addPaymentInfo and addTransfer."
+---
+
 # Facades (`CustomerCreditFacade`, `CustomerDirectDebitFacade`, `TransferFileFacadeFactory`)
 
 **Namespace:** `Digitick\Sepa\TransferFile\Facade\*` and `Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory`

@@ -1,3 +1,8 @@
+---
+title: "PaymentInformation"
+description: "Public surface of Digitick\\Sepa\\PaymentInformation — constructor, sequence-type constants, key methods."
+---
+
 # PaymentInformation
 
 **Namespace:** `Digitick\Sepa\PaymentInformation`

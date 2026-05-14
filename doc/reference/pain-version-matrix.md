@@ -1,3 +1,8 @@
+---
+title: "pain Version Matrix"
+description: "Catalogue of supported pain.001.* and pain.008.* message versions and their defaults."
+---
+
 # pain Version Matrix
 
 The library accepts any pain version string matching `pain.NNN.NNN.NN`, but only the formats listed below are explicitly supported (validated against the XSD and exercised by tests). The list is sourced from `Digitick\Sepa\Util\MessageFormat::$supportedMessageFormats`.

@@ -1,3 +1,8 @@
+---
+title: "Gotchas"
+description: "Curated catalogue of subtle pitfalls in php-sepa-xml — read before shipping to production."
+---
+
 # Gotchas
 
 Subtle things that bite. Read this before you debug your first "but the bank rejected my file" ticket.

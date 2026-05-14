@@ -1,3 +1,8 @@
+---
+title: "Migrations"
+description: "Upgrade notes for moving between major versions of the library."
+---
+
 # Migrations
 
 Upgrade notes for users moving across major versions. For exhaustive release notes see [`CHANGELOG.md`](../CHANGELOG.md) and the [GitHub releases page](https://github.com/php-sepa-xml/php-sepa-xml/releases).

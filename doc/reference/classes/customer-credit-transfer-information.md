@@ -1,3 +1,8 @@
+---
+title: "CustomerCreditTransferInformation"
+description: "Public surface of the per-transfer credit-transfer line class."
+---
+
 # CustomerCreditTransferInformation
 
 **Namespace:** `Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation`

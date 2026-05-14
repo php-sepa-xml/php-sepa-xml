@@ -1,3 +1,8 @@
+---
+title: "CustomerDirectDebitTransferFile"
+description: "Public surface of the pain.008.* root container class."
+---
+
 # CustomerDirectDebitTransferFile
 
 **Namespace:** `Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile`

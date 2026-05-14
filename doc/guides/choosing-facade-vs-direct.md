@@ -1,3 +1,8 @@
+---
+title: "Choosing: Facade vs. Direct construction"
+description: "Pick the right entry point — facade for speed and array config, direct construction for control."
+---
+
 # Choosing: Facade vs. Direct construction
 
 The library exposes two entry points to the same XML output. Pick based on the controls you need.
