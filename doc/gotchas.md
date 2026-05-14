@@ -14,9 +14,9 @@ For direct debits, `S_FIRST` / `S_RECURRING` / `S_ONEOFF` / `S_FINAL` are set wi
 
 `PaymentInformation::__construct` has `$originAccountCurrency = 'EUR'` as the fifth arg. There is no `setCurrency` on the transfer info that affects the issued amount currency — the file uses the `PaymentInformation` currency for all its children.
 
-## `validate()` is opt-in
+## `validate()` runs automatically — but only at render time
 
-The DomBuilder will happily serialise an incomplete object graph. Call `$transferFile->validate()` explicitly before generating XML if you want missing-mandate / missing-creditor-id / wrong-payment-method to throw. See [Reference: Exceptions](reference/exceptions.md).
+Both flows call `validate()` for you: `DomBuilderFactory::createDomBuilder($file, ...)` invokes `$file->accept($builder)` which validates first, and the facade does the same inside its `asXML()` / `asDOC()`. So you don't need to call `validate()` explicitly — but the throw happens at the moment you ask for output, not when you build the object graph. See [Reference: Exceptions](reference/exceptions.md).
 
 ## BIC is optional in newer pain versions but the XML still emits the element
 
@@ -49,9 +49,9 @@ Three different identifiers travel with each transfer; they're not interchangeab
 - **`instructionId`** — caller-supplied, ID used by your bank's processing systems.
 - **`UUID`** (UETR) — auto-generated UUIDv4 since v2.3.0, retrievable via `$transfer->getUUID()`. Store it if you want to track the SWIFT-side journey.
 
-## Facade default pain version is old
+## Facades are single-shot — `asXML()` finalises them
 
-`TransferFileFacadeFactory::createCustomerCredit('id', 'name')` (no third arg) defaults to `pain.001.001.03`. The `MessageFormat::$defaultMessageFormats` constants point at the newer `.09`. Pass the version explicitly unless you know your bank wants `.03`.
+After the first call to `asXML()` or `asDOC()` the facade is frozen: subsequent `addPaymentInfo` / `addTransfer` calls throw `\LogicException`. Subsequent `asXML()` calls return a cached string. If you need to amend the output, build a new facade rather than reusing one.
 
 ## `setNumberOfTransactions` is usually wrong if you set it manually
 
