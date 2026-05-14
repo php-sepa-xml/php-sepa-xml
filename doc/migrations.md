@@ -21,7 +21,9 @@ The 3.0.0 release was a major version bump; consult the [3.0.0 GitHub release](h
 
 ### Facade is now single-shot
 
-`asXML()` / `asDOC()` finalise the facade. Re-calling `addPaymentInfo` or `addTransfer` after a render throws `\LogicException`. Repeated `asXML()` calls return a cached string.
+> ⚠️ **Gotcha**
+>
+> `asXML()` / `asDOC()` finalise the facade. Re-calling `addPaymentInfo` or `addTransfer` after a render throws `\LogicException`. Repeated `asXML()` calls return a cached string. See [Gotchas: facades are single-shot](gotchas.md#facades-are-single-shot--asxml-finalises-them).
 
 **Migration:** if you previously rendered, then mutated, then re-rendered the same facade, build a new facade for each render. The cached behaviour is also the safer one — pre-3.x flows could double-count `<NbOfTxs>` / `<CtrlSum>` on a second render.
 
@@ -29,7 +31,9 @@ See [Reference: Facade](reference/classes/facade.md).
 
 ### DK / German bank compliance flags
 
-`setOmitGroupHeaderControlSum(bool)` and `setOmitAgentElementIfBicMissing(bool)` were added on `BaseCustomerTransferFileFacade` (and the underlying `BaseDomBuilder`).
+> 🏦 **Bank profile**
+>
+> `setOmitGroupHeaderControlSum(bool)` and `setOmitAgentElementIfBicMissing(bool)` were added on `BaseCustomerTransferFileFacade` (and the underlying `BaseDomBuilder`) for DK / German bank compatibility.
 
 **Migration:** if you previously hand-edited the rendered XML to strip `<CtrlSum>` from `<GrpHdr>` or replace `NOTPROVIDED` BIC placeholders, switch to the flags. See [Bank profiles](guides/bank-profiles.md).
 
@@ -43,7 +47,9 @@ Per the 2.0-rc1 release notes:
 
 ### Direct debit amount: string → int (cents)
 
-The direct-debit transfer amount was previously a string. From 2.0 onwards it is an **integer** representing cents.
+> ⚠️ **Gotcha**
+>
+> The direct-debit transfer amount was previously a string. From 2.0 onwards it is an **integer** representing cents. Files generated with the old string form may have contained the wrong amounts — re-export anything you still rely on. See [Gotchas: amounts are integer cents](gotchas.md#amounts-are-integer-cents-not-floats).
 
 ```php
 // 1.x
@@ -52,8 +58,6 @@ new CustomerDirectDebitTransferInformation('500', $iban, $name); // 500 = "five 
 // 2.x and later
 new CustomerDirectDebitTransferInformation(50000, $iban, $name); // 50000 cents = 500.00 EUR
 ```
-
-Files generated with the old string form may have contained the wrong amounts — re-export anything you still rely on.
 
 ### PSR-4 layout
 

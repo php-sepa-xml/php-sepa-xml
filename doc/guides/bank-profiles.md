@@ -7,23 +7,25 @@ description: "Country- and bank-specific recipes for producing files that pass v
 
 Country- and bank-specific recipes for producing files that pass validation
 at institutions whose XML conventions diverge from the bare ISO 20022
-defaults. Phase 1 of the documentation restructure covers only the two
-generic flags. Per-bank recipes (German DK, Spanish initiating-party,
-NL Rabo, AT Raiffeisen, AT Volksbank) are added in Phase 2.
+defaults. The library exposes the per-bank quirks via two opt-in flags on
+`BaseDomBuilder` (and as passthroughs on `BaseCustomerTransferFileFacade`).
 
 ## Generic flags
 
-The library exposes two opt-in flags via `BaseDomBuilder` and as passthrough
-methods on `BaseCustomerTransferFileFacade`. Both default to `false`, so
-existing callers are unaffected.
+Both flags default to `false`, so existing callers are unaffected.
 
-- `setOmitGroupHeaderControlSum(bool)` — suppresses `<CtrlSum>` inside
-  `<GrpHdr>`. Required by the German DK pain.001.001.03 profile, which
-  forbids CtrlSum at group-header level.
-- `setOmitAgentElementIfBicMissing(bool)` — omits the whole
-  `<CdtrAgt>` / `<DbtrAgt>` wrapper when the corresponding BIC is missing,
-  instead of emitting `<Othr><Id>NOTPROVIDED</Id></Othr>`. Applied at all
-  four agent-element call sites (SCT and SDD, payment and transfer levels).
+> 🏦 **Bank profile — German DK**
+>
+> `setOmitGroupHeaderControlSum(bool)` suppresses `<CtrlSum>` inside
+> `<GrpHdr>`. Required by the German DK pain.001.001.03 profile, which
+> forbids `CtrlSum` at group-header level.
+
+> 🏦 **Bank profile — BIC-optional pain versions**
+>
+> `setOmitAgentElementIfBicMissing(bool)` omits the whole
+> `<CdtrAgt>` / `<DbtrAgt>` wrapper when the corresponding BIC is missing,
+> instead of emitting `<Othr><Id>NOTPROVIDED</Id></Othr>`. Applied at all
+> four agent-element call sites (SCT and SDD, payment and transfer levels).
 
 Set the flags on the facade instance before adding transfers:
 
@@ -37,3 +39,11 @@ $customerCredit->setOmitAgentElementIfBicMissing(true);
 ```
 
 The same two methods are available on the Direct Debit facade.
+
+## Confirmed institutions
+
+The project README maintains the canonical list of confirmed institutions
+and the pain versions they accept (RABO, Raiffeisen, Volksbank, ING,
+Commerzbank, CaixaBank, SantanderBank). See the
+[main README](../../README.md#installation) for the current list — verify
+generated files with your bank before any production run.

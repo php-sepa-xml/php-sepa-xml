@@ -7,7 +7,13 @@ description: "Override or disable the default string sanitiser applied before XM
 By default, this package sanitizes strings using an internal helper method — `StringHelper::sanitizeString()` — to ensure safe and valid output for SEPA XML.
 If the default sanitization doesn't suit your needs, you can override it globally using the `Sanitizer::setSanitizer()` method.
 
-Note: XML entities (like `<`, `>`, `&`, etc.) will still be escaped separately. This customization affects **pre-processing** before XML generation.
+> ℹ️ **Version note**
+>
+> XML entities (`<`, `>`, `&`, etc.) are escaped separately by the DOM. The `Sanitizer` customisation affects **pre-processing** before XML generation, not output-side escaping.
+
+> ⚠️ **Gotcha**
+>
+> The sanitiser is **global, static state**. Installing a custom callback affects every subsequent DOM write in the process — call `Sanitizer::resetSanitizer()` at the end of short-lived scripts and tests. See [Gotchas: character set](../gotchas.md#character-set-iso-20022-has-a-sepa-approved-subset).
 
 ## Example: Custom Sanitization
 ```php

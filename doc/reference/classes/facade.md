@@ -111,7 +111,11 @@ Throws `InvalidArgumentException` if `$paymentName` isn't registered. Throws `\L
 
 ### `asXML(): string`
 
-Renders the document. **Finalises the facade** — subsequent `addPaymentInfo`/`addTransfer` calls throw `\LogicException`. Subsequent `asXML()` calls return a cached string.
+Renders the document.
+
+> ⚠️ **Gotcha**
+>
+> Finalises the facade — subsequent `addPaymentInfo`/`addTransfer` calls throw `\LogicException`. Subsequent `asXML()` calls return a cached string. See [Gotchas: facades are single-shot](../../gotchas.md#facades-are-single-shot--asxml-finalises-them).
 
 ### `asDOC(): DOMDocument`
 

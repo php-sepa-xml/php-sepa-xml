@@ -7,6 +7,8 @@ description: "Curated catalogue of subtle pitfalls in php-sepa-xml — read befo
 
 Subtle things that bite. Read this before you debug your first "but the bank rejected my file" ticket.
 
+Every section below is a `⚠️ Gotcha` — sharp edges the library does not protect you from. Other pages link back here using inline `⚠️ **Gotcha**` callouts; this page is the canonical list.
+
 ## Amounts are integer cents, not floats
 
 `BaseTransferInformation::__construct` takes `int $amount` as its first arg. `500` means 5.00 EUR. Passing `5.00` is silently truncated to `5`. In the facade form the same rule applies to the `amount` array key.
@@ -57,6 +59,14 @@ Three different identifiers travel with each transfer; they're not interchangeab
 ## Facades are single-shot — `asXML()` finalises them
 
 After the first call to `asXML()` or `asDOC()` the facade is frozen: subsequent `addPaymentInfo` / `addTransfer` calls throw `\LogicException`. Subsequent `asXML()` calls return a cached string. If you need to amend the output, build a new facade rather than reusing one.
+
+## `MsgId` is a bank-side duplicate-submission key
+
+Banks use the `<MsgId>` value to detect re-submission of the same file. Two files with the same `MsgId` submitted to the same bank on the same day may have one silently dropped. Use a timestamp or a unique reference per submission rather than a hard-coded constant.
+
+## `amendedDebtorAccount` vs `originalMandateId` mean different things
+
+In a direct debit amendment, `amendedDebtorAccount => true` signals that the debtor's bank account changed (combine with `originalDebtorIban`). `originalMandateId` signals that the mandate itself was reissued (e.g. signed afresh). The two flags carry different operational meaning at the receiving bank — combining them describes both kinds of change.
 
 ## `setNumberOfTransactions` is usually wrong if you set it manually
 

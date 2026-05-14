@@ -5,6 +5,14 @@ description: "Generate pain.008.* SEPA Direct Debit files via the facade or via 
 
 # Direct Debit Payment Initiation
 
+> ⚠️ **Gotcha**
+>
+> Amounts are integer cents (`500` = 5.00 EUR). The sequence type is set on the `PaymentInformation`, not on individual transfers. Mandate fields are required but `validate()` does not enforce them. See [Gotchas](../gotchas.md) for the full list.
+
+> ℹ️ **Version note**
+>
+> The UETR (`UUID` / UUIDv4) field is auto-generated from library v2.3.0 onwards and is retrievable via `$transfer->getUUID()`.
+
 * [Sample usage of DirectDebit File](#sample-usage-of-directdebit-file)
 * [Sample Usage DirectDebit with Factory](#sample-usage-of-directdebit-with-facade-factory)
 

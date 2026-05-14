@@ -11,6 +11,14 @@ the transaction. For sure one must do this for the following countries:
 Switzerland, Andorra, Monaco, San Marino, Vatican City and the United Kingdom.
 Though it is generally a good practice to add this data anyway.
 
+> ⚠️ **Gotcha**
+>
+> Setting only some of the address fields emits a partial `<PstlAdr>` block
+> that some banks reject. Either fill the whole cascade (`setCountry`,
+> `setPostCode`, `setTownName`, `setStreetName`, `setBuildingNumber`,
+> `setFloorNumber`) or none of it. See
+> [Gotchas: DD non-EEA addresses](../gotchas.md#dd-non-eea-addresses-need-the-full-setter-cascade).
+
 ## Direct Debit example
 
 ```php

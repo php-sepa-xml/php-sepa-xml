@@ -46,7 +46,9 @@ If you pass a version not on this list the library still tries to render it (tre
 
 - **Facade flow:** if you omit the third arg to `TransferFileFacadeFactory::createCustomerCredit(...)` the library uses `pain.001.001.03` (factory default), not the `defaultMessageFormats` constant. Pass an explicit version to opt into newer schemas.
 - **Direct flow:** pass the version string to `DomBuilderFactory::createDomBuilder($transferFile, $painFormat)`.
-- **Older banks (e.g. RABO direct-debit):** historically locked to `pain.008.001.02`. Check [Bank profiles](../guides/bank-profiles.md) and confirm with the bank.
+> 🏦 **Bank profile — older banks**
+>
+> Some institutions are locked to older versions (e.g. RABO direct-debit historically accepts `pain.008.001.02` only). Check [Bank profiles](../guides/bank-profiles.md) and confirm with your bank before picking a version.
 
 ## See also
 

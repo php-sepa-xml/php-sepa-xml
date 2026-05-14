@@ -11,6 +11,20 @@ from the constructor arguments, but you can pass your own when you need a
 custom `InitiatingPartyId` (common with Spanish banks) or a deterministic
 `MsgId`.
 
+> 🏦 **Bank profile — Spanish banks**
+>
+> Spanish institutions typically require `InitgPty/Id` (set via
+> `GroupHeader::setInitiatingPartyId(...)`) populated with the company's
+> SEPA Creditor Identifier. Use `TransferFileFacadeFactory::createDirectDebitWithGroupHeader`
+> or `createCustomerCreditWithGroupHeader` so you can pre-configure the header.
+
+> ⚠️ **Gotcha**
+>
+> `MsgId` is used by banks as a duplicate-submission key. Two files with
+> the same `MsgId` submitted to the same bank on the same day may have one
+> silently dropped. Use a timestamp or unique reference rather than a
+> hard-coded constant. See [Gotchas: MsgId is a duplicate key](../gotchas.md#msgid-is-a-bank-side-duplicate-submission-key).
+
 ## Custom GroupHeader with the Facade
 
 ```php

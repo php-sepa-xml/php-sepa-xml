@@ -18,7 +18,9 @@ $xml = $facade->asXML();
 file_put_contents('out.xml', $xml);
 ```
 
-**Single-shot:** first call walks the tree and caches; subsequent calls return the cached string. `addPaymentInfo` / `addTransfer` after the first `asXML()` throw `\LogicException`.
+> ⚠️ **Gotcha**
+>
+> First call walks the tree and caches; subsequent calls return the cached string. `addPaymentInfo` / `addTransfer` after the first `asXML()` throw `\LogicException`. See [Gotchas: facades are single-shot](../gotchas.md#facades-are-single-shot--asxml-finalises-them).
 
 ### `$facade->asDOC(): \DOMDocument`
 
@@ -49,7 +51,9 @@ Same as the facade's `asDOC` but on the lower-level builder. Mutations between `
 - **Facade flow:** `validate()` runs inside `asXML()` / `asDOC()` (via the internal `finalize()` → `transferFile->accept($domBuilder)` chain).
 - **Direct flow:** `DomBuilderFactory::createDomBuilder($file, ...)` calls `$file->accept($domBuilder)` internally — validation runs before the factory returns.
 
-This means a misconfigured object graph will throw at **render time**, not at construction time. If you want earlier feedback, call `$transferFile->validate()` explicitly.
+> ⚠️ **Gotcha**
+>
+> A misconfigured object graph will throw at **render time**, not at construction time. If you want earlier feedback, call `$transferFile->validate()` explicitly. See [Gotchas: validate() runs automatically](../gotchas.md#validate-runs-automatically--but-only-at-render-time).
 
 ### What `validate()` checks
 

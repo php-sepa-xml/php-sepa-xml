@@ -32,7 +32,9 @@ Runs as part of `accept(DomBuilder)`. Enforces, in addition to the inherited "at
 - Every `PaymentInformation` has a non-empty creditor ID (`setCreditorId`). Throws `InvalidTransferFileConfiguration` with `"Payment must contain a CreditorSchemeId"`.
 - Every transfer is an instance of `CustomerDirectDebitTransferInformation`. Throws `InvalidTransferTypeException` if a credit-transfer instance leaks in.
 
-Note: per-transfer mandate fields (`mandateId`, `mandateSignDate`) are **not** validated here — the DomBuilder will emit empty elements if you forget them.
+> ⚠️ **Gotcha**
+>
+> Per-transfer mandate fields (`mandateId`, `mandateSignDate`) are **not** validated here — the DomBuilder will emit empty elements if you forget them, and the bank will reject the file.
 
 ### `accept(DomBuilderInterface $domBuilder): void`
 

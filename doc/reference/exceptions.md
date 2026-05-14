@@ -42,7 +42,9 @@ Thrown by `validate()` on the transfer files when the assembled object graph is 
 - `CustomerCreditTransferFile::validate` — a `PaymentInformation` has zero transfers.
 - `CustomerDirectDebitTransferFile::validate` — `PaymentInformation` missing `sequenceType` or `creditorId`.
 
-Run `validate()` before serialising if you want this surfaced; the DomBuilder will otherwise produce technically-XML-shaped but functionally invalid output.
+> ⚠️ **Gotcha**
+>
+> `validate()` is invoked automatically by `BaseTransferFile::accept()` (called from `DomBuilderFactory::createDomBuilder` and from facade `asXML()`/`asDOC()`), so the throw happens at render time, not at object-graph build time. See [Gotchas: validate() runs automatically](../gotchas.md#validate-runs-automatically--but-only-at-render-time).
 
 ## `Digitick\Sepa\Exception\InvalidTransferTypeException`
 

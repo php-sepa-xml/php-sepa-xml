@@ -8,6 +8,14 @@ description: "Mark a direct debit mandate as amended and supply the original man
 Add an amendment to a transfer by passing the amendment fields when calling
 `addTransfer` on the named `PaymentInformation` object.
 
+> ⚠️ **Gotcha**
+>
+> The `amendedDebtorAccount` flag is independent of the original-mandate
+> fields. If only the debtor account changed, set `amendedDebtorAccount =>
+> true` and `originalDebtorIban`. If the mandate itself was reissued, set
+> `originalMandateId`. Combining the two signals different things to the
+> receiving bank. See [Gotchas: amendedDebtorAccount vs originalMandateId](../gotchas.md#amendeddebtoraccount-vs-originalmandateid-mean-different-things).
+
 ```php
 $directDebit->addTransfer('firstPayment', array(
     'amount'                  => 500,

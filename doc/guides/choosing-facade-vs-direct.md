@@ -35,7 +35,9 @@ $facade->addTransfer('p1', [/* ... */]);
 $xml = $facade->asXML();
 ```
 
-Once `asXML()` runs, the facade is frozen. Subsequent `addPaymentInfo` / `addTransfer` calls throw `\LogicException`. Build a new facade if you need to amend.
+> ⚠️ **Gotcha**
+>
+> Once `asXML()` runs, the facade is frozen. Subsequent `addPaymentInfo` / `addTransfer` calls throw `\LogicException`. Build a new facade if you need to amend. See [Gotchas: facades are single-shot](../gotchas.md#facades-are-single-shot--asxml-finalises-them).
 
 ## Sketch: direct flow
 

@@ -5,6 +5,10 @@ description: "Generate pain.001.* SEPA Credit Transfer files via the facade or v
 
 # Credit Transfer Payment Initiation
 
+> ⚠️ **Gotcha**
+>
+> Amounts are integer cents (`1234` = 12.34 EUR). For non-EEA creditors the full address-setter cascade must be filled or omitted entirely. See [Gotchas](../gotchas.md) for the full list.
+
 * [Direct usage of CreditTransfer File](#direct-usage-of-credittransfer-file)
 * [Sample usage of CreditTransfer File with Facade Factory](#sample-usage-of-credittransfer-file-with-facade-factory)
 

@@ -79,9 +79,17 @@ file_put_contents('direct-debit.xml', $directDebit->asXML());
 
 ## Three things to know before you ship
 
-1. **Amounts are integer cents** — `12500` is 125.00 EUR. Passing floats silently truncates. See [Gotchas](gotchas.md).
-2. **Validate against your bank** — every bank has slightly different acceptance criteria. Generate, send a test file, confirm before any production run.
-3. **Facades are single-shot** — `asXML()` finalises the facade. Build a new one if you need to amend the output.
+> ⚠️ **Gotcha**
+>
+> Amounts are integer cents — `12500` is 125.00 EUR. Passing floats silently truncates. See [Gotchas: amounts are integer cents](gotchas.md#amounts-are-integer-cents-not-floats).
+
+> ⚠️ **Gotcha**
+>
+> Facades are single-shot — `asXML()` finalises the facade and subsequent `addPaymentInfo` / `addTransfer` throw. Build a new facade if you need to amend the output. See [Gotchas: facades are single-shot](gotchas.md#facades-are-single-shot--asxml-finalises-them).
+
+> 🏦 **Bank profile**
+>
+> Every bank has slightly different acceptance criteria. Generate, send a test file, confirm before any production run. See [Bank profiles](guides/bank-profiles.md).
 
 ## Next steps
 
