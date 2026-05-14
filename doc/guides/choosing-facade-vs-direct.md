@@ -5,6 +5,12 @@ description: "Pick the right entry point — facade for speed and array config, 
 
 # Choosing: Facade vs. Direct construction
 
+> **At a glance**
+>
+> - **Use this when:** deciding between the array-based facade and direct object construction for a new integration.
+> - **Key types:** `TransferFileFacadeFactory` (facade path); `CustomerCreditTransferFile` / `CustomerDirectDebitTransferFile` + `DomBuilderFactory` (direct path).
+> - **Output:** a working call chain matched to your control / safety trade-off.
+
 The library exposes two entry points to the same XML output. Pick based on the controls you need.
 
 ## Decision matrix

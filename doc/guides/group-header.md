@@ -5,6 +5,12 @@ description: "Customise the message-level GroupHeader: identifiers, party metada
 
 # Group Header
 
+> **At a glance**
+>
+> - **Use this when:** you need a custom `<MsgId>`, `InitgPty/Id`, or test indicator that the facade default doesn't expose.
+> - **Key types:** `GroupHeader`, `TransferFileFacadeFactory::createCustomerCreditWithGroupHeader` / `createDirectDebitWithGroupHeader`.
+> - **Output:** a configured `GroupHeader` instance attached to a facade or transfer file.
+
 The `GroupHeader` controls the file-level metadata: `MsgId`, `CreDtTm`,
 `InitgPty/Nm`, and `InitgPty/Id`. The Facade auto-creates a `GroupHeader`
 from the constructor arguments, but you can pass your own when you need a
@@ -63,3 +69,9 @@ $directDebit->addTransfer('firstPayment', array(
 // Retrieve the resulting XML
 $directDebit->asXML();
 ```
+
+## Related
+
+- [Reference: GroupHeader](../reference/classes/group-header.md)
+- [Bank profiles](bank-profiles.md) — Spanish banks and similar that need a custom `InitgPty/Id`
+- [Gotchas: MsgId duplicate-key](../gotchas.md#msgid-is-a-bank-side-duplicate-submission-key)

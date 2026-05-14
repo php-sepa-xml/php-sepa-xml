@@ -18,7 +18,11 @@ MessageType.MessageSubType.MessageVariant.MessageVersion
 - **MessageVariant:** `001`
 - **MessageVersion:** `12`
 
-## External references
+## Related
+
+- [Reference: pain version matrix](pain-version-matrix.md) — the supported version list, sourced from `MessageFormat`
+
+## External resources
 
 - [ISO 20022 official site](https://www.iso20022.org/)
 - [ISO 20022 message catalogue](https://www.iso20022.org/full_catalogue.page)

@@ -91,7 +91,7 @@ file_put_contents('direct-debit.xml', $directDebit->asXML());
 >
 > Every bank has slightly different acceptance criteria. Generate, send a test file, confirm before any production run. See [Bank profiles](guides/bank-profiles.md).
 
-## Next steps
+## Related
 
 - [Choosing facade vs. direct construction](guides/choosing-facade-vs-direct.md) — when to drop down to the four-class API
 - [Credit Transfer guide](guides/credit-transfer.md) / [Direct Debit guide](guides/direct-debit.md) — both flows in detail

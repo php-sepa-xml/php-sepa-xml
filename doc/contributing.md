@@ -22,3 +22,8 @@ composer run phpunit
 composer run phpstan
 composer run rector
 ```
+
+## Related
+
+- [`CHANGELOG.md`](../CHANGELOG.md) — release history
+- [Reference: pain version matrix](reference/pain-version-matrix.md) — supported message versions when adding tests

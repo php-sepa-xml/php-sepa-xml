@@ -5,6 +5,12 @@ description: "asXML / asDOC / DomBuilder output methods, what validate() checks,
 
 # Output and validation
 
+> **At a glance**
+>
+> - **Use this when:** picking which output method to call, or wiring external XSD validation.
+> - **Key types:** `BaseCustomerTransferFileFacade::asXML` / `asDOC`, `BaseDomBuilder::asXml` / `asDoc`, `BaseTransferFile::validate`.
+> - **Output:** an XML string or a `DOMDocument` you can further mutate.
+
 Four serialisation entry points, one validation pass. This page is the reference for which one to call and when validation fires.
 
 ## Output methods

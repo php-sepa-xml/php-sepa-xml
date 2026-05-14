@@ -5,6 +5,12 @@ description: "Generate pain.001.* SEPA Credit Transfer files via the facade or v
 
 # Credit Transfer Payment Initiation
 
+> **At a glance**
+>
+> - **Use this when:** building a SEPA Credit Transfer (`pain.001.*`) file.
+> - **Key types:** `CustomerCreditFacade`, `CustomerCreditTransferFile`, `CustomerCreditTransferInformation`.
+> - **Output:** `pain.001.*` XML via `asXML()` / `asDOC()`.
+
 > ⚠️ **Gotcha**
 >
 > Amounts are integer cents (`1234` = 12.34 EUR). For non-EEA creditors the full address-setter cascade must be filled or omitted entirely. See [Gotchas](../gotchas.md) for the full list.
@@ -94,4 +100,14 @@ $customerCredit->addTransfer('firstPayment', array(
 // Retrieve the resulting XML
 $customerCredit->asXML();
 ```
+
+## Related
+
+- [Direct Debit](direct-debit.md) — sibling flow for `pain.008.*`
+- [Choosing facade vs. direct construction](choosing-facade-vs-direct.md)
+- [Output and validation](output-and-validation.md)
+- [Bank profiles](bank-profiles.md)
+- [Reference: PaymentInformation](../reference/classes/payment-information.md)
+- [Reference: CustomerCreditTransferInformation](../reference/classes/customer-credit-transfer-information.md)
+- [Gotchas](../gotchas.md)
 

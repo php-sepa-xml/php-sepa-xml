@@ -5,6 +5,12 @@ description: "Country- and bank-specific recipes for producing files that pass v
 
 # Bank Profiles
 
+> **At a glance**
+>
+> - **Use this when:** a specific institution rejects the bare ISO 20022 defaults.
+> - **Key types:** `BaseDomBuilder` / `BaseCustomerTransferFileFacade` and their two opt-in flags.
+> - **Output:** bank-compatible XML that passes the institution's validation.
+
 Country- and bank-specific recipes for producing files that pass validation
 at institutions whose XML conventions diverge from the bare ISO 20022
 defaults. The library exposes the per-bank quirks via two opt-in flags on
@@ -47,3 +53,10 @@ and the pain versions they accept (RABO, Raiffeisen, Volksbank, ING,
 Commerzbank, CaixaBank, SantanderBank). See the
 [main README](../../README.md#installation) for the current list — verify
 generated files with your bank before any production run.
+
+## Related
+
+- [Reference: DomBuilder](../reference/classes/dom-builder.md)
+- [Reference: Facade](../reference/classes/facade.md)
+- [Reference: pain version matrix](../reference/pain-version-matrix.md)
+- [Gotchas](../gotchas.md)

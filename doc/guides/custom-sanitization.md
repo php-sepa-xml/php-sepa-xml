@@ -4,6 +4,13 @@ description: "Override or disable the default string sanitiser applied before XM
 ---
 
 # Custom String Sanitization
+
+> **At a glance**
+>
+> - **Use this when:** the default SEPA character-set sanitiser doesn't match your bank's expectations.
+> - **Key types:** `Digitick\Sepa\Util\Sanitizer`, `StringHelper`.
+> - **Output:** process-global side effect applied to every subsequent DOM write.
+
 By default, this package sanitizes strings using an internal helper method — `StringHelper::sanitizeString()` — to ensure safe and valid output for SEPA XML.
 If the default sanitization doesn't suit your needs, you can override it globally using the `Sanitizer::setSanitizer()` method.
 
@@ -40,3 +47,8 @@ use Digitick\Sepa\Util\Sanitizer;
 // Reset the sanitizer to its default behavior
 Sanitizer::resetSanitizer();
 ```
+
+## Related
+
+- [Reference: Sanitizer](../reference/classes/sanitizer.md)
+- [Gotchas: character set](../gotchas.md#character-set-iso-20022-has-a-sepa-approved-subset)

@@ -50,7 +50,7 @@ If you pass a version not on this list the library still tries to render it (tre
 >
 > Some institutions are locked to older versions (e.g. RABO direct-debit historically accepts `pain.008.001.02` only). Check [Bank profiles](../guides/bank-profiles.md) and confirm with your bank before picking a version.
 
-## See also
+## Related
 
 - [Reference: ISO 20022 message names](iso20022-naming.md) — naming convention reference
 - [Guide: Credit Transfer](../guides/credit-transfer.md)

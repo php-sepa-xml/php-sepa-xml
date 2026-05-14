@@ -5,6 +5,12 @@ description: "Emit structured postal addresses for credit and direct debit trans
 
 # Addresses
 
+> **At a glance**
+>
+> - **Use this when:** a creditor or debtor lives outside the EEA, or your bank requires a structured `<PstlAdr>` block.
+> - **Key types:** address setters on `CustomerCreditTransferInformation` / `CustomerDirectDebitTransferInformation`; address keys on the facade `addTransfer` array.
+> - **Output:** a `<PstlAdr>` block per transfer in the rendered XML.
+
 If the debtor account belongs to a bank that is not a member of the European
 Economic Area (EEA), the address data of the account holder must be added to
 the transaction. For sure one must do this for the following countries:
@@ -51,3 +57,9 @@ $transfer->setStreetName('Some Street');
 $transfer->setBuildingNumber(12);
 $transfer->setFloorNumber(13);
 ```
+
+## Related
+
+- [Reference: CustomerCreditTransferInformation](../reference/classes/customer-credit-transfer-information.md)
+- [Reference: CustomerDirectDebitTransferInformation](../reference/classes/customer-direct-debit-transfer-information.md)
+- [Gotchas: DD non-EEA addresses](../gotchas.md#dd-non-eea-addresses-need-the-full-setter-cascade)

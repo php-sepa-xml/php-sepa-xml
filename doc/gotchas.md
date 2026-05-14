@@ -72,7 +72,7 @@ In a direct debit amendment, `amendedDebtorAccount => true` signals that the deb
 
 The DomBuilder writes the actual count when generating the XML. Setting `GroupHeader::setNumberOfTransactions` manually is for advanced cases (e.g. building the header without yet having attached all the payments). For 99% of flows, leave it alone.
 
-## See also
+## Related
 
 - [Reference: Exceptions](reference/exceptions.md)
 - [Reference: pain version matrix](reference/pain-version-matrix.md)

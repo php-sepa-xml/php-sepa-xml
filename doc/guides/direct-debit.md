@@ -5,6 +5,12 @@ description: "Generate pain.008.* SEPA Direct Debit files via the facade or via 
 
 # Direct Debit Payment Initiation
 
+> **At a glance**
+>
+> - **Use this when:** building a SEPA Direct Debit (`pain.008.*`) file.
+> - **Key types:** `CustomerDirectDebitFacade`, `CustomerDirectDebitTransferFile`, `CustomerDirectDebitTransferInformation`.
+> - **Output:** `pain.008.*` XML via `asXML()` / `asDOC()`.
+
 > ⚠️ **Gotcha**
 >
 > Amounts are integer cents (`500` = 5.00 EUR). The sequence type is set on the `PaymentInformation`, not on individual transfers. Mandate fields are required but `validate()` does not enforce them. See [Gotchas](../gotchas.md) for the full list.
@@ -114,4 +120,16 @@ $directDebit->addTransfer('firstPayment', array(
 // Retrieve the resulting XML
 $directDebit->asXML();
 ```
+
+## Related
+
+- [Credit Transfer](credit-transfer.md) — sibling flow for `pain.001.*`
+- [Choosing facade vs. direct construction](choosing-facade-vs-direct.md)
+- [Amendments](amendments.md)
+- [Addresses](addresses.md)
+- [Output and validation](output-and-validation.md)
+- [Bank profiles](bank-profiles.md)
+- [Reference: PaymentInformation](../reference/classes/payment-information.md)
+- [Reference: CustomerDirectDebitTransferInformation](../reference/classes/customer-direct-debit-transfer-information.md)
+- [Gotchas](../gotchas.md)
 

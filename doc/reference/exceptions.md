@@ -59,7 +59,7 @@ Thrown when a `PaymentInformation` declares a payment method incompatible with t
 
 Catch `\Throwable` if you want a guarantee of total coverage; otherwise catch `Digitick\Sepa\Exception\Exception` plus `\LogicException`.
 
-## See also
+## Related
 
 - [Guide: Output and validation](../guides/output-and-validation.md)
 - [Gotchas](../gotchas.md)
