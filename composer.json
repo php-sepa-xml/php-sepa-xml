@@ -33,13 +33,13 @@
     },
     "require": {
         "ext-dom": "*",
-        "php": ">=7.2",
-        "ramsey/uuid": "^4.2.3"
+        "php": ">=7.2"
     },
     "require-dev": {
         "ext-xml": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
+        "ramsey/uuid": "^4.2.3",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^2.0",
         "phpstan/phpstan": "^2.0",
