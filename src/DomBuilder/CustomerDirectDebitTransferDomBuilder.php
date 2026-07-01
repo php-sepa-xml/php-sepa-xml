@@ -91,6 +91,39 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $this->currentPayment->appendChild($this->createElement('ReqdColltnDt', $paymentInformation->getDueDate()));
         $creditor = $this->createElement('Cdtr');
         $creditor->appendChild($this->createElement('Nm', $paymentInformation->getOriginName()));
+
+        // Creditor postal address is supported starting with pain.008 version 2.
+        if ($this->messageFormat->isDirectDebit() && $this->messageFormat->getVersion() >= 2) {
+            $postalAddress = $this->createElement('PstlAdr');
+
+            // Variants 2 and 3 only support Country and AddressLine
+            if (!in_array($this->messageFormat->getVariant(), [2,3], true)) {
+                if (!empty($paymentInformation->getOriginStreetName())) {
+                    $postalAddress->appendChild($this->createElement('StrtNm', $paymentInformation->getOriginStreetName()));
+                }
+
+                if (!empty($paymentInformation->getOriginBuildingNumber())) {
+                    $postalAddress->appendChild($this->createElement('BldgNb', $paymentInformation->getOriginBuildingNumber()));
+                }
+
+                if (!empty($paymentInformation->getOriginPostCode())) {
+                    $postalAddress->appendChild($this->createElement('PstCd', $paymentInformation->getOriginPostCode()));
+                }
+
+                if (!empty($paymentInformation->getOriginTownName())) {
+                    $postalAddress->appendChild($this->createElement('TwnNm', $paymentInformation->getOriginTownName()));
+                }
+            }
+
+            if (!empty($paymentInformation->getOriginCountry())) {
+                $postalAddress->appendChild($this->createElement('Ctry', $paymentInformation->getOriginCountry()));
+            }
+
+            if ($postalAddress->childNodes->length > 0) {
+                $creditor->appendChild($postalAddress);
+            }
+        }
+
         $this->currentPayment->appendChild($creditor);
 
         // <CdtrAcct>
