@@ -17,6 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
+    - name: Generate locales required by the test suite
+      run: |
+        sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 de_DE.UTF-8
+        sudo update-locale
+        locale -a
+
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
