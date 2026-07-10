@@ -44,7 +44,12 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     creditorId: string,
      *     localInstrumentCode?: string,
      *     batchBooking?: bool,
-     *     dueDate?: string|DateTimeInterface
+     *     dueDate?: string|DateTimeInterface,
+     *     creditorStreetName?: string|null,
+     *     creditorBuildingNumber?: string|null,
+     *     creditorPostCode?: string|null,
+     *     creditorTownName?: string|null,
+     *     creditorCountry?: string|null
      * } $paymentInformation
      * @return PaymentInformation
      * @throws InvalidArgumentException
@@ -71,6 +76,27 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
         if (isset($paymentInformation['batchBooking'])) {
             $payment->setBatchBooking($paymentInformation['batchBooking']);
         }
+
+        if (isset($paymentInformation['creditorStreetName'])) {
+            $payment->setOriginStreetName($paymentInformation['creditorStreetName']);
+        }
+
+        if (isset($paymentInformation['creditorBuildingNumber'])) {
+            $payment->setOriginBuildingNumber($paymentInformation['creditorBuildingNumber']);
+        }
+
+        if (isset($paymentInformation['creditorPostCode'])) {
+            $payment->setOriginPostCode($paymentInformation['creditorPostCode']);
+        }
+
+        if (isset($paymentInformation['creditorTownName'])) {
+            $payment->setOriginTownName($paymentInformation['creditorTownName']);
+        }
+
+        if (isset($paymentInformation['creditorCountry'])) {
+            $payment->setOriginCountry($paymentInformation['creditorCountry']);
+        }
+
         $this->payments[$paymentName] = $payment;
 
         return $payment;
