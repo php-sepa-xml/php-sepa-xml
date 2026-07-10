@@ -68,6 +68,41 @@ class PaymentInformation
     public $originName;
 
     /**
+     * Creditor's postal street name, rendered as <Cdtr><PstlAdr><StrtNm>.
+     *
+     * @var string|null
+     */
+    protected $originStreetName;
+
+    /**
+     * Creditor's postal building number, rendered as <Cdtr><PstlAdr><BldgNb>.
+     *
+     * @var string|null
+     */
+    protected $originBuildingNumber;
+
+    /**
+     * Creditor's postal post code, rendered as <Cdtr><PstlAdr><PstCd>.
+     *
+     * @var string|null
+     */
+    protected $originPostCode;
+
+    /**
+     * Creditor's postal town name, rendered as <Cdtr><PstlAdr><TwnNm>.
+     *
+     * @var string|null
+     */
+    protected $originTownName;
+
+    /**
+     * Creditor's postal country, rendered as <Cdtr><PstlAdr><Ctry>.
+     *
+     * @var string|null
+     */
+    protected $originCountry;
+
+    /**
      * Unique identification of an organisation, as assigned by an institution, using an identification scheme.
      *
      * @var string|null
@@ -428,5 +463,110 @@ class PaymentInformation
     public function setDueDateFormat(string $format): void
     {
         $this->dateFormat = $format;
+    }
+
+    /**
+     * Set the creditor's postal street name.
+     *
+     * @param string|null $originStreetName Maximum allowed length is 70 characters.
+     * @return void
+     */
+    public function setOriginStreetName(?string $originStreetName): void
+    {
+        $this->originStreetName = !empty($originStreetName) ? Sanitizer::sanitize($originStreetName) : null;
+    }
+
+    /**
+     * Get the creditor's postal street name.
+     *
+     * @return string|null
+     */
+    public function getOriginStreetName(): ?string
+    {
+        return $this->originStreetName;
+    }
+
+    /**
+     * Set the creditor's postal building number.
+     *
+     * @param string|null $originBuildingNumber Maximum allowed length is 16 characters.
+     * @return void
+     */
+    public function setOriginBuildingNumber(?string $originBuildingNumber): void
+    {
+        $this->originBuildingNumber = !empty($originBuildingNumber) ? Sanitizer::sanitize($originBuildingNumber) : null;
+    }
+
+    /**
+     * Get the creditor's postal building number.
+     *
+     * @return string|null
+     */
+    public function getOriginBuildingNumber(): ?string
+    {
+        return $this->originBuildingNumber;
+    }
+
+    /**
+     * Set the creditor's postal post code.
+     *
+     * @param string|null $originPostCode Maximum allowed length is 16 characters.
+     * @return void
+     */
+    public function setOriginPostCode(?string $originPostCode): void
+    {
+        $this->originPostCode = !empty($originPostCode) ? Sanitizer::sanitize($originPostCode) : null;
+    }
+
+    /**
+     * Get the creditor's postal post code.
+     *
+     * @return string|null
+     */
+    public function getOriginPostCode(): ?string
+    {
+        return $this->originPostCode;
+    }
+
+    /**
+     * Set the creditor's postal town name.
+     *
+     * @param string|null $originTownName Maximum allowed length is 35 characters.
+     * @return void
+     */
+    public function setOriginTownName(?string $originTownName): void
+    {
+        $this->originTownName = !empty($originTownName) ? Sanitizer::sanitize($originTownName) : null;
+    }
+
+    /**
+     * Get the creditor's postal town name.
+     *
+     * @return string|null
+     */
+    public function getOriginTownName(): ?string
+    {
+        return $this->originTownName;
+    }
+
+    /**
+     * Set the creditor's postal country, as an ISO 3166-1 alpha-2 code.
+     *
+     * @param string|null $originCountry
+     * @return void
+     */
+    public function setOriginCountry(?string $originCountry): void
+    {
+        $this->originCountry = $originCountry !== null ? strtoupper($originCountry) : null;
+    }
+
+    /**
+     * Get the creditor's postal country.
+     *
+     * @return string|null
+     */
+    public function getOriginCountry(): ?string
+    {
+        return $this->originCountry;
     }
 }

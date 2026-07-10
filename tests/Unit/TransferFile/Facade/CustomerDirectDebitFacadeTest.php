@@ -352,6 +352,43 @@ class CustomerDirectDebitFacadeTest extends TestCase
         ];
     }
 
+    public function testCreditorPostalAddressIsRendered(): void
+    {
+        $painFormat = 'pain.008.001.09';
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', $painFormat);
+
+        $directDebit->addPaymentInfo('firstPayment', [
+            'id' => 'firstPayment',
+            'creditorName' => 'My Company',
+            'creditorAccountIBAN' => 'DE78500105172337771347',
+            'creditorAgentBIC' => 'WELADE3LXXX',
+            'seqType' => PaymentInformation::S_ONEOFF,
+            'creditorId' => 'DE21WVM1234567890',
+            'creditorStreetName' => 'Example Street',
+            'creditorBuildingNumber' => '25',
+            'creditorPostCode' => '8245',
+            'creditorTownName' => 'Feuerthalen',
+            'creditorCountry' => 'CH',
+        ]);
+
+        $directDebit->addTransfer('firstPayment', [
+            'amount' => 1499,
+            'debtorIban' => 'CH6089144731137988786',
+            'debtorBic' => 'CRESCHZZXXX',
+            'debtorName' => 'John Doe',
+            'debtorMandate' => 'AB12345',
+            'debtorMandateSignDate' => '2022-05-23',
+            'remittanceInformation' => 'Purpose of this direct debit',
+        ]);
+
+        $xml = $directDebit->asXML();
+
+        $this->assertStringContainsString('<StrtNm>Example Street</StrtNm>', $xml);
+        $this->assertStringContainsString('<PstCd>8245</PstCd>', $xml);
+        $this->assertStringContainsString('<TwnNm>Feuerthalen</TwnNm>', $xml);
+        $this->assertStringContainsString('<Ctry>CH</Ctry>', $xml);
+    }
+
     public function testAddPaymentInfoThrowsWhenNameAlreadyExists(): void
     {
         $directDebit = TransferFileFacadeFactory::createDirectDebit('test123', 'Me', 'pain.008.001.02');
