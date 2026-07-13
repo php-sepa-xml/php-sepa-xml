@@ -28,7 +28,9 @@ class MessageFormat
         'pain.001.001.08',
         'pain.001.001.09',
         'pain.001.001.10',
+        'pain.001.001.11',
         'pain.001.001.12',
+        'pain.001.001.13',
         /* Variants: */
         'pain.001.002.03', // (STPCreditTransferInitiationV03)
         'pain.001.003.03', // (EUSTPCreditTransferInitiationV03)
@@ -43,6 +45,7 @@ class MessageFormat
         'pain.008.001.09',
         'pain.008.001.10',
         'pain.008.001.11',
+        'pain.008.001.12',
         /* Variants: */
         'pain.008.002.02',
         'pain.008.003.02',
