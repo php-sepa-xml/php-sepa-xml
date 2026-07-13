@@ -66,7 +66,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
     /**
      * Test a transfer file with one payment and one transaction.
      *
-     * @param array<string, mixed> $scenario
+     * @param array{batchBooking?: bool, bic: string, localInstrumentProprietary?: string, localInstrumentCode?: string, transactionCategoryPurposeCode?: string, transactionLocalInstrumentProprietary?: string, transactionLocalInstrumentCode?: string, transactionServiceLevelCode?: string} $scenario
      *
      * @dataProvider scenarios
      */
@@ -163,7 +163,7 @@ class CustomerCreditValidationPain00100103Test extends TestCase
     }
 
     /**
-     * @return iterable<array{array<string, mixed>}>
+     * @return iterable<array{array{batchBooking?: bool, bic: string, localInstrumentProprietary?: string, localInstrumentCode?: string, transactionCategoryPurposeCode?: string, transactionLocalInstrumentProprietary?: string, transactionLocalInstrumentCode?: string, transactionServiceLevelCode?: string}}>
      */
     public static function scenarios(): iterable
     {

@@ -10,6 +10,7 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\Tests\XPathAssertions;
+use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
@@ -145,7 +146,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testAmendedDebtorAccountEmitsSmndaOrgnlDbtrAcct(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer): void {
+        $xpath = $this->renderWithAmendments(function (CustomerDirectDebitTransferInformation $transfer): void {
             $transfer->setAmendedDebtorAccount(true);
         });
 
@@ -168,7 +169,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testOriginalMandateIdEmitsOrgnlMndtId(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer): void {
+        $xpath = $this->renderWithAmendments(function (CustomerDirectDebitTransferInformation $transfer): void {
             $transfer->setOriginalMandateId('OLD-MANDATE-42');
         });
 
@@ -191,7 +192,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
     {
         // The builder emits the SMNDA sentinel when either amendedDebtorAccount
         // or originalDebtorIban is set — verify the latter path.
-        $xpath = $this->renderWithAmendments(function ($transfer): void {
+        $xpath = $this->renderWithAmendments(function (CustomerDirectDebitTransferInformation $transfer): void {
             $transfer->setOriginalDebtorIban('DE11520513735120710131');
         });
 
@@ -205,7 +206,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testBothAmendmentsEmitBothNodes(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer): void {
+        $xpath = $this->renderWithAmendments(function (CustomerDirectDebitTransferInformation $transfer): void {
             $transfer->setAmendedDebtorAccount(true);
             $transfer->setOriginalMandateId('OLD-MANDATE-42');
         });
@@ -295,7 +296,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
     public function testNoAmendmentsSuppressesAmdmntInd(): void
     {
-        $xpath = $this->renderWithAmendments(function ($transfer): void {
+        $xpath = $this->renderWithAmendments(function (CustomerDirectDebitTransferInformation $transfer): void {
             // deliberately set no amendments
         });
 
@@ -309,6 +310,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @param callable(CustomerDirectDebitTransferInformation): void $configureTransfer
+     */
     private function renderWithAmendments(callable $configureTransfer): \DOMXPath
     {
         $painFormat = 'pain.008.001.02';

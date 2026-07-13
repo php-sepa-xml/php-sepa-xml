@@ -32,6 +32,8 @@ class Sanitizer
 
     /**
      * Set the global sanitization strategy.
+     *
+     * @param callable(string): string $callback
      */
     public static function setSanitizer(callable $callback): void
     {
@@ -40,6 +42,8 @@ class Sanitizer
 
     /**
      * Get the current sanitizer (with fallback to default).
+     *
+     * @return callable(string): string
      */
     public static function getSanitizer(): callable
     {
