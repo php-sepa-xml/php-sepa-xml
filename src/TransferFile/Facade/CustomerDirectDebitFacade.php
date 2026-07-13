@@ -159,7 +159,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 
         if (isset($transferInformation['creditorReference'])) {
             $transfer->setCreditorReference($transferInformation['creditorReference']);
-        } else {
+        } elseif (isset($transferInformation['remittanceInformation'])) {
             $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
         }
 

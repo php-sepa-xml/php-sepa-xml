@@ -6,6 +6,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -24,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FinancialInstitutionElementTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @dataProvider sctLegacyBicProvider
      */
@@ -31,8 +34,8 @@ class FinancialInstitutionElementTest extends TestCase
     {
         $xpath = $this->sctXpath($painFormat, 'DEUTDEFF');
 
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
         $this->assertSame(
             'DEUTDEFF',
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC)')
@@ -46,8 +49,8 @@ class FinancialInstitutionElementTest extends TestCase
     {
         $xpath = $this->sctXpath($painFormat, 'DEUTDEFF');
 
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
         $this->assertSame(
             'DEUTDEFF',
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI)')
@@ -67,8 +70,8 @@ class FinancialInstitutionElementTest extends TestCase
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:Othr/ns:Id)'),
             'NOTPROVIDED fallback expected for ' . $painFormat
         );
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BIC')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:BICFI')->length);
     }
 
     /**
@@ -78,8 +81,8 @@ class FinancialInstitutionElementTest extends TestCase
     {
         $xpath = $this->sddXpath($painFormat, 'DEUTDEFF');
 
-        $this->assertSame(1, $xpath->query('//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BIC')->length);
-        $this->assertSame(0, $xpath->query('//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BICFI')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BIC')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BICFI')->length);
     }
 
     /**
@@ -89,8 +92,8 @@ class FinancialInstitutionElementTest extends TestCase
     {
         $xpath = $this->sddXpath($painFormat, 'DEUTDEFF');
 
-        $this->assertSame(1, $xpath->query('//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BICFI')->length);
-        $this->assertSame(0, $xpath->query('//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BIC')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BICFI')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId/ns:BIC')->length);
     }
 
     /**

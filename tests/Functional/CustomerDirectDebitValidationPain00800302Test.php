@@ -27,12 +27,15 @@ use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationPain00800302Test extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @var string
      */
@@ -95,11 +98,9 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $painFormat);
         // Date is correctly coded
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:Ctry');
-        $this->assertEquals('AT', $testNode->item(0)->textContent);
+        $this->assertEquals('AT', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:PstlAdr/sepa:Ctry'));
 
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine');
-        $this->assertEquals('Postal Address', $testNode->item(0)->textContent);
+        $this->assertEquals('Postal Address', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine'));
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);
@@ -141,9 +142,8 @@ class CustomerDirectDebitValidationPain00800302Test extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $painFormat);
 
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine');
-        $this->assertEquals('Postal Address 1', $testNode->item(0)->textContent);
-        $this->assertEquals('Postal Address 2', $testNode->item(1)->textContent);
+        $this->assertEquals('Postal Address 1', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine'));
+        $this->assertEquals('Postal Address 2', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:PstlAdr/sepa:AdrLine', null, 1));
 
         $validated = $this->dom->schemaValidate($this->schema);
         $this->assertTrue($validated);

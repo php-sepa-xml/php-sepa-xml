@@ -26,6 +26,7 @@ namespace Digitick\Sepa\Tests\Functional;
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerCreditValidationPain00100103Test extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @var string
      */
@@ -126,53 +129,37 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
 
-        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
-        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
+        $this->assertEquals('SALA', self::xpathText($xpathDoc, '//sepa:Purp/sepa:Cd'));
 
         if (isset($scenario['transactionCategoryPurposeCode'])) {
-            $ctgyPurp = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:CtgyPurp/sepa:Cd');
-            $this->assertEquals('SUPP', $ctgyPurp->item(0)->textContent);
+            $this->assertEquals('SUPP', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:CtgyPurp/sepa:Cd'));
         }
 
         if (isset($scenario['transactionLocalInstrumentProprietary'])) {
-            $transactionLocalInstrumentProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
-            $this->assertEquals($scenario['transactionLocalInstrumentProprietary'], $transactionLocalInstrumentProprietary->item(0)->textContent);
+            $this->assertEquals($scenario['transactionLocalInstrumentProprietary'], self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry'));
         } elseif (isset($scenario['transactionLocalInstrumentCode'])) {
-            $transactionLocalInstrumentCode = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd');
-            $this->assertEquals($scenario['transactionLocalInstrumentCode'], $transactionLocalInstrumentCode->item(0)->textContent);
+            $this->assertEquals($scenario['transactionLocalInstrumentCode'], self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd'));
         }
 
         if (isset($scenario['transactionServiceLevelCode'])) {
-            $transactionServiceLevelCodeProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:SvcLvl/sepa:Cd');
-            $this->assertEquals($scenario['transactionServiceLevelCode'], $transactionServiceLevelCodeProprietary->item(0)->textContent);
+            $this->assertEquals($scenario['transactionServiceLevelCode'], self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:PmtTpInf/sepa:SvcLvl/sepa:Cd'));
         } elseif (!isset($scenario['transactionCategoryPurposeCode']) && !isset($scenario['transactionLocalInstrumentProprietary']) && !isset($scenario['transactionLocalInstrumentCode'])) {
-            $transactionServiceProprietary = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:PmtTpInf');
-            $this->assertSame(0, $transactionServiceProprietary->length);
+            $this->assertSame(0, self::xpathQuery($xpathDoc, '//sepa:CdtTrfTxInf/sepa:PmtTpInf')->length);
         }
 
         if (isset($scenario['localInstrumentProprietary'])) {
-            $localInstrumentProprietary = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry');
-            $this->assertEquals($scenario['localInstrumentProprietary'], $localInstrumentProprietary->item(0)->textContent);
+            $this->assertEquals($scenario['localInstrumentProprietary'], self::xpathText($xpathDoc, '//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Prtry'));
         } elseif (isset($scenario['localInstrumentCode'])) {
-            $localInstrumentCode = $xpathDoc->query('//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd');
-            $this->assertEquals($scenario['localInstrumentCode'], $localInstrumentCode->item(0)->textContent);
+            $this->assertEquals($scenario['localInstrumentCode'], self::xpathText($xpathDoc, '//sepa:PmtInf/sepa:PmtTpInf/sepa:LclInstrm/sepa:Cd'));
         }
 
-        $strtNm = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:StrtNm');
-        $this->assertEquals('Straat creditor 1', $strtNm->item(0)->textContent);
+        $this->assertEquals('Straat creditor 1', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:StrtNm'));
+        $this->assertEquals('9999', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:PstCd'));
+        $this->assertEquals('XX Plaats creditor', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:TwnNm'));
+        $this->assertEquals('NL', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:Ctry'));
 
-        $pstCd = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:PstCd');
-        $this->assertEquals('9999', $pstCd->item(0)->textContent);
-
-        $twnNm = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:TwnNm');
-        $this->assertEquals('XX Plaats creditor', $twnNm->item(0)->textContent);
-
-        $ctry = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
-        $this->assertEquals('NL', $ctry->item(0)->textContent);
-
-        $adrLine = $xpathDoc->query('//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine');
-        $this->assertEquals('Straat creditor 1', $adrLine->item(0)->textContent);
-        $this->assertEquals('9999 XX Plaats creditor', $adrLine->item(1)->textContent);
+        $this->assertEquals('Straat creditor 1', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine'));
+        $this->assertEquals('9999 XX Plaats creditor', self::xpathText($xpathDoc, '//sepa:CdtTrfTxInf/sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine', null, 1));
     }
 
     /**

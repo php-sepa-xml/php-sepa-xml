@@ -9,11 +9,14 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * Test the XML generation of a direct debit transfer with structured address
      * data for pain.008.001.02
@@ -60,21 +63,21 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         // Test contents
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', "urn:iso:std:iso:20022:tech:xsd:{$painFormat}");
-        $postalAddressNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr')->item(0);
+        $postalAddressNode = self::xpathNode($xpath, '/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr');
 
-        $this->assertNull($xpath->evaluate('./ns:AdrLine', $postalAddressNode)->item(0));
-        $this->assertSame('DE', $xpath->evaluate('./ns:Ctry', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('60431', $xpath->evaluate('./ns:PstCd', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Frankfurt am Main', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
+        $this->assertNull(self::xpathQuery($xpath, './ns:AdrLine', $postalAddressNode)->item(0));
+        $this->assertSame('DE', self::xpathText($xpath, './ns:Ctry', $postalAddressNode));
+        $this->assertSame('60431', self::xpathText($xpath, './ns:PstCd', $postalAddressNode));
+        $this->assertSame('Frankfurt am Main', self::xpathText($xpath, './ns:TwnNm', $postalAddressNode));
+        $this->assertSame('Wilhelm-Epstein-Str.', self::xpathText($xpath, './ns:StrtNm', $postalAddressNode));
+        $this->assertSame('14', self::xpathText($xpath, './ns:BldgNb', $postalAddressNode));
         if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
-            $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
+            $this->assertSame('12', self::xpathText($xpath, './ns:Flr', $postalAddressNode));
         }
 
         // Check Ultimate Debtor name
-        $transactionInfoNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf')->item(0);
-        $this->assertSame('Maximilian Musterman', $xpath->evaluate('./ns:UltmtDbtr/ns:Nm', $transactionInfoNode)->item(0)->textContent);
+        $transactionInfoNode = self::xpathNode($xpath, '/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf');
+        $this->assertSame('Maximilian Musterman', self::xpathText($xpath, './ns:UltmtDbtr/ns:Nm', $transactionInfoNode));
     }
 
     /**
@@ -135,9 +138,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.10');
 
-        $finInstnIdNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId')->item(0);
+        $finInstnIdNode = self::xpathNode($xpath, '/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:DbtrAgt/ns:FinInstnId');
 
-        $this->assertSame('INGDDEFFXXX', $xpath->evaluate('./ns:BICFI', $finInstnIdNode)->item(0)->textContent);
+        $this->assertSame('INGDDEFFXXX', self::xpathText($xpath, './ns:BICFI', $finInstnIdNode));
     }
 
     public function testAmendedDebtorAccountEmitsSmndaOrgnlDbtrAcct(): void
@@ -158,7 +161,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         );
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls/ns:OrgnlMndtId')->length,
+            self::xpathQuery($xpath, '//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls/ns:OrgnlMndtId')->length,
             'OrgnlMndtId must be absent when only the debtor account is amended'
         );
     }
@@ -179,7 +182,7 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         );
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls/ns:OrgnlDbtrAcct')->length,
+            self::xpathQuery($xpath, '//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls/ns:OrgnlDbtrAcct')->length,
             'OrgnlDbtrAcct must be absent when only the mandate id is amended'
         );
     }
@@ -265,19 +268,18 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
 
-        $postalAddressNode = $xpath->evaluate('//ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr')->item(0);
-        $this->assertNotNull($postalAddressNode);
+        $postalAddressNode = self::xpathNode($xpath, '//ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr');
 
         $this->assertSame('DE', $xpath->evaluate('string(./ns:Ctry)', $postalAddressNode));
         $this->assertSame(
             'Some Street 123, 12345 Berlin',
             $xpath->evaluate('string(./ns:AdrLine)', $postalAddressNode)
         );
-        $this->assertSame(0, $xpath->query('./ns:StrtNm', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:BldgNb', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:PstCd', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:TwnNm', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:Flr', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:StrtNm', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:BldgNb', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:PstCd', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:TwnNm', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:Flr', $postalAddressNode)->length);
     }
 
     /**
@@ -299,11 +301,11 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
 
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInd')->length
+            self::xpathQuery($xpath, '//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInd')->length
         );
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls')->length
+            self::xpathQuery($xpath, '//ns:DrctDbtTx/ns:MndtRltdInf/ns:AmdmntInfDtls')->length
         );
     }
 

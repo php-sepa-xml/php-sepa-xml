@@ -24,12 +24,15 @@
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use Digitick\Sepa\Util\MessageFormat;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitFacadeTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @var string
      */
@@ -94,19 +97,20 @@ class CustomerDirectDebitFacadeTest extends TestCase
     public function testValidSumIsCalculatedCorrectly(string $schema): void
     {
         $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
-        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
-
-        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:GrpHdr/sepa:CtrlSum'),
+            'GroupHeader ControlSum should be 19.99'
+        );
+
+        $this->assertEquals(
+            '19.99',
+            self::xpathText($directDebitXpath, '//sepa:PmtInf/sepa:CtrlSum'),
             'PaymentInformation ControlSum should be 19.99'
         );
-        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:DrctDbtTxInf/sepa:InstdAmt'),
             'DirectDebitTransferInformation InstructedAmount should be 19.99'
         );
     }
@@ -117,19 +121,20 @@ class CustomerDirectDebitFacadeTest extends TestCase
     public function testFloatSumIsCalculatedCorrectly(string $schema): void
     {
         $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
-        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
-
-        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:GrpHdr/sepa:CtrlSum'),
+            'GroupHeader ControlSum should be 19.99'
+        );
+
+        $this->assertEquals(
+            '19.99',
+            self::xpathText($directDebitXpath, '//sepa:PmtInf/sepa:CtrlSum'),
             'PaymentInformation ControlSum should be 19.99'
         );
-        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:DrctDbtTxInf/sepa:InstdAmt'),
             'DirectDebitTransferInformation InstructedAmount should be 19.99'
         );
     }
@@ -146,19 +151,20 @@ class CustomerDirectDebitFacadeTest extends TestCase
         }
 
         $directDebitXpath = $this->createDirectDebitXpathObject(1999, $schema);
-        $controlSum = $directDebitXpath->query('//sepa:GrpHdr/sepa:CtrlSum');
-        $this->assertEquals('19.99', $controlSum->item(0)->textContent, 'GroupHeader ControlSum should be 19.99');
-
-        $controlSum = $directDebitXpath->query('//sepa:PmtInf/sepa:CtrlSum');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:GrpHdr/sepa:CtrlSum'),
+            'GroupHeader ControlSum should be 19.99'
+        );
+
+        $this->assertEquals(
+            '19.99',
+            self::xpathText($directDebitXpath, '//sepa:PmtInf/sepa:CtrlSum'),
             'PaymentInformation ControlSum should be 19.99'
         );
-        $controlSum = $directDebitXpath->query('//sepa:DrctDbtTxInf/sepa:InstdAmt');
         $this->assertEquals(
             '19.99',
-            $controlSum->item(0)->textContent,
+            self::xpathText($directDebitXpath, '//sepa:DrctDbtTxInf/sepa:InstdAmt'),
             'DirectDebitTransferInformation InstructedAmount should be 19.99'
         );
     }
@@ -313,7 +319,9 @@ class CustomerDirectDebitFacadeTest extends TestCase
         ]);
 
         // Test the Transfer Object:
-        $transfer = $directDebit->getPaymentInfo('firstPayment')->getTransfers()[0];
+        $paymentInfo = $directDebit->getPaymentInfo('firstPayment');
+        $this->assertInstanceOf(PaymentInformation::class, $paymentInfo);
+        $transfer = $paymentInfo->getTransfers()[0];
 
         $this->assertSame('CH', $transfer->getCountry());
         $this->assertSame('8245', $transfer->getPostCode());
@@ -327,16 +335,16 @@ class CustomerDirectDebitFacadeTest extends TestCase
 
         $xpath = new \DOMXPath($this->dom);
         $xpath->registerNamespace('ns', sprintf('urn:iso:std:iso:20022:tech:xsd:%s', $painFormat));
-        $postalAddressNode = $xpath->evaluate('/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr')->item(0);
+        $postalAddressNode = self::xpathNode($xpath, '/ns:Document/ns:CstmrDrctDbtInitn/ns:PmtInf/ns:DrctDbtTxInf/ns:Dbtr/ns:PstlAdr');
 
-        $this->assertNull($xpath->evaluate('./ns:AdrLine', $postalAddressNode)->item(0));
-        $this->assertSame('CH', $xpath->evaluate('./ns:Ctry', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('8245', $xpath->evaluate('./ns:PstCd', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Feuerthalen', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Example Street', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('25', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
+        $this->assertNull(self::xpathQuery($xpath, './ns:AdrLine', $postalAddressNode)->item(0));
+        $this->assertSame('CH', self::xpathText($xpath, './ns:Ctry', $postalAddressNode));
+        $this->assertSame('8245', self::xpathText($xpath, './ns:PstCd', $postalAddressNode));
+        $this->assertSame('Feuerthalen', self::xpathText($xpath, './ns:TwnNm', $postalAddressNode));
+        $this->assertSame('Example Street', self::xpathText($xpath, './ns:StrtNm', $postalAddressNode));
+        $this->assertSame('25', self::xpathText($xpath, './ns:BldgNb', $postalAddressNode));
         if ($messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
-            $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
+            $this->assertSame('12', self::xpathText($xpath, './ns:Flr', $postalAddressNode));
         }
     }
 

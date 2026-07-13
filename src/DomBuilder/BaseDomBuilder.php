@@ -43,8 +43,8 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /** @var DOMElement|null */
     protected $currentPayment;
 
-    /** @var null|MessageFormat */
-    protected $messageFormat = null;
+    /** @var MessageFormat */
+    protected $messageFormat;
 
     /**
      * @var bool
@@ -119,7 +119,12 @@ abstract class BaseDomBuilder implements DomBuilderInterface
 
     public function asXml(): string
     {
-        return $this->doc->saveXML();
+        $xml = $this->doc->saveXML();
+        if (false === $xml) {
+            throw new \RuntimeException('The DOM document could not be serialized to XML.');
+        }
+
+        return $xml;
     }
 
     public function setOmitGroupHeaderControlSum(bool $omit): void
@@ -160,6 +165,10 @@ abstract class BaseDomBuilder implements DomBuilderInterface
      */
     public function visitGroupHeader(GroupHeader $groupHeader): void
     {
+        if (!isset($this->currentTransfer)) {
+            throw new \LogicException('The transfer file has to be visited before the group header can be added.');
+        }
+
         $groupHeaderTag = $this->doc->createElement('GrpHdr');
         $messageId = $this->createElement('MsgId', $groupHeader->getMessageIdentification());
         $groupHeaderTag->appendChild($messageId);

@@ -27,6 +27,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\Util\MessageFormat;
@@ -37,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CustomerCreditValidationTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @var \DOMDocument
      */
@@ -176,10 +179,8 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
-        $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
-        $this->assertEquals(2, $numberOfTxs->item(0)->textContent);
-        $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
-        $this->assertEquals('5000.02', $ctrlSum->item(0)->textContent);
+        $this->assertEquals(2, self::xpathText($xpathDoc, '//sepa:NbOfTxs'));
+        $this->assertEquals('5000.02', self::xpathText($xpathDoc, '//sepa:CtrlSum'));
     }
 
     /**
@@ -215,31 +216,24 @@ class CustomerCreditValidationTest extends TestCase
 
         // Date is correctly coded
         if ($messageFormat->isCreditTransfer() && $messageFormat->getVariant() == 1 && $messageFormat->getVersion() >= 8) {
-            $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt/sepa:Dt');
-            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+            $this->assertEquals('2012-11-20', self::xpathText($xpathDoc, '//sepa:ReqdExctnDt/sepa:Dt'));
         } else {
-            $executionDate = $xpathDoc->query('//sepa:ReqdExctnDt');
-            $this->assertEquals('2012-11-20', $executionDate->item(0)->textContent);
+            $this->assertEquals('2012-11-20', self::xpathText($xpathDoc, '//sepa:ReqdExctnDt'));
         }
 
         //Payment method is set
-        $paymentMethod = $xpathDoc->query('//sepa:PmtMtd');
-        $this->assertEquals('TRF', $paymentMethod->item(0)->textContent);
+        $this->assertEquals('TRF', self::xpathText($xpathDoc, '//sepa:PmtMtd'));
         //Originating IBAN
-        $originIban = $xpathDoc->query('//sepa:DbtrAcct/sepa:Id/sepa:IBAN');
-        $this->assertEquals('FR1420041010050500013M02606', $originIban->item(0)->textContent);
+        $this->assertEquals('FR1420041010050500013M02606', self::xpathText($xpathDoc, '//sepa:DbtrAcct/sepa:Id/sepa:IBAN'));
         //Originating BIC
         if ($messageFormat->isCreditTransfer() && $messageFormat->getVariant() == '1' && $messageFormat->getVersion() >= 4) {
-            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BICFI');
-            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+            $this->assertEquals('PSSTFRPPMON', self::xpathText($xpathDoc, '//sepa:DbtrAgt/sepa:FinInstnId/sepa:BICFI'));
         } else {
-            $originBic = $xpathDoc->query('//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC');
-            $this->assertEquals('PSSTFRPPMON', $originBic->item(0)->textContent);
+            $this->assertEquals('PSSTFRPPMON', self::xpathText($xpathDoc, '//sepa:DbtrAgt/sepa:FinInstnId/sepa:BIC'));
         }
 
         //Originating Name
-        $originName = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
-        $this->assertEquals('My Corp', $originName->item(0)->textContent);
+        $this->assertEquals('My Corp', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:Nm'));
     }
 
     /**
@@ -282,16 +276,12 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
         // Creditor country is correctly added:
-        $originAddressCountry = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
         if (null === $country) {
             // Without a country, no <Ctry> node may be emitted at all.
-            $this->assertNull($originAddressCountry->item(0));
+            $this->assertNull(self::xpathQuery($xpathDoc, '//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry')->item(0));
         } else {
-            $this->assertEquals($country, $originAddressCountry->item(0)->textContent);
+            $this->assertEquals($country, self::xpathText($xpathDoc, '//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry'));
         }
-
-        // Creditor address lines are correctly added:
-        $originAddressLines = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine');
 
         // $addressLines could be string instead of array. Ensure array for easier testing.
         if (!is_array($addressLines)) {
@@ -300,7 +290,7 @@ class CustomerCreditValidationTest extends TestCase
 
         // check that all address lines exist and match the expected inputs.
         for ($index = 0; $index < count($addressLines); $index++) {
-            $this->assertEquals($addressLines[$index], $originAddressLines->item($index)->textContent);
+            $this->assertEquals($addressLines[$index], self::xpathText($xpathDoc, '//sepa:Cdtr/sepa:PstlAdr/sepa:AdrLine', null, $index));
         }
     }
 
@@ -354,12 +344,10 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
-        $numberOfTxs = $xpathDoc->query('//sepa:NbOfTxs');
-        $this->assertEquals(4, $numberOfTxs->item(0)->textContent);
-        $this->assertEquals(2, $numberOfTxs->item(1)->textContent);
-        $this->assertEquals(2, $numberOfTxs->item(2)->textContent);
-        $ctrlSum = $xpathDoc->query('//sepa:CtrlSum');
-        $this->assertEquals('10000.04', $ctrlSum->item(0)->textContent);
+        $this->assertEquals(4, self::xpathText($xpathDoc, '//sepa:NbOfTxs'));
+        $this->assertEquals(2, self::xpathText($xpathDoc, '//sepa:NbOfTxs', null, 1));
+        $this->assertEquals(2, self::xpathText($xpathDoc, '//sepa:NbOfTxs', null, 2));
+        $this->assertEquals('10000.04', self::xpathText($xpathDoc, '//sepa:CtrlSum'));
     }
 
     /**
@@ -393,16 +381,11 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
-        $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:EndToEndId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', self::xpathText($xpathDoc, '//sepa:InitgPty/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', self::xpathText($xpathDoc, '//sepa:Cdtr/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', self::xpathText($xpathDoc, '//sepa:EndToEndId'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', self::xpathText($xpathDoc, '//sepa:Ustrd'));
     }
 
     /**
@@ -445,8 +428,7 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
-        $testNode = $xpathDoc->query('//sepa:CreDtTm');
-        $this->assertEquals($dateTime->format($dateTimeFormat), $testNode->item(0)->textContent, 'CreDtTm should have the specified format: ' . $dateTimeFormat);
+        $this->assertEquals($dateTime->format($dateTimeFormat), self::xpathText($xpathDoc, '//sepa:CreDtTm'), 'CreDtTm should have the specified format: ' . $dateTimeFormat);
     }
 
     /**
@@ -517,14 +499,11 @@ class CustomerCreditValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
 
-        $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals(0, $testNode->length, 'RmtInf should not contain Ustrd when Strd is present.');
+        $this->assertEquals(0, self::xpathQuery($xpathDoc, '//sepa:Ustrd')->length, 'RmtInf should not contain Ustrd when Strd is present.');
 
-        $testNode = $xpathDoc->query('//sepa:Strd');
-        $this->assertEquals(1, $testNode->length, 'Missing structured creditor reference Strd.');
+        $this->assertEquals(1, self::xpathQuery($xpathDoc, '//sepa:Strd')->length, 'Missing structured creditor reference Strd.');
 
-        $testNode = $xpathDoc->query('//sepa:Strd/sepa:CdtrRefInf/sepa:Ref');
-        $this->assertEquals('RF81123453', $testNode->item(0)->textContent);
+        $this->assertEquals('RF81123453', self::xpathText($xpathDoc, '//sepa:Strd/sepa:CdtrRefInf/sepa:Ref'));
     }
 
     /**
@@ -562,8 +541,7 @@ class CustomerCreditValidationTest extends TestCase
 
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
-        $purposeCode = $xpathDoc->query('//sepa:Purp/sepa:Cd');
-        $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
+        $this->assertEquals('SALA', self::xpathText($xpathDoc, '//sepa:Purp/sepa:Cd'));
     }
 
     /**

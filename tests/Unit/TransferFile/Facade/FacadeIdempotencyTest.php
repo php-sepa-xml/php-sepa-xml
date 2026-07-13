@@ -3,6 +3,7 @@
 namespace Digitick\Sepa\Tests\Unit\TransferFile\Facade;
 
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -12,6 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FacadeIdempotencyTest extends TestCase
 {
+    use XPathAssertions;
+
     public function testCustomerCreditAsXmlIsIdempotent(): void
     {
         $credit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me', 'pain.001.001.09');
@@ -48,12 +51,12 @@ class FacadeIdempotencyTest extends TestCase
         );
         $this->assertSame(
             1,
-            $xpath->query('//sepa:CstmrCdtTrfInitn')->length,
+            self::xpathQuery($xpath, '//sepa:CstmrCdtTrfInitn')->length,
             'Document must contain exactly one CstmrCdtTrfInitn element'
         );
         $this->assertSame(
             1,
-            $xpath->query('//sepa:PmtInf')->length,
+            self::xpathQuery($xpath, '//sepa:PmtInf')->length,
             'Document must contain exactly one PmtInf element'
         );
     }
@@ -140,8 +143,8 @@ class FacadeIdempotencyTest extends TestCase
         $xpath = $this->xpath($secondXml, 'pain.008.001.02');
         $this->assertSame('1', $xpath->evaluate('string(//sepa:GrpHdr/sepa:NbOfTxs)'));
         $this->assertSame('5.00', $xpath->evaluate('string(//sepa:GrpHdr/sepa:CtrlSum)'));
-        $this->assertSame(1, $xpath->query('//sepa:CstmrDrctDbtInitn')->length);
-        $this->assertSame(1, $xpath->query('//sepa:PmtInf')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//sepa:CstmrDrctDbtInitn')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//sepa:PmtInf')->length);
     }
 
     public function testCustomerCreditAddPaymentInfoAfterRenderThrows(): void

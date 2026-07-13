@@ -96,9 +96,7 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
 
     public function asXML(): string
     {
-        $this->finalize();
-
-        return $this->renderedXml;
+        return $this->finalize();
     }
 
     public function asDOC(): DOMDocument
@@ -130,18 +128,18 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
      * DomBuilder, and cache the result. Safe to call repeatedly — only the
      * first invocation performs work.
      */
-    private function finalize(): void
+    private function finalize(): string
     {
-        if ($this->rendered) {
-            return;
+        if (null === $this->renderedXml) {
+            foreach ($this->payments as $payment) {
+                $this->transferFile->addPaymentInformation($payment);
+            }
+            $this->transferFile->accept($this->domBuilder);
+            $this->renderedXml = $this->domBuilder->asXml();
+            $this->rendered = true;
         }
 
-        foreach ($this->payments as $payment) {
-            $this->transferFile->addPaymentInformation($payment);
-        }
-        $this->transferFile->accept($this->domBuilder);
-        $this->renderedXml = $this->domBuilder->asXml();
-        $this->rendered = true;
+        return $this->renderedXml;
     }
 
     /**
@@ -167,6 +165,11 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
             }
         }
 
-        return new DateTimeImmutable(date('Y-m-d', strtotime($timestamp)));
+        $time = strtotime($timestamp);
+        if (false === $time) {
+            throw new InvalidArgumentException(sprintf('Invalid timestamp "%s"', $timestamp));
+        }
+
+        return new DateTimeImmutable(date('Y-m-d', $time));
     }
 }
