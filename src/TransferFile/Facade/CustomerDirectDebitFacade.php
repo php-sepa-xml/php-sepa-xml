@@ -111,7 +111,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     debtorBic?: string,
      *     debtorMandate: string,
      *     debtorMandateSignDate: string|DateTimeInterface,
-     *     remittanceInformation: string,
+     *     remittanceInformation?: string,
      *     creditorReference?: string,
      *     endToEndId?: string,
      *     originalMandateId?: string,

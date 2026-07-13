@@ -63,7 +63,7 @@ class MessageFormatTest extends TestCase
     }
 
     /**
-     * @return iterable
+     * @return iterable<string, array{messageName: string, messageType: string, messageSubType: int, messageVariant: int, messageVersion: int}>
      */
     public static function messageNameParserTestProvider(): iterable
     {
@@ -164,7 +164,7 @@ class MessageFormatTest extends TestCase
 
     /**
      * Only wrong messageNames here
-     * @return iterable
+     * @return iterable<string, array{string}>
      */
     public static function invalidPatternProvider(): iterable
     {

@@ -260,6 +260,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $this->assertSame(0, $xpath->query('./ns:Flr', $postalAddressNode)->length);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function stpVariantProvider(): iterable
     {
         return [
@@ -331,6 +334,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function painProvider(): iterable
     {
         return [
@@ -346,6 +352,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function painProviderV9Plus(): iterable
     {
         // Versions where PstlAdr with structured fields is meaningful.

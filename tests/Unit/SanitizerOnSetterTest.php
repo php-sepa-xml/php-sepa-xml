@@ -48,6 +48,9 @@ class SanitizerOnSetterTest extends TestCase
         $this->assertSame($expected, $obj->$getter());
     }
 
+    /**
+     * @return iterable<string, array{string, string, string, string}>
+     */
     public static function baseTransferInformationSetters(): iterable
     {
         return [
@@ -80,6 +83,9 @@ class SanitizerOnSetterTest extends TestCase
         $this->assertSame($expected, $obj->$getter());
     }
 
+    /**
+     * @return iterable<string, array{string, string, string, string}>
+     */
     public static function customerDirectDebitTransferInformationSetters(): iterable
     {
         return [
@@ -103,6 +109,9 @@ class SanitizerOnSetterTest extends TestCase
         $this->assertSame($expected, $obj->$getter());
     }
 
+    /**
+     * @return iterable<string, array{string, string, string, string}>
+     */
     public static function paymentInformationSetters(): iterable
     {
         return [

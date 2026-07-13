@@ -63,6 +63,8 @@ class CustomerCreditValidationPain00100103Test extends TestCase
     /**
      * Test a transfer file with one payment and one transaction.
      *
+     * @param array<string, mixed> $scenario
+     *
      * @dataProvider scenarios
      */
     public function testSinglePaymentSingleTransWithMoreInfo(array $scenario): void
@@ -173,6 +175,9 @@ class CustomerCreditValidationPain00100103Test extends TestCase
         $this->assertEquals('9999 XX Plaats creditor', $adrLine->item(1)->textContent);
     }
 
+    /**
+     * @return iterable<array{array<string, mixed>}>
+     */
     public static function scenarios(): iterable
     {
         return [

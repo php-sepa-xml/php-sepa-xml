@@ -86,6 +86,9 @@ class CustomerCreditFacadeTest extends TestCase
         $this->assertTrue($dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function schemaProvider(): iterable
     {
         return [
@@ -103,6 +106,9 @@ class CustomerCreditFacadeTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function schemaProviderEmptyBic(): iterable
     {
         return [

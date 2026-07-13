@@ -256,6 +256,9 @@ class CustomerDirectDebitFacadeTest extends TestCase
         $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $schema . '.xsd'));
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function provideSchema(): iterable
     {
         return [
@@ -337,6 +340,9 @@ class CustomerDirectDebitFacadeTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function provideSchemaWithFullAddresses(): iterable
     {
         return [

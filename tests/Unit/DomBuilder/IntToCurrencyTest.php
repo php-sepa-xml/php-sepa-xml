@@ -27,6 +27,9 @@ class IntToCurrencyTest extends TestCase
         $this->assertSame($expected, $formatter->publicIntToCurrency($cents));
     }
 
+    /**
+     * @return iterable<string, array{int, string}>
+     */
     public static function amountProvider(): iterable
     {
         return [
@@ -42,6 +45,8 @@ class IntToCurrencyTest extends TestCase
     }
 
     /**
+     * @param string[] $locales
+     *
      * @dataProvider localeProvider
      */
     public function testFormattingIsLocaleInsensitive(string $localeName, array $locales): void
@@ -64,6 +69,9 @@ class IntToCurrencyTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<string, array{string, string[]}>
+     */
     public static function localeProvider(): iterable
     {
         return [

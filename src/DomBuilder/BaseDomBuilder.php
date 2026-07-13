@@ -40,13 +40,14 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     /** @var DOMElement|null */
     protected $currentTransfer;
 
-    /** @var DOMELement|null */
+    /** @var DOMElement|null */
     protected $currentPayment;
 
     /** @var null|MessageFormat */
     protected $messageFormat = null;
 
     /**
+     * @var bool
      * When true, <CtrlSum> is suppressed inside <GrpHdr>. Required by the
      * German DK pain.001.001.03 profile, which forbids CtrlSum at the
      * group-header level.
@@ -54,6 +55,7 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     private $omitGroupHeaderControlSum = false;
 
     /**
+     * @var bool
      * When true, the <CdtrAgt>/<DbtrAgt> wrapper is omitted entirely when
      * the corresponding BIC is missing, instead of emitting the
      * <Othr><Id>NOTPROVIDED</Id></Othr> fallback.

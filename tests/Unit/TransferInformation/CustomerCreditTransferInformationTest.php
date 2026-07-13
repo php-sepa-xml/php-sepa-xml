@@ -19,19 +19,19 @@ class CustomerCreditTransferInformationTest extends TestCase
      */
     public function testEndToEndIndentifierEqualsName(): void
     {
-        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp');
+        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
         $this->assertEquals('Their Corp', $information->getEndToEndIdentification());
     }
 
     public function testUniqueIdentifierNullByDefault(): void
     {
-        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp');
+        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
         $this->assertNull($information->getUUID());
     }
 
     public function testCustomUniqueIdentifier(): void
     {
-        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp');
+        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp');
         $uuid = Uuid::uuid4();
         $information->setUUID($uuid);
 
@@ -44,7 +44,7 @@ class CustomerCreditTransferInformationTest extends TestCase
      */
     public function testOptionalEndToEndIdentifier(): void
     {
-        $information = new CustomerCreditTransferInformation('100', 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
+        $information = new CustomerCreditTransferInformation(100, 'DE12500105170648489890', 'Their Corp', 'MyEndToEndId');
         $this->assertEquals('MyEndToEndId', $information->getEndToEndIdentification());
     }
 

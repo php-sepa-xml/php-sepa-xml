@@ -26,7 +26,6 @@ namespace Digitick\Sepa\DomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
-use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 /**
@@ -305,7 +304,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * Appends an address node to the passed dom element containing country and unstructured address lines.
      * Does nothing if no address exists in $transactionInformation.
      */
-    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation): void
+    protected function appendAddressToDomElement(\DOMElement $creditor, TransferInformationInterface $transactionInformation): void
     {
         if (!$transactionInformation->getCountry() && !$transactionInformation->getPostalAddress()) {
             return; // No address exists, nothing to do.

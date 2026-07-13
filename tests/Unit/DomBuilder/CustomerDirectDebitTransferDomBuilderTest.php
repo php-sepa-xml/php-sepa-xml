@@ -77,6 +77,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame('Maximilian Musterman', $xpath->evaluate('./ns:UltmtDbtr/ns:Nm', $transactionInfoNode)->item(0)->textContent);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function painProvider(): iterable
     {
         return [
@@ -277,6 +280,9 @@ class CustomerDirectDebitTransferDomBuilderTest extends TestCase
         $this->assertSame(0, $xpath->query('./ns:Flr', $postalAddressNode)->length);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddStpVariantProvider(): iterable
     {
         return [

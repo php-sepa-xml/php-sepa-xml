@@ -234,6 +234,9 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function provideSchema(): iterable
     {
         return [
@@ -254,6 +257,8 @@ class CustomerDirectDebitValidationTest extends TestCase
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
+     * @param array{pain: string, batchBooking: bool, originAgentBic: string} $scenario
      *
      * @dataProvider scenarios
      */
@@ -293,6 +298,9 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertTrue($validated);
     }
 
+    /**
+     * @return iterable<array{array{pain: string, batchBooking: bool, originAgentBic: string}}>
+     */
     public static function scenarios(): iterable
     {
         $scenarios = [];

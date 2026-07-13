@@ -106,6 +106,9 @@ class FinancialInstitutionElementTest extends TestCase
         );
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctLegacyBicProvider(): iterable
     {
         return [
@@ -113,6 +116,9 @@ class FinancialInstitutionElementTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctBicfiProvider(): iterable
     {
         return [
@@ -122,6 +128,9 @@ class FinancialInstitutionElementTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddLegacyBicProvider(): iterable
     {
         return [
@@ -129,6 +138,9 @@ class FinancialInstitutionElementTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddBicfiProvider(): iterable
     {
         return [

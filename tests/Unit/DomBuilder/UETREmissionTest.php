@@ -81,6 +81,9 @@ class UETREmissionTest extends TestCase
         );
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctUetrPresentProvider(): iterable
     {
         return [
@@ -90,6 +93,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctUetrAbsentProvider(): iterable
     {
         return [
@@ -102,6 +108,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddUetrPresentProvider(): iterable
     {
         return [
@@ -112,6 +121,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddUetrAbsentProvider(): iterable
     {
         return [

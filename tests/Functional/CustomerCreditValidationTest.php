@@ -245,6 +245,8 @@ class CustomerCreditValidationTest extends TestCase
     /**
      * Test the payment informations in the xml
      *
+     * @param array{string|null, string|string[]} $address
+     *
      * @dataProvider provideAddressTests
      */
     public function testCreditorAddressGeneration(array $address): void
@@ -262,7 +264,9 @@ class CustomerCreditValidationTest extends TestCase
 
         $country = $address[0];
         $addressLines = $address[1];
-        $transfer->setCountry($country);
+        if (null !== $country) {
+            $transfer->setCountry($country);
+        }
         $transfer->setPostalAddress($addressLines);
         $payment->addTransfer($transfer);
 
@@ -279,8 +283,8 @@ class CustomerCreditValidationTest extends TestCase
 
         // Creditor country is correctly added:
         $originAddressCountry = $xpathDoc->query('//sepa:Cdtr/sepa:PstlAdr/sepa:Ctry');
-        // if country is null, whole node should not exist in document.
-        if (is_null($country)) {
+        if (null === $country) {
+            // Without a country, no <Ctry> node may be emitted at all.
             $this->assertNull($originAddressCountry->item(0));
         } else {
             $this->assertEquals($country, $originAddressCountry->item(0)->textContent);
@@ -294,13 +298,9 @@ class CustomerCreditValidationTest extends TestCase
             $addressLines = [$addressLines];
         }
 
-        // check that all address lines do (not) exist and match the expected inputs.
+        // check that all address lines exist and match the expected inputs.
         for ($index = 0; $index < count($addressLines); $index++) {
-            if (is_null($addressLines[$index])) {
-                $this->assertNull($originAddressLines->item($index));
-            } else {
-                $this->assertEquals($addressLines[$index], $originAddressLines->item($index)->textContent);
-            }
+            $this->assertEquals($addressLines[$index], $originAddressLines->item($index)->textContent);
         }
     }
 
@@ -566,6 +566,9 @@ class CustomerCreditValidationTest extends TestCase
         $this->assertEquals('SALA', $purposeCode->item(0)->textContent);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function provideSchema(): iterable
     {
         return [
@@ -584,13 +587,17 @@ class CustomerCreditValidationTest extends TestCase
     }
 
     //@TODO: Add more address fields, test with and without address line
+    /**
+     * @return iterable<string, array{array{string|null, string|string[]}}>
+     */
     public static function provideAddressTests(): iterable
     {
         return [
-            [['CH', ['Teststreet 1', '21345 Somewhere']]],
-            [['DE', ['Teststreet 2']]],
-            [['NL', '21456 Rightthere']],
-            [['NL', []]],
+            'country with multiple address lines' => [['CH', ['Teststreet 1', '21345 Somewhere']]],
+            'country with single address line' => [['DE', ['Teststreet 2']]],
+            'country with address line as string' => [['NL', '21456 Rightthere']],
+            'country without address lines' => [['NL', []]],
+            'address lines without country' => [[null, ['Teststreet 3', '21345 Somewhere']]],
         ];
     }
 }

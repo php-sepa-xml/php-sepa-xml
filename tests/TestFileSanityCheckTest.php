@@ -93,8 +93,8 @@ class TestFileSanityCheckTest extends TestCase
         $transfer->setPostCode('1000');
         $transfer->setTownName('Nowhere');
         $transfer->setStreetName('Some Street');
-        $transfer->setBuildingNumber(12);
-        $transfer->setFloorNumber(12);
+        $transfer->setBuildingNumber('12');
+        $transfer->setFloorNumber('12');
 
         $paymentInfo->addTransfer($transfer);
         $sepaFile->addPaymentInformation($paymentInfo);
@@ -148,8 +148,8 @@ class TestFileSanityCheckTest extends TestCase
         $transfer->setPostCode('1000');
         $transfer->setTownName('Nowhere');
         $transfer->setStreetName('Some Street');
-        $transfer->setBuildingNumber(12);
-        $transfer->setFloorNumber(12);
+        $transfer->setBuildingNumber('12');
+        $transfer->setFloorNumber('12');
 
         $paymentInfo->addTransfer($transfer);
         $sepaFile->addPaymentInformation($paymentInfo);
@@ -171,6 +171,9 @@ class TestFileSanityCheckTest extends TestCase
         $this->assertTrue($this->dom->schemaValidate(XSD_DIR . $pain . '.xsd'));
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function schemaVersionProvider(): iterable
     {
         return array_merge(
@@ -179,6 +182,9 @@ class TestFileSanityCheckTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, array{string}>
+     */
     public static function ddProvider(): array
     {
         return [
@@ -198,6 +204,9 @@ class TestFileSanityCheckTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<string, array{string}>
+     */
     public static function ctProvider(): array
     {
         return [
