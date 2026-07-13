@@ -21,7 +21,9 @@ If you pass a version not on this list the library still tries to render it (tre
 | pain.001.001.08  |                                                      |
 | pain.001.001.09  | **Default** (`MessageFormat::$defaultMessageFormats['SCT']`). Minimum version recommended for new integrations. |
 | pain.001.001.10  |                                                      |
+| pain.001.001.11  |                                                      |
 | pain.001.001.12  |                                                      |
+| pain.001.001.13  |                                                      |
 | pain.001.002.03  | Variant — `STPCreditTransferInitiationV03`           |
 | pain.001.003.03  | Variant — `EUSTPCreditTransferInitiationV03`         |
 
@@ -39,6 +41,7 @@ If you pass a version not on this list the library still tries to render it (tre
 | pain.008.001.09  | **Default** (`MessageFormat::$defaultMessageFormats['SDD']`). |
 | pain.008.001.10  |                                                      |
 | pain.008.001.11  |                                                      |
+| pain.008.001.12  |                                                      |
 | pain.008.002.02  | Variant                                              |
 | pain.008.003.02  | Variant                                              |
 
