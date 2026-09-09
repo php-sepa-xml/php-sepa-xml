@@ -73,24 +73,17 @@ The latest versions are developed by the [php-sepa-xml community](https://github
 In the near future we may switch to `php-sepa-xml/php-sepa-xml` as that is already the official package name.
 
 ## Documentation
-Check out our docs at:
-* [handling Direct Debits](doc/direct_debit.md)
-* [handling Credit Transfers](doc/credit_transfer.md)
-* [handling string sanitization](doc/string_sanitization.md)
+Full documentation lives in [`doc/`](doc/README.md). Start with the
+[guides directory](doc/guides/) or jump straight to
+[Credit Transfer](doc/guides/credit-transfer.md) or
+[Direct Debit](doc/guides/direct-debit.md).
 
-### ISO20022 Message Names
-ISO20022 messages follow a specific naming convention which can be denoted to the following pattern:
-`MessageType.MessageSubType.MessageVariant.MessageVersion`
-
-For e.g. pain.001.001.12 should be decoded as:
-- MessageType: 'PAIN' - Payments Initiation
-- MessageSubType: '001' - CustomerCreditTransferInitiation
-- MessageVariant: '001'
-- MessageVersion: '12'
+### ISO 20022 Message Names
+See [reference/iso20022-naming.md](doc/reference/iso20022-naming.md).
 
 
 ## Development
-Want to contribute? Please check out our [Dev docs](doc/dev_setup.md)
+Want to contribute? Please check out our [Contributing guide](doc/contributing.md)
 
 ## Any Questions?
 Feel free to open an issue. We will try to reply to the best of our knowledge.

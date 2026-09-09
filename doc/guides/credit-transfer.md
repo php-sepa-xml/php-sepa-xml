@@ -1,12 +1,25 @@
-Credit Transfer Payment Initiation
-===============================
+---
+title: "Credit Transfer Payment Initiation"
+description: "Generate pain.001.* SEPA Credit Transfer files via the facade or via direct object construction."
+---
+
+# Credit Transfer Payment Initiation
+
+> **At a glance**
+>
+> - **Use this when:** building a SEPA Credit Transfer (`pain.001.*`) file.
+> - **Key types:** `CustomerCreditFacade`, `CustomerCreditTransferFile`, `CustomerCreditTransferInformation`.
+> - **Output:** `pain.001.*` XML via `asXML()` / `asDOC()`.
+
+> ⚠️ **Gotcha**
+>
+> Amounts are integer cents (`1234` = 12.34 EUR). For non-EEA creditors the full address-setter cascade must be filled or omitted entirely. See [Gotchas](../gotchas.md) for the full list.
 
 * [Direct usage of CreditTransfer File](#direct-usage-of-credittransfer-file)
 * [Sample usage of CreditTransfer File with Facade Factory](#sample-usage-of-credittransfer-file-with-facade-factory)
 
 
-Direct usage of CreditTransfer File
--------------------------------------
+## Direct usage of CreditTransfer File
 The following example creates a CreditTransfer file, adds a PaymentInformation Object and a single transaction to it.  
 The variable names are used to describe what should be contained within them.
 
@@ -50,14 +63,13 @@ The variable names are used to describe what should be contained within them.
 
     // Write to a file:
     $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, $painFormat); //For e.g. 'pain.001.001.08'
-    file_put_contents($filePath, $domBuilder->asXml());.
+    file_put_contents($filePath, $domBuilder->asXml());
     // ...or retrieve the \DomDocument object, modify it and do something else with it:
     $domBuilder->asDoc();
 ```
 
 
-Sample usage of CreditTransfer File with Facade Factory
--------------------------------------
+## Sample usage of CreditTransfer File with Facade Factory
 
 ```php
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
@@ -89,19 +101,13 @@ $customerCredit->addTransfer('firstPayment', array(
 $customerCredit->asXML();
 ```
 
-Additional Features
---------------------------------------
-- `BaseDomBuilder::setOmitGroupHeaderControlSum(bool)` — suppresses       `<CtrlSum>` inside `<GrpHdr>`. Required by the German DK pain.001.001.03 profile, which forbids CtrlSum at group-header level.
-- `BaseDomBuilder::setOmitAgentElementIfBicMissing(bool)` — omits the whole `<CdtrAgt>`/`<DbtrAgt>` wrapper when the corresponding BIC is missing, instead of emitting `<Othr><Id>NOTPROVIDED</Id></Othr>`. Applied at all four agent-element call sites (SCT and SDD, payment and transfer levels).
-- Passthrough methods on `BaseCustomerTransferFileFacade` so facade users can set both flags without reaching into the builder.
-Both flags default to `false`; existing callers are unaffected. To use set the flags on the facade instance before adding transfers:
-- 
-```php
-use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+## Related
 
-// Returns a CustomerCreditFacade
-$customerCredit = TransferFileFacadeFactory::createCustomerCredit('test123', 'Me');
+- [Direct Debit](direct-debit.md) — sibling flow for `pain.008.*`
+- [Choosing facade vs. direct construction](choosing-facade-vs-direct.md)
+- [Output and validation](output-and-validation.md)
+- [Bank profiles](bank-profiles.md)
+- [Reference: PaymentInformation](../reference/classes/payment-information.md)
+- [Reference: CustomerCreditTransferInformation](../reference/classes/customer-credit-transfer-information.md)
+- [Gotchas](../gotchas.md)
 
-$customerCredit->setOmitAgentElementIfBicMissing(true);
-$customerCredit->setOmitAgentElementIfBicMissing(true);
-```
