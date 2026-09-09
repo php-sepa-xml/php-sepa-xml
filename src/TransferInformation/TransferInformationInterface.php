@@ -72,4 +72,9 @@ interface TransferInformationInterface
     public function getFloorNumber(): ?string;
 
     public function getPostCode(): ?string;
+
+    /**
+     * @return string|string[]|null
+     */
+    public function getPostalAddress();
 }

@@ -5,6 +5,7 @@ namespace Digitick\Sepa\Tests\Unit\DomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\Util\MessageFormat;
@@ -12,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerCreditTransferDomBuilderTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @dataProvider painProvider
      */
@@ -60,20 +63,19 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $this->assertTrue($doc->schemaValidate(XSD_DIR . $painFormat . '.xsd'));
 
         $xpath = $this->xpath($doc, $painFormat);
-        $postalAddressNode = $xpath->evaluate('/ns:Document/ns:CstmrCdtTrfInitn/ns:PmtInf/ns:CdtTrfTxInf/ns:Cdtr/ns:PstlAdr')->item(0);
+        $postalAddressNode = self::xpathNode($xpath, '/ns:Document/ns:CstmrCdtTrfInitn/ns:PmtInf/ns:CdtTrfTxInf/ns:Cdtr/ns:PstlAdr');
 
-        $this->assertNotNull($postalAddressNode);
-        $this->assertSame('DE', $xpath->evaluate('./ns:Ctry', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('60431', $xpath->evaluate('./ns:PstCd', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Frankfurt am Main', $xpath->evaluate('./ns:TwnNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('Wilhelm-Epstein-Str.', $xpath->evaluate('./ns:StrtNm', $postalAddressNode)->item(0)->textContent);
-        $this->assertSame('14', $xpath->evaluate('./ns:BldgNb', $postalAddressNode)->item(0)->textContent);
+        $this->assertSame('DE', self::xpathText($xpath, './ns:Ctry', $postalAddressNode));
+        $this->assertSame('60431', self::xpathText($xpath, './ns:PstCd', $postalAddressNode));
+        $this->assertSame('Frankfurt am Main', self::xpathText($xpath, './ns:TwnNm', $postalAddressNode));
+        $this->assertSame('Wilhelm-Epstein-Str.', self::xpathText($xpath, './ns:StrtNm', $postalAddressNode));
+        $this->assertSame('14', self::xpathText($xpath, './ns:BldgNb', $postalAddressNode));
 
         // Flr only valid for variant 1, version >= 9.
         if ($messageFormat->getVariant() === 1 && $messageFormat->getVersion() >= 9) {
-            $this->assertSame('12', $xpath->evaluate('./ns:Flr', $postalAddressNode)->item(0)->textContent);
+            $this->assertSame('12', self::xpathText($xpath, './ns:Flr', $postalAddressNode));
         } else {
-            $this->assertSame(0, $xpath->query('./ns:Flr', $postalAddressNode)->length);
+            $this->assertSame(0, self::xpathQuery($xpath, './ns:Flr', $postalAddressNode)->length);
         }
     }
 
@@ -86,7 +88,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
 
         $xpath = $this->xpath($doc, 'pain.001.001.09');
 
-        $this->assertSame(1, $xpath->query('//ns:PmtInf/ns:ReqdExctnDt/ns:Dt')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:PmtInf/ns:ReqdExctnDt/ns:Dt')->length);
     }
 
     public function testReqdExctnDtIsFlatForOlderVariant1Versions(): void
@@ -98,7 +100,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
 
         $xpath = $this->xpath($doc, 'pain.001.001.03');
 
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:ReqdExctnDt/ns:Dt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:ReqdExctnDt/ns:Dt')->length);
         $this->assertNotEmpty($xpath->evaluate('string(//ns:PmtInf/ns:ReqdExctnDt)'));
     }
 
@@ -165,7 +167,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
 
         $this->assertSame('CORE', $xpath->evaluate('string(//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Cd)'));
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Prtry')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Prtry')->length);
     }
 
     public function testLocalInstrumentProprietaryRenderedWhenCodeAbsent(): void
@@ -184,7 +186,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
 
         $this->assertSame('LOCAL-STUFF', $xpath->evaluate('string(//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Prtry)'));
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Cd')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:PmtTpInf/ns:LclInstrm/ns:Cd')->length);
     }
 
     public function testInstructionPriorityIsRenderedForVariant1(): void
@@ -242,8 +244,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         );
 
         $xpath = $this->xpath($doc, $painFormat);
-        $postalAddressNode = $xpath->evaluate('//ns:CdtTrfTxInf/ns:Cdtr/ns:PstlAdr')->item(0);
-        $this->assertNotNull($postalAddressNode);
+        $postalAddressNode = self::xpathNode($xpath, '//ns:CdtTrfTxInf/ns:Cdtr/ns:PstlAdr');
 
         // Allowed: Ctry + AdrLine
         $this->assertSame('DE', $xpath->evaluate('string(./ns:Ctry)', $postalAddressNode));
@@ -253,13 +254,16 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         );
 
         // Suppressed structured fields
-        $this->assertSame(0, $xpath->query('./ns:StrtNm', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:BldgNb', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:PstCd', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:TwnNm', $postalAddressNode)->length);
-        $this->assertSame(0, $xpath->query('./ns:Flr', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:StrtNm', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:BldgNb', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:PstCd', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:TwnNm', $postalAddressNode)->length);
+        $this->assertSame(0, self::xpathQuery($xpath, './ns:Flr', $postalAddressNode)->length);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function stpVariantProvider(): iterable
     {
         return [
@@ -284,7 +288,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
 
         $xpath = $this->xpath($this->asDoc($builder), 'pain.001.002.03');
 
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:PmtTpInf/ns:InstrPrty')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:PmtTpInf/ns:InstrPrty')->length);
     }
 
     public function testBatchBookingNullSuppressesBtchBookgElement(): void
@@ -303,7 +307,7 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
 
         $this->assertSame(
             0,
-            $xpath->query('//ns:PmtInf/ns:BtchBookg')->length,
+            self::xpathQuery($xpath, '//ns:PmtInf/ns:BtchBookg')->length,
             '<BtchBookg> must be omitted when BatchBooking is null; emitting it would change semantics for callers relying on bank-side defaulting'
         );
     }
@@ -321,9 +325,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         $transferFile->accept($builder);
         $xpath = $this->xpath($this->asDoc($builder), 'pain.001.001.09');
 
-        $node = $xpath->query('//ns:PmtInf/ns:BtchBookg')->item(0);
+        $node = self::xpathQuery($xpath, '//ns:PmtInf/ns:BtchBookg')->item(0);
 
-        $this->assertNotNull($node, '<BtchBookg> must be emitted when BatchBooking is explicitly set');
+        $this->assertInstanceOf(\DOMNode::class, $node, '<BtchBookg> must be emitted when BatchBooking is explicitly set');
         $this->assertSame(
             'false',
             $node->textContent,
@@ -331,6 +335,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function painProvider(): iterable
     {
         return [
@@ -346,6 +353,9 @@ class CustomerCreditTransferDomBuilderTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function painProviderV9Plus(): iterable
     {
         // Versions where PstlAdr with structured fields is meaningful.

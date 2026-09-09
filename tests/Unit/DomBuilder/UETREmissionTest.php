@@ -6,6 +6,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class UETREmissionTest extends TestCase
 {
+    use XPathAssertions;
+
     private const SAMPLE_UUID = '550e8400-e29b-41d4-a716-446655440000';
 
     /**
@@ -46,7 +49,7 @@ class UETREmissionTest extends TestCase
 
         $this->assertSame(
             0,
-            $xpath->query('//ns:CdtTrfTxInf/ns:PmtId/ns:UETR')->length,
+            self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:PmtId/ns:UETR')->length,
             'UETR must not be emitted for ' . $painFormat
         );
     }
@@ -76,11 +79,14 @@ class UETREmissionTest extends TestCase
 
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTxInf/ns:PmtId/ns:UETR')->length,
+            self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:PmtId/ns:UETR')->length,
             'UETR must not be emitted for ' . $painFormat
         );
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctUetrPresentProvider(): iterable
     {
         return [
@@ -90,6 +96,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sctUetrAbsentProvider(): iterable
     {
         return [
@@ -102,6 +111,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddUetrPresentProvider(): iterable
     {
         return [
@@ -112,6 +124,9 @@ class UETREmissionTest extends TestCase
         ];
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function sddUetrAbsentProvider(): iterable
     {
         return [

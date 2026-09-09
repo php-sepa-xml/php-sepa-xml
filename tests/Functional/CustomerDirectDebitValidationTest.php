@@ -27,12 +27,15 @@ use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerDirectDebitTransferInformation;
 use PHPUnit\Framework\TestCase;
 
 class CustomerDirectDebitValidationTest extends TestCase
 {
+    use XPathAssertions;
+
     /**
      * @var \DOMDocument
      */
@@ -128,14 +131,11 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($this->dom);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:'.$schema);
 
-        $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals(0, $testNode->length, 'RmtInf should not contain Ustrd when Strd is present.');
+        $this->assertEquals(0, self::xpathQuery($xpathDoc, '//sepa:Ustrd')->length, 'RmtInf should not contain Ustrd when Strd is present.');
 
-        $testNode = $xpathDoc->query('//sepa:Strd');
-        $this->assertEquals(1, $testNode->length, 'Missing structured creditor reference Strd.');
+        $this->assertEquals(1, self::xpathQuery($xpathDoc, '//sepa:Strd')->length, 'Missing structured creditor reference Strd.');
 
-        $testNode = $xpathDoc->query('//sepa:Strd/sepa:CdtrRefInf/sepa:Ref');
-        $this->assertEquals('RF81123453', $testNode->item(0)->textContent);
+        $this->assertEquals('RF81123453', self::xpathText($xpathDoc, '//sepa:Strd/sepa:CdtrRefInf/sepa:Ref'));
     }
 
     /**
@@ -216,24 +216,19 @@ class CustomerDirectDebitValidationTest extends TestCase
         $xpathDoc = new \DOMXPath($doc);
         $xpathDoc->registerNamespace('sepa', 'urn:iso:std:iso:20022:tech:xsd:' . $schema);
         // Date is correctly coded
-        $testNode = $xpathDoc->query('//sepa:InitgPty/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Cdtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:EndToEndId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Dbtr/sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:Ustrd');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:MndtId');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:UltmtDbtr//sepa:Nm');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe ultimateDebtorName', $testNode->item(0)->textContent);
-        $testNode = $xpathDoc->query('//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id');
-        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', $testNode->item(0)->textContent);
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe initiatingPartyName', self::xpathText($xpathDoc, '//sepa:InitgPty/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorName', self::xpathText($xpathDoc, '//sepa:Cdtr/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', self::xpathText($xpathDoc, '//sepa:EndToEndId'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe debtorName', self::xpathText($xpathDoc, '//sepa:Dbtr/sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe remittanceInformation', self::xpathText($xpathDoc, '//sepa:Ustrd'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe mandateId', self::xpathText($xpathDoc, '//sepa:MndtId'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe ultimateDebtorName', self::xpathText($xpathDoc, '//sepa:UltmtDbtr//sepa:Nm'));
+        $this->assertEquals('Only A-Z without aeoeuessAeOeUe creditorSchemeId', self::xpathText($xpathDoc, '//sepa:CdtrSchmeId//sepa:PrvtId//sepa:Id'));
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function provideSchema(): iterable
     {
         return [
@@ -254,6 +249,8 @@ class CustomerDirectDebitValidationTest extends TestCase
 
     /**
      * Test a transfer file with one payment and one transaction.
+     *
+     * @param array{pain: string, batchBooking: bool, originAgentBic: string} $scenario
      *
      * @dataProvider scenarios
      */
@@ -293,6 +290,9 @@ class CustomerDirectDebitValidationTest extends TestCase
         $this->assertTrue($validated);
     }
 
+    /**
+     * @return iterable<array{array{pain: string, batchBooking: bool, originAgentBic: string}}>
+     */
     public static function scenarios(): iterable
     {
         $scenarios = [];

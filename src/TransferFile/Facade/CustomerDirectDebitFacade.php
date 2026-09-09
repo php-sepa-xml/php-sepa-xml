@@ -111,7 +111,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
      *     debtorBic?: string,
      *     debtorMandate: string,
      *     debtorMandateSignDate: string|DateTimeInterface,
-     *     remittanceInformation: string,
+     *     remittanceInformation?: string,
      *     creditorReference?: string,
      *     endToEndId?: string,
      *     originalMandateId?: string,
@@ -159,7 +159,7 @@ class CustomerDirectDebitFacade extends BaseCustomerTransferFileFacade
 
         if (isset($transferInformation['creditorReference'])) {
             $transfer->setCreditorReference($transferInformation['creditorReference']);
-        } else {
+        } elseif (isset($transferInformation['remittanceInformation'])) {
             $transfer->setRemittanceInformation($transferInformation['remittanceInformation']);
         }
 

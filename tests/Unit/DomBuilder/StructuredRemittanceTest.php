@@ -6,6 +6,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
@@ -30,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StructuredRemittanceTest extends TestCase
 {
+    use XPathAssertions;
+
     private const SCT_PAIN = 'pain.001.001.09';
     private const SDD_PAIN = 'pain.008.001.02';
 
@@ -39,7 +42,7 @@ class StructuredRemittanceTest extends TestCase
             $t->setCreditorReference('RF81123453');
         });
 
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf')->length);
         $this->assertSame(
             'SCOR',
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Tp/ns:CdOrPrtry/ns:Cd)')
@@ -50,7 +53,7 @@ class StructuredRemittanceTest extends TestCase
         );
         $this->assertSame(
             0,
-            $xpath->query('//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Tp/ns:Issr')->length,
+            self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Tp/ns:Issr')->length,
             'Issr must be omitted when creditorReferenceType is not set'
         );
     }
@@ -74,7 +77,7 @@ class StructuredRemittanceTest extends TestCase
             $t->setRemittanceInformation('Invoice 42');
         });
 
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd')->length);
         $this->assertSame(
             'Invoice 42',
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:RmtInf/ns:Ustrd)')
@@ -90,8 +93,8 @@ class StructuredRemittanceTest extends TestCase
             $t->setRemittanceInformation('Should be ignored');
         });
 
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd')->length);
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:RmtInf/ns:Ustrd')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:RmtInf/ns:Strd')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:RmtInf/ns:Ustrd')->length);
     }
 
     public function testSDDEmitsScorStructuredRemittanceWithoutIssuer(): void
@@ -110,7 +113,7 @@ class StructuredRemittanceTest extends TestCase
         );
         $this->assertSame(
             0,
-            $xpath->query('//ns:DrctDbtTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Tp/ns:Issr')->length
+            self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Tp/ns:Issr')->length
         );
     }
 
@@ -133,7 +136,7 @@ class StructuredRemittanceTest extends TestCase
             $t->setRemittanceInformation('Invoice 42');
         });
 
-        $this->assertSame(0, $xpath->query('//ns:DrctDbtTxInf/ns:RmtInf/ns:Strd')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:RmtInf/ns:Strd')->length);
         $this->assertSame(
             'Invoice 42',
             $xpath->evaluate('string(//ns:DrctDbtTxInf/ns:RmtInf/ns:Ustrd)')

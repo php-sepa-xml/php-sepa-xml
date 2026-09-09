@@ -48,6 +48,9 @@ class StringHelper
 
         $mapped = strtr($inputString, $map);
         $sanitized = preg_replace('/[^A-Za-z0-9:?,\-\/(+.)\' ]/', ' ', $mapped);
+        if (null === $sanitized) {
+            throw new \RuntimeException(sprintf('Unable to sanitize the string "%s".', $inputString));
+        }
 
         return $sanitized;
     }

@@ -6,6 +6,7 @@ use Digitick\Sepa\DomBuilder\CustomerCreditTransferDomBuilder;
 use Digitick\Sepa\DomBuilder\CustomerDirectDebitTransferDomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\Tests\XPathAssertions;
 use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\CustomerDirectDebitTransferFile;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
@@ -31,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DkComplianceTest extends TestCase
 {
+    use XPathAssertions;
+
     private const SCT_PAIN = 'pain.001.001.03';
     private const SDD_PAIN = 'pain.008.001.02';
 
@@ -42,7 +45,7 @@ class DkComplianceTest extends TestCase
             // no flag
         });
 
-        $this->assertSame(1, $xpath->query('//ns:GrpHdr/ns:CtrlSum')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:GrpHdr/ns:CtrlSum')->length);
     }
 
     public function testSctOmitsGrpHdrCtrlSumWhenFlagSet(): void
@@ -51,9 +54,9 @@ class DkComplianceTest extends TestCase
             $builder->setOmitGroupHeaderControlSum(true);
         });
 
-        $this->assertSame(0, $xpath->query('//ns:GrpHdr/ns:CtrlSum')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:GrpHdr/ns:CtrlSum')->length);
         // PmtInf/CtrlSum must still appear — CtrlSum is valid there.
-        $this->assertSame(1, $xpath->query('//ns:PmtInf/ns:CtrlSum')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:PmtInf/ns:CtrlSum')->length);
     }
 
     public function testSddOmitsGrpHdrCtrlSumWhenFlagSet(): void
@@ -62,8 +65,8 @@ class DkComplianceTest extends TestCase
             $builder->setOmitGroupHeaderControlSum(true);
         });
 
-        $this->assertSame(0, $xpath->query('//ns:GrpHdr/ns:CtrlSum')->length);
-        $this->assertSame(1, $xpath->query('//ns:PmtInf/ns:CtrlSum')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:GrpHdr/ns:CtrlSum')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:PmtInf/ns:CtrlSum')->length);
     }
 
     // ---------- Agent element on missing BIC --------------------------------
@@ -74,7 +77,7 @@ class DkComplianceTest extends TestCase
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ null);
 
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
     }
 
     public function testSctOmitsDbtrAgtAtPaymentLevelWhenBicMissingAndFlagSet(): void
@@ -83,7 +86,7 @@ class DkComplianceTest extends TestCase
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ null);
 
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:DbtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:DbtrAgt')->length);
     }
 
     public function testSctPreservesAgentElementsWhenBicPresentAndFlagSet(): void
@@ -93,8 +96,8 @@ class DkComplianceTest extends TestCase
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ 'DEUTDEFF');
 
         // Flag is on but BICs are present — agent wrappers must remain.
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
-        $this->assertSame(1, $xpath->query('//ns:PmtInf/ns:DbtrAgt')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:PmtInf/ns:DbtrAgt')->length);
     }
 
     public function testSctEmitsNotProvidedWhenBicMissingAndFlagNotSet(): void
@@ -104,7 +107,7 @@ class DkComplianceTest extends TestCase
             // no flag
         }, /* transferBic */ null);
 
-        $this->assertSame(1, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
         $this->assertSame(
             'NOTPROVIDED',
             $xpath->evaluate('string(//ns:CdtTrfTxInf/ns:CdtrAgt/ns:FinInstnId/ns:Othr/ns:Id)')
@@ -117,7 +120,7 @@ class DkComplianceTest extends TestCase
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ null);
 
-        $this->assertSame(0, $xpath->query('//ns:DrctDbtTxInf/ns:DbtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:DrctDbtTxInf/ns:DbtrAgt')->length);
     }
 
     public function testSddOmitsCdtrAgtAtPaymentLevelWhenBicMissingAndFlagSet(): void
@@ -126,7 +129,7 @@ class DkComplianceTest extends TestCase
             $builder->setOmitAgentElementIfBicMissing(true);
         }, /* transferBic */ 'DEUTDEFF', /* originBic */ null);
 
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:CdtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:CdtrAgt')->length);
     }
 
     // ---------- Integration: full DK-compliant pain.001.001.03 --------------
@@ -159,14 +162,14 @@ class DkComplianceTest extends TestCase
         $xpath->registerNamespace('ns', 'urn:iso:std:iso:20022:tech:xsd:' . self::SCT_PAIN);
 
         // DK-forbidden elements: absent
-        $this->assertSame(0, $xpath->query('//ns:GrpHdr/ns:CtrlSum')->length);
-        $this->assertSame(0, $xpath->query('//ns:PmtInf/ns:DbtrAgt')->length);
-        $this->assertSame(0, $xpath->query('//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:GrpHdr/ns:CtrlSum')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:PmtInf/ns:DbtrAgt')->length);
+        $this->assertSame(0, self::xpathQuery($xpath, '//ns:CdtTrfTxInf/ns:CdtrAgt')->length);
 
         // Required elements still present
-        $this->assertSame(1, $xpath->query('//ns:GrpHdr/ns:MsgId')->length);
-        $this->assertSame(1, $xpath->query('//ns:GrpHdr/ns:NbOfTxs')->length);
-        $this->assertSame(1, $xpath->query('//ns:PmtInf/ns:CtrlSum')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:GrpHdr/ns:MsgId')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:GrpHdr/ns:NbOfTxs')->length);
+        $this->assertSame(1, self::xpathQuery($xpath, '//ns:PmtInf/ns:CtrlSum')->length);
     }
 
     // ---------- Facade passthrough ------------------------------------------
@@ -190,7 +193,9 @@ class DkComplianceTest extends TestCase
         ]);
 
         $xml = $facade->asXML();
-        $this->assertStringNotContainsString('<CtrlSum>', substr($xml, 0, strpos($xml, '<PmtInf>')));
+        $pmtInfPosition = strpos($xml, '<PmtInf>');
+        $this->assertNotFalse($pmtInfPosition);
+        $this->assertStringNotContainsString('<CtrlSum>', substr($xml, 0, $pmtInfPosition));
     }
 
     public function testFacadeExposesOmitAgentElementIfBicMissing(): void

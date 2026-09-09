@@ -27,6 +27,9 @@ class IntToCurrencyTest extends TestCase
         $this->assertSame($expected, $formatter->publicIntToCurrency($cents));
     }
 
+    /**
+     * @return iterable<string, array{int, string}>
+     */
     public static function amountProvider(): iterable
     {
         return [
@@ -42,11 +45,14 @@ class IntToCurrencyTest extends TestCase
     }
 
     /**
+     * @param string[] $locales
+     *
      * @dataProvider localeProvider
      */
     public function testFormattingIsLocaleInsensitive(string $localeName, array $locales): void
     {
         $original = setlocale(LC_ALL, '0');
+        $this->assertNotFalse($original, 'Unable to determine the current locale');
         $applied = setlocale(LC_ALL, ...$locales);
         if ($applied === false) {
             $this->markTestSkipped(sprintf('%s locale unavailable on this system', $localeName));
@@ -64,6 +70,9 @@ class IntToCurrencyTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<string, array{string, string[]}>
+     */
     public static function localeProvider(): iterable
     {
         return [
@@ -73,13 +82,19 @@ class IntToCurrencyTest extends TestCase
         ];
     }
 
-    private function formatter(): object
+    private function formatter(): IntToCurrencyExposingDomBuilder
     {
-        return new class ('pain.001.001.09') extends CustomerCreditTransferDomBuilder {
-            public function publicIntToCurrency(int $amount): string
-            {
-                return $this->intToCurrency($amount);
-            }
-        };
+        return new IntToCurrencyExposingDomBuilder('pain.001.001.09');
+    }
+}
+
+/**
+ * Exposes the protected BaseDomBuilder::intToCurrency for direct unit testing.
+ */
+class IntToCurrencyExposingDomBuilder extends CustomerCreditTransferDomBuilder
+{
+    public function publicIntToCurrency(int $amount): string
+    {
+        return $this->intToCurrency($amount);
     }
 }

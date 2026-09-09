@@ -503,20 +503,14 @@ class BaseTransferInformation implements TransferInformationInterface
         $this->postalAddress = $postalAddress;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUltimateDebtorName()
+    public function getUltimateDebtorName(): ?string
     {
         return $this->ultimateDebtorName;
     }
 
-    /**
-     * @param string|string[] $name
-     */
-    public function setUltimateDebtorName($name): void
+    public function setUltimateDebtorName(?string $name): void
     {
-        $this->ultimateDebtorName = Sanitizer::sanitize($name);
+        $this->ultimateDebtorName = null === $name ? null : Sanitizer::sanitize($name);
     }
 
     /**

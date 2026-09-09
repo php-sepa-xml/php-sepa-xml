@@ -69,6 +69,9 @@ class PaymentInformationTest extends TestCase
         $pi->setLocalInstrumentCode($code);
     }
 
+    /**
+     * @return iterable<string, array{string}>
+     */
     public static function invalidLocalInstrumentCodeProvider(): iterable
     {
         return [
@@ -90,6 +93,9 @@ class PaymentInformationTest extends TestCase
         $this->assertSame($stored, $pi->getLocalInstrumentCode());
     }
 
+    /**
+     * @return iterable<string, array{string, string}>
+     */
     public static function validLocalInstrumentCodeProvider(): iterable
     {
         return [
@@ -120,6 +126,9 @@ class PaymentInformationTest extends TestCase
         $this->assertSame($stored, $pi->getInstructionPriority());
     }
 
+    /**
+     * @return iterable<string, array{string, string}>
+     */
     public static function validInstructionPriorityProvider(): iterable
     {
         return [

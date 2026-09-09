@@ -30,11 +30,15 @@ use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 interface CustomerTransferFileFacadeInterface
 {
     /**
+     * @param array<string, mixed> $paymentInformation
+     *
      * @throws InvalidArgumentException
      */
     public function addPaymentInfo(string $paymentName, array $paymentInformation): PaymentInformation;
 
     /**
+     * @param array<string, mixed> $transferInformation
+     *
      * @throws InvalidArgumentException
      */
     public function addTransfer(string $paymentName, array $transferInformation): TransferInformationInterface;

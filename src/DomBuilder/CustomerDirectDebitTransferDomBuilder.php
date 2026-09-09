@@ -23,6 +23,7 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
+use Digitick\Sepa\Exception\InvalidTransferFileConfiguration;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
@@ -50,6 +51,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
      */
     public function visitPaymentInformation(PaymentInformation $paymentInformation): void
     {
+        if (!isset($this->currentTransfer)) {
+            throw new \LogicException('The transfer file has to be visited before payment informations can be added.');
+        }
+
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
@@ -205,8 +210,12 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
         $mandateRelatedInformation->appendChild(
             $this->createElement('MndtId', $transactionInformation->getMandateId())
         );
+        $mandateSignDate = $transactionInformation->getMandateSignDate();
+        if (null === $mandateSignDate) {
+            throw new InvalidTransferFileConfiguration('The transfer must contain a mandate sign date.');
+        }
         $mandateRelatedInformation->appendChild(
-            $this->createElement('DtOfSgntr', $transactionInformation->getMandateSignDate()->format('Y-m-d'))
+            $this->createElement('DtOfSgntr', $mandateSignDate->format('Y-m-d'))
         );
         $directDebitTransactionInformation->appendChild($directDebitTransaction);
 
@@ -283,13 +292,14 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
             $directDebitTransactionInformation->appendChild($ultimateDebtor);
         }
 
-        if (strlen((string)$transactionInformation->getCreditorReference()) > 0) {
+        $remittanceMessage = $transactionInformation->getRemittanceInformation();
+        if (strlen((string) $transactionInformation->getCreditorReference()) > 0) {
             $directDebitTransactionInformation->appendChild(
                 $this->getStructuredRemittanceElement($transactionInformation)
             );
-        } elseif (strlen((string)$transactionInformation->getRemittanceInformation()) > 0) {
+        } elseif (null !== $remittanceMessage && '' !== $remittanceMessage) {
             $directDebitTransactionInformation->appendChild(
-                $this->getRemittenceElement($transactionInformation->getRemittanceInformation())
+                $this->getRemittenceElement($remittanceMessage)
             );
         }
 
@@ -349,7 +359,10 @@ class CustomerDirectDebitTransferDomBuilder extends BaseDomBuilder
 
             $xpath = new \DOMXpath($this->doc);
             $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
-            $oldId = $items->item(0);
+            $oldId = false === $items ? null : $items->item(0);
+            if (!$oldId instanceof \DOMNode || null === $oldId->parentNode) {
+                throw new \LogicException('The group header must contain an initiating party id element.');
+            }
 
             $oldId->parentNode->replaceChild($newId, $oldId);
         }

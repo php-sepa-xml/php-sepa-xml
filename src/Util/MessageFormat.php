@@ -18,6 +18,7 @@ class MessageFormat
     /** @var int */
     private $version;
 
+    /** @var string[] */
     private static $supportedMessageFormats = [
         /* Credit Transfers: */
         'pain.001.001.03',
@@ -48,6 +49,7 @@ class MessageFormat
         'pain.008.003.02',
     ];
 
+    /** @var array<string, string> */
     public static $defaultMessageFormats = [
         'SCT' => 'pain.001.001.09',
         'SDD' => 'pain.008.001.09',
@@ -83,6 +85,9 @@ class MessageFormat
         return $this->version;
     }
 
+    /**
+     * @return string[]
+     */
     public function getSupportedMessageFormats(): array
     {
         return self::$supportedMessageFormats;

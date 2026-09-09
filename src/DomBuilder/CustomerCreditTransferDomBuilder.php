@@ -26,7 +26,6 @@ namespace Digitick\Sepa\DomBuilder;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\PaymentInformation;
 use Digitick\Sepa\TransferFile\TransferFileInterface;
-use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 
 /**
@@ -53,6 +52,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      */
     public function visitPaymentInformation(PaymentInformation $paymentInformation): void
     {
+        if (!isset($this->currentTransfer)) {
+            throw new \LogicException('The transfer file has to be visited before payment informations can be added.');
+        }
+
         $this->currentPayment = $this->createElement('PmtInf');
         $this->currentPayment->appendChild($this->createElement('PmtInfId', $paymentInformation->getId()));
         $this->currentPayment->appendChild($this->createElement('PmtMtd', $paymentInformation->getPaymentMethod()));
@@ -151,6 +154,11 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      */
     public function visitTransferInformation(TransferInformationInterface $transactionInformation): void
     {
+        if (!isset($this->currentPayment)) {
+            throw new \LogicException('Payment information have to be added before any transaction informations can be added.');
+        }
+        $currentPayment = $this->currentPayment;
+
         $CdtTrfTxInf = $this->createElement('CdtTrfTxInf');
 
         // Payment ID 2.28
@@ -234,15 +242,16 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
         }
 
         // remittance 2.98 2.99
-        if (strlen((string)$transactionInformation->getCreditorReference()) > 0) {
+        $remittanceMessage = $transactionInformation->getRemittanceInformation();
+        if (strlen((string) $transactionInformation->getCreditorReference()) > 0) {
             $remittanceInformation = $this->getStructuredRemittanceElement($transactionInformation);
             $CdtTrfTxInf->appendChild($remittanceInformation);
-        } elseif (strlen((string)$transactionInformation->getRemittanceInformation()) > 0) {
-            $remittanceInformation = $this->getRemittenceElement($transactionInformation->getRemittanceInformation());
+        } elseif (null !== $remittanceMessage && '' !== $remittanceMessage) {
+            $remittanceInformation = $this->getRemittenceElement($remittanceMessage);
             $CdtTrfTxInf->appendChild($remittanceInformation);
         }
 
-        $this->currentPayment->appendChild($CdtTrfTxInf);
+        $currentPayment->appendChild($CdtTrfTxInf);
     }
 
     /**
@@ -265,7 +274,10 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
 
             $xpath = new \DOMXpath($this->doc);
             $items = $xpath->query('GrpHdr/InitgPty/Id', $this->currentTransfer);
-            $oldId = $items->item(0);
+            $oldId = false === $items ? null : $items->item(0);
+            if (!$oldId instanceof \DOMNode || null === $oldId->parentNode) {
+                throw new \LogicException('The group header must contain an initiating party id element.');
+            }
 
             $oldId->parentNode->replaceChild($organizationId, $oldId);
         }
@@ -305,7 +317,7 @@ class CustomerCreditTransferDomBuilder extends BaseDomBuilder
      * Appends an address node to the passed dom element containing country and unstructured address lines.
      * Does nothing if no address exists in $transactionInformation.
      */
-    protected function appendAddressToDomElement(\DOMElement $creditor, CustomerCreditTransferInformation $transactionInformation): void
+    protected function appendAddressToDomElement(\DOMElement $creditor, TransferInformationInterface $transactionInformation): void
     {
         if (!$transactionInformation->getCountry() && !$transactionInformation->getPostalAddress()) {
             return; // No address exists, nothing to do.
