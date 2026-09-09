@@ -192,6 +192,7 @@ class TestFileSanityCheckTest extends TestCase
             'pain.008.001.09' => ['pain.008.001.09'],
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.001.12' => ['pain.008.001.12'],
             //SEPA Variants:
             'pain.008.002.02' => ['pain.008.002.02'],
             'pain.008.003.02' => ['pain.008.003.02'],
@@ -209,7 +210,9 @@ class TestFileSanityCheckTest extends TestCase
             'pain.001.001.08' => ['pain.001.001.08'],
             'pain.001.001.09' => ['pain.001.001.09'],
             'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.11' => ['pain.001.001.11'],
             'pain.001.001.12' => ['pain.001.001.12'],
+            'pain.001.001.13' => ['pain.001.001.13'],
             //SEPA Variants:
             'pain.001.002.03' => ['pain.001.002.03'],
             'pain.001.003.03' => ['pain.001.003.03'],

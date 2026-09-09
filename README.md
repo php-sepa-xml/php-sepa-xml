@@ -22,8 +22,10 @@ The versions of the [ISO20022 standard](https://www.iso20022.org/) supported are
   * pain.001.001.07
   * pain.001.001.08
   * pain.001.001.09 (The minimum version recommended)
+  * pain.001.001.10
   * pain.001.001.11
   * pain.001.001.12
+  * pain.001.001.13
   * Credit Transfer [Variants](https://www.iso20022.org/catalogue-messages/additional-content-messages/variants):
     * pain.001.002.03 (STPCreditTransferInitiationV03)
     * pain.001.003.03 (EUSTPCreditTransferInitiationV03)
@@ -35,8 +37,10 @@ The versions of the [ISO20022 standard](https://www.iso20022.org/) supported are
   * pain.008.001.06
   * pain.008.001.07
   * pain.008.001.08 (The minimum version recommended)
+  * pain.008.001.09
   * pain.008.001.10
   * pain.008.001.11
+  * pain.008.001.12
   * Direct Debit [Variants](https://www.iso20022.org/catalogue-messages/additional-content-messages/variants):
     * pain.008.002.02
     * pain.008.003.02
