@@ -26,10 +26,13 @@ namespace Digitick\Sepa;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
+use Digitick\Sepa\Util\DeprecatedPublicProperties;
 use Digitick\Sepa\Util\Sanitizer;
 
 class GroupHeader
 {
+    use DeprecatedPublicProperties;
+
     /**
      * Whether this is a test Transaction
      *
@@ -54,7 +57,7 @@ class GroupHeader
      *
      * @var string|null
      */
-    public $initiatingPartyIdentificationScheme;
+    protected $initiatingPartyIdentificationScheme;
 
     /**
      * The Issuer.
@@ -100,6 +103,16 @@ class GroupHeader
         $this->isTest = $isTest;
         $this->initiatingPartyName = Sanitizer::sanitize($initiatingPartyName);
         $this->creationDateTime = new DateTimeImmutable();
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    protected function deprecatedPublicPropertyMap(): array
+    {
+        return [
+            'initiatingPartyIdentificationScheme' => ['getInitiatingPartyIdentificationScheme', 'setInitiatingPartyIdentificationScheme'],
+        ];
     }
 
     public function accept(DomBuilderInterface $domBuilder): void
