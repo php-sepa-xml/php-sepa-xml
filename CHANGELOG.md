@@ -1,8 +1,30 @@
 # Changelog
 
-## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/3.2.0 - Fixes, Docs update, Improvements...HEAD)
+## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/3.2.0...HEAD)
 
-## [Fixes and improvements](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.2...3.1.0) - 2026-05-04
+## [3.2.0](https://github.com/php-sepa-xml/php-sepa-xml/compare/3.1.0...3.2.0)
+### What's Changed
+* GHAs: (deps): Bump actions/checkout from 3 to 6 by @dependabot[bot] in https://github.com/php-sepa-xml/php-sepa-xml/pull/241
+* Update dependabot-auto-merge.yml to also commit. Note: this workflow … by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/243
+* GHAs: (deps): Bump stefanzweifel/git-auto-commit-action from 4 to 7 by @dependabot[bot] in https://github.com/php-sepa-xml/php-sepa-xml/pull/239
+* Readd `<PmtTpInf>` with necessary conditions, which was dropped in v3.0 by @mkszepp in https://github.com/php-sepa-xml/php-sepa-xml/pull/245
+* Move ramsey/uuid to require-dev (#246) by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/247
+* GHAs: (deps): Bump actions/cache from 5 to 6 by @dependabot[bot] in https://github.com/php-sepa-xml/php-sepa-xml/pull/249
+* Update phpunit.yml to generate the locales required by the test suite by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/251
+* Add creditor postal address support for Direct Debit (pain.008) by @sergcms in https://github.com/php-sepa-xml/php-sepa-xml/pull/250
+* GHAs: (deps): Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/php-sepa-xml/php-sepa-xml/pull/248
+* Docs/restructure phase 1 by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/254
+* Move some properties to protected to even the API surface out by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/255
+* Add optional XSD validation by @BorislavSabev in https://github.com/php-sepa-xml/php-sepa-xml/pull/256
+
+### New Contributors
+* @mkszepp made their first contribution in https://github.com/php-sepa-xml/php-sepa-xml/pull/245
+* @sergcms made their first contribution in https://github.com/php-sepa-xml/php-sepa-xml/pull/250
+
+**Full Changelog**: https://github.com/php-sepa-xml/php-sepa-xml/compare/3.1.0...3.2.0
+
+
+## [3.1.0](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.2...3.1.0) - 2026-05-04
 
 ### What's Changed
 
