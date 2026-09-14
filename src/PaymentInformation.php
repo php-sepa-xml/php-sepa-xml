@@ -28,10 +28,13 @@ use DateTimeInterface;
 use Digitick\Sepa\DomBuilder\DomBuilderInterface;
 use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
+use Digitick\Sepa\Util\DeprecatedPublicProperties;
 use Digitick\Sepa\Util\Sanitizer;
 
 class PaymentInformation
 {
+    use DeprecatedPublicProperties;
+
     /**
      * The first drawn from several recurring debits
      */
@@ -55,17 +58,17 @@ class PaymentInformation
     /**
      * @var string Unambiguously identify the payment.
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string|null Purpose of the transaction(s).
      */
-    public $categoryPurposeCode;
+    protected $categoryPurposeCode;
 
     /**
      * @var string Debtor's name.
      */
-    public $originName;
+    protected $originName;
 
     /**
      * Creditor's postal street name, rendered as <Cdtr><PstlAdr><StrtNm>.
@@ -107,24 +110,24 @@ class PaymentInformation
      *
      * @var string|null
      */
-    public $originBankPartyIdentification;
+    protected $originBankPartyIdentification;
 
     /**
      * Name of the identification scheme, in a coded form as published in an external list. 1-4 characters.
      *
      * @var string|null
      */
-    public $originBankPartyIdentificationScheme;
+    protected $originBankPartyIdentificationScheme;
 
     /**
      * @var string Debtor's account IBAN.
      */
-    public $originAccountIBAN;
+    protected $originAccountIBAN;
 
     /**
      * @var string|null Debtor's account bank BIC code.
      */
-    public $originAgentBIC;
+    protected $originAgentBIC;
 
     /**
      * @var string Debtor's account ISO currency code.
@@ -215,6 +218,22 @@ class PaymentInformation
         $this->originName = Sanitizer::sanitize($originName);
         $this->originAccountCurrency = $originAccountCurrency;
         $this->dueDate = new DateTimeImmutable();
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    protected function deprecatedPublicPropertyMap(): array
+    {
+        return [
+            'id' => ['getId', 'setId'],
+            'categoryPurposeCode' => ['getCategoryPurposeCode', 'setCategoryPurposeCode'],
+            'originName' => ['getOriginName', 'setOriginName'],
+            'originBankPartyIdentification' => ['getOriginBankPartyIdentification', 'setOriginBankPartyIdentification'],
+            'originBankPartyIdentificationScheme' => ['getOriginBankPartyIdentificationScheme', 'setOriginBankPartyIdentificationScheme'],
+            'originAccountIBAN' => ['getOriginAccountIBAN', 'setOriginAccountIBAN'],
+            'originAgentBIC' => ['getOriginAgentBIC', 'setOriginAgentBIC'],
+        ];
     }
 
     public function addTransfer(TransferInformationInterface $transfer): void
