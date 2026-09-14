@@ -25,6 +25,7 @@ Thrown when caller-supplied data is rejected before any XML is written. Typical 
 - `addTransfer` called with a `$paymentName` that doesn't exist on the facade.
 - Invalid `dueDate` passed to `BaseCustomerTransferFileFacade::createDueDateFromPaymentInformation` (wraps the underlying `DateTime` failure).
 - `DomBuilderFactory::createDomBuilder` called with an object that isn't a recognised `TransferFile` subclass.
+- `validateSchema()` / `getSchemaValidationErrors()` (on `BaseDomBuilder` or a facade) given an XSD path that doesn't exist, or called without one for a pain format that has no bundled XSD.
 
 ## `Digitick\Sepa\Exception\InvalidPaymentMethodException`
 

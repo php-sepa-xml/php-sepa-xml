@@ -109,6 +109,36 @@ abstract class BaseCustomerTransferFileFacade implements CustomerTransferFileFac
     }
 
     /**
+     * Render the document, like asXML(), and validate it against an XSD.
+     *
+     * @param string|null $xsdFile Defaults to the ISO 20022 XSD bundled for this message format.
+     *
+     * @throws InvalidArgumentException when $xsdFile doesn't exist, or no XSD is bundled for the format.
+     */
+    public function validateSchema(?string $xsdFile = null): bool
+    {
+        $this->finalize();
+
+        return $this->domBuilder->validateSchema($xsdFile);
+    }
+
+    /**
+     * Render the document, like asXML(), and return what fails XSD validation.
+     *
+     * @param string|null $xsdFile Defaults to the ISO 20022 XSD bundled for this message format.
+     *
+     * @return string[] One message per validation error; empty when the document is valid.
+     *
+     * @throws InvalidArgumentException when $xsdFile doesn't exist, or no XSD is bundled for the format.
+     */
+    public function getSchemaValidationErrors(?string $xsdFile = null): array
+    {
+        $this->finalize();
+
+        return $this->domBuilder->getSchemaValidationErrors($xsdFile);
+    }
+
+    /**
      * Guard used by subclasses to refuse mutation after the document has
      * been rendered. Otherwise the new payments/transfers would be silently
      * ignored by the cached XML.
