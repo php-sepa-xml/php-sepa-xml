@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/php-sepa-xml/php-sepa-xml/compare/3.1.0...HEAD)
 
-## [Fixes and improvements](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.2...Fixes and improvements) - 2026-05-04
+## [Fixes and improvements](https://github.com/php-sepa-xml/php-sepa-xml/compare/2.3.2...3.1.0) - 2026-05-04
 
 ### What's Changed
 
