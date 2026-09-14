@@ -268,6 +268,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
             'pain.008.001.09' => ['pain.008.001.09'],
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.001.12' => ['pain.008.001.12'],
             'pain.008.002.02' => ['pain.008.002.02'],
             'pain.008.003.02' => ['pain.008.003.02'],
         ];
@@ -349,6 +350,7 @@ class CustomerDirectDebitFacadeTest extends TestCase
             'pain.008.001.09' => ['pain.008.001.09'],
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.001.12' => ['pain.008.001.12'],
         ];
     }
 
