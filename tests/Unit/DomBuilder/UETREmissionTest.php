@@ -86,7 +86,9 @@ class UETREmissionTest extends TestCase
         return [
             'pain.001.001.09' => ['pain.001.001.09'],
             'pain.001.001.10' => ['pain.001.001.10'],
+            'pain.001.001.11' => ['pain.001.001.11'],
             'pain.001.001.12' => ['pain.001.001.12'],
+            'pain.001.001.13' => ['pain.001.001.13'],
         ];
     }
 
@@ -109,6 +111,7 @@ class UETREmissionTest extends TestCase
             'pain.008.001.09' => ['pain.008.001.09'],
             'pain.008.001.10' => ['pain.008.001.10'],
             'pain.008.001.11' => ['pain.008.001.11'],
+            'pain.008.001.12' => ['pain.008.001.12'],
         ];
     }
 
