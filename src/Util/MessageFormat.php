@@ -113,6 +113,20 @@ class MessageFormat
     }
 
     /**
+     * Path to the ISO 20022 XSD bundled with the library for this message format.
+     *
+     * @return string|null null when no XSD is bundled for this format
+     */
+    public function getBundledSchemaPath(): ?string
+    {
+        $messageName = strtolower($this->messageName);
+        [$type, $subType, $variant] = explode('.', $messageName);
+        $path = sprintf('%s/doc/ISO20022/%s/%s/%s/%s.xsd', dirname(__DIR__, 2), $type, $subType, $variant, $messageName);
+
+        return is_file($path) ? $path : null;
+    }
+
+    /**
      * @param string $messageName
      * @return void
      */

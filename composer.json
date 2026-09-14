@@ -33,11 +33,11 @@
     },
     "require": {
         "ext-dom": "*",
+        "ext-libxml": "*",
         "php": ">=7.2"
     },
     "require-dev": {
         "ext-xml": "*",
-        "ext-libxml": "*",
         "ext-simplexml": "*",
         "ramsey/uuid": "^4.2.3",
         "phpunit/phpunit": "^10.0",

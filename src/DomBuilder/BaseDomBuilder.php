@@ -23,6 +23,7 @@
 
 namespace Digitick\Sepa\DomBuilder;
 
+use Digitick\Sepa\Exception\InvalidArgumentException;
 use Digitick\Sepa\GroupHeader;
 use Digitick\Sepa\TransferInformation\TransferInformationInterface;
 use Digitick\Sepa\Util\MessageFormat;
@@ -143,6 +144,61 @@ abstract class BaseDomBuilder implements DomBuilderInterface
     public function asDoc(): DomDocument
     {
         return $this->doc;
+    }
+
+    /**
+     * Validate the generated XML against an XSD.
+     *
+     * @param string|null $xsdFile Defaults to the ISO 20022 XSD bundled for this message format.
+     *
+     * @throws InvalidArgumentException when $xsdFile doesn't exist, or no XSD is bundled for the format.
+     */
+    public function validateSchema(?string $xsdFile = null): bool
+    {
+        return $this->getSchemaValidationErrors($xsdFile) === [];
+    }
+
+    /**
+     * Validate the generated XML against an XSD and return what failed.
+     *
+     * @param string|null $xsdFile Defaults to the ISO 20022 XSD bundled for this message format.
+     *
+     * @return string[] One message per validation error; empty when the document is valid.
+     *
+     * @throws InvalidArgumentException when $xsdFile doesn't exist, or no XSD is bundled for the format.
+     */
+    public function getSchemaValidationErrors(?string $xsdFile = null): array
+    {
+        $xsdFile = $xsdFile ?? $this->messageFormat->getBundledSchemaPath();
+        if ($xsdFile === null) {
+            throw new InvalidArgumentException(sprintf(
+                'No XSD is bundled for %s; pass the path to one explicitly.',
+                $this->messageFormat->getMessageName()
+            ));
+        }
+        if (!is_file($xsdFile)) {
+            throw new InvalidArgumentException(sprintf('XSD file "%s" does not exist.', $xsdFile));
+        }
+
+        // Validate a re-parsed copy: the xmlns attribute set through setAttribute()
+        // doesn't put the in-memory elements into the namespace the XSD targets.
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $errors = [];
+        $useInternalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        try {
+            $doc->loadXML($this->asXml());
+            $doc->schemaValidate($xsdFile);
+            foreach (libxml_get_errors() as $error) {
+                $errors[] = sprintf('Line %d: %s', $error->line, trim($error->message));
+            }
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($useInternalErrors);
+        }
+
+        return $errors;
     }
 
     /**

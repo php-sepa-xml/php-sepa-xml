@@ -1,14 +1,14 @@
 ---
 title: "Output and validation"
-description: "asXML / asDOC / DomBuilder output methods, what validate() checks, and external XSD validation."
+description: "asXML / asDOC / DomBuilder output methods, what validate() checks, and XSD validation."
 ---
 
 # Output and validation
 
 > **At a glance**
 >
-> - **Use this when:** picking which output method to call, or wiring external XSD validation.
-> - **Key types:** `BaseCustomerTransferFileFacade::asXML` / `asDOC`, `BaseDomBuilder::asXml` / `asDoc`, `BaseTransferFile::validate`.
+> - **Use this when:** picking which output method to call, or validating the output against an XSD.
+> - **Key types:** `BaseCustomerTransferFileFacade::asXML` / `asDOC` / `validateSchema`, `BaseDomBuilder::asXml` / `asDoc` / `validateSchema`, `BaseTransferFile::validate`.
 > - **Output:** an XML string or a `DOMDocument` you can further mutate.
 
 Four serialisation entry points, one validation pass. This page is the reference for which one to call and when validation fires.
@@ -82,14 +82,32 @@ Same as the facade's `asDOC` but on the lower-level builder. Mutations between `
 
 ## XSD validation
 
-The library does not ship the ISO 20022 XSDs. If your bank or compliance requirements demand XSD validation, do it externally:
+The ISO 20022 XSDs for every [supported pain version](../reference/pain-version-matrix.md) ship with the library, under `doc/ISO20022/`. Validate the rendered file against the matching one:
 
 ```php
-$doc = $facade->asDOC();
-$doc->schemaValidate('/path/to/pain.001.001.09.xsd');
+$errors = $facade->getSchemaValidationErrors(); // string[], one "Line N: message" per error
+if ($errors !== []) {
+    // log / reject
+}
+
+$facade->validateSchema(); // or just a bool
 ```
 
-XSDs are downloadable from the [ISO 20022 message catalogue](https://www.iso20022.org/full_catalogue.page). Some banks publish their own variant XSDs alongside their integration docs — use those when present, since variants may add or constrain elements.
+The same two methods exist on `BaseDomBuilder` for the direct flow. On a facade they render the document first, with the same single-shot semantics as `asXML()`. The serialised XML is what gets validated, so changes made through `asDOC()` / `asDoc()` are included.
+
+Pass a path to validate against another XSD — a bank's variant schema, or a pain version outside the supported list, which has no bundled XSD:
+
+```php
+$facade->validateSchema('/path/to/bank-variant.xsd');
+```
+
+Both methods throw `Digitick\Sepa\Exception\InvalidArgumentException` when the path doesn't exist, or when no XSD is bundled for the format and none was passed.
+
+> ⚠️ **Gotcha**
+>
+> Bank-profile output isn't always valid against the base ISO XSD: `setOmitAgentElementIfBicMissing(true)` can drop `<DbtrAgt>` / `<CdtrAgt>` elements the ISO schema requires. Validate those files against the bank's own XSD. See [Bank profiles](bank-profiles.md).
+
+Some banks publish variant XSDs alongside their integration docs — use those when present, since variants may add or constrain elements. Other ISO 20022 releases are in the [message catalogue](https://www.iso20022.org/full_catalogue.page).
 
 ## Schema location
 

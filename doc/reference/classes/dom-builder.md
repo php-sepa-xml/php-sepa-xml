@@ -59,6 +59,16 @@ Serialise the DOM to a UTF-8 XML string. Idempotent — safe to call multiple ti
 
 Return the underlying `DOMDocument`. Use this for downstream mutation (signing, encryption, manual XPath fixups).
 
+### `validateSchema(?string $xsdFile = null): bool`
+
+Validate the generated XML against an XSD. Without an argument it uses the ISO 20022 XSD bundled for the builder's pain format (every format in the [pain version matrix](../pain-version-matrix.md) has one); pass a path to validate against a bank's variant XSD instead. The serialised XML is validated, so mutations made through `asDoc()` are included.
+
+Throws `Digitick\Sepa\Exception\InvalidArgumentException` when `$xsdFile` doesn't exist, or when no XSD is bundled for the format and none was passed.
+
+### `getSchemaValidationErrors(?string $xsdFile = null): array`
+
+Same as `validateSchema()`, but returns one `"Line N: message"` string per validation error. Empty when the document is valid.
+
 ### `setOmitGroupHeaderControlSum(bool $omit): void`
 
 When `true`, suppresses the `<CtrlSum>` element under `<GrpHdr>`. Required by some bank profiles (notably German DK pain.001.001.03). Per-payment `<CtrlSum>` is still emitted.

@@ -121,6 +121,14 @@ Renders the document.
 
 Same finalisation semantics; returns the `DOMDocument` for in-memory manipulation (signing, encryption, custom mutation).
 
+### `validateSchema(?string $xsdFile = null): bool`
+
+Renders the document (same finalisation semantics as `asXML()`) and validates it against the XSD bundled for the facade's pain format, or against `$xsdFile` when given. Forwards to the DomBuilder — see [Reference: DomBuilder](dom-builder.md).
+
+### `getSchemaValidationErrors(?string $xsdFile = null): array`
+
+Same as `validateSchema()`, but returns one `"Line N: message"` string per validation error. Empty when the document is valid.
+
 ### `getPaymentInfo(string $paymentName): ?PaymentInformation`
 
 Look up an already-added `PaymentInformation` by its facade-side name. Returns `null` if unknown.
